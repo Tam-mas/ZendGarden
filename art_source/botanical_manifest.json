@@ -1,0 +1,422 @@
+[
+  {
+    "id": 0,
+    "name": "Cosmos",
+    "vertices": 19197,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_00.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 1,
+    "name": "Lavender",
+    "vertices": 35200,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_01.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 2,
+    "name": "Daisy",
+    "vertices": 4635,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_02.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 3,
+    "name": "Sunflower",
+    "vertices": 2214,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_03.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 4,
+    "name": "Foxglove",
+    "vertices": 2409,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_04.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 5,
+    "name": "Hydrangea",
+    "vertices": 58429,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_05.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 6,
+    "name": "Peony",
+    "vertices": 13230,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_06.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 7,
+    "name": "Poppy",
+    "vertices": 2421,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_07.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 8,
+    "name": "Iris",
+    "vertices": 1680,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_08.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 9,
+    "name": "Sweet pea",
+    "vertices": 3888,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_09.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 10,
+    "name": "Clematis",
+    "vertices": 4416,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_10.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 11,
+    "name": "Nasturtium",
+    "vertices": 2484,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_11.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 12,
+    "name": "Creeping thyme",
+    "vertices": 9324,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_12.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 13,
+    "name": "Moss carpet",
+    "vertices": 3900,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_13.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 14,
+    "name": "Blue fescue",
+    "vertices": 3780,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_14.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 15,
+    "name": "Feather grass",
+    "vertices": 3780,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_15.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 16,
+    "name": "Sedge",
+    "vertices": 3780,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_16.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 17,
+    "name": "Fountain grass",
+    "vertices": 3744,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_17.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 18,
+    "name": "Dichondra",
+    "vertices": 1008,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_18.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 19,
+    "name": "Chamomile",
+    "vertices": 26124,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_19.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 20,
+    "name": "Rose",
+    "vertices": 49457,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_20.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 21,
+    "name": "Azalea",
+    "vertices": 19944,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_21.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 22,
+    "name": "Rosemary",
+    "vertices": 30564,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_22.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 23,
+    "name": "Camellia",
+    "vertices": 25783,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_23.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 24,
+    "name": "Lilac",
+    "vertices": 75540,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_24.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 25,
+    "name": "Boxwood",
+    "vertices": 24378,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_25.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 26,
+    "name": "Gardenia",
+    "vertices": 26904,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_26.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 27,
+    "name": "Blueberry",
+    "vertices": 12672,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_27.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 28,
+    "name": "Cherry blossom",
+    "vertices": 84156,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_28.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 29,
+    "name": "Silver birch",
+    "vertices": 28554,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_29.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 30,
+    "name": "Japanese maple",
+    "vertices": 22956,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_30.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 31,
+    "name": "Olive",
+    "vertices": 31156,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_31.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 32,
+    "name": "Willow",
+    "vertices": 39636,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_32.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 33,
+    "name": "Magnolia",
+    "vertices": 57036,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_33.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 34,
+    "name": "Lemon",
+    "vertices": 31156,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_34.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 35,
+    "name": "Apple",
+    "vertices": 31156,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_35.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 36,
+    "name": "Kangaroo paw",
+    "vertices": 5658,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_36.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 37,
+    "name": "Billy buttons",
+    "vertices": 1269,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_37.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 38,
+    "name": "Wattle",
+    "vertices": 118536,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_38.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 39,
+    "name": "Bottlebrush",
+    "vertices": 45678,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_39.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 40,
+    "name": "Grevillea",
+    "vertices": 74760,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_40.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 41,
+    "name": "Banksia",
+    "vertices": 44916,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_41.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 42,
+    "name": "Lilly pilly",
+    "vertices": 24102,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_42.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 43,
+    "name": "Waxflower",
+    "vertices": 25691,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_43.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 44,
+    "name": "Lomandra",
+    "vertices": 3780,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_44.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 45,
+    "name": "Eucalyptus",
+    "vertices": 21456,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_45.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 46,
+    "name": "Carrot",
+    "vertices": 3890,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_46.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 47,
+    "name": "Tomato",
+    "vertices": 7462,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_47.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 48,
+    "name": "Lettuce",
+    "vertices": 900,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_48.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 49,
+    "name": "Pumpkin",
+    "vertices": 1560,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_49.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 50,
+    "name": "Strawberry",
+    "vertices": 1436,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_50.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 51,
+    "name": "Radish",
+    "vertices": 374,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_51.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 52,
+    "name": "Pea",
+    "vertices": 2504,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_52.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 53,
+    "name": "Aubergine",
+    "vertices": 1512,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_53.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 54,
+    "name": "Basil",
+    "vertices": 1834,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_54.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 55,
+    "name": "Corn",
+    "vertices": 1210,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_55.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 56,
+    "name": "Cucumber",
+    "vertices": 1560,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_56.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 57,
+    "name": "Chilli",
+    "vertices": 1120,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_57.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 58,
+    "name": "Beetroot",
+    "vertices": 374,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_58.glb",
+    "morphology_version": 2
+  },
+  {
+    "id": 59,
+    "name": "Melon",
+    "vertices": 1560,
+    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_59.glb",
+    "morphology_version": 2
+  }
+]

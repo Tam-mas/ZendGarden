@@ -1,0 +1,20 @@
+# Godot and operating-system caches
+.godot/
+.DS_Store
+*.log
+
+# Python caches and Blender recovery copies
+__pycache__/
+*.py[cod]
+*.blend[0-9]*
+*.blend@
+
+# Generated review captures and obsolete source snapshots
+/captures/
+/art_source/*_before_*.gd
+
+# Local personal documents and credentials
+/*.docx
+.env
+.env.*
+!.env.example
