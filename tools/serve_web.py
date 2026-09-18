@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preview the Pages output with the same compression headers (localhost only)."""
+"""Preview the Pages output with the same static asset behaviour (localhost only)."""
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -9,9 +9,6 @@ ROOT = Path(__file__).resolve().parents[1] / 'build/web'
 
 class Handler(SimpleHTTPRequestHandler):
     def end_headers(self):
-        path = self.path.split('?', 1)[0]
-        if path == '/index.wasm' or (path.startswith('/pack/') and path.endswith('.bin')):
-            self.send_header('Content-Encoding', 'gzip')
         self.send_header('Cache-Control', 'no-cache')
         super().end_headers()
 

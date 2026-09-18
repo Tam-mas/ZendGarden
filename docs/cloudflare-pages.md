@@ -48,8 +48,8 @@ Associate the domain with the Pages project before adding a DNS record manually.
 - `tools/build_web.py` installs project-local build tools as needed, fetches runtime Git LFS assets, checks Godot release archive checksums, imports resources, and exports the game.
 - `web/` contains the welcome page, loader, and Pages HTTP headers.
 - The generated site goes into `build/web/`. Build tools and output are ignored by Git and do not need committing.
-- The asset pack is divided into compressed pieces. The browser checks and joins them before starting Godot. The engine's WASM file is also compressed. This keeps each deployed file below [Pages' 25 MiB asset limit](https://developers.cloudflare.com/pages/platform/limits/).
-- `_headers` is essential: it tells the browser to decompress the WASM and pack pieces. Deploy the complete output folder, not selected files. A plain static server without those headers will not load the game correctly.
+- The asset pack is divided into compressed pieces. The browser checks and joins them before starting Godot. The engine's WASM file is also compressed. The browser explicitly decompresses these files; it does not depend on HTTP content-encoding headers. This keeps each deployed file below [Pages' 25 MiB asset limit](https://developers.cloudflare.com/pages/platform/limits/).
+- `_headers` sets MIME types, cache behaviour, and security headers. Deploy the complete output folder, not selected files.
 - A top-level `404.html` prevents missing game assets from being treated as SPA routes.
 
 GitHub Actions also builds and validates the site on pushes and pull requests. A successful run provides a `zend-garden-pages` artifact for inspection or manual upload; it does not deploy to your Cloudflare account. The connected Pages project handles deployment.
@@ -72,9 +72,9 @@ python3 tests/check_web_build.py
 python3 tools/serve_web.py
 ```
 
-Open `http://localhost:8080`. The preview server supplies the same compression headers as Pages. Python 3.10+ and Git are required; install Git LFS locally on macOS. The cloud build installs Git LFS if it is missing on Linux x86-64.
+Open `http://localhost:8080`. The preview server serves the compressed bytes directly, just like Pages. Python 3.10+ and Git are required; install Git LFS locally on macOS. The cloud build installs Git LFS if it is missing on Linux x86-64.
 
-If a build fails, inspect the Cloudflare build log or `build/import.log` and `build/export.log` locally. Missing models usually indicate a Git LFS download problem. Download or decompression errors in the browser usually mean `_headers` was omitted or an old deployment is being cached. Try a full reload after confirming the deployment finished.
+If a build fails, inspect the Cloudflare build log or `build/import.log` and `build/export.log` locally. Missing models usually indicate a Git LFS download problem. Download or decompression errors in the browser can indicate an interrupted transfer or an old deployment being cached. Try a full reload after confirming the deployment finished.
 
 ## Homepage shows “This path is outside the garden”
 
