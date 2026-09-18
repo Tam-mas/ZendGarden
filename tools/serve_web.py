@@ -9,6 +9,15 @@ ROOT = Path(__file__).resolve().parents[1] / 'build/web'
 
 class Handler(SimpleHTTPRequestHandler):
     def end_headers(self):
+        # Mirror the global Pages policy during local browser/security checks.
+        in_global = False
+        for line in (ROOT / '_headers').read_text().splitlines():
+            if line and not line[0].isspace():
+                in_global = line == '/*'
+            elif in_global and ':' in line:
+                name, value = line.strip().split(':', 1)
+                if name.lower() != 'cache-control':
+                    self.send_header(name, value.strip())
         self.send_header('Cache-Control', 'no-cache')
         super().end_headers()
 

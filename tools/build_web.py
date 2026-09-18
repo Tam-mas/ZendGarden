@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import subprocess
 import tarfile
@@ -31,14 +32,10 @@ def download(url, destination):
 
 def godot_archive(name):
     base = f'https://github.com/godotengine/godot/releases/download/{VERSION}-stable/'
-    sums = CACHE / 'SHA512-SUMS.txt'
-    if not sums.exists():
-        download(base + sums.name, sums)
     destination = CACHE / name
     if not destination.exists():
         download(base + name, destination)
-    expected = next(line.split()[0] for line in sums.read_text().splitlines()
-                    if line.split()[-1].lstrip('*') == name)
+    expected = json.loads((ROOT / 'tools/build_checksums.json').read_text())[name]['digest']
     with destination.open('rb') as source:
         digest = hashlib.sha512()
         for block in iter(lambda: source.read(1024 * 1024), b''):
@@ -52,13 +49,21 @@ def godot_archive(name):
 def prepare_tools():
     CACHE.mkdir(exist_ok=True)
     # Pages build images may not include Git LFS. Install a project-local binary.
-    if subprocess.run(['git', 'lfs', 'version'], stdout=subprocess.DEVNULL,
-                      stderr=subprocess.DEVNULL).returncode:
-        if platform.system() != 'Linux' or platform.machine() not in ('x86_64', 'AMD64'):
-            raise RuntimeError('Install Git LFS before building on this platform')
+    lfs = subprocess.run(['git', 'lfs', 'version'], text=True, stdout=subprocess.PIPE,
+                         stderr=subprocess.DEVNULL)
+    match = re.search(r'git-lfs/(\d+)\.(\d+)\.(\d+)', lfs.stdout)
+    installed = tuple(map(int, match.groups())) if match else (0, 0, 0)
+    linux_builder = platform.system() == 'Linux' and platform.machine() in ('x86_64', 'AMD64')
+    if not linux_builder and installed < (3, 7, 1):
+        raise RuntimeError('Install Git LFS 3.7.1 or newer (includes required security fixes)')
+    if linux_builder and installed != tuple(map(int, LFS_VERSION.split('.'))):
         archive = CACHE / 'git-lfs.tar.gz'
         download(f'https://github.com/git-lfs/git-lfs/releases/download/v{LFS_VERSION}/'
                  f'git-lfs-linux-amd64-v{LFS_VERSION}.tar.gz', archive)
+        lock = json.loads((ROOT / 'tools/build_checksums.json').read_text())[f'git-lfs-linux-amd64-v{LFS_VERSION}.tar.gz']
+        if hashlib.sha256(archive.read_bytes()).hexdigest() != lock['digest']:
+            archive.unlink()
+            raise RuntimeError('Git LFS archive checksum mismatch')
         with tarfile.open(archive) as source:
             member = next(m for m in source.getmembers() if m.name.endswith('/git-lfs'))
             with source.extractfile(member) as binary, (CACHE / 'git-lfs').open('wb') as target:
@@ -106,6 +111,15 @@ def package_site():
     pack.unlink()
     wasm = OUT / 'index.wasm'
     wasm.write_bytes(gzip.compress(wasm.read_bytes(), compresslevel=9, mtime=0))
+    # Keep executable code external so CSP can block arbitrary inline scripts.
+    html_path = OUT / 'index.html'
+    html = html_path.read_text()
+    pattern = r'<script>(window\.ZEND_GODOT_CONFIG = .*?;)</script>'
+    match = re.search(pattern, html)
+    if not match:
+        raise RuntimeError('Missing Godot configuration script in exported HTML')
+    (OUT / 'godot-config.js').write_text(match.group(1) + '\n')
+    html_path.write_text(re.sub(pattern, '<script src="godot-config.js"></script>', html))
     for name in ('_headers', 'loader.js', '404.html'):
         shutil.copyfile(ROOT / 'web' / name, OUT / name)
     shutil.copytree(ROOT / 'web/art', OUT / 'art')
