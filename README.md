@@ -142,4 +142,4 @@ On macOS, the script defaults to Blender in `/Applications/Blender.app`. Run hea
 
 ## License and release status
 
-An open-source release is planned, but a license has not yet been added to this repository. The licensing terms will be published here as part of that release.
+MIT licensed. Use, fork, modify or share. Its up to you
