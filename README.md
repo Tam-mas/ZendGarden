@@ -6,7 +6,7 @@ Zend Garden is a cozy first-person gardening game set in a peaceful lake valley.
 
 There is no rush to keep everything perfect. Plants do not die from neglect, and garden requests have no deadlines. Tend a small patch or gradually build a dense, layered garden at your own pace.
 
-The game is in development, and its source is publicly available as we prepare for an **open-source release**. See [License and release status](#license-and-release-status) below.
+The game is in development, and its source is publicly available as an **open-source release**.
 
 ## What you can do
 
