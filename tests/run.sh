@@ -2,6 +2,7 @@
 set -eu
 cd "$(dirname "$0")/.."
 python3 tests/check_assets.py
+python3 tests/check_audio.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
 import_log="$(mktemp -t zend-garden-import)"

@@ -29,10 +29,38 @@ def segment(name,a,b,r,mat,parent,r2=None):
     n=bpy.context.object; n.name=name; n.parent=parent; n.location=(a+b)*.5; n.rotation_euler=d.to_track_quat('Z','Y').to_euler(); n.data.materials.append(mat)
     for f in n.data.polygons: f.use_smooth=True
     return n
+def paint_tabby(torso):
+    # Bake markings into the coat texture: no separate geometry can float or flicker.
+    mat=material('Painted tabby coat',(.34,.17,.055))
+    torso.data.materials.clear(); torso.data.materials.append(mat)
+    nodes=mat.node_tree.nodes; links=mat.node_tree.links; nodes.clear()
+    coord=nodes.new('ShaderNodeTexCoord'); axes=nodes.new('ShaderNodeSeparateXYZ')
+    links.new(coord.outputs['Generated'],axes.inputs[0])
+    length=nodes.new('ShaderNodeMath'); length.operation='MULTIPLY'; length.inputs[1].default_value=36
+    links.new(axes.outputs['Y'],length.inputs[0])
+    bend=nodes.new('ShaderNodeMath'); bend.operation='MULTIPLY'; bend.inputs[1].default_value=3
+    links.new(axes.outputs['Z'],bend.inputs[0])
+    add=nodes.new('ShaderNodeMath'); add.operation='ADD'; links.new(length.outputs[0],add.inputs[0]); links.new(bend.outputs[0],add.inputs[1])
+    sine=nodes.new('ShaderNodeMath'); sine.operation='SINE'; links.new(add.outputs[0],sine.inputs[0])
+    ramp=nodes.new('ShaderNodeValToRGB'); ramp.color_ramp.elements[0].position=.72; ramp.color_ramp.elements[0].color=(.34,.17,.055,1)
+    ramp.color_ramp.elements[1].position=.88; ramp.color_ramp.elements[1].color=(.065,.046,.032,1)
+    links.new(sine.outputs[0],ramp.inputs[0])
+    emit=nodes.new('ShaderNodeEmission'); links.new(ramp.outputs[0],emit.inputs[0])
+    out=nodes.new('ShaderNodeOutputMaterial'); links.new(emit.outputs[0],out.inputs['Surface'])
+    image=bpy.data.images.new('Tabby painted fur',width=1024,height=1024)
+    tex=nodes.new('ShaderNodeTexImage'); tex.image=image; nodes.active=tex
+    bpy.ops.object.select_all(action='DESELECT'); torso.select_set(True); bpy.context.view_layer.objects.active=torso
+    scene.render.engine='CYCLES'; scene.cycles.samples=1
+    bpy.ops.object.bake(type='EMIT',margin=8)
+    image.filepath_raw=ROOT+'/assets/companions/tabby_coat.png'; image.file_format='PNG'; image.save(); image.pack()
+    nodes.clear(); tex=nodes.new('ShaderNodeTexImage'); tex.image=image
+    bs=nodes.new('ShaderNodeBsdfPrincipled'); bs.inputs['Roughness'].default_value=.88
+    out=nodes.new('ShaderNodeOutputMaterial'); links.new(tex.outputs['Color'],bs.inputs['Base Color']); links.new(bs.outputs[0],out.inputs['Surface'])
+
 for cat in [True,False]:
     kind='cat' if cat else 'dog'; root=pivot(kind,(0,0,0)); coat=ginger if cat else dark
     body=pivot('Body',(0,.39 if cat else .52,0),root)
-    ell('Torso',(0,0,.03),(.32,.36,.65) if cat else (.43,.49,.85),coat,body)
+    torso=ell('Torso',(0,0,.03),(.32,.36,.65) if cat else (.43,.49,.85),coat,body)
     ell('Chest',(0,.015,-.22),(.28,.32,.24) if cat else (.38,.46,.32),cream,body)
     ell('Haunch',(0,-.025,.23),(.34,.35,.30) if cat else (.43,.46,.39),coat,body)
     head=pivot('Head',(0,.13,-.31) if cat else (0,.24,-.40),body)
@@ -65,9 +93,7 @@ for cat in [True,False]:
         a=(.035*math.sin(k*.45),k*.055,k*.067); b=(.035*math.sin((k+1)*.45),(k+1)*.055,(k+1)*.067)
         segment('Tail fur',a,b,(.035 if cat else .065)*(1-k*.11),dark if cat and k%2 else coat,tail)
     if cat:
-        for k in range(5):
-            for side in [-1,1]: ell('Tabby marking',(side*.15,.06,.22-k*.09),(.023,.20,.026),dark,body)
-        for k in [-1,0,1]: ell('Forehead stripe',(k*.052,.126,-.067),(.025,.077,.021),dark,head)
+        paint_tabby(torso)
     else:
         ell('White blaze',(0,.06,-.173),(.065,.22,.021),cream,head)
         ell('Neck ruff',(0,.10,-.27),(.42,.42,.22),cream,body)

@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Check audio loop assets
+        run: python3 tests/check_audio.py
       - name: Test browser asset loader
         run: node tests/web_loader.cjs
       - name: Export and package for Cloudflare Pages

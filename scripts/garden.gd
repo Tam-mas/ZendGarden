@@ -114,6 +114,7 @@ var request_popup: PanelContainer
 var request_unread=false
 var orders_button: Button
 var request_popup_time=0.0
+var request_return_to_game=false
 var rake_petals=0
 var climate: GardenClimate
 
@@ -354,13 +355,15 @@ func make_ui() -> void:
  var cap_col = VBoxContainer.new()
  cap_col.add_theme_constant_override("separation",8)
  capacity.add_child(cap_col)
- capacity_label = label("",19)
+ capacity_label = label("",17)
+ capacity_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ capacity_label.custom_minimum_size.x=320
  cap_col.add_child(capacity_label)
  capacity_bar = ProgressBar.new()
  capacity_bar.custom_minimum_size.y = 8
  capacity_bar.show_percentage = false
- capacity_bar.add_theme_stylebox_override("background",panel_style(Color("e1e3d4"),4))
- capacity_bar.add_theme_stylebox_override("fill",panel_style(Color("91a780"),4))
+ capacity_bar.add_theme_stylebox_override("background",GardenTheme.meter(Color("392b20")))
+ capacity_bar.add_theme_stylebox_override("fill",GardenTheme.meter(Color("a8bd79")))
  cap_col.add_child(capacity_bar)
  status_label = label("",13,Color("7b886f"))
  status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -645,20 +648,31 @@ func apply_settings() -> void:
  AudioServer.set_bus_volume_db(0,linear_to_db(maxf(.0001,float(settings.volume)/100)))
  if not settings.request_notifications and is_instance_valid(request_popup): request_popup.hide()
 
+func dismiss_request() -> void:
+ request_popup_time=0
+ if is_instance_valid(request_popup): request_popup.hide()
+ if request_return_to_game and not side_panel.visible:
+  Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+ request_return_to_game=false
+
 func notify_requests() -> void:
  request_unread=true
- if not settings.request_notifications: return
+ if not settings.request_notifications:
+  dismiss_request()
+  return
  if is_instance_valid(request_popup): request_popup.queue_free()
  request_popup=panel_at(Vector2(1030,295),Vector2(380,190))
  request_popup.z_index=15
+ request_return_to_game=Input.mouse_mode==Input.MOUSE_MODE_CAPTURED
+ if not photo_mode and not day_transition: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  var col=VBoxContainer.new()
  request_popup.add_child(col)
  col.add_child(label("A note at the garden gate",20))
  col.add_child(label("A neighbour has a new request.
 A little kindness, whenever you’re ready.",15))
- col.add_child(button("Read neighbour requests",func(): request_popup_time=0; request_popup.hide(); open_sidebar("Orders")))
- col.add_child(button("Later",func(): request_popup_time=0; request_popup.hide(),Vector2(0,28)))
- request_popup_time=12.0
+ col.add_child(button("Read neighbour requests",func(): request_return_to_game=false; dismiss_request(); open_sidebar("Orders")))
+ col.add_child(button("Later",dismiss_request,Vector2(0,28)))
+ request_popup_time=1.0 # Remain available until the player responds.
 
 func replenish_orders() -> void:
  var arrived=false
@@ -676,8 +690,10 @@ func _process(delta: float) -> void:
  if not is_instance_valid(camera): return
  if is_instance_valid(welcome):
   return
- request_popup_time-=delta
- if is_instance_valid(request_popup): request_popup.visible=request_popup_time>0 and settings.request_notifications and not photo_mode and not day_transition
+ if is_instance_valid(request_popup):
+  var show_note=request_popup_time>0 and settings.request_notifications and not photo_mode and not day_transition
+  if show_note and not request_popup.visible: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+  request_popup.visible=show_note
  var input_focus = get_viewport().gui_get_focus_owner() is LineEdit
  var move = Vector3.ZERO
  if not day_transition and not input_focus and not is_instance_valid(welcome) and (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED or photo_mode):
@@ -1642,6 +1658,7 @@ func run_smoke_test() -> void:
  if planted.size()!=saved_count or coins!=saved_coins: failures.append("Save/reload round trip failed")
  for i in range(mini(saved_heights.size(),planted.size())):
   if not is_equal_approx(float(saved_heights[i]),float(planted[i].height_factor)): failures.append("Plant height changed after save/reload")
+ dismiss_request() # Walking HUD check starts after acknowledging any simulated deliveries.
  set_mode("walk")
  player.position=GardenTerrain.point(Vector3(0,0,6))+Vector3(0,.1,0)
  yaw=0

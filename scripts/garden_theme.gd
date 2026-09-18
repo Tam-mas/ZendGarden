@@ -10,6 +10,13 @@ static func frame(kind: String="wood", tint: Color=Color.WHITE, margin: int=18) 
   style.set_content_margin(side,margin)
  return style
 
+static func meter(color: Color) -> StyleBoxFlat:
+ var style=StyleBoxFlat.new()
+ style.bg_color=color
+ style.set_corner_radius_all(4)
+ style.set_content_margin_all(0)
+ return style
+
 static func make() -> Theme:
  var theme=Theme.new()
  var font=SystemFont.new()

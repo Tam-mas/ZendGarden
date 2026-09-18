@@ -16,7 +16,9 @@ static func run(g, failures: Array) -> void:
  if g.orders[0].get("pending",false) or not g.request_unread: failures.append("Scheduled request did not arrive")
  if is_instance_valid(g.request_popup) and g.request_popup.visible: failures.append("Disabled notification still visible")
  g.settings.request_notifications=true
+ Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
  g.notify_requests()
+ if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: failures.append("Request notification did not release the mouse")
  if not is_instance_valid(g.request_popup): failures.append("Request notification missing")
  g.open_sidebar("Settings")
  await g.get_tree().create_timer(.4).timeout
@@ -25,6 +27,11 @@ static func run(g, failures: Array) -> void:
  later.pressed.emit()
  await g.get_tree().process_frame
  if g.request_popup.visible: failures.append("Dismissed request popup returned")
+ g.notify_requests()
+ g.request_popup.get_child(0).get_child(2).pressed.emit()
+ if g.active_tab!="Orders" or not g.side_panel.visible: failures.append("Request button did not open orders")
+ await g.get_tree().process_frame
+ if g.capacity_bar.size.y>16: failures.append("Capacity meter expanded into a full panel")
  g.show_welcome()
  var clock=g.clock_time
  var position=g.player.position

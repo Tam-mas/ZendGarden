@@ -108,6 +108,9 @@ def package_site():
     wasm.write_bytes(gzip.compress(wasm.read_bytes(), compresslevel=9, mtime=0))
     for name in ('_headers', 'loader.js', '404.html'):
         shutil.copyfile(ROOT / 'web' / name, OUT / name)
+    shutil.copytree(ROOT / 'web/art', OUT / 'art')
+    for name in ('wood', 'parchment', 'button'):
+        shutil.copyfile(ROOT / 'assets/ui' / (name + '.png'), OUT / 'art' / (name + '.png'))
     for path in OUT.rglob('*'):
         if path.is_file() and path.stat().st_size > LIMIT:
             raise RuntimeError(f'{path.name} exceeds Cloudflare Pages 25 MiB limit')
