@@ -18,6 +18,10 @@ The game is in development, and its source is publicly available as an **open-so
 - Enjoy changing seasons, weather, birds, bees, butterflies, and animal companions.
 - Use photo mode to explore freely and capture your favourite corners.
 
+## Play on the web or host your own garden
+
+The repository includes a browser export and an automatic Cloudflare Pages build. To publish it on your own domain, follow the [Cloudflare Pages setup guide](docs/cloudflare-pages.md). The browser edition uses keyboard and mouse, and saves your garden on that device in browser storage.
+
 ## Getting started
 
 These instructions run the game from source using the Godot editor.

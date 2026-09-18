@@ -18,3 +18,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Web exports and downloaded build tools
+/build/
+/.web-tools/

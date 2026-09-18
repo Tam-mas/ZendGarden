@@ -1,0 +1,10 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cache-Control: public, max-age=0, must-revalidate
+/index.wasm
+  Content-Type: application/wasm
+  Content-Encoding: gzip
+/pack/*
+  Content-Type: application/octet-stream
+  Content-Encoding: gzip
