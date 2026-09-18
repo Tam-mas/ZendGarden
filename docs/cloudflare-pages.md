@@ -16,6 +16,8 @@ This repository can build the browser game directly in Cloudflare Pages. You do 
 | Build command | `python3 tools/build_web.py` |
 | Build output directory | `build/web` |
 
+The repository also declares `build/web` in `wrangler.jsonc`, so Pages reads the output directory from version control. The build command and repository root must still be set in the dashboard.
+
 4. Save and deploy. The first build downloads Godot 4.7.2, its export templates, and the runtime models from Git LFS. Allow several minutes.
 5. Open the supplied `*.pages.dev` address and click **Enter the garden**. Test walking, planting, and returning to a saved garden before sharing the link.
 
@@ -73,3 +75,7 @@ python3 tools/serve_web.py
 Open `http://localhost:8080`. The preview server supplies the same compression headers as Pages. Python 3.10+ and Git are required; install Git LFS locally on macOS. The cloud build installs Git LFS if it is missing on Linux x86-64.
 
 If a build fails, inspect the Cloudflare build log or `build/import.log` and `build/export.log` locally. Missing models usually indicate a Git LFS download problem. Download or decompression errors in the browser usually mean `_headers` was omitted or an old deployment is being cached. Try a full reload after confirming the deployment finished.
+
+## Homepage shows “This path is outside the garden”
+
+If the homepage returns this message and `/shell.html` is accessible, Pages has published the source `web/` folder instead of the generated game. Set the root directory to the repository root (blank), the build command to `python3 tools/build_web.py`, and the output directory to `build/web`. Save the settings and retry the latest production deployment. Do not use `web` as the output directory: it contains the page template, not the exported game.
