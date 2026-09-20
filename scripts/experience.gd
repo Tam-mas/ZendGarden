@@ -70,8 +70,9 @@ static func finish(g) -> void:
 
 static func settings_page(g) -> void:
  g.side_title.text="Make yourself at home"
- g.add_note("COMFORT & QUIET",15)
- for entry in [["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["invert_y","Invert vertical look"],["pause_menus","Pause time in menus"]]:
+ g.add_note("MOUSE LOOK",15)
+ for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
+  if entry[0]=="request_notifications": g.add_note("COMFORT & QUIET",15)
   var key=entry[0]
   var toggle=CheckButton.new()
   toggle.text=entry[1]

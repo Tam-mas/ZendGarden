@@ -109,7 +109,7 @@ var transition_crossed_midnight=false
 var transition_label: Label
 const TRANSITION_SECONDS=6.0
 var tool_tween: Tween
-var settings={"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
+var settings={"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
 var request_popup: PanelContainer
 var request_unread=false
 var orders_button: Button
@@ -833,12 +833,16 @@ func target_plant(pos: Vector3) -> int:
   if distance<nearest: chosen=i; nearest=distance
  return chosen
 
+func apply_mouse_look(movement: Vector2) -> void:
+ var sensitivity=0.0022*float(settings.sensitivity)
+ yaw -= movement.x*sensitivity*(-1 if settings.invert_x else 1)
+ pitch = clampf(pitch+movement.y*sensitivity*(-1 if settings.invert_y else 1),-1.45,1.45)
+
 func _unhandled_input(event: InputEvent) -> void:
  if is_instance_valid(welcome): return
  if day_transition: return
  if event is InputEventMouseMotion and (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED or Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
-  yaw -= event.relative.x*0.0022*float(settings.sensitivity)
-  pitch = clampf(pitch+event.relative.y*0.0022*float(settings.sensitivity)*(-1 if settings.invert_y else 1),-1.45,1.45)
+  apply_mouse_look(event.relative)
  if event is InputEventMouseButton and event.pressed:
   if event.button_index==MOUSE_BUTTON_WHEEL_UP: view_fov=clampf(view_fov-2,45,90)
   elif event.button_index==MOUSE_BUTTON_WHEEL_DOWN: view_fov=clampf(view_fov+2,45,90)

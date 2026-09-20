@@ -11,6 +11,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+mouse_log="$(mktemp -t zend-garden-mouse)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/mouse_look.gd > "$mouse_log" 2>&1 || { cat "$mouse_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$mouse_log" || ! rg -Fq 'MOUSE_LOOK_RESULT: []' "$mouse_log"; then
+  cat "$mouse_log"
+  exit 1
+fi
 wildlife_log="$(mktemp -t zend-garden-wildlife)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/wildlife_direction.gd > "$wildlife_log" 2>&1 || { cat "$wildlife_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$wildlife_log" || ! rg -Fq 'WILDLIFE_DIRECTION_RESULT: []' "$wildlife_log"; then

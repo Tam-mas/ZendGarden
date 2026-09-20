@@ -85,7 +85,7 @@ A normal in-game day lasts about **10 minutes**, and each season lasts **12 days
 
 You can advance to the next morning whenever you want. The garden does not progress while the game is closed, so you can return without having missed anything.
 
-Settings include reduced motion, mouse sensitivity, inverted look, field of view, separate audio volume controls, and an option to pause while menus are open.
+Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
 
 ## Saves and photos
 
