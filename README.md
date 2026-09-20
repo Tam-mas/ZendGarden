@@ -147,3 +147,7 @@ On macOS, the script defaults to Blender in `/Applications/Blender.app`. Run hea
 ## License and release status
 
 MIT licensed. Use, fork, modify or share. Its up to you
+
+### Personal garden signs
+
+Open **Shop → Custom garden sign** to write up to 64 characters and choose a text colour. Each sign costs 15 petals. Place it on the ground and use **Q/E** to rotate it; the lettering is readable from both sides. Use the **Edit sign** buttons in the Shop to change existing signs for free, or the usual move and remove tools to rearrange them. Your signs are saved with your garden.

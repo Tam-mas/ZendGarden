@@ -73,9 +73,7 @@ static func build_row(g, index: int) -> void:
     var p=center+Vector3(-4.6+edge*.48,0,side*4.9)
     g.Art.ball(root,GardenTerrain.point(p),Vector3(.5,.18,.33),Color("a3a087"))
   if g.plot_signs.size()<=i:
-   var sign=Label3D.new()
-   sign.position=GardenTerrain.point(center+Vector3(-3.4,0,5.2))+Vector3(0,.65,0)
-   sign.font_size=30
-   sign.pixel_size=.003
+   var sign=g.Art.sign_board()
+   sign.position=GardenTerrain.point(center+Vector3(-3.4,0,5.2))
    root.add_child(sign)
    g.plot_signs.append(sign)

@@ -109,6 +109,10 @@ var transition_crossed_midnight=false
 var transition_label: Label
 const TRANSITION_SECONDS=6.0
 var tool_tween: Tween
+var sign_text="My garden"
+var sign_color=Color("f1e5c7")
+var editing_sign=-1
+
 var settings={"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
 var request_popup: PanelContainer
 var request_unread=false
@@ -448,6 +452,75 @@ func open_sidebar(page: String) -> void:
  side_panel.visible=not was_open
  refresh_sidebar()
 
+func choose_furnishing(index: int) -> void:
+ selected_furniture=index
+ if furniture[index].kind=="sign":
+  open_sign_editor()
+ else:
+  set_mode("build")
+  toast(furniture[index].hint)
+
+func open_sign_editor(index: int = -1) -> void:
+ editing_sign=index
+ if index>=0:
+  sign_text=objects[index].get("text","My garden")
+  sign_color=Color.from_string(objects[index].get("text_color","f1e5c7"),Color("f1e5c7"))
+ active_tab="Sign"
+ side_panel.show()
+ Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ refresh_sidebar()
+
+func sign_editor_page() -> void:
+ side_title.text="Your garden sign"
+ add_note("SIGN TEXT · up to 64 characters",14)
+ var field=LineEdit.new()
+ field.name="SignText"
+ field.max_length=64
+ field.text=sign_text
+ field.placeholder_text="A name, a welcome, a little reminder…"
+ list_box.add_child(field)
+ add_note("TEXT COLOUR",14)
+ var picker=ColorPickerButton.new()
+ picker.name="SignColour"
+ picker.color=sign_color
+ picker.edit_alpha=false
+ picker.custom_minimum_size=Vector2(254,40)
+ list_box.add_child(picker)
+ var sample=label(sign_text,20,sign_color)
+ sample.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ sample.custom_minimum_size=Vector2(254,80)
+ list_box.add_child(sample)
+ var apply=button("Save changes" if editing_sign>=0 else "Place sign · ◇ 15",finish_sign_editor)
+ apply.disabled=Art.clean_sign_text(sign_text).is_empty()
+ list_box.add_child(apply)
+ field.text_changed.connect(func(value):
+  sign_text=Art.clean_sign_text(value)
+  sample.text=sign_text
+  apply.disabled=sign_text.is_empty())
+ picker.color_changed.connect(func(value):
+  sign_color=value
+  sample.add_theme_color_override("font_color",value))
+ list_box.add_child(button("Back to the shed",func(): open_sidebar("Shop")))
+ detail_label.text="Lettering appears on both sides.\nQ/E rotates a sign while placing or moving it.\nEdit placed signs from the Shop at any time."
+
+func finish_sign_editor() -> void:
+ sign_text=Art.clean_sign_text(sign_text)
+ if sign_text.is_empty(): return
+ if editing_sign>=0:
+  if editing_sign>=objects.size() or objects[editing_sign].kind!="sign": return
+  var obj=objects[editing_sign]
+  obj.text=sign_text
+  obj.text_color=sign_color.to_html(false)
+  Art.set_sign_text(obj.node,sign_text,sign_color)
+  save_game()
+  open_sidebar("Shop")
+  toast("Your sign has been updated.")
+ else:
+  for i in range(furniture.size()):
+   if furniture[i].kind=="sign": selected_furniture=i
+  set_mode("build")
+  toast("Choose a spot for your sign. Q/E to rotate.")
+
 func clear_list() -> void:
  for c in list_box.get_children():
   list_box.remove_child(c)
@@ -535,9 +608,13 @@ func refresh_sidebar() -> void:
    add_note("ORNAMENTS & STRUCTURES",14)
    for i in range(furniture.size()):
     var idx = i
-    var b = button(furniture[i].name+"   ◇ "+str(furniture[i].price),func(): selected_furniture=idx; set_mode("build"); toast(furniture[idx].hint))
+    var b = button(furniture[i].name+"   ◇ "+str(furniture[i].price),func(): choose_furnishing(idx))
     b.tooltip_text = furniture[i].hint
     list_box.add_child(b)
+   for i in range(objects.size()):
+    if objects[i].kind=="sign":
+     var sign_index=i
+     list_box.add_child(button("Edit sign: "+str(objects[i].get("text","My garden")).left(22),func(): open_sign_editor(sign_index)))
    list_box.add_child(button("◇ 20  Stock nearest pond with fish",stock_fish))
    add_note("A LITTLE MORE ROOM",14)
    if unlocked_plots<plots.size(): list_box.add_child(button("Open "+plots[unlocked_plots].name+"   ◇ "+str(plots[unlocked_plots].cost),buy_plot))
@@ -566,6 +643,8 @@ func refresh_sidebar() -> void:
    if total==0: add_note("Gather mature flowers and produce to fill your basket.")
    list_box.add_child(button("Sell spare harvest",sell_harvest))
    detail_label.text = "Gathering keeps the plant and starts its next bloom. Trees and shrubs offer cuttings."
+  "Sign":
+   sign_editor_page()
   "Settings":
    GardenExperience.settings_page(self)
   "Guide":
@@ -965,6 +1044,8 @@ func update_hover() -> void:
    if pid.begins_with("p"): preview=Art.plant(catalogue[int(pid.substr(1))])
    elif pid.begins_with("f"): preview=Art.furnishing(furniture[selected_furniture].kind)
    else: preview=Art.furnishing(objects[moved_object].kind)
+   if pid.begins_with("f") and furniture[selected_furniture].kind=="sign": Art.set_sign_text(preview,sign_text,sign_color)
+   if pid.begins_with("o") and objects[moved_object].kind=="sign": Art.set_sign_text(preview,objects[moved_object].text,Color.from_string(objects[moved_object].text_color,Color("f1e5c7")))
    add_child(preview)
    preview_id=pid
    ghost_material(preview)
@@ -1110,7 +1191,7 @@ func perform_action() -> void:
    if coins<f.price: toast("Gather or fill a neighbour’s order for more petals."); return
    if object_at(hover_cell)>=0: toast("There is already an ornament here."); return
    coins-=f.price
-   add_object(f.kind,hover_cell,f.price,false,structure_rotation)
+   add_object(f.kind,hover_cell,f.price,false,structure_rotation,sign_text,sign_color)
    toast(f.name+" placed. "+f.hint)
   "rake":
    if bed_at(hover_cell)>=0 or not plantable_ground(hover_cell): toast("Rake dry paths and lawn away from bridges and structures."); return
@@ -1148,13 +1229,17 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  refresh_plant(p)
  return p
 
-func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orientation: float = 0.0) -> void:
+func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orientation: float = 0.0, text: String = "My garden", color: Color = Color("f1e5c7")) -> void:
  pos=GardenTerrain.point(pos)
  var n = Art.furnishing(kind)
  object_root.add_child(n)
  n.position=pos
  n.rotation.y=orientation
  objects.append({"rotation":orientation,"kind":kind,"pos":pos,"price":price,"fish":fish,"node":n})
+ if kind=="sign":
+  objects[-1]["text"]=Art.clean_sign_text(text)
+  objects[-1]["text_color"]=color.to_html(false)
+  Art.set_sign_text(n,objects[-1].text,color)
  if fish: make_fish(n)
 
 func plant_scale(p: Dictionary) -> Vector3:
@@ -1309,7 +1394,7 @@ func unlock_plot() -> void:
  for row in range(2,int(plots.size()/2)): GardenExpansion.build_row(self,row)
  discover_seeds(3)
  toast(plots[unlocked_plots-1].name+" is open. Follow the path. Three new seed varieties await.")
- for i in range(plot_signs.size()): plot_signs[i].text=plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else "")
+ for i in range(plot_signs.size()): Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else ""))
 
 func discover_seeds(count: int) -> void:
  for id in range(catalogue.size()):
@@ -1513,7 +1598,7 @@ func save_game() -> void:
  var ps: Array=[]
  for p in planted: ps.append({"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
  var os: Array=[]
- for obj in objects: os.append({"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0)})
+ for obj in objects: os.append({"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
  var data={"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x,player.position.z]}
  var file=FileAccess.open(SAVE_PATH+".tmp",FileAccess.WRITE)
  if file:
@@ -1559,9 +1644,9 @@ func restore_garden() -> void:
   plant.stress=float(p.stress)
   plant.pruned=float(p.get("pruned",0.0))
   refresh_plant(plant)
- for obj in loaded_data.get("objects",[]): add_object(obj.kind,Vector3(obj.pos[0],0,obj.pos[1]),int(obj.price),bool(obj.fish),float(obj.get("rotation",0.0)))
+ for obj in loaded_data.get("objects",[]): add_object(obj.kind,Vector3(obj.pos[0],0,obj.pos[1]),int(obj.price),bool(obj.fish),float(obj.get("rotation",0.0)),str(obj.get("text","My garden")),Color.from_string(str(obj.get("text_color","f1e5c7")),Color("f1e5c7")))
  if loaded_data.has("player"): player.position=GardenTerrain.point(Vector3(loaded_data.player[0],0,loaded_data.player[1]))+Vector3(0,.1,0)
- for i in range(plot_signs.size()): plot_signs[i].text=plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else "")
+ for i in range(plot_signs.size()): Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else ""))
  for key in automation:
   var index=int(key.trim_suffix("water").trim_suffix("prune"))
   var center: Vector3=plots[index].center
@@ -1645,6 +1730,7 @@ func run_smoke_test() -> void:
  if accessible(Vector3(8.5,0,0)): failures.append("Water crossing allowed outside bridge")
  if not accessible(Vector3(8.5,0,5.9)): failures.append("Bridge blocked")
  if snap_to_bed(Vector3(0.15,0,0.15),0)!=GardenTerrain.point(Vector3.ZERO): failures.append("Grid snapping failed")
+ await preload("res://tests/signs.gd").run(self,failures)
  # Persist and reconstruct live models, with a separate smoke-test save.
  save_game()
  var saved_heights=planted.map(func(p): return p.height_factor)
@@ -1659,6 +1745,13 @@ func run_smoke_test() -> void:
  load_game()
  smoke=true
  restore_garden()
+ var restored_sign=objects.filter(func(obj): return obj.kind=="sign")
+ if restored_sign.is_empty():
+  failures.append("Sign missing after reload")
+ else:
+  var sign_obj=restored_sign[0]
+  if sign_obj.text!="Herbs & flowers" or sign_obj.text_color!="ffe6a0" or not is_equal_approx(sign_obj.rotation,1.25): failures.append("Saved sign lost its lettering, colour or rotation")
+  if sign_obj.node.get_node("FrontText").text!=sign_obj.text: failures.append("Restored sign model has incorrect lettering")
  if planted.size()!=saved_count or coins!=saved_coins: failures.append("Save/reload round trip failed")
  for i in range(mini(saved_heights.size(),planted.size())):
   if not is_equal_approx(float(saved_heights[i]),float(planted[i].height_factor)): failures.append("Plant height changed after save/reload")

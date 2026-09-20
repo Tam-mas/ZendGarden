@@ -141,7 +141,40 @@ static func fallback_plant(data: Dictionary, decorative: bool = false) -> Node3D
  if decorative: n.rotation.y = rng.randf()*TAU
  return n
 
+# Each face is one-sided: the board never exposes mirrored lettering.
+static func sign_board() -> Node3D:
+ var n=Node3D.new()
+ box(n,Vector3(0,.62,0),Vector3(1.8,.52,.10),Color("665039"))
+ for x in [-.65,.65]:
+  box(n,Vector3(x,.29,0),Vector3(.065,.58,.065),Color("88704d"))
+ for back in [false,true]:
+  var face=Label3D.new()
+  face.name="BackText" if back else "FrontText"
+  face.position=Vector3(0,.62,-.056 if back else .056)
+  face.rotation.y=PI if back else 0.0
+  face.double_sided=false
+  face.font_size=40
+  face.pixel_size=.002
+  face.width=810
+  face.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+  face.outline_size=3
+  face.outline_modulate=Color("30291f")
+  n.add_child(face)
+ set_sign_text(n,"My garden",Color("f1e5c7"))
+ return n
+
+static func clean_sign_text(value: String) -> String:
+ return value.replace("\n"," ").replace("\r"," ").replace("\t"," ").strip_edges().left(64)
+
+static func set_sign_text(node: Node3D, value: String, color: Color = Color("f1e5c7")) -> void:
+ for face_name in ["FrontText","BackText"]:
+  var face=node.get_node_or_null(face_name) as Label3D
+  if face:
+   face.text=value
+   face.modulate=Color(color.r,color.g,color.b,1.0)
+
 static func furnishing(kind: String) -> Node3D:
+ if kind=="sign": return sign_board()
  var n = Node3D.new()
  var wood = Color("b19a7a")
  var dark = Color("817460")

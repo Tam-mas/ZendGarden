@@ -91,5 +91,6 @@ static func furnishings() -> Array:
   {"name":"Timber pergola", "price":100, "kind":"pergola", "hint":"A canopy for nearby climbing plants."},
   {"name":"Glass greenhouse", "price":120, "kind":"greenhouse", "hint":"Protects plants within 4 metres in any conditions."},
   {"name":"Lily pond", "price":75, "kind":"pond", "hint":"Attracts frogs and dragonflies. Stock fish in the shop."},
-  {"name":"Bird bath", "price":40, "kind":"bath", "hint":"Draws visiting birds."}
+  {"name":"Bird bath", "price":40, "kind":"bath", "hint":"Draws visiting birds."},
+  {"name":"Custom garden sign", "price":15, "kind":"sign", "hint":"Your words and colours. Q/E to rotate; edit in the garden shed."}
  ]

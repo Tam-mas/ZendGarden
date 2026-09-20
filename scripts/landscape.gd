@@ -57,17 +57,10 @@ static func build(g) -> void:
  # Bed names belong on small physical labels, not floating across the horizon.
  for i in range(g.plots.size()):
   var plot=g.plots[i]
-  var sign=Label3D.new()
-  sign.position=GardenTerrain.point(plot.center+Vector3(-4.1,0,5.1))+Vector3(0,.62,0)
-  sign.rotation_degrees.x=-15
-  sign.font_size=30
-  sign.pixel_size=.003
-  sign.modulate=Color("f1e5c7")
-  sign.outline_modulate=Color("4b5138")
+  var sign=Art.sign_board()
+  sign.position=GardenTerrain.point(plot.center+Vector3(-4.1,0,5.15))
   g.world_root.add_child(sign)
   g.plot_signs.append(sign)
-  Art.box(g.world_root,GardenTerrain.point(plot.center+Vector3(-4.1,0,5.15))+Vector3(0,.59,0),Vector3(1.65,.40,.08),Color("5b5c40"))
-  for x in [-.6,.6]: Art.cylinder(g.world_root,GardenTerrain.point(plot.center+Vector3(-4.1+x,0,5.15))+Vector3(0,.3,0),.035,.6,Color("77634a"))
  # Small collision box for the permanent pavilion.
  var wall=StaticBody3D.new()
  var collider=CollisionShape3D.new()
