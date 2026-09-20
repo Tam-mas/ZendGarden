@@ -113,7 +113,8 @@ var sign_text="My garden"
 var sign_color=Color("f1e5c7")
 var editing_sign=-1
 
-var settings={"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
+var touch: GardenTouch
+var settings={"controls":"auto","left_handed":false,"control_size":100,"graphics":"auto","render_scale":0,"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
 var request_popup: PanelContainer
 var request_unread=false
 var orders_button: Button
@@ -124,7 +125,7 @@ var climate: GardenClimate
 
 func _ready() -> void:
  rng.seed = 7183
- smoke = "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
+ smoke = "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
  if smoke: SAVE_PATH="user://smoke-test-save.json"
  load_game()
  GardenExpansion.prepare(self)
@@ -135,6 +136,9 @@ func _ready() -> void:
  add_child(climate)
  climate.restore(loaded_data.get("climate",{}))
  make_ui()
+ touch=GardenTouch.new()
+ add_child(touch)
+ touch.setup(self)
  restore_garden()
  ambient = Soundscape.new()
  add_child(ambient)
@@ -143,11 +147,21 @@ func _ready() -> void:
  refresh_ui()
  if planted.is_empty() and loaded_data.is_empty(): starter_garden()
  if not settings.intro_seen and not smoke: show_welcome()
- if "--ground-test" in OS.get_cmdline_user_args(): call_deferred("run_ground_test")
+ if "--touch-test" in OS.get_cmdline_user_args(): call_deferred("run_touch_test")
+ elif "--ground-test" in OS.get_cmdline_user_args(): call_deferred("run_ground_test")
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
- elif not is_instance_valid(welcome): Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+ elif not is_instance_valid(welcome): resume_controls()
+
+func touch_active() -> bool:
+ return is_instance_valid(touch) and touch.enabled
+
+func resume_controls() -> void:
+ Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if touch_active() else Input.MOUSE_MODE_CAPTURED
+
+func gameplay_active() -> bool:
+ return not touch.blocked() if touch_active() else Input.mouse_mode==Input.MOUSE_MODE_CAPTURED
 
 func make_world() -> void:
  world_root = Node3D.new()
@@ -285,7 +299,7 @@ func label(text: String, size: int = 16, color: Color = Color("efdfbc")) -> Labe
  var l = Label.new()
  l.theme=menu_theme
  l.text = text
- l.add_theme_font_size_override("font_size",size)
+ l.add_theme_font_size_override("font_size",maxi(16,size) if touch_active() else size)
  l.add_theme_color_override("font_color",Color("cbb98e") if color in [Color("75816b"),Color("7b886f"),Color("82917c")] else color)
  return l
 
@@ -293,10 +307,10 @@ func button(text: String, action: Callable, min_size: Vector2 = Vector2(0,38)) -
  var b = Button.new()
  b.text = text
  b.focus_mode = Control.FOCUS_NONE
- b.custom_minimum_size = min_size
+ b.custom_minimum_size = Vector2(min_size.x,maxf(48,min_size.y)) if touch_active() else min_size
  b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
  b.theme=menu_theme
- b.add_theme_font_size_override("font_size",14)
+ b.add_theme_font_size_override("font_size",17 if touch_active() else 14)
  b.pressed.connect(action)
  return b
 
@@ -446,6 +460,7 @@ func make_ui() -> void:
  ui.add_child(compact_hud)
 
 func open_sidebar(page: String) -> void:
+ if touch_active(): touch.reset_gestures()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  var was_open = side_panel.visible and active_tab==page
  active_tab=page
@@ -651,13 +666,13 @@ func refresh_sidebar() -> void:
    GardenExperience.journey(self)
    side_title.text = "A field companion"
    add_note("GROWING IN LAYERS",15)
-   add_note("Groundcover, flowers and shrubs share planting rows. Trees sit between the rows, above the underplanting. Each uses 1, 2, 4 or 7 capacity. Press L to target a layer. Trees shade nearby plants; leave sunny flowers at the edges.")
+   add_note("Groundcover, flowers and shrubs share planting rows. Trees sit between the rows, above the underplanting. Each uses 1, 2, 4 or 7 capacity. Use the Layer button (L on keyboard) to target a layer. Trees shade nearby plants; leave sunny flowers at the edges.")
    add_note("A GENTLE RHYTHM",15)
-   add_note("A day lasts 10 minutes; G plays a six-second sunset, starry night and sunrise into the next morning. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
+   add_note("A day lasts 10 minutes; Next morning in the Garden menu (G on keyboard) plays a six-second sunset, starry night and sunrise. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
    add_note("WELCOMING WILDLIFE",15)
    add_note("Native plants → native birds\nThree flowering plants → bees & butterflies\nTrees or bird baths → songbirds\nPonds → frogs & dragonflies\nMoss and dusk → fireflies\nFish → stock a placed pond in the shop")
    add_note("STRUCTURES & PHOTOS",15)
-   add_note("Q rotates a structure anticlockwise; E rotates clockwise in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
+   add_note("Use Turn left / Turn right on touch, or Q/E on keyboard, to rotate a structure in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
    add_note("COMPANIONS",15)
    for i in range(2):
     var idx = i
@@ -667,10 +682,13 @@ func refresh_sidebar() -> void:
     input.max_length = 24
     input.text_changed.connect(func(value): companion_names[idx]=value)
     list_box.add_child(input)
-   add_note("Walk near a companion and press E for a little affection. No feeding, chores or worries.")
+   add_note("Walk near a companion and tap Greet (E on keyboard) for a little affection. No feeding, chores or worries.")
    list_box.add_child(button("Save garden",func(): save_game(); toast("Your garden is saved.")))
    list_box.add_child(button("Comfort & sound settings",func(): open_sidebar("Settings")))
-   detail_label.text = "WASD move · Shift stroll faster\nMouse look · Tab menus · Wheel field of view\nL switches target layer · Esc settings"
+   detail_label.text = "Left thumb to walk · Drag to look\nTools selects an action · Garden opens menus\nLayer chooses plant height · Photo mode has Rise / Lower and Take photo buttons" if touch_active() else "WASD move · Shift stroll faster\nMouse look · Tab menus · Wheel field of view\nL switches target layer · Esc settings"
+
+ if touch_active():
+  add_note(detail_label.text,16)
 
 func refresh_ui() -> void:
  refresh_sidebar()
@@ -717,9 +735,11 @@ func update_hud() -> void:
  if hover_valid and not preview_error.is_empty() and mode=="plant": status_label.text=preview_error
 
 func show_welcome() -> void:
- GardenExperience.welcome(self)
+ if touch_active(): touch.welcome_page()
+ else: GardenExperience.welcome(self)
 
 func apply_settings() -> void:
+ if is_instance_valid(touch): touch.configure()
  if is_instance_valid(ambient):
   ambient.music_volume=float(settings.music_volume)/100
   ambient.nature_volume=float(settings.nature_volume)/100
@@ -731,7 +751,7 @@ func dismiss_request() -> void:
  request_popup_time=0
  if is_instance_valid(request_popup): request_popup.hide()
  if request_return_to_game and not side_panel.visible:
-  Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+  resume_controls()
  request_return_to_game=false
 
 func notify_requests() -> void:
@@ -775,10 +795,11 @@ func _process(delta: float) -> void:
   request_popup.visible=show_note
  var input_focus = get_viewport().gui_get_focus_owner() is LineEdit
  var move = Vector3.ZERO
- if not day_transition and not input_focus and not is_instance_valid(welcome) and (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED or photo_mode):
+ if not day_transition and not input_focus and not is_instance_valid(welcome) and (gameplay_active() or (photo_mode and not touch_active())):
   move.x = float(Input.is_physical_key_pressed(KEY_D))-float(Input.is_physical_key_pressed(KEY_A))
   move.z = float(Input.is_physical_key_pressed(KEY_S))-float(Input.is_physical_key_pressed(KEY_W))
-  move = move.rotated(Vector3.UP,yaw).normalized()
+  if touch_active(): move=Vector3(touch.stick.x,0,touch.stick.y)
+  move = move.limit_length(1.0).rotated(Vector3.UP,yaw)
  if photo_mode:
   camera_target += move*delta*8
   camera_target.y += (float(Input.is_physical_key_pressed(KEY_E))-float(Input.is_physical_key_pressed(KEY_Q)))*delta*4
@@ -799,7 +820,7 @@ func _process(delta: float) -> void:
   camera_target = camera_target.lerp(player.position+Vector3(0,1.15,0),minf(1,delta*8))
   if mode=="walk": current_plot=nearest_plot(player.position)
   if day_transition: update_day_transition(delta)
-  elif not (settings.pause_menus and Input.mouse_mode==Input.MOUSE_MODE_VISIBLE and not smoke):
+  elif not (settings.pause_menus and not gameplay_active() and not smoke):
    clock_time += delta/DAY_SECONDS
    if clock_time>=1:
     clock_time-=1
@@ -831,11 +852,11 @@ func update_camera(_delta: float) -> void:
  camera.rotation=Vector3(-pitch,yaw,0)
  if day_transition and not settings.reduced_motion:
   camera.rotation.x=lerpf(-pitch,.40,sin(transition_elapsed/TRANSITION_SECONDS*PI)*.85)
- if is_instance_valid(reticle): reticle.visible=not photo_mode and not day_transition and Input.mouse_mode==Input.MOUSE_MODE_CAPTURED
+ if is_instance_valid(reticle): reticle.visible=not photo_mode and not day_transition and gameplay_active()
  if is_instance_valid(held_tool):
   var tools_by_mode={"water":"can","prune":"shears","harvest":"shears","plant":"trowel","remove":"trowel","rake":"rake"}
   var active=tools_by_mode.get(mode,"")
-  for key in tool_models: tool_models[key].visible=key==active and not photo_mode and not day_transition and Input.mouse_mode==Input.MOUSE_MODE_CAPTURED
+  for key in tool_models: tool_models[key].visible=key==active and not photo_mode and not day_transition and gameplay_active()
 
 
 func walk_motion(motion: Vector3) -> void:
@@ -918,6 +939,7 @@ func apply_mouse_look(movement: Vector2) -> void:
  pitch = clampf(pitch+movement.y*sensitivity*(-1 if settings.invert_y else 1),-1.45,1.45)
 
 func _unhandled_input(event: InputEvent) -> void:
+ if touch_active() and (event is InputEventMouse or event is InputEventScreenTouch or event is InputEventScreenDrag): return
  if is_instance_valid(welcome): return
  if day_transition: return
  if event is InputEventMouseMotion and (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED or Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
@@ -928,7 +950,7 @@ func _unhandled_input(event: InputEvent) -> void:
   elif event.button_index==MOUSE_BUTTON_LEFT and not photo_mode and not is_instance_valid(welcome):
    if Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED:
     side_panel.hide()
-    Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+    resume_controls()
    else: perform_action()
  if event is InputEventKey and event.pressed and not event.echo:
   if get_viewport().gui_get_focus_owner() is LineEdit: return
@@ -949,7 +971,7 @@ func _unhandled_input(event: InputEvent) -> void:
      side_panel.show()
     else:
      side_panel.hide()
-     Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+     resume_controls()
    KEY_L:
     selected_layer=(selected_layer+1)%4
     toast("Target layer: "+["groundcover","flowers","shrubs","canopy"][selected_layer])
@@ -970,7 +992,8 @@ func set_mode(value: String) -> void:
  mode=value
  if value=="build": structure_rotation=0.0
  side_panel.visible=value=="plant"
- Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if value=="plant" else Input.MOUSE_MODE_CAPTURED
+ if value=="plant": Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ else: resume_controls()
  if value=="plant": active_tab="Seeds"; refresh_sidebar()
  moved_index=-1
  moved_object=-1
@@ -997,7 +1020,7 @@ func choose_plant(id: int) -> void:
  selected_layer=catalogue[id].layer
  set_mode("plant")
  side_panel.hide()
- Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+ resume_controls()
  refresh_ui()
 
 func update_hover() -> void:
@@ -1006,8 +1029,9 @@ func update_hover() -> void:
  if is_instance_valid(preview): preview.hide()
  hover_valid=false
  if day_transition or photo_mode or mode=="walk": return
- if Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and get_viewport().gui_get_hovered_control()!=null: return
- var mouse = get_viewport().get_visible_rect().size*0.5 if Input.mouse_mode==Input.MOUSE_MODE_CAPTURED else get_viewport().get_mouse_position()
+ if touch_active() and not gameplay_active(): return
+ if not touch_active() and Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and get_viewport().gui_get_hovered_control()!=null: return
+ var mouse = get_viewport().get_visible_rect().size*0.5 if gameplay_active() else get_viewport().get_mouse_position()
  var origin = camera.project_ray_origin(mouse)
  var dir = camera.project_ray_normal(mouse)
  var hit = GardenTerrain.ray(origin,dir)
@@ -1213,6 +1237,7 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  pos=GardenTerrain.point(pos)
  var n = Art.plant(catalogue[id])
  plant_root.add_child(n)
+ if is_instance_valid(touch) and (settings.graphics=="mobile" or (settings.graphics=="auto" and touch_active())): touch.apply_detail(n,65.0)
  n.position=pos
  n.rotation.y=rng.randf()*TAU
  var marker=Node3D.new()
@@ -1309,7 +1334,7 @@ func update_day_transition(delta: float) -> void:
  if progress>=1:
   day_transition=false
   transition_label.hide()
-  if Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED: side_panel.show()
+  if not gameplay_active() and not touch_active(): side_panel.show()
   refresh_ui()
   if not smoke: save_game()
 
@@ -1574,7 +1599,8 @@ func toggle_photo() -> void:
  grid_cursor.hide()
  if is_instance_valid(preview): preview.hide()
  player.hide()
- Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if photo_mode else Input.MOUSE_MODE_CAPTURED
+ if photo_mode: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ else: resume_controls()
  if not photo_mode:
   camera_target=player.position+Vector3(0,1.15,0)
   side_panel.hide()
@@ -1582,17 +1608,22 @@ func toggle_photo() -> void:
 
 func capture_photo() -> void:
  var was_visible=ui.visible
+ var touch_was_visible=is_instance_valid(touch) and touch.visible
+ if is_instance_valid(touch): touch.hide()
  ui.hide()
  await RenderingServer.frame_post_draw
  var img=get_viewport().get_texture().get_image()
  var path="user://photos"
  DirAccess.make_dir_recursive_absolute(path)
  var file=path+"/zend-garden-"+Time.get_datetime_string_from_system().replace(":","-")+".png"
- img.save_png(file)
+ if OS.has_feature("web"):
+  JavaScriptBridge.download_buffer(img.save_png_to_buffer(),file.get_file(),"image/png")
+ else: img.save_png(file)
  ui.visible=was_visible
- toast("Photo saved in "+ProjectSettings.globalize_path(path))
+ if is_instance_valid(touch): touch.visible=touch_was_visible
+ toast("Photo download ready." if OS.has_feature("web") else "Photo saved in "+ProjectSettings.globalize_path(path))
  if photo_mode:
-  photo_panel.get_child(0).get_child(0).text="Saved to user data / photos"
+  photo_panel.get_child(0).get_child(0).text="Photo downloaded" if OS.has_feature("web") else "Saved to user data / photos"
 
 func save_game() -> void:
  var ps: Array=[]
@@ -1783,7 +1814,7 @@ func run_smoke_test() -> void:
  # Exercise first-person aiming and cursor switching using the player input path.
  set_mode("plant")
  side_panel.hide()
- Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+ resume_controls()
  yaw=0
  pitch=atan2(player.position.y+1.62-GardenTerrain.point(Vector3.ZERO).y,player.position.z)
  update_camera(0)
@@ -1832,6 +1863,7 @@ func run_smoke_test() -> void:
  await preload("res://tests/walking.gd").run(self,failures)
  await preload("res://tests/ground_finish.gd").run(self,failures)
  await preload("res://tests/pruning.gd").run(self,failures)
+ await preload("res://tests/touch_controls.gd").run(self,failures)
  print("ZEND_GARDEN_TEST_RESULT: ","PASS" if failures.is_empty() else failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 
@@ -1878,3 +1910,8 @@ func restart_garden() -> void:
   return
  set_process(false)
  get_tree().reload_current_scene()
+
+func run_touch_test() -> void:
+ var failures=[]
+ await preload("res://tests/touch_controls.gd").run(self,failures)
+ get_tree().quit(0 if failures.is_empty() else 1)

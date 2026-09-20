@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-21 08:47] Added
+
+**Tech:** `scripts/touch_controls.gd`, `scripts/garden.gd/gameplay_active` — adaptive touch controls and mobile layouts.
+
+**Dev:** Added capability-based detection without JavaScript eval, tracked multi-touch gestures, analogue walking, centre aiming, repeated care actions, placement controls, lift undo, responsive menus, touch onboarding, virtual keyboard support, browser photo downloads and saved control/display preferences. Mobile graphics reduce resolution, shadows and distant detail; focus loss clears gestures and saves progress. Desktop gameplay no longer depends on touch requiring pointer lock.
+
+**Plain:** Phones and tablets can play with a thumbstick, drag-to-look, large tool buttons and menus made for touch.
+
+**Why:** Makes the same garden accessible without a keyboard or mouse while preserving desktop controls and browser security protections.
+
 ### [2026-09-21 08:12] Added
 
 **Tech:** `scripts/garden_art.gd/sign_board`, `scripts/garden.gd/sign_editor_page` — correctly oriented garden labels and custom signs.

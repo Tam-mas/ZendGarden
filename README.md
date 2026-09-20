@@ -20,7 +20,7 @@ The game is in development, and its source is publicly available as an **open-so
 
 ## Play on the web or host your own garden
 
-The repository includes a browser export and an automatic Cloudflare Pages build. To publish it on your own domain, follow the [Cloudflare Pages setup guide](docs/cloudflare-pages.md). The browser edition uses keyboard and mouse, and saves your garden on that device in browser storage.
+The repository includes a browser export and an automatic Cloudflare Pages build. To publish it on your own domain, follow the [Cloudflare Pages setup guide](docs/cloudflare-pages.md). The browser edition supports keyboard and mouse, plus automatic touch controls for phones and tablets. It saves your garden on that device in browser storage.
 
 ## Getting started
 
@@ -151,3 +151,13 @@ MIT licensed. Use, fork, modify or share. Its up to you
 ### Personal garden signs
 
 Open **Shop → Custom garden sign** to write up to 64 characters and choose a text colour. Each sign costs 15 petals. Place it on the ground and use **Q/E** to rotate it; the lettering is readable from both sides. Use the **Edit sign** buttons in the Shop to change existing signs for free, or the usual move and remove tools to rearrange them. Your signs are saved with your garden.
+
+### Playing on a phone or tablet
+
+Touch controls appear automatically; landscape orientation gives you the most room. Use the left thumbstick to walk, drag the view to look around, and choose a tool from **Tools**. Aim with the centre dot and tap the labelled action button. Hold **Water** or **Rake** to repeat. Placement offers rotation and cancel buttons; lifting a plant or ornament offers **Undo lift** for 12 seconds.
+
+**Garden** opens seeds, the shop, orders, settings, next morning and photo mode. Menus pause movement, and controls reset when the app loses focus. Text fields support the on-screen keyboard, and browser photos download to your device.
+
+In **Settings**, choose Auto, Touch or Keyboard & mouse controls; switch to a left-handed layout; adjust touch-control size, look sensitivity and inversion; and choose graphics quality or 3D resolution. The automatic mobile graphics preset reduces rendering resolution, disables sun shadows, and limits distant decorative meshes. Menus stay at full resolution.
+
+Mobile layouts and simultaneous touch input are covered by automated tests and browser emulation. Performance and on-screen keyboard behaviour still need testing on physical iOS and Android devices, particularly with large gardens. Saves stay with the browser profile and site address; they do not automatically sync across devices or domains.

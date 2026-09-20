@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="A quiet place to plant, grow, and make your own. Play Zend Garden, a cozy first-person gardening game, in your browser.">
   <title>Zend Garden</title>
   <link rel="icon" href="index.icon.png">
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; background: #24372b; color: #49351f; font: 16px/1.6 Georgia, serif; }
-    #canvas { display: block; width: 100vw; height: 100vh; outline: none; }
+    #canvas { display: block; width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right)) !important; height: 100vh; height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important; margin-left: env(safe-area-inset-left); margin-top: env(safe-area-inset-top); outline: none; touch-action: none; overscroll-behavior: none; }
     #welcome { position: fixed; inset: 0; display: grid; place-items: center; padding: 32px 20px; overflow: auto;
       background: linear-gradient(90deg, #1c302844, #1c302811, #1c302844), url('art/lakeside.jpg') center/cover; }
     #welcome[hidden] { display: none; }
@@ -35,6 +35,8 @@
     a { color: #556638; text-underline-offset: 3px; }
     progress { width: 100%; height: 8px; accent-color: #738651; }
     #status { min-height: 20px; margin: 5px 0; font: italic 13px/1.5 Georgia, serif; }
+    .touch-hint { display: none; }
+    @media (any-pointer: coarse) { .desktop-hint { display: none; } .touch-hint { display: inline; } }
     @media (max-height: 760px) { main { padding: 18px 30px; } h1 { font-size: 44px; } .intro { font-size: 18px; } .small { margin: 8px 0; } .controls { margin-top: 12px; padding-top: 12px; } }
     @media (max-width: 480px) { #welcome { padding: 16px 10px; } main { padding: 20px 18px; border-width: 12px; } }
   </style>
@@ -52,7 +54,7 @@
       <p><button id="play" type="button">Enter the garden</button></p>
       <progress id="progress" max="1" value="0" hidden aria-label="Game download progress"></progress>
       <p id="status" role="status" aria-live="polite"></p>
-      <p class="small controls"><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> wander &nbsp; · &nbsp; Mouse to look &nbsp; · &nbsp; <kbd>Tab</kbd> menus<br>Best enjoyed with a keyboard and mouse.</p>
+      <p class="small controls"><span class="desktop-hint"><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> wander &nbsp; · &nbsp; Mouse to look &nbsp; · &nbsp; <kbd>Tab</kbd> menus</span><span class="touch-hint">Left thumb to walk · Drag to look · Tap to garden</span><br>Touch controls are available on phones and tablets. Landscape works best.</p>
       <p class="small">Your garden stays in this browser, ready for your next visit.<br>Clearing site data removes your save.</p>
       <p class="small"><a href="https://github.com/Tam-mas/ZendGarden">About the game &amp; source code</a></p>
       <noscript>Please enable JavaScript to enter the garden.</noscript>

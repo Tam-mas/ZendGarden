@@ -66,9 +66,10 @@ static func finish(g) -> void:
  g.welcome_backdrop=null
  g.settings.intro_seen=true
  g.save_game()
- Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+ g.resume_controls()
 
 static func settings_page(g) -> void:
+ if is_instance_valid(g.touch): g.touch.settings_page()
  g.side_title.text="Make yourself at home"
  g.add_note("MOUSE LOOK",15)
  for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
@@ -76,6 +77,7 @@ static func settings_page(g) -> void:
   var key=entry[0]
   var toggle=CheckButton.new()
   toggle.text=entry[1]
+  if g.touch_active(): toggle.custom_minimum_size.y=48
   toggle.button_pressed=g.settings[key]
   toggle.toggled.connect(func(value): g.settings[key]=value; g.apply_settings(); g.save_game())
   g.list_box.add_child(toggle)
@@ -85,11 +87,11 @@ static func settings_page(g) -> void:
   var slider=HSlider.new()
   slider.min_value=entry[2]; slider.max_value=entry[3]; slider.step=entry[4]
   slider.value=g.settings[key]
-  slider.custom_minimum_size=Vector2(240,24)
+  slider.custom_minimum_size=Vector2(240,48 if g.touch_active() else 24)
   slider.value_changed.connect(func(value): g.settings[key]=value; g.apply_settings())
   slider.drag_ended.connect(func(_changed): g.save_game())
   g.list_box.add_child(slider)
- g.list_box.add_child(g.button("Replay the welcome walk",func(): welcome(g)))
+ g.list_box.add_child(g.button("Replay the welcome walk",func(): g.show_welcome()))
  g.list_box.add_child(g.button("Save garden",func(): g.save_game(); g.toast("Your garden is saved.")))
  g.list_box.add_child(g.button("Start a new garden…",func(): confirm_restart(g)))
  g.detail_label.text="Settings are saved with your garden.\nReduced motion skips the time-lapse and menu fades."
