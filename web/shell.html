@@ -8,12 +8,21 @@
   <link rel="icon" href="index.icon.png">
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; background: #24372b; color: #49351f; font: 16px/1.6 Georgia, serif; }
-    #canvas { display: block; width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right)) !important; height: 100vh; height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important; margin-left: env(safe-area-inset-left); margin-top: env(safe-area-inset-top); outline: none; touch-action: none; overscroll-behavior: none; }
-    #welcome { position: fixed; inset: 0; display: grid; place-items: center; padding: 32px 20px; overflow: auto;
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
+    body { background: #24372b; color: #49351f; font: 16px/1.6 Georgia, serif; }
+    #canvas { display: block; position: fixed !important;
+      left: var(--garden-left, 0px) !important; top: var(--garden-top, 0px) !important;
+      width: calc(var(--garden-width, 100vw) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) !important;
+      height: calc(var(--garden-height, 100vh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+      margin-left: env(safe-area-inset-left, 0px); margin-top: env(safe-area-inset-top, 0px);
+      outline: none; touch-action: none; overscroll-behavior: none; }
+    #welcome { position: fixed; z-index: 10; left: var(--garden-left, 0px); top: var(--garden-top, 0px);
+      width: var(--garden-width, 100%); height: var(--garden-height, 100%);
+      display: flex; flex-direction: column; align-items: center; padding: 16px; overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
       background: linear-gradient(90deg, #1c302844, #1c302811, #1c302844), url('art/lakeside.jpg') center/cover; }
     #welcome[hidden] { display: none; }
-    main { width: min(540px, 100%); padding: 28px 40px; text-align: center;
+    main { flex: 0 0 auto; margin: auto 0; width: min(540px, 100%); padding: 28px 40px; text-align: center;
       background: #eadbb8 url('art/parchment.png') center/100% 100%;
       border: 18px solid #644322; border-image: url('art/wood.png') 32 fill / 18px / 0 stretch;
       box-shadow: 0 18px 60px #14221870; position: relative; isolation: isolate; }
@@ -35,6 +44,8 @@
     a { color: #556638; text-underline-offset: 3px; }
     progress { width: 100%; height: 8px; accent-color: #738651; }
     #status { min-height: 20px; margin: 5px 0; font: italic 13px/1.5 Georgia, serif; }
+    #fullscreen { font-size: 15px; padding: 6px 16px; }
+    #fullscreen[hidden] { display: none; }
     .touch-hint { display: none; }
     @media (any-pointer: coarse) { .desktop-hint { display: none; } .touch-hint { display: inline; } }
     @media (max-height: 760px) { main { padding: 18px 30px; } h1 { font-size: 44px; } .intro { font-size: 18px; } .small { margin: 8px 0; } .controls { margin-top: 12px; padding-top: 12px; } }
@@ -52,6 +63,8 @@
       <p class="intro">A quiet place to plant, grow,<br>and make your own.</p>
       <p class="description">A handful of seeds. A friendly visitor. A little growth, every day.<br>There’s room to make something lovely here.</p>
       <p><button id="play" type="button">Enter the garden</button></p>
+      <button id="fullscreen" type="button" hidden>Full screen</button>
+      <p id="fullscreen-note" class="small" role="status"></p>
       <progress id="progress" max="1" value="0" hidden aria-label="Game download progress"></progress>
       <p id="status" role="status" aria-live="polite"></p>
       <p class="small controls"><span class="desktop-hint"><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> wander &nbsp; · &nbsp; Mouse to look &nbsp; · &nbsp; <kbd>Tab</kbd> menus</span><span class="touch-hint">Left thumb to walk · Drag to look · Tap to garden</span><br>Touch controls are available on phones and tablets. Landscape works best.</p>
@@ -60,6 +73,7 @@
       <noscript>Please enable JavaScript to enter the garden.</noscript>
     </main>
   </section>
+  <script src="viewport.js"></script>
   <script src="$GODOT_URL"></script>
   <script>window.ZEND_GODOT_CONFIG = $GODOT_CONFIG;</script>
   <script src="loader.js"></script>

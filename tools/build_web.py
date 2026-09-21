@@ -120,7 +120,7 @@ def package_site():
         raise RuntimeError('Missing Godot configuration script in exported HTML')
     (OUT / 'godot-config.js').write_text(match.group(1) + '\n')
     html_path.write_text(re.sub(pattern, '<script src="godot-config.js"></script>', html))
-    for name in ('_headers', 'loader.js', '404.html'):
+    for name in ('_headers', 'loader.js', 'viewport.js', '404.html'):
         shutil.copyfile(ROOT / 'web' / name, OUT / name)
     shutil.copytree(ROOT / 'web/art', OUT / 'art')
     for name in ('wood', 'parchment', 'button'):

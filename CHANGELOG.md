@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-21 13:37] Fixed
+
+**Tech:** `web/shell.html`, `web/viewport.js` — visible-viewport layout and optional fullscreen.
+
+**Dev:** Removed the canvas from document flow, replaced the centred grid launch overlay with a scrollable flex layout, and size both against VisualViewport with resize/orientation handling and safe-area insets. Added a user-initiated fullscreen button with a non-blocking fallback while retaining the existing CSP.
+
+**Plain:** The welcome screen and game fill the available iPad browser area, with the play button reachable and fullscreen available on supported browsers.
+
+**Why:** Lets tablet players reach and play the game instead of seeing a clipped welcome screen below a blank area.
+
 ### [2026-09-21 08:47] Added
 
 **Tech:** `scripts/touch_controls.gd`, `scripts/garden.gd/gameplay_active` — adaptive touch controls and mobile layouts.
