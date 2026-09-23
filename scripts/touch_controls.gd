@@ -281,7 +281,7 @@ func _process(delta: float) -> void:
   if repeat_time<=0: act(); repeat_time=.3
 
 func _input(event: InputEvent) -> void:
- if enabled and g.settings.controls=="auto" and event is InputEventKey and event.pressed and not blocked() and event.physical_keycode in [KEY_W,KEY_A,KEY_S,KEY_D]:
+ if enabled and g.settings.controls=="auto" and event is InputEventKey and event.pressed and not blocked() and event.physical_keycode in [KEY_W,KEY_A,KEY_S,KEY_D,KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT]:
   detected=false
   g.settings.controls="keyboard"
   configure()

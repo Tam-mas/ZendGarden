@@ -179,6 +179,15 @@ static func furnishing(kind: String) -> Node3D:
  var wood = Color("b19a7a")
  var dark = Color("817460")
  match kind:
+  "hive":
+   for x in [-.24,.24]:
+    for z in [-.2,.2]: box(n,Vector3(x,.18,z),Vector3(.07,.36,.07),dark)
+   for y in [.45,.73]:
+    box(n,Vector3(0,y,0),Vector3(.66,.26,.54),Color("dfbb72"))
+    for x in [-.34,.34]: box(n,Vector3(x,y,0),Vector3(.06,.05,.18),wood)
+   box(n,Vector3(0,.90,0),Vector3(.78,.08,.66),Color("7c8e84"))
+   box(n,Vector3(0,.33,-.285),Vector3(.26,.045,.025),Color("30271e"))
+   box(n,Vector3(0,.30,-.36),Vector3(.50,.045,.24),wood)
   "bench":
    for x in [-0.65,0.65]:
     box(n,Vector3(x,0.3,0),Vector3(0.12,0.6,0.5),dark)

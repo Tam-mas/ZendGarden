@@ -62,7 +62,7 @@ Press **Tab** to open the menus and choose a plant from the seed selection. Aim 
 
 | Control | Action |
 | --- | --- |
-| **W A S D** | Walk |
+| **W A S D** or **arrow keys** | Walk |
 | **Mouse** | Look around |
 | **Shift** | Walk faster |
 | **Tab** | Open menus / return to looking around |
@@ -86,6 +86,14 @@ A normal in-game day lasts about **10 minutes**, and each season lasts **12 days
 You can advance to the next morning whenever you want. The garden does not progress while the game is closed, so you can return without having missed anything.
 
 Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
+
+### Pruning, paths, and visitors
+
+Outside garden beds, three pruning cuts remove a plant. Planted varieties recover one cut each morning; cleared decorative border plants stay cleared. Pruning inside beds remains safe. To clear lawn grass, use the rake: it leaves a grooved earth path, and upgraded rakes can widen an existing patch. Move or prune plants before raking underneath them. New patches can reveal up to four petals per day.
+
+Tomato seeds cost **23 petals** to unlock. You can plant them in any season; they grow in **summer and autumn**, or year-round inside a greenhouse. The seed selection now explains when you need more petals.
+
+Rabbits and kangaroos occasionally visit open areas, including a mother carrying a joey. Buy a **Beehive for 65 petals** from the shop and place it to attract its own daytime bees.
 
 ## Saves and photos
 

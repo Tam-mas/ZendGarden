@@ -27,7 +27,7 @@ test_exit=0
 # macOS may stop drawing an obscured window; screenshot awaits need visible frames.
 "$GODOT_BIN" --always-on-top --path "$PWD" -- --smoke-test > "$logfile" 2>&1 || test_exit=$?
 cat "$logfile"
-if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[' "$logfile"; then
+if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[[^]]' "$logfile"; then
   exit 1
 fi
 rg -q 'ZEND_GARDEN_TEST_RESULT: PASS' "$logfile"

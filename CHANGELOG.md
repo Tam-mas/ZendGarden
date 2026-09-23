@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-23 18:54] Added
+
+**Tech:** `scripts/garden_care.gd`, `scripts/garden_visitors.gd`, `scripts/garden.gd` — outdoor care, animal visits, shop hives and arrow navigation.
+
+**Dev:** Added persistent three-cut outdoor pruning with safe bed pruning, visible rake furrows and upgrade widening with footprint checks, temporary rabbit/kangaroo groups including a joey, and saved hive ornaments with daytime bees. Clarified seed unlock costs and seasonal growth; tomatoes remain plantable year-round. Added gameplay regressions for these features and arrow input.
+
+**Plain:** Clear overgrown paths, rake visible trails, welcome rabbits and kangaroos, place a beehive, and walk using the arrow keys.
+
+**Why:** Makes garden care understandable and useful while adding more life and flexible controls.
+
 ### [2026-09-21 13:37] Fixed
 
 **Tech:** `web/shell.html`, `web/viewport.js` — visible-viewport layout and optional fullscreen.

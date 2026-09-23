@@ -45,6 +45,7 @@ static func build(g) -> void:
   plant.rotation.y=r.randf()*TAU
   plant.scale=Vector3.ONE*r.randf_range(.75,1.3)
   g.world_root.add_child(plant)
+  GardenCare.register_wild(g,plant,"border:%d" % j)
  for plot in g.plots:
   for j in range(24):
    var side=-1.0 if j%2==0 else 1.0
@@ -54,6 +55,7 @@ static func build(g) -> void:
    border.position=GardenTerrain.point(p)
    border.scale=Vector3.ONE*r.randf_range(.7,1.05)
    g.world_root.add_child(border)
+   GardenCare.register_wild(g,border,"edge:%d:%d" % [g.plots.find(plot),j])
  # Bed names belong on small physical labels, not floating across the horizon.
  for i in range(g.plots.size()):
   var plot=g.plots[i]
