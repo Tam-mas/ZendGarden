@@ -70,10 +70,12 @@ static func run(g, failures: Array) -> void:
  g.visitors.random.seed=19
  for guest in g.visitors.guests: guest.node.queue_free()
  g.visitors.guests.clear()
+ await g.get_tree().process_frame
  g.visitors.spawn_group(true)
  if g.visitors.guests.size()!=2 or not g.visitors.guests.any(func(v): return v.node.name=="KangarooWithJoey"): failures.append("Kangaroo family missing")
  for guest in g.visitors.guests: guest.node.queue_free()
  g.visitors.guests.clear()
+ await g.get_tree().process_frame
  g.visitors.spawn_group(false)
  if g.visitors.guests.size()!=3: failures.append("Rabbit visitors missing")
  g.visitors._process(66)
