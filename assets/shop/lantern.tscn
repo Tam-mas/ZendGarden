@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ahoow"]
+albedo_color = Color(0.5882353, 0.6039216, 0.5294118, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qdyxu"]
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.7
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ckylg"]
+albedo_color = Color(0.95686275, 0.85882354, 0.627451, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_8qvuy"]
+size = Vector3(0.42, 0.4, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_atkkh"]
+albedo_color = Color(0.57254905, 0.58431375, 0.5019608, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xcx4t"]
+top_radius = 0.18
+bottom_radius = 0.38
+height = 0.18
+radial_segments = 10
+
+[node name="Lantern" type="Node3D" unique_id=545274326]
+
+[node name="@MeshInstance3D@12" type="MeshInstance3D" parent="." unique_id=1358927401]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+material_override = SubResource("StandardMaterial3D_ahoow")
+mesh = SubResource("CylinderMesh_qdyxu")
+
+[node name="@MeshInstance3D@13" type="MeshInstance3D" parent="." unique_id=588217006]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
+material_override = SubResource("StandardMaterial3D_ckylg")
+mesh = SubResource("BoxMesh_8qvuy")
+
+[node name="@MeshInstance3D@14" type="MeshInstance3D" parent="." unique_id=1301951271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
+material_override = SubResource("StandardMaterial3D_atkkh")
+mesh = SubResource("CylinderMesh_xcx4t")
+
+[node name="@OmniLight3D@15" type="OmniLight3D" parent="." unique_id=325582789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+light_color = Color(1, 0.8627451, 0.61960787, 1)
+light_energy = 0.8
+omni_range = 4.0

@@ -24,10 +24,10 @@ def write(name, values):
 
 notes = [261.63, 329.63, 392, 440, 392, 329.63, 293.66, 261.63,
          196, 261.63, 329.63, 293.66, 261.63, 196, 220, 293.66]
-def music():
+def music(profile=0):
     for i in range(RATE*DURATION):
         t=i/RATE; value=0
-        for k, frequency in enumerate(notes):
+        for k, frequency in enumerate(notes if profile==0 else [[196,246.94,293.66,329.63,293.66,246.94,220,196,146.83,196,246.94,220,196,146.83,164.81,220],[220,261.63,329.63,392,329.63,261.63,293.66,220,164.81,220,261.63,293.66,220,164.81,196,261.63],[293.66,369.99,440,493.88,440,369.99,329.63,293.66,220,293.66,369.99,329.63,293.66,220,246.94,329.63]][profile-1]):
             age=(t-k*2) % DURATION
             if age < 7:
                 envelope=(1-exp(-age*8))*exp(-age*.95)*(1-age/7)**2
@@ -43,16 +43,22 @@ def nature(kind):
         low += .014*(rng.uniform(-1,1)-low)
         softer += .005*(low-softer)
         value=softer*(.15 if kind=='rain' else .06)
-        if kind=='day':
+        if kind in ('day','bath_birds','woodland'):
             for onset in (3, 3.45, 12, 12.4, 22, 23):
                 age=t-onset
                 if 0<age<.24:
-                    value += .016*sin(pi*age/.24)**2*sin(2*pi*(1800*age+600*age*age))
+                    value += (.04 if kind=='bath_birds' else .016)*sin(pi*age/.24)**2*sin(2*pi*(1800*age+600*age*age))
+        if kind=='waterside':
+            value += softer*.55 + .004*sin(2*pi*380*t)*max(0,sin(t*1.3))**12
+        if kind=='woodland':
+            value += softer*.22
         if kind=='night':
             pulse=max(0,sin(t*5))**10
             value+=.002*sin(2*pi*2400*t)*pulse
         yield value
 
-write('garden_music',music())
-for name in ('day','night','rain'): write(name,nature(name))
-print('Rendered four original seamless garden audio loops')
+if __name__ == '__main__':
+    write('garden_music',music())
+    for i,name in enumerate(('water_music','woodland_music','terrace_music'),1): write(name,music(i))
+    for name in ('day','night','rain','bath_birds','waterside','woodland'): write(name,nature(name))
+    print('Rendered ten original seamless garden audio loops')

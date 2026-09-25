@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-26 08:28] Added
+
+**Tech:** `bath_life.gd`, `soundscape.gd`, `mountain.gdshader`, `assets/shop/` — bathing birds, regional ambience and inspectable shop models.
+
+**Dev:** Added daylight landing/bathing cycles, splash droplets and distance-faded calls; crossfaded four music themes with waterside/woodland ambience. Completed greenhouse intermediate posts, raised the distant snow line, varied rock and vegetation shading, reduced excessive mist washout, and exported Godot/GLB shop inspection copies. Audio seam and gameplay tests cover the additions.
+
+**Plain:** Birds play in bird baths, each garden area has a different soundscape, and the greenhouse and distant hills look more natural.
+
+**Why:** Adds life and variety while fixing floating supports and pale scenery and making the shop models accessible for inspection.
+
 ### [2026-09-26 08:13] Fixed
 
 **Tech:** `garden.gd/fulfill_order`, `load_game`, `catalogue.gd` — saved order IDs, menu labels, and shop additions.

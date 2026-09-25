@@ -210,7 +210,7 @@ static func furnishing(kind: String) -> Node3D:
    for z in [-depth/2,depth/2]: box(n,Vector3(0,2.5,z),Vector3(2.9,0.18,0.12),dark)
   "greenhouse":
    for x in [-1.6,1.6]:
-    for z in [-1.4,1.4]: box(n,Vector3(x,1.15,z),Vector3(0.08,2.3,0.08),wood)
+    for z in [-1.4,0.0,1.4]: box(n,Vector3(x,1.15,z),Vector3(0.08,2.3,0.08),wood)
     box(n,Vector3(x,1.1,0),Vector3(0.025,2.2,2.8),Color(0.72,0.9,0.84,0.23))
     var roof = box(n,Vector3(x/2,2.65,0),Vector3(1.9,0.04,2.9),Color(0.77,0.92,0.87,0.3))
     roof.rotation.z = -sign(x)*0.45

@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8tn01"]
+albedo_color = Color(0.4, 0.3137255, 0.22352941, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_m1vyg"]
+size = Vector3(1.8, 0.52, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqkra"]
+albedo_color = Color(0.53333336, 0.4392157, 0.3019608, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_apcql"]
+size = Vector3(0.065, 0.58, 0.065)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c8xkw"]
+size = Vector3(0.065, 0.58, 0.065)
+
+[node name="Sign" type="Node3D" unique_id=159939032]
+
+[node name="@MeshInstance3D@112" type="MeshInstance3D" parent="." unique_id=1832990812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
+material_override = SubResource("StandardMaterial3D_8tn01")
+mesh = SubResource("BoxMesh_m1vyg")
+
+[node name="@MeshInstance3D@113" type="MeshInstance3D" parent="." unique_id=1635173297]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.29, 0)
+material_override = SubResource("StandardMaterial3D_aqkra")
+mesh = SubResource("BoxMesh_apcql")
+
+[node name="@MeshInstance3D@114" type="MeshInstance3D" parent="." unique_id=597035819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.29, 0)
+material_override = SubResource("StandardMaterial3D_aqkra")
+mesh = SubResource("BoxMesh_c8xkw")
+
+[node name="FrontText" type="Label3D" parent="." unique_id=303943893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0.056)
+pixel_size = 0.002
+double_sided = false
+modulate = Color(0.94509804, 0.8980392, 0.78039217, 1)
+outline_modulate = Color(0.1882353, 0.16078432, 0.12156863, 1)
+text = "My garden"
+font_size = 40
+outline_size = 3
+autowrap_mode = 3
+width = 810.0
+
+[node name="BackText" type="Label3D" parent="." unique_id=832933231]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.62, -0.056)
+pixel_size = 0.002
+double_sided = false
+modulate = Color(0.94509804, 0.8980392, 0.78039217, 1)
+outline_modulate = Color(0.1882353, 0.16078432, 0.12156863, 1)
+text = "My garden"
+font_size = 40
+outline_size = 3
+autowrap_mode = 3
+width = 810.0

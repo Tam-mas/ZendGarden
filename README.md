@@ -186,7 +186,7 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 | Timber pergola | 100 | Larger frame supporting nearby climbing plants. |
 | Glass greenhouse | 120 | Lets plants within 4 metres grow year-round and protects their growing conditions. |
 | Lily pond | 75 | Attracts frogs and dragonflies; can hold fish. |
-| Bird bath | 40 | Attracts visiting birds. |
+| Bird bath | 40 | Birds land, dip and splash in daylight; nearby calls follow the nature-volume setting. |
 | Beehive | 65 | Adds four daytime bees around the hive. |
 | Custom garden sign | 15 | Places a sign with your text and colour; existing signs can be edited for free. |
 | Stock nearest pond with fish | 20 | Adds decorative fish to an unstocked pond in the current garden area. |
@@ -202,3 +202,19 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 First tool upgrades unlock on day 3; second upgrades unlock on day 18. Seed varieties are bought in **Seeds**, where each variety’s unlock price is shown. Unlocking a variety lets you plant it repeatedly without paying for each plant.
 
 Pressing **G** advances to the next morning with a 12-second transition. The reduced-motion setting retains its quick transition option.
+
+### Inspecting shop models
+
+Every shop item has an exported model in **`assets/shop/`**:
+
+- Open a `.tscn` in Godot to inspect the complete scene, including lights and sign lettering.
+- Import the matching `.glb` into Blender or a glTF viewer to inspect its geometry and materials. Sign lettering is a Godot label and is preserved in the `.tscn`, rather than the GLB.
+- Examples: `greenhouse.tscn`, `bath.tscn`, `stone.tscn`, and their `.glb` counterparts.
+
+The game currently builds these models from `scripts/garden_art.gd` (`furnishing`). These exports are inspection copies; editing one does not change the runtime model. After changing the generator, refresh the copies with:
+
+```sh
+godot --headless --path . --script tools/export_shop_models.gd
+```
+
+Bird-bath behaviour lives in `scripts/bath_life.gd`. Bath visitors leave at night, and calls fade with distance. The four starting beds have distinct gentle music themes: the beginning, waterside, woodland, and terrace. Later beds reuse these themes. Moving between beds crossfades the tracks; music and nature volume settings still apply. Original audio sources can be regenerated with `python3 tools/build_audio.py`.

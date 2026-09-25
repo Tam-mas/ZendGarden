@@ -4,7 +4,7 @@ from array import array
 from pathlib import Path
 import wave
 root = Path(__file__).resolve().parents[1]
-for name in ('garden_music', 'day', 'night', 'rain'):
+for name in ('garden_music','water_music','woodland_music','terrace_music','day','night','rain','waterside','woodland','bath_birds'):
     path = root / 'assets/audio' / (name + '.wav')
     with wave.open(str(path)) as audio:
         assert audio.getsampwidth() == 2 and audio.getnchannels() == 1
@@ -16,4 +16,4 @@ for name in ('garden_music', 'day', 'night', 'rain'):
     settings = path.with_suffix('.wav.import').read_text()
     assert 'edit/loop_mode=2' in settings, f'{name}: browser loop missing at import'
     assert 'compress/mode=0' in settings, f'{name}: keep source PCM fidelity'
-print('AUDIO_CHECK: PASS — four looping tracks, quiet levels, smooth seams, no sharp impulses')
+print('AUDIO_CHECK: PASS — ten looping tracks, quiet levels, smooth seams, no sharp impulses')

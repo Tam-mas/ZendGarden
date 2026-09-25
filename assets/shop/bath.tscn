@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cec6b"]
+albedo_color = Color(0.7529412, 0.7254902, 0.63529414, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xo47d"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 0.9
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_llbnl"]
+top_radius = 0.6
+bottom_radius = 0.6
+height = 0.13
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ltccm"]
+albedo_color = Color(0.5568628, 0.73333335, 0.7254902, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4wvwu"]
+height = 0.015
+radial_segments = 10
+
+[node name="Bath" type="Node3D" unique_id=664535676]
+
+[node name="@MeshInstance3D@95" type="MeshInstance3D" parent="." unique_id=325430047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+material_override = SubResource("StandardMaterial3D_cec6b")
+mesh = SubResource("CylinderMesh_xo47d")
+
+[node name="@MeshInstance3D@96" type="MeshInstance3D" parent="." unique_id=2079610458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+material_override = SubResource("StandardMaterial3D_cec6b")
+mesh = SubResource("CylinderMesh_llbnl")
+
+[node name="@MeshInstance3D@97" type="MeshInstance3D" parent="." unique_id=1632035028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0)
+material_override = SubResource("StandardMaterial3D_ltccm")
+mesh = SubResource("CylinderMesh_4wvwu")

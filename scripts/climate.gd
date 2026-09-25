@@ -64,7 +64,7 @@ func update(g, delta: float) -> void:
 func apply(g) -> void:
  if is_instance_valid(g.ambient): g.ambient.rainfall=current.y
  g.sun.light_energy*=1.0-current.x*.55
- g.environment.environment.fog_density=.00012+current.z*.007
+ g.environment.environment.fog_density=.00008+current.z*.00065
  g.environment.environment.sky.sky_material.set_shader_parameter("overcast",current.x)
 
 func description() -> String:

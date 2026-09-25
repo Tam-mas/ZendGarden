@@ -204,4 +204,8 @@ static func recede_landscape(node: Node) -> void:
   node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
   # Small sections retain woodland coverage while reducing distant geometry.
   node.lod_bias=2.0
+  # Use restrained foliage colours instead of the bright imported canopy palette.
+  var shades=[Color("34482d"),Color("435439"),Color("536345")]
+  for surface in range(node.mesh.get_surface_count()):
+   node.set_surface_override_material(surface,Art.mat(shades[surface%shades.size()],1.0))
  for child in node.get_children(): recede_landscape(child)

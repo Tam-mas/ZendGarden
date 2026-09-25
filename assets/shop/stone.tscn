@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/Weathered_limestone.png" id="1_wthsc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gvwe7"]
+albedo_texture = ExtResource("1_wthsc")
+roughness = 0.9
+
+[sub_resource type="SphereMesh" id="SphereMesh_awfv6"]
+radial_segments = 10
+rings = 5
+
+[node name="Stone" type="Node3D" unique_id=629896937]
+
+[node name="@MeshInstance3D@111" type="MeshInstance3D" parent="." unique_id=1940578382]
+transform = Transform3D(0.64, 0, 0, 0, 0.28, 0, 0, 0, 0.46, 0, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_gvwe7")
+mesh = SubResource("SphereMesh_awfv6")

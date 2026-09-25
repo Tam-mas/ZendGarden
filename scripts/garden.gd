@@ -1320,6 +1320,10 @@ func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orie
  object_root.add_child(n)
  n.position=pos
  n.rotation.y=orientation
+ if kind=="bath":
+  var life=GardenBathLife.new()
+  n.add_child(life)
+  life.setup(self)
  objects.append({"rotation":orientation,"kind":kind,"pos":pos,"price":price,"fish":fish,"node":n})
  if kind=="sign":
   objects[-1]["text"]=Art.clean_sign_text(text)
@@ -1671,7 +1675,9 @@ func update_lighting() -> void:
  sky_material.set_shader_parameter("twilight",twilight)
  environment.environment.ambient_light_color=Color("8196c5").lerp(Color("e4e7cc"),daylight)
  environment.environment.ambient_light_energy=.16+daylight*.38
- if is_instance_valid(ambient): ambient.daylight=daylight
+ if is_instance_valid(ambient):
+  ambient.daylight=daylight
+  ambient.bed=nearest_plot(player.position)%4
 
 func greet_pet() -> void:
  var nearest=0
@@ -1969,6 +1975,7 @@ func run_smoke_test() -> void:
  await preload("res://tests/touch_controls.gd").run(self,failures)
  await preload("res://tests/garden_additions.gd").run(self,failures)
  await preload("res://tests/orders.gd").run(self,failures)
+ await preload("res://tests/ambience.gd").run(self,failures)
  print("ZEND_GARDEN_TEST_RESULT: ","PASS" if failures.is_empty() else failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 
