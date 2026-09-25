@@ -49,7 +49,7 @@ static func welcome(g, page: int = 0) -> void:
  nav.alignment=BoxContainer.ALIGNMENT_CENTER
  col.add_child(nav)
  if page>0: nav.add_child(g.button("← Back",func(): welcome(g,page-1),Vector2(130,44)))
- nav.add_child(g.button("Let’s grow something" if page==4 else "Continue →",func():
+ nav.add_child(g.button("Let’s grow something" if page==4 else "Continue ->",func():
   if page==4: finish(g)
   else: welcome(g,page+1),Vector2(250,44)))
  nav.add_child(g.button("Explore now",func(): finish(g),Vector2(150,44)))
@@ -99,7 +99,7 @@ static func settings_page(g) -> void:
 static func journey(g) -> void:
  g.add_note("YOUR GARDEN’S NEXT CHAPTERS",15)
  for entry in [[3,"Better hand tools"],[7,"Willow water + bed care systems"],[18,"Fern hollow + master tools"],[36,"Sunrise terrace"]]:
-  g.add_note(("✓ " if g.day>=entry[0] else "Day %d · " % entry[0])+entry[1])
+  g.add_note(("Owned " if g.day>=entry[0] else "Day %d · " % entry[0])+entry[1])
  g.add_note("After day 36, another bed opens every 12 days, with no final bed. A new seed every third day. Deliver 3, 8 and 15 requests for three extra seed discoveries each.")
 
 static func confirm_restart(g) -> void:

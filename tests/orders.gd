@@ -52,10 +52,30 @@ static func run(g, failures: Array) -> void:
  for key in g.inventory:
   if int(saved.inventory.get(key,-1))!=int(g.inventory[key]): failures.append("Basket save count incorrect")
  if int(saved.orders[0].plant)!=0 or int(saved.orders[0].count)!=2 or int(saved.orders[0].reward)!=24 or int(saved.wild_collection.get(wild.key,-1))!=g.day: failures.append("Order/border save data incorrect")
+ # Use JSON-parsed orders, whose numeric IDs are floats, just like a real reload.
+ g.orders=saved.orders
+ g.inventory=saved.inventory
+ var before_delivery=g.coins
+ g.fulfill_order(0)
+ if g.coins!=before_delivery+24 or int(g.inventory.get("0",-1))!=0: failures.append("Reloaded Cosmos order could not use basket items")
  g.wild_collection=saved.wild_collection
  if GardenCare.collect_wild(g,wild): failures.append("Reload allowed repeated border collection")
  g.day+=1
  if not GardenCare.collect_wild(g,wild): failures.append("Border did not replenish next morning")
+ if g.TRANSITION_SECONDS!=12.0: failures.append("Next morning transition is not half speed")
+ var code=OS.get_environment("ZEND_TEST_CODE")
+ if not code.is_empty():
+  var before_code=g.coins
+  if g.redeem_test_code("invalid") or not g.redeem_test_code(code) or g.coins!=before_code+1000: failures.append("Testing credit incorrect")
+ g.add_object("stone",Vector3(-7,0,8),3)
+ var stone=g.objects.back()
+ if stone.node.get_child_count()==0: failures.append("Stone model missing")
+ g.mode="remove"
+ g.hover_cell=stone.pos
+ g.hover_valid=true
+ g.action_cooldown=0
+ g.perform_action()
+ if stone in g.objects: failures.append("Remove did not remove a shop stone")
  g.open_sidebar("Orders")
  await g.get_tree().process_frame
  await RenderingServer.frame_post_draw

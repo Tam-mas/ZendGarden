@@ -171,3 +171,34 @@ Touch controls appear automatically; landscape orientation gives you the most ro
 In **Settings**, choose Auto, Touch or Keyboard & mouse controls; switch to a left-handed layout; adjust touch-control size, look sensitivity and inversion; and choose graphics quality or 3D resolution. The automatic mobile graphics preset reduces rendering resolution, disables sun shadows, and limits distant decorative meshes. Menus stay at full resolution.
 
 Mobile layouts and simultaneous touch input are covered by automated tests and browser emulation. Performance and on-screen keyboard behaviour still need testing on physical iOS and Android devices, particularly with large gardens. Saves stay with the browser profile and site address; they do not automatically sync across devices or domains.
+
+## Shop reference
+
+Prices are in petals. Select a structure in Shop, then aim at open ground to place it. **Q/E** rotates it; **Move** relocates it. **Remove** (formerly “Lift”) removes a plant or ornament; it does not raise the ground. Removing an ornament refunds its purchase price. Plants do not refund petals, but unlocked seeds stay available. Terrain raising is not currently a tool.
+
+| Item | Price | Function |
+| --- | ---: | --- |
+| Path stone | 3 | Places one small limestone stone for a decorative border or path. |
+| Terracotta pot | 25 | Decorative pot. |
+| Garden bench | 45 | Decorative seating for a quiet garden corner. |
+| Stone lantern | 55 | Glows after dusk. |
+| Climbing arbor | 65 | Supports nearby climbing plants. |
+| Timber pergola | 100 | Larger frame supporting nearby climbing plants. |
+| Glass greenhouse | 120 | Lets plants within 4 metres grow year-round and protects their growing conditions. |
+| Lily pond | 75 | Attracts frogs and dragonflies; can hold fish. |
+| Bird bath | 40 | Attracts visiting birds. |
+| Beehive | 65 | Adds four daytime bees around the hive. |
+| Custom garden sign | 15 | Places a sign with your text and colour; existing signs can be edited for free. |
+| Stock nearest pond with fish | 20 | Adds decorative fish to an unstocked pond in the current garden area. |
+| Soaker system | 45 per bed | From day 7, restores the bed’s plants’ water every morning. |
+| Gentle auto-pruner | 45 per bed | From day 7, removes stress from the bed’s plants each morning; does not collect items. |
+| Expand bed capacity | 65 | Adds 80 planting capacity to the current bed; repeatable. |
+| Watering can upgrades | 45, then 90 | Wider watering area and a longer-lasting water supply. |
+| Pruning shears upgrades | 45, then 90 | Wider pruning area and greater stress reduction. |
+| Planting trowel upgrades | 45, then 90 | Shorter delay between planting actions. |
+| Garden rake upgrades | 45, then 90 | Wider raked paths and more petals per new patch, within the four-petal daily limit. |
+| Open next garden | Varies | Opens the next plot early and discovers three seed varieties; the shop shows its price. Plots also open as days pass. |
+
+First tool upgrades unlock on day 3; second upgrades unlock on day 18. Seed varieties are bought in **Seeds**, where each variety’s unlock price is shown. Unlocking a variety lets you plant it repeatedly without paying for each plant.
+
+Pressing **G** advances to the next morning with a 12-second transition. The reduced-motion setting retains its quick transition option.

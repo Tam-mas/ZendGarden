@@ -93,5 +93,6 @@ static func furnishings() -> Array:
   {"name":"Lily pond", "price":75, "kind":"pond", "hint":"Attracts frogs and dragonflies. Stock fish in the shop."},
   {"name":"Bird bath", "price":40, "kind":"bath", "hint":"Draws visiting birds."},
   {"name":"Beehive", "price":65, "kind":"hive", "hint":"A timber hive with its own bees visiting during daylight."},
+  {"name":"Path stone", "price":3, "kind":"stone", "hint":"One decorative limestone stone for a path or border."},
   {"name":"Custom garden sign", "price":15, "kind":"sign", "hint":"Your words and colours. Q/E to rotate; edit in the garden shed."}
  ]

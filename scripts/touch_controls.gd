@@ -161,7 +161,7 @@ func show_drawer(kind: String) -> void:
  col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  scroll.add_child(col)
  var choices=[["Seeds","Seeds"],["Shop","Shop"],["Orders","Orders"],["Guide","Guide"],["Settings","Settings"]]
- if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Lift / remove"],["rake","Rake"]]
+ if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"]]
  for entry in choices:
   var key=entry[0]
   col.add_child(g.button(entry[1],func():
@@ -264,7 +264,7 @@ func _process(delta: float) -> void:
  buttons.action.visible=g.mode!="walk" and not g.photo_mode
  buttons.action.disabled=not g.hover_valid
  if g.mode=="plant": g.compact_hud.text="%s · %d petals\n%s" % [g.catalogue[g.selected].name,g.coins,g.status_label.text]
- buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Lift","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake"}.get(g.mode,"Use")
+ buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake"}.get(g.mode,"Use")
  buttons.layer.visible=g.mode!="walk" and not g.photo_mode
  buttons.layer.text="Layer: "+["Ground","Flowers","Shrubs","Trees"][g.selected_layer]
  buttons.cancel.visible=g.mode in ["build","move","plant"] and not g.photo_mode

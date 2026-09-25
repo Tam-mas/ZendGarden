@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-26 08:13] Fixed
+
+**Tech:** `garden.gd/fulfill_order`, `load_game`, `catalogue.gd` — saved order IDs, menu labels, and shop additions.
+
+**Dev:** Canonicalized saved inventory/order lookup IDs, added a real JSON-roundtrip delivery regression, halved next-morning transition speed, replaced unsupported menu glyphs with text, clarified Remove, and added a 3-petal limestone stone. Documented shop functions and added an unlisted testing entry.
+
+**Plain:** Saved basket items work for orders, menu prices are readable, and the shop includes a small stone.
+
+**Why:** Fixes blocked deliveries and clarifies the garden tools and purchases.
+
 ### [2026-09-26 07:47] Changed
 
 **Tech:** `garden.gd/collect_plant`, `garden_care.gd/collect_wild`, `garden_visitors.gd` — shared collection and visible order inventory.

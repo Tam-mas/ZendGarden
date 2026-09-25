@@ -112,7 +112,7 @@ var transition_elapsed=0.0
 var transition_start=0.0
 var transition_crossed_midnight=false
 var transition_label: Label
-const TRANSITION_SECONDS=6.0
+const TRANSITION_SECONDS=12.0
 var tool_tween: Tween
 var sign_text="My garden"
 var sign_color=Color("f1e5c7")
@@ -400,7 +400,7 @@ func make_ui() -> void:
  var tools_row = HBoxContainer.new()
  tools_row.add_theme_constant_override("separation",7)
  toolbar.add_child(tools_row)
- var tools_data = [["walk","1  Wander"],["plant","2  Plant"],["water","3  Water"],["prune","4  Prune"],["harvest","5  Gather"],["move","6  Move"],["remove","7  Lift"],["rake","8  Rake"]]
+ var tools_data = [["walk","1  Wander"],["plant","2  Plant"],["water","3  Water"],["prune","4  Prune"],["harvest","5  Gather"],["move","6  Move"],["remove","7  Remove"],["rake","8  Rake"]]
  for entry in tools_data:
   var key: String = entry[0]
   var b = button(entry[1],func(): set_mode(key),Vector2(0,42))
@@ -513,7 +513,7 @@ func sign_editor_page() -> void:
  sample.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  sample.custom_minimum_size=Vector2(254,80)
  list_box.add_child(sample)
- var apply=button("Save changes" if editing_sign>=0 else "Place sign · ◇ 15",finish_sign_editor)
+ var apply=button("Save changes" if editing_sign>=0 else "Place sign · Petals: 15",finish_sign_editor)
  apply.disabled=Art.clean_sign_text(sign_text).is_empty()
  list_box.add_child(apply)
  field.text_changed.connect(func(value):
@@ -606,7 +606,7 @@ func refresh_sidebar() -> void:
     name_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
     name_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
     content.add_child(name_label)
-    var cost=label("Capacity %d" % p.capacity if unlocked else "◇ %d to discover" % p.price,11,Color("cbb98e"))
+    var cost=label("Capacity %d" % p.capacity if unlocked else "Petals: %d to discover" % p.price,11,Color("cbb98e"))
     cost.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
     cost.mouse_filter=Control.MOUSE_FILTER_IGNORE
     content.add_child(cost)
@@ -622,27 +622,27 @@ func refresh_sidebar() -> void:
    for kind in ["water","prune"]:
     var k: String = kind
     var owned = automation.has(str(current_plot)+k)
-    list_box.add_child(button(("✓ " if owned else "◇ 45  ")+ ("Soaker system" if k=="water" else "Gentle auto-pruner"),func(): buy_automation(k)))
-   list_box.add_child(button("◇ 65  Expand bed capacity +80",expand_bed))
+    list_box.add_child(button(("Owned " if owned else "Petals: 45  ")+ ("Soaker system" if k=="water" else "Gentle auto-pruner"),func(): buy_automation(k)))
+   list_box.add_child(button("Petals: 65  Expand bed capacity +80",expand_bed))
    add_note("TOOLS  ·  first upgrades day 3, master day 18",14)
    for kind in ["can","shears","trowel","rake"]:
     var k: String = kind
     var level: int = int(upgrades[k])
     var names = {"can":"Watering can", "shears":"Pruning shears", "trowel":"Planting trowel", "rake":"Garden rake"}
-    list_box.add_child(button(names[k]+(" · complete" if level>=2 else " +"+str(level+1)+"   ◇ "+str(45+level*45)),func(): buy_tool(k)))
+    list_box.add_child(button(names[k]+(" · complete" if level>=2 else " +"+str(level+1)+"   Petals: "+str(45+level*45)),func(): buy_tool(k)))
    add_note("ORNAMENTS & STRUCTURES",14)
    for i in range(furniture.size()):
     var idx = i
-    var b = button(furniture[i].name+"   ◇ "+str(furniture[i].price),func(): choose_furnishing(idx))
+    var b = button(furniture[i].name+"   Petals: "+str(furniture[i].price),func(): choose_furnishing(idx))
     b.tooltip_text = furniture[i].hint
     list_box.add_child(b)
    for i in range(objects.size()):
     if objects[i].kind=="sign":
      var sign_index=i
      list_box.add_child(button("Edit sign: "+str(objects[i].get("text","My garden")).left(22),func(): open_sign_editor(sign_index)))
-   list_box.add_child(button("◇ 20  Stock nearest pond with fish",stock_fish))
+   list_box.add_child(button("Petals: 20  Stock nearest pond with fish",stock_fish))
    add_note("A LITTLE MORE ROOM",14)
-   if unlocked_plots<plots.size(): list_box.add_child(button("Open "+plots[unlocked_plots].name+"   ◇ "+str(plots[unlocked_plots].cost),buy_plot))
+   if unlocked_plots<plots.size(): list_box.add_child(button("Open "+plots[unlocked_plots].name+"   Petals: "+str(plots[unlocked_plots].cost),buy_plot))
    else: add_note("Every path is open. Keep making it yours.")
    detail_label.text = "Aim at a nearby patch of ground.\nNew beds open over time; after day 36, another opens every 12 days."
   "Orders":
@@ -658,8 +658,8 @@ func refresh_sidebar() -> void:
      add_note(order.person+" sends thanks. Next note on day %d." % order.ready_day)
      continue
     add_note(order.person+" would love",16)
-    add_note("%d × %s  ·  in basket: %d" % [order.count,catalogue[order.plant].name,int(inventory.get(str(order.plant),0))])
-    var ready=int(inventory.get(str(order.plant),0))>=int(order.count)
+    add_note("%d × %s  ·  in basket: %d" % [order.count,catalogue[order.plant].name,int(inventory.get(str(int(order.plant)),0))])
+    var ready=int(inventory.get(str(int(order.plant)),0))>=int(order.count)
     var deliver=button(("Deliver   +"+str(order.reward)+" petals") if ready else "Collect more to deliver",func(): fulfill_order(idx))
     deliver.disabled=not ready
     list_box.add_child(deliver)
@@ -675,12 +675,12 @@ func refresh_sidebar() -> void:
    add_note("GROWING IN LAYERS",15)
    add_note("Groundcover, flowers and shrubs share planting rows. Trees sit between the rows, above the underplanting. Each uses 1, 2, 4 or 7 capacity. Use the Layer button (L on keyboard) to target a layer. Trees shade nearby plants; leave sunny flowers at the edges.")
    add_note("A GENTLE RHYTHM",15)
-   add_note("A day lasts 10 minutes; Next morning in the Garden menu (G on keyboard) plays a six-second sunset, starry night and sunrise. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
+   add_note("A day lasts 10 minutes; Next morning in the Garden menu (G on keyboard) plays a twelve-second sunset, starry night and sunrise. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
    add_note("PRUNING & PATHS",15)
    add_note("Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. Border clearing and raked paths are saved. Rake open ground to remove grass and leave visible grooves; move or prune plants first. Upgrades widen existing patches. New patches can reveal up to four petals per day.")
    add_note("WELCOMING WILDLIFE",15)
    add_note("Rabbits occasionally visit open ground. A shop beehive brings its own daytime bees.")
-   add_note("Native plants → native birds\nThree flowering plants → bees & butterflies\nTrees or bird baths → songbirds\nPonds → frogs & dragonflies\nMoss and dusk → fireflies\nFish → stock a placed pond in the shop")
+   add_note("Native plants -> native birds\nThree flowering plants -> bees & butterflies\nTrees or bird baths -> songbirds\nPonds -> frogs & dragonflies\nMoss and dusk -> fireflies\nFish -> stock a placed pond in the shop")
    add_note("STRUCTURES & PHOTOS",15)
    add_note("Use Turn left / Turn right on touch, or Q/E on keyboard, to rotate a structure in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
    add_note("COMPANIONS",15)
@@ -719,7 +719,7 @@ func update_hud() -> void:
  compact_hud.text="ZEND GARDEN   /   "+plots[current_plot].name+"\nDay %02d   ·   %02d:%02d   ·   %d petals   ·   %s" % [day,int(clock_time*24),int(fmod(clock_time*1440,60)),coins,mode.capitalize()]
  compact_hud.text+="\n"+GardenClimate.season(day)+" · "+climate.description()
  var hour = int(clock_time*24)
- top_label.text = "DAY %02d · %02d:%02d  |  ◇ %d petals" % [day,hour,int(fmod(clock_time*1440,60)),coins]
+ top_label.text = "DAY %02d · %02d:%02d  |  Petals: %d petals" % [day,hour,int(fmod(clock_time*1440,60)),coins]
  hud_top.reset_size()
  var used = capacity_used(current_plot)
  var cap = plot_capacity(current_plot)
@@ -739,7 +739,7 @@ func update_hud() -> void:
   if index>=0 and growth_conditions(planted[index])==0: status_label.text+="\nResting until "+Catalogue.growing_seasons(planted[index].id)
  for key in mode_buttons:
   mode_buttons[key].add_theme_stylebox_override("normal",GardenTheme.frame("button",Color("efcd8c") if key==mode else Color.WHITE,8))
- var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Click plants to water  ·  Upgrade your can for a wider, longer pour", "prune":"Prune mature plants to collect items. Outside beds, three cuts clear a plant.", "harvest":"Click a mature plant to gather  ·  It will bloom again", "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Click to lift a plant or ornament  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+ var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Click plants to water  ·  Upgrade your can for a wider, longer pour", "prune":"Prune mature plants to collect items. Outside beds, three cuts clear a plant.", "harvest":"Click a mature plant to gather  ·  It will bloom again", "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  tip_label.text = tips.get(mode,"")
  if mode=="build" or (mode=="move" and moved_object>=0): tip_label.text+="  ·  Q/E rotate 15°"
  if hover_valid and not preview_error.is_empty() and mode=="plant": status_label.text=preview_error
@@ -943,6 +943,35 @@ func target_plant(pos: Vector3) -> int:
   if distance<nearest: chosen=i; nearest=distance
  return chosen
 
+func open_test_entry() -> void:
+ Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ var dialog=ConfirmationDialog.new()
+ dialog.title="Enter code"
+ var entry=LineEdit.new()
+ entry.secret=true
+ entry.max_length=64
+ dialog.add_child(entry)
+ entry.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+ entry.position=Vector2(12,16)
+ entry.size=Vector2(296,36)
+ ui.add_child(dialog)
+ var submit=func():
+  redeem_test_code(entry.text)
+  dialog.queue_free()
+ dialog.confirmed.connect(submit)
+ entry.text_submitted.connect(func(_text): submit.call())
+ dialog.canceled.connect(func(): dialog.queue_free())
+ dialog.popup_centered(Vector2i(320,120))
+ entry.grab_focus()
+
+func redeem_test_code(value: String) -> bool:
+ if value.strip_edges().sha256_text()!="71c205cbb6ebd7950d4299af4ed8a45a8512ad360800d82621d46b33bb7114ed": return false
+ coins+=1000
+ refresh_ui()
+ save_game()
+ toast("Added 1000 petals.")
+ return true
+
 func navigation_input() -> Vector2:
  return Vector2(float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT))-float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)),float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN))-float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP)))
 
@@ -968,6 +997,7 @@ func _unhandled_input(event: InputEvent) -> void:
  if event is InputEventKey and event.pressed and not event.echo:
   if get_viewport().gui_get_focus_owner() is LineEdit: return
   match event.physical_keycode:
+   KEY_F8: open_test_entry()
    KEY_1: set_mode("walk")
    KEY_2: set_mode("plant")
    KEY_3: set_mode("water")
@@ -1141,7 +1171,7 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
  var bed=bed_at(pos)
  if bed>=0 and bed!=plot: return "Choose an open garden bed."
  if bed<0 and not plantable_ground(pos): return "Choose dry ground away from bridges, water and structures."
- if capacity_used(plot,excluding)+int(catalogue[id].capacity)>plot_capacity(plot): return "This bed is full. Lift a plant, move one, or expand its capacity."
+ if capacity_used(plot,excluding)+int(catalogue[id].capacity)>plot_capacity(plot): return "This bed is full. Remove a plant, move one, or expand its capacity."
  if plant_at(pos,catalogue[id].layer,excluding)>=0: return "This layer is occupied. Another layer can share this square."
  # Root systems require room at canopy level, but allow genuine underplanting.
  if int(catalogue[id].layer)==3:
@@ -1476,7 +1506,7 @@ func basket_summary() -> void:
 
 func collect_plant(p: Dictionary) -> bool:
  if p.age<float(catalogue[p.id].days): return false
- var key=str(p.id)
+ var key=str(int(p.id))
  inventory[key]=int(inventory.get(key,0))+1
  p.age=maxf(0.5,p.age-1.5)
  refresh_plant(p)
@@ -1490,7 +1520,7 @@ func fulfill_order(idx: int) -> void:
  if idx<0 or idx>=orders.size(): return
  var order=orders[idx]
  if order.get("pending",false): return
- var key=str(order.plant)
+ var key=str(int(order.plant))
  if int(inventory.get(key,0))<int(order.count): toast("No rush. Gather a little more "+catalogue[order.plant].name+" first."); return
  inventory[key]=int(inventory[key])-int(order.count)
  coins+=int(order.reward)
@@ -1506,7 +1536,7 @@ func sell_harvest() -> void:
  for key in inventory:
   var reserved=0
   for order in orders:
-   if not order.get("pending",false) and str(order.plant)==key: reserved+=int(order.count)
+   if not order.get("pending",false) and str(int(order.plant))==key: reserved+=int(order.count)
   var spare=maxi(0,int(inventory[key])-reserved)
   value+=spare*maxi(1,int(catalogue[int(key)].value)/2)
   inventory[key]=int(inventory[key])-spare
@@ -1724,7 +1754,10 @@ func load_game() -> void:
  clock_time=float(parsed.get("clock",0.26))
  unlocked_plants=parsed.get("unlocked_plants",STARTERS.duplicate())
  unlocked_plots=int(parsed.get("unlocked_plots",1))
- inventory=parsed.get("inventory",{})
+ inventory={}
+ for raw_key in parsed.get("inventory",{}):
+  var key=str(int(float(raw_key)))
+  inventory[key]=int(inventory.get(key,0))+int(parsed.inventory[raw_key])
  upgrades=parsed.get("upgrades",upgrades)
  automation=parsed.get("automation",{})
  expansions=parsed.get("expansions",{})

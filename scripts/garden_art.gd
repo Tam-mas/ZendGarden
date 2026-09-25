@@ -179,6 +179,13 @@ static func furnishing(kind: String) -> Node3D:
  var wood = Color("b19a7a")
  var dark = Color("817460")
  match kind:
+  "stone":
+   var stone=ball(n,Vector3(0,.10,0),Vector3(.64,.28,.46),Color("a6a28a"))
+   var texture=load("res://assets/textures/Weathered_limestone.png") if ResourceLoader.exists("res://assets/textures/Weathered_limestone.png") else null
+   if texture:
+    var material=mat(Color.WHITE).duplicate()
+    material.albedo_texture=texture
+    stone.material_override=material
   "hive":
    for x in [-.24,.24]:
     for z in [-.2,.2]: box(n,Vector3(x,.18,z),Vector3(.07,.36,.07),dark)

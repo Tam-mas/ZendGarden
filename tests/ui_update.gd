@@ -83,7 +83,7 @@ static func run(g, failures: Array) -> void:
  var screenshots={"sunset":false,"stars":false,"sunrise":false}
  var night_energy=1.0
  var elapsed=0.0
- while g.day_transition and elapsed<9:
+ while g.day_transition and elapsed<g.TRANSITION_SECONDS+3:
   await g.get_tree().process_frame
   elapsed+=g.get_process_delta_time()
   var stage=""
