@@ -39,7 +39,7 @@ func _process(delta: float) -> void:
  if guests.is_empty():
   countdown-=delta
   if countdown<=0:
-   spawn_group(random.randf()<.45)
+   spawn_group(false)
    countdown=random.randf_range(85,150)
   return
  for guest in guests.duplicate():

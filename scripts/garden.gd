@@ -19,6 +19,7 @@ var plots: Array = [
 ]
 var wild_plants: Array=[]
 var wild_pruning: Dictionary={}
+var wild_collection: Dictionary={}
 var raked_nodes: Dictionary={}
 var visitors: GardenVisitors
 var planted: Array = []
@@ -614,6 +615,8 @@ func refresh_sidebar() -> void:
    detail_label.text = "%s\n%s layer · %d capacity · %d growing days\nLikes %s · welcomes %s%s" % [plant.name,["Ground","Flower","Shrub","Canopy"][plant.layer],plant.capacity,plant.days,plant.condition,plant.animal,"\nClimbs nearby arbors & pergolas." if plant.climber else ""]
    detail_label.text+="\nGrows: "+Catalogue.growing_seasons(plant.id)
   "Shop":
+   basket_summary()
+   list_box.add_child(button("View orders",func(): open_sidebar("Orders")))
    side_title.text = "The garden shed"
    add_note("BED CARE  ·  available day 7",14)
    for kind in ["water","prune"]:
@@ -647,6 +650,7 @@ func refresh_sidebar() -> void:
    request_popup_time=0
    side_title.text = "Notes from neighbours"
    add_note("No deadlines. A thank-you, whenever you're ready.")
+   basket_summary()
    for i in range(orders.size()):
     var idx = i
     var order = orders[i]
@@ -655,16 +659,12 @@ func refresh_sidebar() -> void:
      continue
     add_note(order.person+" would love",16)
     add_note("%d × %s  ·  in basket: %d" % [order.count,catalogue[order.plant].name,int(inventory.get(str(order.plant),0))])
-    list_box.add_child(button("Deliver   +"+str(order.reward)+" petals",func(): fulfill_order(idx)))
-   add_note("YOUR BASKET",14)
-   var total = 0
-   for key in inventory:
-    if int(inventory[key])>0:
-     add_note(catalogue[int(key)].name+" × "+str(inventory[key]))
-     total += int(inventory[key])
-   if total==0: add_note("Gather mature flowers and produce to fill your basket.")
+    var ready=int(inventory.get(str(order.plant),0))>=int(order.count)
+    var deliver=button(("Deliver   +"+str(order.reward)+" petals") if ready else "Collect more to deliver",func(): fulfill_order(idx))
+    deliver.disabled=not ready
+    list_box.add_child(deliver)
    list_box.add_child(button("Sell spare harvest",sell_harvest))
-   detail_label.text = "Gathering keeps the plant and starts its next bloom. Trees and shrubs offer cuttings."
+   detail_label.text = "Prune or gather mature plants to collect one item per plant. Both start its next bloom. Border plants provide one item per day. Selling keeps items needed by current orders."
   "Sign":
    sign_editor_page()
   "Settings":
@@ -679,7 +679,7 @@ func refresh_sidebar() -> void:
    add_note("PRUNING & PATHS",15)
    add_note("Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. Border clearing and raked paths are saved. Rake open ground to remove grass and leave visible grooves; move or prune plants first. Upgrades widen existing patches. New patches can reveal up to four petals per day.")
    add_note("WELCOMING WILDLIFE",15)
-   add_note("Rabbits and kangaroos occasionally visit open ground; watch for a joey in its mother’s pouch. A shop beehive brings its own daytime bees.")
+   add_note("Rabbits occasionally visit open ground. A shop beehive brings its own daytime bees.")
    add_note("Native plants → native birds\nThree flowering plants → bees & butterflies\nTrees or bird baths → songbirds\nPonds → frogs & dragonflies\nMoss and dusk → fireflies\nFish → stock a placed pond in the shop")
    add_note("STRUCTURES & PHOTOS",15)
    add_note("Use Turn left / Turn right on touch, or Q/E on keyboard, to rotate a structure in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
@@ -739,7 +739,7 @@ func update_hud() -> void:
   if index>=0 and growth_conditions(planted[index])==0: status_label.text+="\nResting until "+Catalogue.growing_seasons(planted[index].id)
  for key in mode_buttons:
   mode_buttons[key].add_theme_stylebox_override("normal",GardenTheme.frame("button",Color("efcd8c") if key==mode else Color.WHITE,8))
- var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Click plants to water  ·  Upgrade your can for a wider, longer pour", "prune":"Trim to ease stress. Outside beds, three cuts clear a plant.", "harvest":"Click a mature plant to gather  ·  It will bloom again", "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Click to lift a plant or ornament  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+ var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Click plants to water  ·  Upgrade your can for a wider, longer pour", "prune":"Prune mature plants to collect items. Outside beds, three cuts clear a plant.", "harvest":"Click a mature plant to gather  ·  It will bloom again", "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Click to lift a plant or ornament  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  tip_label.text = tips.get(mode,"")
  if mode=="build" or (mode=="move" and moved_object>=0): tip_label.text+="  ·  Q/E rotate 15°"
  if hover_valid and not preview_error.is_empty() and mode=="plant": status_label.text=preview_error
@@ -1056,7 +1056,7 @@ func update_hover() -> void:
  if mode in ["water","prune","harvest","remove"] or (mode=="move" and moved_index<0 and moved_object<0):
   var target=target_plant(hit)
   if target>=0: hover_cell=planted[target].pos
-  elif mode=="prune":
+  elif mode in ["prune","harvest"]:
    var nearest=.9
    for plant in wild_plants:
     var gap=Vector2(plant.pos.x-hit.x,plant.pos.z-hit.z).length()
@@ -1174,10 +1174,12 @@ func perform_action() -> void:
    var radius = 0.65+int(upgrades.can if mode=="water" else upgrades.shears)*1.25
    var count = 0
    var cleared=0
+   var collected_before=basket_total()
    for p in planted.duplicate():
     if p.pos.distance_to(hover_cell)<=radius:
      if mode=="water": p.water=2.0+int(upgrades.can)*1.5
      else:
+      collect_plant(p)
       p.stress=maxf(0,p.stress-(0.55+int(upgrades.shears)*0.25))
       if bed_at(p.pos)<0 and bed_at(hover_cell)<0:
        p["prune_cuts"]=int(p.get("prune_cuts",0))+1
@@ -1195,15 +1197,19 @@ func perform_action() -> void:
     count+=GardenCare.prune_wild(self,hover_cell,radius)
     toast("Trimmed %d plants; cleared %d planted plants. Three cuts clear plants outside beds." % [count,cleared])
    else: toast(("Watered " if mode=="water" else "Tended ")+str(count)+" plants.")
+   if mode=="prune": toast("Collected %d items for your basket. Trimmed %d; cleared %d planted plants." % [basket_total()-collected_before,count,cleared])
    action_cooldown=0.3
   "harvest":
-   if idx<0: toast("Choose a plant to gather from."); return
-   var p = planted[idx]
-   if p.age<float(catalogue[p.id].days): toast("Still growing. Every morning brings a little more."); return
-   inventory[str(p.id)]=int(inventory.get(str(p.id),0))+1
-   p.age=maxf(0.5,p.age-1.5)
-   refresh_plant(p)
-   toast("Gathered "+catalogue[p.id].name+". It will bloom again.")
+   if idx<0:
+    var collected=0
+    for plant in wild_plants:
+     if plant.pos.distance_to(hover_cell)<=.65 and GardenCare.collect_wild(self,plant): collected+=1
+    toast("Collected %d border items. Border plants provide one item per day." % collected)
+   else:
+    var p=planted[idx]
+    if not collect_plant(p): toast("Still growing. Every morning brings a little more."); return
+    toast("Gathered "+catalogue[p.id].name+" for your basket. It will bloom again.")
+   action_cooldown=.3
   "remove":
    if idx>=0:
     planted[idx].marker.queue_free()
@@ -1455,11 +1461,33 @@ func discover_seeds(count: int) -> void:
    toast("A gift of "+catalogue[id].name+" seeds. Find them in Seeds.")
    if count<=0: break
 
+func basket_total() -> int:
+ var total=0
+ for amount in inventory.values(): total+=int(amount)
+ return total
+
+func basket_summary() -> void:
+ add_note("YOUR BASKET · %d items" % basket_total(),16)
+ add_note("Collected by pruning and gathering. Available for neighbour orders.")
+ for id in range(catalogue.size()):
+  var amount=int(inventory.get(str(id),0))
+  if amount>0: add_note("%s × %d" % [catalogue[id].name,amount])
+ if basket_total()==0: add_note("Your basket is empty. Prune or gather a mature plant to begin.")
+
+func collect_plant(p: Dictionary) -> bool:
+ if p.age<float(catalogue[p.id].days): return false
+ var key=str(p.id)
+ inventory[key]=int(inventory.get(key,0))+1
+ p.age=maxf(0.5,p.age-1.5)
+ refresh_plant(p)
+ return true
+
 func make_orders() -> void:
  if not orders.is_empty(): return
  orders=[{"person":"Hazel at the bakery","plant":0,"count":2,"reward":24},{"person":"Jun, your neighbour","plant":48,"count":2,"reward":22,"pending":true,"ready_day":3},{"person":"Mae at the cottage","plant":50,"count":2,"reward":26,"pending":true,"ready_day":5}]
 
 func fulfill_order(idx: int) -> void:
+ if idx<0 or idx>=orders.size(): return
  var order=orders[idx]
  if order.get("pending",false): return
  var key=str(order.plant)
@@ -1476,8 +1504,12 @@ func fulfill_order(idx: int) -> void:
 func sell_harvest() -> void:
  var value=0
  for key in inventory:
-  value+=int(inventory[key])*maxi(1,int(catalogue[int(key)].value)/2)
-  inventory[key]=0
+  var reserved=0
+  for order in orders:
+   if not order.get("pending",false) and str(order.plant)==key: reserved+=int(order.count)
+  var spare=maxi(0,int(inventory[key])-reserved)
+  value+=spare*maxi(1,int(catalogue[int(key)].value)/2)
+  inventory[key]=int(inventory[key])-spare
  coins+=value
  toast("Your basket brought "+str(value)+" petals.")
  refresh_ui()
@@ -1664,7 +1696,7 @@ func save_game() -> void:
  for p in planted: ps.append({"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
  var os: Array=[]
  for obj in objects: os.append({"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
- var data={"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x,player.position.z]}
+ var data={"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x,player.position.z]}
  var file=FileAccess.open(SAVE_PATH+".tmp",FileAccess.WRITE)
  if file:
   file.store_string(JSON.stringify(data))
@@ -1682,6 +1714,7 @@ func load_game() -> void:
    backup.store_string(JSON.stringify(parsed))
    backup.close()
  loaded_data=parsed
+ wild_collection=parsed.get("wild_collection",{})
  wild_pruning=parsed.get("wild_pruning",{})
  settings.merge(parsed.get("settings",{}),true)
  request_unread=parsed.get("request_unread",false)
@@ -1902,6 +1935,7 @@ func run_smoke_test() -> void:
  await preload("res://tests/pruning.gd").run(self,failures)
  await preload("res://tests/touch_controls.gd").run(self,failures)
  await preload("res://tests/garden_additions.gd").run(self,failures)
+ await preload("res://tests/orders.gd").run(self,failures)
  print("ZEND_GARDEN_TEST_RESULT: ","PASS" if failures.is_empty() else failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 

@@ -1,8 +1,8 @@
 class_name GardenCare
 extends RefCounted
 
-static func register_wild(g, node: Node3D, key: String) -> void:
- g.wild_plants.append({"node":node,"key":key,"pos":node.position,"scale":node.scale})
+static func register_wild(g, node: Node3D, key: String, id: int) -> void:
+ g.wild_plants.append({"id":id,"node":node,"key":key,"pos":node.position,"scale":node.scale})
 
 static func restore_wild(g) -> void:
  for plant in g.wild_plants:
@@ -14,6 +14,7 @@ static func prune_wild(g, pos: Vector3, radius: float) -> int:
  var count=0
  for plant in g.wild_plants:
   if not plant.node.visible or plant.pos.distance_to(pos)>radius: continue
+  collect_wild(g,plant)
   g.wild_pruning[plant.key]=mini(3,int(g.wild_pruning.get(plant.key,0))+1)
   count+=1
  restore_wild(g)
@@ -51,3 +52,10 @@ static func rake(g) -> void:
  g.action_cooldown=.3
  g.care_effect(GardenTerrain.point(center),Color("bda078"))
  g.toast(("Cleared grass and raked a grooved path." if fresh else "Widened this path with your upgraded rake.")+(" Found %d petals." % found if found>0 else ""))
+
+static func collect_wild(g, plant: Dictionary) -> bool:
+ if not plant.node.visible or int(g.wild_collection.get(plant.key,-1))==g.day: return false
+ g.wild_collection[plant.key]=g.day
+ var key=str(plant.id)
+ g.inventory[key]=int(g.inventory.get(key,0))+1
+ return true

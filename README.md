@@ -89,11 +89,13 @@ Settings include reduced motion, mouse sensitivity, independent left/right and u
 
 ### Pruning, paths, and visitors
 
+Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Shop** or **Orders**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
+
 Outside garden beds, three pruning cuts remove a plant. Planted varieties recover one cut each morning; cleared decorative border plants stay cleared. Pruning inside beds remains safe. To clear lawn grass, use the rake: it leaves a grooved earth path, and upgraded rakes can widen an existing patch. Move or prune plants before raking underneath them. New patches can reveal up to four petals per day.
 
 Tomato seeds cost **23 petals** to unlock. You can plant them in any season; they grow in **summer and autumn**, or year-round inside a greenhouse. The seed selection now explains when you need more petals.
 
-Rabbits and kangaroos occasionally visit open areas, including a mother carrying a joey. Buy a **Beehive for 65 petals** from the shop and place it to attract its own daytime bees.
+Rabbits occasionally visit open areas. Kangaroo visits are currently disabled. Buy a **Beehive for 65 petals** from the shop and place it to attract its own daytime bees.
 
 ## Saves and photos
 

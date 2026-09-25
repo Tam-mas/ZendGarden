@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-26 07:47] Changed
+
+**Tech:** `garden.gd/collect_plant`, `garden_care.gd/collect_wild`, `garden_visitors.gd` — shared collection and visible order inventory.
+
+**Dev:** Disabled kangaroo visits, shared mature-plant yields between pruning and gathering, persisted daily border collection, surfaced baskets in Shop and Orders, disabled incomplete deliveries, and reserved active-order stock when selling surplus. Added order lifecycle, duplicate reward, collection and save regressions.
+
+**Plain:** Pruning now collects items for orders, your basket is easy to find, and only rabbits visit for now.
+
+**Why:** Makes collecting and fulfilling requests clear and prevents accidental sale of requested items.
+
 ### [2026-09-23 18:54] Added
 
 **Tech:** `scripts/garden_care.gd`, `scripts/garden_visitors.gd`, `scripts/garden.gd` — outdoor care, animal visits, shop hives and arrow navigation.
