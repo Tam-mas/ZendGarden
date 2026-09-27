@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 11:08] Changed
+
+**Tech:** `art_source/mountain_forms.py`, `build_environment.py`, `shaders/mountain.gdshader` — detailed alpine terrain and materials around the whole garden.
+
+**Dev:** Rebuilt the basin with asymmetric massifs, erosion grooves and rock spurs on a 448-cell grid, plus three overlapping outer ridge chains. Added world-aligned rock normal detail, mineral strata, scree, slope/altitude vegetation transitions and high-elevation snow. Woodland now follows gentler slopes and an irregular treeline with better-proportioned tree crowns. Preserved lake level and playable garden geometry; reduced the exported environment from about 98 MiB to 58 MiB. Added terrain/shoreline/budget validation and four-direction rendering previews; verified Blender sources, both Forward+ and Compatibility rendering, and the full gameplay smoke suite.
+
+**Plain:** The mountains surrounding the garden have more varied peaks, rocky faces, snowy summits and natural woodland patterns.
+
+**Why:** Gives every background view greater depth and believable landscape detail while keeping the garden playable and the environment asset smaller.
+
 ### [2026-09-27 10:29] Changed
 
 **Tech:** `art_source/build_shop.py`, `build_companions.py`, `build_wildlife.py`, `scripts/garden_art.gd` — detailed Blender models and embedded PBR materials used directly in the game.

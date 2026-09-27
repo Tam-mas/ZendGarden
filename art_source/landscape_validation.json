@@ -1,7 +1,13 @@
 {
   "lake_level": -39.0,
-  "shore_segments": 692,
-  "minimum_boundary_height": 86.41245422483752,
-  "forest_sections": 168,
-  "southern_forest_sections": 37
+  "shore_segments": 978,
+  "minimum_boundary_height": 85.43463462400359,
+  "forest_sections": 115,
+  "southern_forest_sections": 27,
+  "terrain_resolution": 448,
+  "terrain_triangles": 401408,
+  "outer_ridge_triangles": 25600,
+  "forest_trees": 4869,
+  "maximum_mountain_height": 683.2063832879769,
+  "maximum_outer_height": 673.2139495074364
 }

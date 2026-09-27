@@ -226,3 +226,18 @@ godot --headless --path . --script tools/export_shop_models.gd
 The inspection-scene command preserves the Blender GLBs. See [the detailed asset workflow](art_source/detail/README.md) for model coverage, animation contracts and visual review commands.
 
 Bird-bath behaviour lives in `scripts/bath_life.gd`. Bath visitors leave at night, and calls fade with distance. The four starting beds have distinct gentle music themes: the beginning, waterside, woodland, and terrace. Later beds reuse these themes. Moving between beds crossfades the tracks; music and nature volume settings still apply. Original audio sources can be regenerated with `python3 tools/build_audio.py`.
+
+### Working on the background mountains
+
+The surrounding terrain and outer ridge chains are editable in `art_source/lake_garden.blend`. Their deterministic relief is defined in `art_source/mountain_forms.py`; `build_environment.py` places the woodland, fits the shoreline to the terrain and exports the environment. Godot applies the world-aligned rock colour/normal maps, slope-dependent vegetation, scree and high-altitude snow in `shaders/mountain.gdshader`.
+
+Rebuild only the environment, then import and review all four directions:
+
+```sh
+"/Applications/Blender.app/Contents/MacOS/Blender" --background art_source/workshop.blend --python art_source/build_environment.py
+"/Applications/Godot.app/Contents/MacOS/Godot" --headless --path . --editor --import
+"/Applications/Godot.app/Contents/MacOS/Godot" --path . --script tools/preview_mountains.gd
+python3 tests/check_mountains.py
+```
+
+The preview writes `captures/mountains/after-{west,north,east,south}.png` without loading a player save. Add `--rendering-method gl_compatibility` before `--script` to check the compatibility renderer. For a matched comparison, put the earlier exported environment at `captures/mountains/before.glb` and its shader at `captures/mountains/before.gdshader`, then append `-- --compare`. Add `--benchmark` after that to measure 120 frames per direction for each version under the same running conditions. `tests/check_mountains.py --baseline captures/mountains/before.glb` also checks that the playable garden geometry matches that baseline. The terrain check is included in `tests/run.sh`.

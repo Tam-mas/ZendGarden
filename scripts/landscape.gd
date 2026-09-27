@@ -192,6 +192,7 @@ static func recede_landscape(node: Node) -> void:
   var material=ShaderMaterial.new()
   material.shader=load("res://shaders/mountain.gdshader")
   material.set_shader_parameter("strata",load("res://assets/textures/Mountain_strata.png"))
+  material.set_shader_parameter("rock_normal",load("res://assets/textures/Mountain_strata_normal.png"))
   node.material_override=material
  if node is MeshInstance3D and str(node.name)=="ContourLake":
   var material=ShaderMaterial.new()
@@ -205,7 +206,7 @@ static func recede_landscape(node: Node) -> void:
   # Small sections retain woodland coverage while reducing distant geometry.
   node.lod_bias=2.0
   # Use restrained foliage colours instead of the bright imported canopy palette.
-  var shades=[Color("34482d"),Color("435439"),Color("536345")]
+  var shades=[Color("30452f"),Color("3b5135"),Color("506047")]
   for surface in range(node.mesh.get_surface_count()):
    node.set_surface_override_material(surface,Art.mat(shades[surface%shades.size()],1.0))
  for child in node.get_children(): recede_landscape(child)
