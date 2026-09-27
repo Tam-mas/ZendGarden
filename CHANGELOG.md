@@ -10,6 +10,16 @@
 
 **Why:** Keeps the release process compatible with supported build tooling and its fixes.
 
+### [2026-09-27 18:20] Removed
+
+**Tech:** `scripts/garden.gd/make_world`, `animate_garden` — randomized ambient sphere meshes.
+
+**Dev:** Removed the 35 randomly placed pale gold spheres and their idle motion so they no longer appear as floating dots in the sky or around the garden.
+
+**Plain:** Removed the stray floating circles from the garden.
+
+**Why:** Keeps the view clear of unexplained objects while looking around the garden.
+
 ### [2026-09-27 16:03] Changed
 
 **Tech:** `web/shell.html`, `web/art/garden-woodland.jpg` — current in-game welcome-page background.

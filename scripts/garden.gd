@@ -77,7 +77,6 @@ var plant_root: Node3D
 var object_root: Node3D
 var wildlife: Array = []
 var pets: Array = []
-var water_motes: Array = []
 var plot_signs: Array = []
 var grid_root: Node3D
 var grid_cursor: Node3D
@@ -225,9 +224,6 @@ func make_world() -> void:
  add_child(sun)
  GardenLandscape.build(self)
  for row in range(2,int(plots.size()/2)): GardenExpansion.build_row(self,row)
- for j in range(35):
-  var mote = Art.ball(world_root,Vector3(rng.randf_range(-8,25),rng.randf_range(0.5,4),rng.randf_range(-23,8)),Vector3.ONE*0.045,Color("f9e6ac"))
-  water_motes.append(mote)
  for j in range(2):
   var pet = Art.companion(j==0)
   pet.position = GardenTerrain.point(Vector3(-5+j*2,0,6))
@@ -1705,10 +1701,6 @@ func animate_garden(delta: float, sample_time: float = -1.0) -> void:
   for wing in entry.node.get_children():
    if str(wing.name).begins_with("Wing"): wing.rotation.z=sin(t*(35 if entry.kind=="bee" else 13)+entry.phase)*.8*float(wing.get_meta("side",1))
  for j in range(pets.size()): pets[j].animate(self,delta,j)
- for j in range(water_motes.size()):
-  var mote=water_motes[j]
-  mote.position.y+=sin(t+j)*delta*0.035
-  mote.position.x+=cos(t*0.3+j)*delta*0.035
  for obj in objects:
   if obj.fish:
    for j in range(4):
