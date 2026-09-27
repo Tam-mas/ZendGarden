@@ -67,7 +67,9 @@ Press **Tab** to open the menus and choose a plant from the seed selection. Aim 
 | **Shift** | Walk faster |
 | **Tab** | Open menus / return to looking around |
 | **Left click** | Use the selected tool at the centre crosshair |
-| **1–8** | Select wander, plant, water, prune, harvest, move, remove, or rake |
+| **1–9** | Select wander, plant, water, prune, harvest, move, remove, rake, or hoe |
+| **[ / ]** with pruners | Shrink / expand the square within purchased limits |
+| **R** with the hoe | Switch between raising and lowering ground |
 | **L** | Change the target plant layer where plants overlap |
 | **G** | Advance to the next morning |
 | **E** | Greet a nearby companion |
@@ -96,6 +98,14 @@ Outside garden beds, three pruning cuts remove a plant. Planted varieties recove
 Tomato seeds cost **23 petals** to unlock. You can plant them in any season; they grow in **summer and autumn**, or year-round inside a greenhouse. The seed selection now explains when you need more petals.
 
 Rabbits occasionally visit open areas. Kangaroo visits are currently disabled. Buy a **Beehive for 65 petals** from the shop and place it to attract its own daytime bees.
+
+Manually watering ground grants **20% faster growth for one in-game day** (ten minutes while the game clock is running). It also benefits plants placed on that soil during the boost. Rewatering refreshes the duration without stacking; rain and soaker systems only provide normal water. Darkened soil marks the active area. Growth is still applied at each new morning.
+
+Each pruner upgrade increases the maximum square’s **side length by 10%**: 1.30 m → 1.43 m → 1.573 m. Equip pruners with **4**, then use **[ / ]** to shrink or expand the square, down to 0.40 m and up to your purchased limit.
+
+The **hoe is included**. Equip it with **9**, press **R** to switch between raising and lowering, then click or hold on unlocked dry ground. Work across a slope to level it. Soil, grass, planting positions and walking collision follow the reshaped surface. Water crossings and structure foundations are protected. Terrain offsets are limited to three metres, with a lower limit above water level. Terrain, watering timers, pruning size and hoe direction are saved.
+
+Lady beetles visit gardens with at least two flower plants or one produce plant. They crawl around those plants during daylight and rest at night.
 
 ## Saves and photos
 
@@ -164,7 +174,7 @@ Open **Shop → Custom garden sign** to write up to 64 characters and choose a t
 
 ### Playing on a phone or tablet
 
-Touch controls appear automatically; landscape orientation gives you the most room. Use the left thumbstick to walk, drag the view to look around, and choose a tool from **Tools**. Aim with the centre dot and tap the labelled action button. Hold **Water** or **Rake** to repeat. Placement offers rotation and cancel buttons; lifting a plant or ornament offers **Undo lift** for 12 seconds.
+Touch controls appear automatically; landscape orientation gives you the most room. Use the left thumbstick to walk, drag the view to look around, and choose a tool from **Tools**. Aim with the centre dot and tap the labelled action button. Hold **Water**, **Rake** or the hoe action to repeat. With pruners, use **Smaller / Larger**; with the hoe, tap **Mode: Raise / Lower** to switch direction. Placement offers rotation and cancel buttons; lifting a plant or ornament offers **Undo lift** for 12 seconds.
 
 **Garden** opens seeds, the shop, orders, settings, next morning and photo mode. Menus pause movement, and controls reset when the app loses focus. Text fields support the on-screen keyboard, and browser photos download to your device.
 
@@ -194,7 +204,7 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 | Gentle auto-pruner | 45 per bed | From day 7, removes stress from the bed’s plants each morning; does not collect items. |
 | Expand bed capacity | 65 | Adds 80 planting capacity to the current bed; repeatable. |
 | Watering can upgrades | 45, then 90 | Wider watering area and a longer-lasting water supply. |
-| Pruning shears upgrades | 45, then 90 | Wider pruning area and greater stress reduction. |
+| Pruning shears upgrades | 45, then 90 | 10% longer pruning-square sides per upgrade and greater stress reduction; resize with [ / ]. |
 | Planting trowel upgrades | 45, then 90 | Shorter delay between planting actions. |
 | Garden rake upgrades | 45, then 90 | Wider raked paths and more petals per new patch, within the four-petal daily limit. |
 | Open next garden | Varies | Opens the next plot early and discovers three seed varieties; the shop shows its price. Plots also open as days pass. |

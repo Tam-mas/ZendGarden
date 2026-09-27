@@ -3,10 +3,10 @@ import json,struct,pathlib
 root=pathlib.Path(__file__).resolve().parents[1]
 files=list((root/'assets/plants').glob('plant_*.glb'))
 assert len(files)==60, f'Expected 60 species, got {len(files)}'
-tools=[root/'assets/tools'/f'{kind}.glb' for kind in ['can','shears','trowel','rake']]
+tools=[root/'assets/tools'/f'{kind}.glb' for kind in ['can','shears','trowel','rake','hoe']]
 companions=[root/'assets/companions'/f'{kind}.glb' for kind in ['cat','dog']]
 shop=[root/'assets/shop'/f'{kind}.glb' for kind in ['stone','pot','bench','lantern','arbor','pergola','greenhouse','pond','bath','hive','sign']]
-wildlife=[root/'assets/wildlife'/f'{kind}.glb' for kind in ['rabbit','kangaroo','kangaroo_joey','songbird','native_bird','frog','bee','butterfly','dragonfly','firefly','fish']]
+wildlife=[root/'assets/wildlife'/f'{kind}.glb' for kind in ['rabbit','kangaroo','kangaroo_joey','songbird','native_bird','frog','bee','butterfly','dragonfly','firefly','fish','lady_beetle']]
 for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+shop+wildlife:
  data=path.read_bytes()
  assert data[:4]==b'glTF', path
@@ -32,4 +32,4 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
  if path.name.startswith('plant_'):
 
   assert any('Foliage' in n.get('name','') for n in doc['nodes']),(path,'missing foliage')
-print('BLENDER_ASSET_CHECK: PASS — 60 species, environment, 4 tools, 11 shop structures, 11 wildlife models and 2 articulated companions, with no default-scene objects')
+print('BLENDER_ASSET_CHECK: PASS — 60 species, environment, 5 tools, 11 shop structures, 12 wildlife models and 2 articulated companions, with no default-scene objects')

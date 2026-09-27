@@ -58,6 +58,7 @@ static func plant(data: Dictionary, decorative: bool = false) -> Node3D:
  if ResourceLoader.exists(path):
   if not botanical_scenes.has(path): botanical_scenes[path]=load(path)
   var root=Node3D.new()
+  root.set_meta("terrain_anchor",true)
   var imported=botanical_scenes[path].instantiate()
   root.add_child(imported)
   add_leaf_wind(imported)

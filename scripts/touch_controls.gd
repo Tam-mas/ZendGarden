@@ -47,10 +47,16 @@ func setup(game) -> void:
  add_button("garden","Garden",func(): show_drawer("garden"))
  add_button("tools","Tools",func(): show_drawer("tools"))
  add_button("action","Water",act)
- add_button("layer","Layer",cycle_layer)
+ add_button("layer","Layer",func():
+  if g.mode=="hoe":GardenTools.toggle_hoe(g)
+  else:cycle_layer())
  add_button("cancel","Cancel",func(): g.set_mode("walk"))
- add_button("left","Turn left",func(): g.rotate_structure(-1))
- add_button("right","Turn right",func(): g.rotate_structure(1))
+ add_button("left","Turn left",func():
+  if g.mode=="prune":GardenTools.resize_pruners(g,-1)
+  else:g.rotate_structure(-1))
+ add_button("right","Turn right",func():
+  if g.mode=="prune":GardenTools.resize_pruners(g,1)
+  else:g.rotate_structure(1))
  add_button("greet","Greet",g.greet_pet)
  add_button("undo","Undo lift",undo_remove)
  add_button("up","Rise",func(): g.camera_target.y+=.5)
@@ -117,7 +123,7 @@ func apply_graphics() -> void:
  apply_detail(g.plant_root,65.0 if low else 0.0)
 
 func apply_detail(node: Node, distance_limit: float) -> void:
- if node is MeshInstance3D and node.get_aabb().size.length()<10:
+ if node is MeshInstance3D and not node.get_meta("sculpt_registered",false) and node.get_aabb().size.length()<10:
   node.visibility_range_end=distance_limit
   node.visibility_range_end_margin=8.0 if distance_limit>0 else 0.0
  for child in node.get_children(): apply_detail(child,distance_limit)
@@ -161,7 +167,7 @@ func show_drawer(kind: String) -> void:
  col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  scroll.add_child(col)
  var choices=[["Seeds","Seeds"],["Shop","Shop"],["Orders","Orders"],["Guide","Guide"],["Settings","Settings"]]
- if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"]]
+ if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"],["hoe","Hoe"]]
  for entry in choices:
   var key=entry[0]
   col.add_child(g.button(entry[1],func():
@@ -264,19 +270,22 @@ func _process(delta: float) -> void:
  buttons.action.visible=g.mode!="walk" and not g.photo_mode
  buttons.action.disabled=not g.hover_valid
  if g.mode=="plant": g.compact_hud.text="%s · %d petals\n%s" % [g.catalogue[g.selected].name,g.coins,g.status_label.text]
- buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake"}.get(g.mode,"Use")
+ buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake","hoe":"Raise ground" if g.hoe_raise else "Lower ground"}.get(g.mode,"Use")
  buttons.layer.visible=g.mode!="walk" and not g.photo_mode
  buttons.layer.text="Layer: "+["Ground","Flowers","Shrubs","Trees"][g.selected_layer]
+ if g.mode=="hoe":buttons.layer.text="Mode: "+("Raise" if g.hoe_raise else "Lower")+" · switch"
  buttons.cancel.visible=g.mode in ["build","move","plant"] and not g.photo_mode
- buttons.left.visible=rotating and not g.photo_mode
- buttons.right.visible=rotating and not g.photo_mode
+ buttons.left.visible=(rotating or g.mode=="prune") and not g.photo_mode
+ buttons.left.text="Smaller [" if g.mode=="prune" else "Turn left"
+ buttons.right.visible=(rotating or g.mode=="prune") and not g.photo_mode
+ buttons.right.text="Larger ]" if g.mode=="prune" else "Turn right"
  buttons.greet.visible=g.mode=="walk" and not g.photo_mode and g.pets.any(func(p): return p.position.distance_to(g.player.position)<4)
  for key in ["up","down","photo","done"]: buttons[key].visible=g.photo_mode
  buttons.garden.visible=not g.photo_mode
  buttons.tools.visible=not g.photo_mode
  undo_time=maxf(0,undo_time-delta)
  buttons.undo.visible=undo_time>0 and not removed.is_empty() and not g.photo_mode
- if held and g.mode in ["water","rake"]:
+ if held and g.mode in ["water","rake","hoe"]:
   repeat_time-=delta
   if repeat_time<=0: act(); repeat_time=.3
 

@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 12:48] Added
+
+**Tech:** `scripts/garden_tools.gd`, `garden_sculpt.gd`, `terrain.gd`, `garden.gd`, `art_source/build_wildlife.py` — manual watering boost, adjustable pruning footprint, sculpting hoe and lady beetles.
+
+**Dev:** Manual ground watering grants a non-stacking 1.2× growth multiplier for one game day, with a refreshable saved timer and slope-following wet patches. Each shears upgrade increases the maximum square side by 10%; bracket keys and touch controls resize it within purchased limits. Added a Blender-built hoe with raise/lower modes (9 to equip, R to toggle), smooth local terrain offsets, nearby-tile mesh/collision updates, protected foundations/crossings and saved terrain. Planting, grass, paths, irrigation and decorative planting follow height edits. Added a textured, articulated seven-spot lady beetle that crawls near flowers/produce in daylight. Existing saves default to unchanged terrain. Expanded asset, keyboard/touch, growth, save and physical terrain checks; the full gameplay suite and Blender source validation pass.
+
+**Plain:** Watering gives plants a temporary growth boost, upgraded pruners have an adjustable square, a new hoe reshapes slopes, and lady beetles visit planted gardens.
+
+**Why:** Gives hands-on garden care a useful reward and adds more control over planting, terrain and wildlife.
+
 ### [2026-09-27 11:46] Changed
 
 **Tech:** `art_source/botanical_detail.py`, `botanical_forms.py`, `scripts/garden_art.gd`, `shaders/leaf_wind.gdshader` — detailed models and PBR surface maps for all 60 catalogue plants.
