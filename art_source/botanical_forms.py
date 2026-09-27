@@ -10,17 +10,23 @@ from mathutils import Vector
 def radial(a, r, z=0): return Vector((cos(a)*r,sin(a)*r,z))
 
 def palmate(g, p, length, angle, mat=1, lobes=5):
-    p=Vector(p); start=len(g.v)
-    g.v.append(tuple(p+Vector((0,0,.015))))
-    # A connected blade with deep sinuses, rather than separate compound leaflets.
-    rim=[p-radial(angle,length*.12)]
-    for j in range(lobes*2-1):
-        t=j/(lobes*2-2); a=angle+(t-.5)*2.6
-        r=length*(.7+.3*sin(pi*t))*(1.0 if j%2==0 else .38)
-        rim.append(p+radial(a,r,.025*sin(pi*t)))
-    rim.append(rim[0])
-    g.v.extend(tuple(v) for v in rim)
-    for j in range(len(rim)-1): g.face((start,start+j+1,start+j+2),mat)
+    p=Vector(p);start=len(g.v)
+    g.v.append(tuple(p+Vector((0,0,length*.05))));g.uv[start]=(.5,.10)
+    rim=[]
+    steps=lobes*4
+    for j in range(steps+1):
+        t=j/steps;a=angle+(t-.5)*2.8
+        wave=(.5+.5*cos(t*lobes*2*pi))**.7
+        r=length*(.65+.35*sin(pi*t))*(.42+.58*wave)
+        rim.append(p+radial(a,r,length*(.07*sin(pi*t)-.12*(r/length)**2)))
+    for fraction in [.48,1.0]:
+        for j,edge in enumerate(rim):
+            v=p.lerp(edge,fraction)+Vector((0,0,length*.09*sin(pi*fraction)))
+            g.v.append(tuple(v));g.uv[len(g.v)-1]=(.5+(v.x-p.x)/length*.45,.5+(v.y-p.y)/length*.45)
+    n=len(rim)
+    for j in range(n-1):
+        g.face((start,start+j+1,start+j+2),mat)
+        g.face((start+j+1,start+n+j+1,start+n+j+2,start+j+2),mat)
 
 def compound(g,p,end,mat=1,fine=False):
     p=Vector(p); end=Vector(end); d=end-p
@@ -39,11 +45,17 @@ def compound(g,p,end,mat=1,fine=False):
     g.leaf(end-d*.17,end+d*.14,d.length*.07,mat,.1,4)
 
 def round_leaf(g,p,r,mat=1,kidney=False):
-    p=Vector(p); start=len(g.v); g.v.append(tuple(p+Vector((0,0,r*.12))))
-    for j in range(17):
-        a=j*2*pi/16; rr=r*(.65+.35*(1-cos(a))*.5) if kidney else r
-        g.v.append(tuple(p+radial(a,rr,sin(a)*r*.15)))
-    for j in range(16): g.face((start,start+j+1,start+j+2),mat)
+    p=Vector(p);start=len(g.v);g.v.append(tuple(p+Vector((0,0,r*.12))));g.uv[start]=(.5,.5)
+    for ring in [.5,1.0]:
+        for j in range(24):
+            a=j*2*pi/24
+            rr=r*(.54+.46*(1-cos(a))*.5) if kidney else r*(1+.035*cos(a*7))
+            q=radial(a,rr*ring,r*(.16*sin(a)-.08*ring*ring))
+            g.v.append(tuple(p+q));g.uv[len(g.v)-1]=(.5+q.x/r*.48,.5+q.y/r*.48)
+    for j in range(24):
+        k=(j+1)%24
+        g.face((start,start+j+1,start+k+1),mat)
+        g.face((start+j+1,start+j+25,start+k+25,start+k+1),mat)
 
 def tendril(g,p,a):
     pts=[Vector(p)+radial(a+t*.55,.018+t*.002,t*.008) for t in range(15)]
@@ -79,13 +91,19 @@ def pea_flower(g,p,size):
     g.ellipsoid(p+Vector((0,-size*.4,-size*.15)),(size*.23,size*.5,size*.22),0,4,7)
 
 def bell(g,p,size):
-    # Open trumpet: rings rather than petals masquerading as a bell.
-    p=Vector(p); start=len(g.v)
-    for k,(r,z) in enumerate([(size*.18,size*.8),(size*.48,size*.45),(size*.55,0),(size*.7,-size*.15)]):
-        for j in range(10):
-            a=j*2*pi/10; g.v.append(tuple(p+radial(a,r,z+(.012*cos(a*5) if k==3 else 0))))
-    for k in range(3):
-        for j in range(10): g.face((start+k*10+j,start+k*10+(j+1)%10,start+(k+1)*10+(j+1)%10,start+(k+1)*10+j),0)
+    p=Vector(p);start=len(g.v);sides=16
+    profile=[(.15,.83),(.30,.67),(.46,.43),(.53,.18),(.56,0),(.69,-.15)]
+    for k,(r,z) in enumerate(profile):
+        for j in range(sides):
+            a=j*2*pi/sides
+            g.v.append(tuple(p+radial(a,size*r,size*z+(.10*size*cos(a*5) if k==len(profile)-1 else 0))))
+            g.uv[len(g.v)-1]=(j/sides,k/(len(profile)-1))
+    for k in range(len(profile)-1):
+        for j in range(sides):g.face((start+k*sides+j,start+k*sides+(j+1)%sides,start+(k+1)*sides+(j+1)%sides,start+(k+1)*sides+j),0)
+    for j in range(3):
+        q=p+radial(j*2.4,size*.16,-size*.08)
+        g.tube([p+Vector((0,0,size*.35)),q],[size*.025]*2,1,3)
+        g.ellipsoid(q,(size*.065,)*3,1,3,5)
 
 def iris(g,p):
     p=Vector(p)
@@ -102,57 +120,81 @@ def flower_head(g,p,size,style):
     if style=='bell': bell(g,p,size); return
     count={'cosmos':8,'daisy':20,'sunflower':28,'poppy':4,'clematis':6,'magnolia':9,'cherry':5}.get(style,5)
     for j in range(count):
-        a=j*2*pi/count
+        a=j*2*pi/count+random.uniform(-.035,.035)
         width=size*(.70 if style=='poppy' else .3 if count<10 else .11)
         z=size*(.4 if style in ['poppy','magnolia'] else .05)
         g.leaf(p+radial(a,size*.15),p+radial(a,size,z),width,0,.45 if style=='poppy' else .18,6)
-    g.ellipsoid(p+Vector((0,0,.012)),(size*.35,size*.35,size*.15),1,4,10)
+    disk_radius=size*(.45 if style=='sunflower' else .27 if style in ['daisy','cosmos'] else .19)
+    g.ellipsoid(p+Vector((0,0,.012)),(disk_radius,disk_radius,size*.11),1,5,12)
+    if style in ['sunflower','daisy','cosmos','poppy','clematis','magnolia','cherry']:
+        count=110 if style=='sunflower' else 25 if style=='poppy' else 5 if style=='cherry' else 8 if style in ['magnolia','clematis'] else 18
+        for k in range(count):
+            a=k*2.39996;r=disk_radius*sqrt((k+.5)/count)
+            loc=p+radial(a,r,.012+size*.105*sqrt(max(0,1-(r/disk_radius)**2)))
+            if style in ['poppy','clematis','magnolia','cherry']:
+                end=loc+Vector((0,0,size*.15));g.tube([loc,end],[size*.009]*2,1,3);loc=end
+            g.ellipsoid(loc,(size*.019,size*.019,size*.026),2 if style=='sunflower' else 1,2,4)
 
 def tree(name,g,b,flower):
     H={'Cherry blossom':4.5,'Silver birch':6.4,'Japanese maple':3.6,'Olive':4.2,'Willow':5.3,'Magnolia':4.3,'Lemon':3.5,'Apple':4.1,'Eucalyptus':7.5}[name]
-    eucalyptus=name=='Eucalyptus'; willow=name=='Willow'; maple=name=='Japanese maple'
+    eucalyptus=name=='Eucalyptus';willow=name=='Willow';maple=name=='Japanese maple'
     trunkmat=6 if name in ['Eucalyptus','Silver birch'] else 5
-    g.tube([(0,0,0),(.12,-.06,H*.25),(-.10,.12,H*.55),(.20,.05,H*.83)], [.16,.12,.08,.018],trunkmat,9)
+    trunk=[Vector((0,0,0)),Vector((.10,-.04,H*.18)),Vector((.07,.05,H*.38)),Vector((-.07,.09,H*.59)),Vector((.10,.04,H*.83))]
+    g.tube(trunk,[.17,.125,.085,.05,.006],trunkmat,12)
+    for j in range(5):
+        a=j*2.4
+        g.tube([radial(a,.24,.012),radial(a,.13,.16),trunk[1]],[.026,.047,.065],trunkmat,7)
+    def on_path(points,t):
+        t=max(0,min(.99999,t))*(len(points)-1);i=int(t)
+        return points[i].lerp(points[i+1],t-i)
+    def trunk_at(z):
+        for left,right in zip(trunk,trunk[1:]):
+            if z<=right.z:return left.lerp(right,(z-left.z)/(right.z-left.z))
+        return trunk[-1]
     if name=='Silver birch':
-        for k in range(22):
-            z=.18+k*H*.033; a=k*2.4
-            g.tube([radial(a-.5,.151-k*.0028,z),radial(a,.156-k*.0028,z+.015),radial(a+.5,.15-k*.0028,z+.004)],[.009]*3,5,3)
+        for k in range(27):
+            z=.18+k*H*.025;a=k*2.4;center=trunk_at(z);r=.16*(1-z/H)
+            g.tube([center+radial(a-.4,r),center+radial(a,r+.002,.012),center+radial(a+.5,r,-.003)],[.006]*3,5,3)
     if eucalyptus:
-        # Pale irregular patches on a smooth trunk, not a chestnut bark texture.
-        for j in range(12):
-            a=j*2.4; z=.12+j*.33
-            g.leaf(radial(a,.15-j*.006,z),radial(a,.16-j*.006,z+.42),.05,7,.02,4)
-    branches=15 if eucalyptus else 20
+        for j in range(13):
+            z=.12+j*.34;a=j*2.4;center=trunk_at(z);r=.16*(1-z/H)
+            g.leaf(center+radial(a,r),center+radial(a,r,.36),.028,7,.015,5)
+    branches=16 if eucalyptus else 20
     for j in range(branches):
-        a=j*2.39996+random.uniform(-.25,.25)
-        t=j/(branches-1)
-        z=H*random.uniform(.42,.78) if eucalyptus else H*(.25+t*.39)
-        length=H*(.34 if maple or willow else .22 if name=='Silver birch' else .28)*(1-t*.35)*random.uniform(.8,1.15)
-        start=Vector((0,0,z))
-        if eucalyptus: length*=random.uniform(.75,1.3)
-        end=start+radial(a,length,H*(.05 if maple else random.uniform(.08,.22) if eucalyptus else .13))
-        mid=start.lerp(end,.45)+Vector((0,0,H*.08))
-        g.tube([start,mid,end],[.055,.035,.009],trunkmat,6)
-        for k in range(6):
-            joint=mid.lerp(end,k/6); aa=a+(k%3-1)*.65
-            tip=joint+radial(aa,.4+random.random()*.25,.25)
-            if willow:
-                tip=joint+radial(aa,.28,-random.uniform(1.0,2.2))
-                curve=joint+radial(aa,.35,-.12)
-                g.tube([joint,curve,tip],[.013,.009,.002],5,4)
-            else: g.tube([joint,tip],[.014,.003],trunkmat,4)
-            for l in range(15 if not willow else 21):
-                p=joint.lerp(tip,l/(15 if not willow else 21)); angle=aa+l*2.4
-                ll=.36 if eucalyptus else .25 if willow else .14 if name=='Silver birch' else .19 if name=='Olive' else .27 if name=='Magnolia' else .20
+        t=j/(branches-1);a=j*2.39996+random.uniform(-.27,.27)
+        z=H*(.32+t*.43)+random.uniform(-.035,.035)*H
+        length=H*(.34 if maple or willow else .22 if name=='Silver birch' else .28)*(1-t*.53)*random.uniform(.82,1.18)
+        start=trunk_at(z)
+        end=start+radial(a,length,H*(.035 if maple else random.uniform(.07,.16)))
+        mid=start.lerp(end,.47)+Vector((0,0,H*.035))
+        path=[start,mid,end]
+        radius=.048*(1-t*.52)
+        g.tube(path,[radius,radius*.61,.005],trunkmat,8)
+        for k in range(7):
+            joint=on_path(path,.32+k*.095)
+            aa=a+(-1 if k%2 else 1)*random.uniform(.42,.95)
+            reach=random.uniform(.35,.62)*(1-t*.25)
+            tip=joint+radial(aa,reach,random.uniform(.06,.23))
+            if willow:tip=joint+radial(aa,.30,-random.uniform(.7,1.85))
+            curve=joint.lerp(tip,.42)+Vector((0,0,.12 if willow else .045))
+            twig=[joint,curve,tip];g.tube(twig,[.011,.006,.0012],trunkmat,5)
+            count=14 if willow else 9
+            for l in range(count):
+                q=.15+l*.82/count;p=on_path(twig,q);angle=aa+l*2.39996+random.uniform(-.16,.16)
+                ll=(.36 if eucalyptus else .25 if willow else .14 if name=='Silver birch' else .19 if name=='Olive' else .27 if name=='Magnolia' else .20)*random.uniform(.82,1.15)
                 leafmat=4 if name in ['Eucalyptus','Olive'] else 8 if maple else 1+l%3
-                if maple: palmate(g,p,ll,angle,leafmat,5); continue
-                droop=-ll*.72 if eucalyptus or willow else random.uniform(-.07,.1)
-                g.leaf(p,p+radial(angle,ll*.8,droop),ll*(.10 if willow else .13 if eucalyptus or name=='Olive' else .36),leafmat,.2,4)
+                if maple:palmate(g,p,ll,angle,leafmat,5);continue
+                droop=-ll*.76 if eucalyptus or willow else random.uniform(-.10,.09)
+                g.leaf(p,p+radial(angle,ll*.85,droop),ll*(.10 if willow else .13 if eucalyptus or name=='Olive' else .37),leafmat,.15,5)
             if name in ['Cherry blossom','Magnolia']:
-                for l in range(3 if name=='Cherry blossom' else 1): flower_head(b,tip+radial(l*2.4,.10),.105 if name=='Cherry blossom' else .22,'cherry' if name=='Cherry blossom' else 'magnolia')
+                for l in range(2 if name=='Cherry blossom' else 1):
+                    loc=tip+radial(l*2.4,.09,random.uniform(-.03,.06))
+                    g.tube([tip,loc],[.002,.001],0,3)
+                    flower_head(b,loc,.09 if name=='Cherry blossom' else .22,'cherry' if name=='Cherry blossom' else 'magnolia')
             if name in ['Apple','Lemon','Olive'] and k%3==0:
-                size=.09 if name!='Olive' else .035
-                b.ellipsoid(tip-Vector((0,0,size)),(size*.85,size*.85,size*(1.3 if name=='Lemon' else 1)),0,6,10)
+                size=.09 if name!='Olive' else .035;loc=tip-Vector((0,0,size*1.7))
+                b.tube([tip,loc+Vector((0,0,size))],[.003,.002],3,4)
+                b.ellipsoid(loc,(size*.85,size*.85,size*(1.3 if name=='Lemon' else 1)),0,8,14)
 
 def shrub(name,g,b,flower):
     settings={
@@ -167,19 +209,26 @@ def shrub(name,g,b,flower):
     height,spread,count,ll,width=settings[name]
     for j in range(count):
         a=j*2.39996; r=spread*sqrt((j+.5)/count)
-        tip=radial(a,r,height*(.40+.60*sqrt(max(0,1-(r/spread)**2))))
+        tip=radial(a+random.uniform(-.08,.08),r,height*(.40+.60*sqrt(max(0,1-(r/spread)**2)))*random.uniform(.87,1.09))
         base=radial(a,.08)
         middle=tip*.5+radial(a,.06,.06)
         g.tube([base,middle,tip],[.018,.010,.003],5,5)
         for k in range(13):
-            p=base.lerp(tip,.12+k*.067); aa=a+k*2.4
+            t=.12+k*.067
+            p=base.lerp(middle,t*2) if t<.5 else middle.lerp(tip,(t-.5)*2)
+            aa=a+k*2.4+random.uniform(-.18,.18)
             leafmat=4 if name=='Rosemary' else 1+k%3
             if name=='Rose': compound(g,p,p+radial(aa,ll*1.3,.04),leafmat); continue
             if name in ['Grevillea','Wattle']:
                 compound(g,p,p+radial(aa,ll,.04),leafmat,name=='Wattle'); continue
             for sign in [-1,1] if name in ['Rosemary','Hydrangea','Lilac','Boxwood','Lilly pilly','Waxflower'] else [1]:
                 g.leaf(p,p+radial(aa+(pi if sign<0 else 0),ll,.04),width,leafmat,.18,8,name=='Banksia')
-        if name=='Boxwood': continue
+        if name=='Boxwood':
+            for q in range(3):
+                end=tip+radial(a+q*2.4,.085,.04)
+                g.tube([tip,end],[.003,.0008],5,4)
+                for sign in [-1,1]:g.leaf(end,end+radial(a+q*2.4+sign,.075,.025),.032,2,.16,5)
+            continue
         if name=='Bottlebrush': brush(b,tip,.25,.095); continue
         if name=='Grevillea': brush(b,tip,.14,.13,curved=True); continue
         if name=='Banksia':
@@ -348,12 +397,12 @@ def produce(name,g,b,flower):
                 if k%2: tendril(g,p,a)
             loc=tip*.8+Vector((0,0,.12))
             b.ellipsoid(loc,(.19,.19,.15) if name=='Pumpkin' else (.16,.19,.15) if name=='Melon' else (.05,.05,.20),0,9,20,.12 if name=='Pumpkin' else 0)
-            b.tube([loc+Vector((0,0,.12)),loc+Vector((.03,0,.20))],[.018,.012],2,5)
+            b.tube([loc+Vector((0,0,.12)),loc+Vector((.03,0,.20))],[.018,.012],3,5)
         return
     if name=='Lettuce':
-        for j in range(30):
-            a=j*2.4; t=j/30
-            g.leaf((0,0,.015+t*.13),radial(a,.30*(1-t*.65),.12+t*.2),.12*(1-t*.5),8,.8,9,True)
+        for j in range(24):
+            a=j*2.39996;t=j/24
+            g.cupped_blade((0,0,.015+t*.08),a,.31*(1-t*.74),.14*(1-t*.52),.11+t*.23,8,.15)
         return
     if name in ['Carrot','Radish','Beetroot','Strawberry']:
         for j in range(10):
@@ -391,7 +440,11 @@ def produce(name,g,b,flower):
         if name=='Chilli': b.tube([p,p+Vector((.02,0,-.07)),p+Vector((.045,0,-.17))],[.024,.017,.001],0,8)
         elif name=='Aubergine': b.ellipsoid(p,(.065,.065,.14),0,7,10)
         else:
-            for k in range(3): b.ellipsoid(p+radial(k*2.4,.07,-k*.035),(.065,)*3,0,6,10)
+            for k in range(3):
+                loc=p+radial(k*2.4,.07,-k*.035)
+                b.ellipsoid(loc,(.065,)*3,0,9,16)
+                b.tube([tip*.8,loc+Vector((0,0,.06))],[.003,.002],3,4)
+                for l in range(5):b.leaf(loc+Vector((0,0,.064)),loc+radial(l*2.4,.042,.062),.009,3,.12,4)
 
 
 def build(name,category,layer,g,b,flower):

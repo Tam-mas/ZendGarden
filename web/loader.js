@@ -67,7 +67,7 @@ play.addEventListener('click', async () => {
   statusText.textContent = 'Preparing your garden…';
   try {
     const missing = Engine.getMissingFeatures({ threads: false });
-    if (missing.length) throw new Error(`This browser needs: ${missing.join(', ')}. Try a current desktop browser.`);
+    if (missing.length) throw new Error(`This browser needs: ${missing.join(', ')}. Try a current browser with WebGL 2 support.`);
     const engine = new Engine({ ...window.ZEND_GODOT_CONFIG,
       canvas: document.getElementById('canvas'),
       onExit: () => location.reload(),

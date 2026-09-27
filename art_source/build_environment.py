@@ -158,21 +158,9 @@ warp_near=False
 def smooth(a,b,v):
     t=max(0,min(1,(v-a)/(b-a))); return t*t*(3-2*t)
 
-def height(x,z):
-    width=85+max(0,-z)*.085+sin(z*.017)*12+sin(z*.041)*4
-    side=max(0,abs(x+sin(z*.002)*50)-width)
-    ridge=(1-math.exp(-side/100))*(140+70*sin(z*.006+.4)**2)
-    broad=noise.fractal(Vector((x*.008,z*.008,3.7)),1.0,2.0,5)*28
-    fine=noise.fractal(Vector((x*.032,z*.032,8.2)),1.0,2.0,3)*13
-    end_range=math.exp(-((z+1320)/185)**2)*(170+noise.fractal(Vector((x*.012,z*.007,4.5)),1,2,4)*65)
-    erosion=abs(noise.fractal(Vector((x*.013,z*.009,1.2)),1,2,5))*45
-    # Rounded terminal headlands close both ends of the basin well inside the mesh.
-    coast=40*sin(x*.027)+24*sin(x*.061+.7)
-    south=smooth(35+coast,420+coast,z)*(145+broad*.6+18*sin(x*.012+z*.009))
-    north=smooth(1400,1660,-z)*(160+broad*.4)
-    return -42+ridge+(broad+fine+erosion)*min(1,side/40)+end_range+south+north
+from mountain_forms import height, outer_height
 X_MIN=-1200; X_SPAN=2400; Z_MIN=-1750; Z_SPAN=2850
-far=WorldGeometry(); resolution=320
+far=WorldGeometry(); resolution=448
 for j in range(resolution+1):
     z=Z_MIN+j*Z_SPAN/resolution
     for i in range(resolution+1):
@@ -183,17 +171,17 @@ for j in range(resolution):
 terrain=far.object('AlpineLakeValley',[rock])
 for li in terrain.data.uv_layers.active.data: li.uv*=.025
 
-# Vertex colour mixes mountain rock, forest and summit frost in the actual asset.
+# Relief masks are exported with the mesh for Blender and glTF inspection.
+# Runtime shading uses continuous world-space strata, scree and treeline masks.
 attr=terrain.data.color_attributes.new(name='Color',type='FLOAT_COLOR',domain='CORNER')
 for poly in terrain.data.polygons:
     for li in poly.loop_indices:
         v=terrain.data.vertices[terrain.data.loops[li].vertex_index].co
         slope=1-abs(poly.normal.z)
-        if v.z>140: c=(.78,.79,.75,1)
-        elif slope>.25: c=(.47,.46,.37,1)
-        else: c=(.27,.38,.19,1)
+        if v.z>420 and slope<.3: c=(.72,.76,.77,1)
+        elif slope>.21 or v.z>260: c=(.47,.45,.41,1)
+        else: c=(.25,.33,.17,1)
         attr.data[li].color=c
-# glTF exports the vertex-color layer and multiplies it with the stone surface.
 
 def surface_height(x,z):
     # Match the exported triangle surface; analytic noise between grid vertices
@@ -235,15 +223,13 @@ for a,b in shoreline:
         stone_piece(shore,(x,surface_height(x,z)+.12,z),(size,size*.75,size*.7))
 shore.object('ShorelineRocks',[stone])
 # An outer ring of ridges covers the distant terrain perimeter in every direction.
-skyline=WorldGeometry(); rings=4; sectors=160
+skyline=WorldGeometry(); rings=26; sectors=512
 for ring in range(rings):
-    radius=[.94,1.3,1.75,2.35][ring]
+    radius=.94+ring*(2.42-.94)/(rings-1)
     for j in range(sectors):
         a=j*2*pi/sectors
         x=cos(a)*1200*radius; z=-300+sin(a)*1450*radius
-        if ring==0: h=height(x,z)-12
-        else: h=[0,235,310,180][ring]+65*sin(a*7+.6)+40*sin(a*17)+25*sin(a*29)
-        skyline.v.append(V(x,h,z))
+        skyline.v.append(V(x,outer_height(x,z,radius,a),z))
 for ring in range(rings-1):
     for j in range(sectors):
         a=ring*sectors+j; b=ring*sectors+(j+1)%sectors
@@ -253,7 +239,9 @@ skyline.object('OuterMountainRidges',[rock])
 # Batched woodland canopy gives distant slopes vegetation at a meaningful scale.
 forest_sections={}
 forest_mats=[material('Forest evergreen','334d28'),material('Forest olive','536336'),material('Forest spring','657947')]
-for j in range(28000):
+forest_count=0
+forest_sites=[]
+for j in range(50000):
     x=random.uniform(-670,670); z=random.uniform(-1370,60)
     if j%4:
         z=max(-1370,min(60,random.gauss(random.choice([-1220,-980,-740,-500,-260,-70]),55)))
@@ -265,13 +253,20 @@ for j in range(28000):
     width=85+max(0,-z)*.085
     side=abs(x+sin(z*.002)*50)-width
     h=surface_height(x,z)
-    if (side<12 and z<65) or h>215 or h<LAKE_LEVEL+.6 or (abs(x)<48 and -65<z<65): continue
+    if (side<12 and z<65) or h<LAKE_LEVEL+.6 or (abs(x)<48 and -65<z<65): continue
+    slope=math.hypot((surface_height(x+5,z)-surface_height(x-5,z))/10,(surface_height(x,z+5)-surface_height(x,z-5))/10)
+    treeline=245+noise.fractal(Vector((x*.012,z*.012,6.2)),1,2,3)*35
+    grove=noise.fractal(Vector((x*.026,z*.022,4.7)),1,2,3)
+    if h>treeline or slope>.78 or grove<-.3: continue
+    if random.random()<smooth(treeline-65,treeline,h)*.86: continue
+    forest_count+=1
+    forest_sites.append((x,z))
     key=(int(math.floor(x/120)),int(math.floor(z/120)))
     forest=forest_sections.setdefault(key,WorldGeometry())
-    size=random.uniform(1.1,2.7)
+    size=random.uniform(1.0,2.5)*(1-.35*smooth(165,270,h))
     if j%5<3:
         for level in range(4):
-            base=h+size*(.35+level*.55); radius=size*(1-level*.19)
+            base=h+size*(.35+level*.55); radius=size*.60*(1-level*.19)
             st=len(forest.v)
             for k in range(9):
                 a=k*2*pi/9; rr=radius*random.uniform(.65,1.15)
@@ -281,11 +276,70 @@ for j in range(28000):
     else:
         for k in range(5):
             a=k*2.4; r=size*.5
-            forest.ellipsoid(V(x+cos(a)*r,h+size*(1.2+random.random()*.6),z+sin(a)*r),(size*.65,size*.6,size*.75),k%3,3,6)
+            forest.ellipsoid(V(x+cos(a)*r,h+size*(1.2+random.random()*.6),z+sin(a)*r),(size*.47,size*.45,size*.88),k%3,4,8)
+# Mature woodland fills the previously sparse lower and middle mountain slopes.
+# A separate RNG preserves the original scenery and lakeside hamlet placement.
+woodland_rng=random.Random(20260927)
+existing_forest_count=forest_count
+spacing=3.2
+occupied={}
+def remember_tree(x,z):
+    key=(math.floor(x/spacing),math.floor(z/spacing))
+    occupied.setdefault(key,[]).append((x,z))
+for x,z in forest_sites: remember_tree(x,z)
+added_by_direction={'west':0,'east':0,'north':0,'south':0}
+for attempt in range(220000):
+    if forest_count-existing_forest_count>=24000: break
+    x=woodland_rng.uniform(-1050,1050)
+    z=woodland_rng.uniform(-1640,1020)
+    # Mix open-slope sampling with dense bands on the slopes visible from the lake.
+    if attempt%3:
+        z=woodland_rng.uniform(-1480,900)
+        width=85+max(0,-z)*.085
+        x=woodland_rng.choice([-1,1])*(width+woodland_rng.uniform(25,370))-sin(z*.002)*50
+    width=85+max(0,-z)*.085
+    side=abs(x+sin(z*.002)*50)-width
+    h=surface_height(x,z)
+    if (side<10 and z<65) or h<LAKE_LEVEL+1.2 or (abs(x)<65 and -85<z<85): continue
+    slope=math.hypot((surface_height(x+5,z)-surface_height(x-5,z))/10,(surface_height(x,z+5)-surface_height(x,z-5))/10)
+    treeline=335+noise.fractal(Vector((x*.009,z*.010,6.2)),1,2,3)*48
+    grove=noise.fractal(Vector((x*.012,z*.010,9.3)),1,2,3)
+    # Match the 3x horizontal / 1.6x vertical landscape scale in Godot.
+    if h>treeline or slope*(1.6/3.0)>1.0 or grove<-.43: continue
+    if woodland_rng.random()<smooth(treeline-80,treeline,h)*.82: continue
+    cell=(math.floor(x/spacing),math.floor(z/spacing))
+    if any((x-px)**2+(z-pz)**2<spacing**2 for dx in [-1,0,1] for dz in [-1,0,1] for px,pz in occupied.get((cell[0]+dx,cell[1]+dz),[])): continue
+    remember_tree(x,z)
+    forest_count+=1
+    direction='south' if z>65 else 'north' if z<-1100 else 'west' if x<0 else 'east'
+    added_by_direction[direction]+=1
+    key=(math.floor(x/120),math.floor(z/120))
+    forest=forest_sections.setdefault(key,WorldGeometry())
+    size=woodland_rng.uniform(2.0,4.8)*(1-.30*smooth(235,380,h))
+    angle=woodland_rng.random()*2*pi
+    shade=woodland_rng.randrange(3)
+    if woodland_rng.random()<.88:
+        # Layered irregular crowns remain recognisable without dense branch meshes.
+        for level in range(4):
+            base=h+size*(.20+level*.65)
+            radius=size*.70*(1-level*.18)
+            st=len(forest.v)
+            for k in range(7):
+                a=angle+k*2*pi/7
+                rr=radius*woodland_rng.uniform(.82,1.15)
+                forest.v.append(V(x+cos(a)*rr,base+woodland_rng.uniform(-.15,.15),z+sin(a)*rr))
+            forest.v.append(V(x+sin(angle)*size*.09,base+size*1.35,z+cos(angle)*size*.09))
+            for k in range(7): forest.face((st+k,st+(k+1)%7,st+7),shade)
+    else:
+        for k in range(3):
+            a=angle+k*2.4
+            forest.ellipsoid(V(x+cos(a)*size*.32,h+size*(1.1+woodland_rng.random()*.35),z+sin(a)*size*.32),(size*.62,size*.62,size*.85),shade,3,7)
 forest_root=bpy.data.objects.new('ForestedMountainSlopes',None)
 scene.collection.objects.link(forest_root)
 for key,section in forest_sections.items():
     ob=section.object('ForestChunk_%s_%s'%key,forest_mats)
+    # Forest materials use solid pigments: omit unused UVs from the large batches.
+    for uv_layer in list(ob.data.uv_layers): ob.data.uv_layers.remove(uv_layer)
     ob.parent=forest_root
 
 # Tiny roofed lakeside settlements establish human scale below the garden.
@@ -313,5 +367,5 @@ for j in range(resolution+1):
     for i in range(resolution+1):
         if i in [0,resolution] or j in [0,resolution]: boundary.append(far.v[j*(resolution+1)+i][2])
 assert min(boundary)>LAKE_LEVEL+20, 'Water reaches the terrain boundary'
-json.dump({'lake_level':LAKE_LEVEL,'shore_segments':len(shoreline),'minimum_boundary_height':min(boundary),'forest_sections':len(forest_sections),'southern_forest_sections':sum(1 for key in forest_sections if key[1]>0)},open(ROOT+'/art_source/landscape_validation.json','w'),indent=2)
+json.dump({'lake_level':LAKE_LEVEL,'shore_segments':len(shoreline),'minimum_boundary_height':min(boundary),'forest_sections':len(forest_sections),'southern_forest_sections':sum(1 for key in forest_sections if key[1]>0),'terrain_resolution':resolution,'terrain_triangles':resolution*resolution*2,'outer_ridge_triangles':(rings-1)*sectors*2,'forest_trees':forest_count,'added_forest_trees':forest_count-existing_forest_count,'added_forest_by_direction':added_by_direction,'forest_triangles':sum(sum(len(f)-2 for f in section.f) for section in forest_sections.values()),'maximum_mountain_height':max(v[2] for v in far.v),'maximum_outer_height':max(v[2] for v in skyline.v)},open(ROOT+'/art_source/landscape_validation.json','w'),indent=2)
 result={'environment':ROOT+'/assets/environment/lake_garden.glb','objects':len(scene.objects)}

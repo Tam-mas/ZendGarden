@@ -45,6 +45,7 @@ static func build(g) -> void:
   plant.rotation.y=r.randf()*TAU
   plant.scale=Vector3.ONE*r.randf_range(.75,1.3)
   g.world_root.add_child(plant)
+  GardenCare.register_wild(g,plant,"border:%d" % j,id)
  for plot in g.plots:
   for j in range(24):
    var side=-1.0 if j%2==0 else 1.0
@@ -54,20 +55,15 @@ static func build(g) -> void:
    border.position=GardenTerrain.point(p)
    border.scale=Vector3.ONE*r.randf_range(.7,1.05)
    g.world_root.add_child(border)
+   GardenCare.register_wild(g,border,"edge:%d:%d" % [g.plots.find(plot),j],id)
  # Bed names belong on small physical labels, not floating across the horizon.
  for i in range(g.plots.size()):
   var plot=g.plots[i]
-  var sign=Label3D.new()
-  sign.position=GardenTerrain.point(plot.center+Vector3(-4.1,0,5.1))+Vector3(0,.62,0)
-  sign.rotation_degrees.x=-15
-  sign.font_size=30
-  sign.pixel_size=.003
-  sign.modulate=Color("f1e5c7")
-  sign.outline_modulate=Color("4b5138")
+  var sign=Art.sign_board()
+  sign.set_meta("terrain_anchor",true)
+  sign.position=GardenTerrain.point(plot.center+Vector3(-4.1,0,5.15))
   g.world_root.add_child(sign)
   g.plot_signs.append(sign)
-  Art.box(g.world_root,GardenTerrain.point(plot.center+Vector3(-4.1,0,5.15))+Vector3(0,.59,0),Vector3(1.65,.40,.08),Color("5b5c40"))
-  for x in [-.6,.6]: Art.cylinder(g.world_root,GardenTerrain.point(plot.center+Vector3(-4.1+x,0,5.15))+Vector3(0,.3,0),.035,.6,Color("77634a"))
  # Small collision box for the permanent pavilion.
  var wall=StaticBody3D.new()
  var collider=CollisionShape3D.new()
@@ -197,6 +193,7 @@ static func recede_landscape(node: Node) -> void:
   var material=ShaderMaterial.new()
   material.shader=load("res://shaders/mountain.gdshader")
   material.set_shader_parameter("strata",load("res://assets/textures/Mountain_strata.png"))
+  material.set_shader_parameter("rock_normal",load("res://assets/textures/Mountain_strata_normal.png"))
   node.material_override=material
  if node is MeshInstance3D and str(node.name)=="ContourLake":
   var material=ShaderMaterial.new()
@@ -209,4 +206,8 @@ static func recede_landscape(node: Node) -> void:
   node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
   # Small sections retain woodland coverage while reducing distant geometry.
   node.lod_bias=2.0
+  # Use restrained foliage colours instead of the bright imported canopy palette.
+  var shades=[Color("30452f"),Color("3b5135"),Color("506047")]
+  for surface in range(node.mesh.get_surface_count()):
+   node.set_surface_override_material(surface,Art.mat(shades[surface%shades.size()],1.0))
  for child in node.get_children(): recede_landscape(child)

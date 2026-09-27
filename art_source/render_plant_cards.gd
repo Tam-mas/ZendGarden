@@ -37,7 +37,12 @@ func render_cards() -> void:
  viewport.add_child(camera)
  camera.current=true
  var catalogue=GardenCatalogue.plants()
+ var rendered=0
+ var review_directory="res://captures/botanical-review-compat" if "--compat-review" in OS.get_cmdline_user_args() else "res://captures/botanical-review"
+ DirAccess.make_dir_recursive_absolute(review_directory)
  for plant in catalogue:
+  if "--new-only" in OS.get_cmdline_user_args() and plant.id<60: continue
+  rendered+=1
   var model=GardenArt.plant(plant,true)
   viewport.add_child(model)
   var box=bounds(model)
@@ -48,8 +53,8 @@ func render_cards() -> void:
   camera.far=100
   await process_frame
   await RenderingServer.frame_post_draw
-  viewport.get_texture().get_image().save_png(("res://captures/botanical-review/%02d.png" if review else "res://assets/ui/plants/%02d.png") % plant.id)
+  viewport.get_texture().get_image().save_png((review_directory+"/%02d.png" if review else "res://assets/ui/plants/%02d.png") % plant.id)
   viewport.remove_child(model)
   model.queue_free()
- print("PLANT_CARD_RENDER: PASS — 60 original model portraits")
+ print("PLANT_CARD_RENDER: PASS — %d model portraits" % rendered)
  quit()

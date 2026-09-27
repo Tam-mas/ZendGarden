@@ -10,6 +10,8 @@ static func material(soil: bool) -> ShaderMaterial:
  return mat
 
 static func path(g, center: Vector3, width: float = 1.0) -> MeshInstance3D:
+ var key="%d:%d" % [center.x,center.z]
+ if g.raked_nodes.has(key) and is_instance_valid(g.raked_nodes[key]): g.raked_nodes[key].queue_free()
  var st=SurfaceTool.new()
  st.begin(Mesh.PRIMITIVE_TRIANGLES)
  for x in range(10):
@@ -25,6 +27,14 @@ static func path(g, center: Vector3, width: float = 1.0) -> MeshInstance3D:
  patch.mesh=st.commit()
  patch.material_override=material(true)
  g.world_root.add_child(patch)
+ g.raked_nodes[key]=patch
+ # Shallow dark furrows make the rake direction visible, even on existing paths.
+ for row in range(int(width/.14)):
+  var x=center.x-width*.5+.07+row*.14
+  for segment in range(5):
+   var a=GardenTerrain.point(Vector3(x,0,center.z-width*.46+segment*width*.184))+Vector3(0,.027,0)
+   var b=GardenTerrain.point(Vector3(x,0,center.z-width*.46+(segment+1)*width*.184))+Vector3(0,.027,0)
+   GardenArt.branch(patch,a,b,.008,Color("6c5137"))
  # Clear procedural blades from the newly raked earth, including on save reload.
  var lawn=g.world_root.get_node_or_null("MeadowGrass")
  if lawn:

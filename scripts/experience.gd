@@ -49,7 +49,7 @@ static func welcome(g, page: int = 0) -> void:
  nav.alignment=BoxContainer.ALIGNMENT_CENTER
  col.add_child(nav)
  if page>0: nav.add_child(g.button("← Back",func(): welcome(g,page-1),Vector2(130,44)))
- nav.add_child(g.button("Let’s grow something" if page==4 else "Continue →",func():
+ nav.add_child(g.button("Let’s grow something" if page==4 else "Continue ->",func():
   if page==4: finish(g)
   else: welcome(g,page+1),Vector2(250,44)))
  nav.add_child(g.button("Explore now",func(): finish(g),Vector2(150,44)))
@@ -66,15 +66,18 @@ static func finish(g) -> void:
  g.welcome_backdrop=null
  g.settings.intro_seen=true
  g.save_game()
- Input.mouse_mode=Input.MOUSE_MODE_CAPTURED
+ g.resume_controls()
 
 static func settings_page(g) -> void:
+ if is_instance_valid(g.touch): g.touch.settings_page()
  g.side_title.text="Make yourself at home"
- g.add_note("COMFORT & QUIET",15)
- for entry in [["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["invert_y","Invert vertical look"],["pause_menus","Pause time in menus"]]:
+ g.add_note("MOUSE LOOK",15)
+ for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
+  if entry[0]=="request_notifications": g.add_note("COMFORT & QUIET",15)
   var key=entry[0]
   var toggle=CheckButton.new()
   toggle.text=entry[1]
+  if g.touch_active(): toggle.custom_minimum_size.y=48
   toggle.button_pressed=g.settings[key]
   toggle.toggled.connect(func(value): g.settings[key]=value; g.apply_settings(); g.save_game())
   g.list_box.add_child(toggle)
@@ -84,11 +87,11 @@ static func settings_page(g) -> void:
   var slider=HSlider.new()
   slider.min_value=entry[2]; slider.max_value=entry[3]; slider.step=entry[4]
   slider.value=g.settings[key]
-  slider.custom_minimum_size=Vector2(240,24)
+  slider.custom_minimum_size=Vector2(240,48 if g.touch_active() else 24)
   slider.value_changed.connect(func(value): g.settings[key]=value; g.apply_settings())
   slider.drag_ended.connect(func(_changed): g.save_game())
   g.list_box.add_child(slider)
- g.list_box.add_child(g.button("Replay the welcome walk",func(): welcome(g)))
+ g.list_box.add_child(g.button("Replay the welcome walk",func(): g.show_welcome()))
  g.list_box.add_child(g.button("Save garden",func(): g.save_game(); g.toast("Your garden is saved.")))
  g.list_box.add_child(g.button("Start a new garden…",func(): confirm_restart(g)))
  g.detail_label.text="Settings are saved with your garden.\nReduced motion skips the time-lapse and menu fades."
@@ -96,7 +99,7 @@ static func settings_page(g) -> void:
 static func journey(g) -> void:
  g.add_note("YOUR GARDEN’S NEXT CHAPTERS",15)
  for entry in [[3,"Better hand tools"],[7,"Willow water + bed care systems"],[18,"Fern hollow + master tools"],[36,"Sunrise terrace"]]:
-  g.add_note(("✓ " if g.day>=entry[0] else "Day %d · " % entry[0])+entry[1])
+  g.add_note(("Owned " if g.day>=entry[0] else "Day %d · " % entry[0])+entry[1])
  g.add_note("After day 36, another bed opens every 12 days, with no final bed. A new seed every third day. Deliver 3, 8 and 15 requests for three extra seed discoveries each.")
 
 static func confirm_restart(g) -> void:

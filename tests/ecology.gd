@@ -16,7 +16,7 @@ static func run(g, failures: Array) -> void:
    if is_instance_valid(node):
     for i in range(node.mesh.get_surface_count()): actual+=node.mesh.surface_get_array_index_len(i)
    if actual!=expected: failures.append("Stale imported environment mesh: "+mesh.name)
- for id in range(60):
+ for id in range(GardenCatalogue.ROWS.size()):
   if not is_equal_approx(GardenCatalogue.saved_age(id, float(GardenCatalogue.ROWS[id][4])*.5,1),g.catalogue[id].days*.5): failures.append("Legacy growth migration changed maturity")
  var old_day=g.day
  var old_clock=g.clock_time
