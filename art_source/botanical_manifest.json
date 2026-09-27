@@ -478,5 +478,419 @@
     "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_59.glb",
     "morphology_version": 3,
     "triangles": 3408
+  },
+  {
+    "id": 60,
+    "name": "Common jasmine",
+    "vertices": 57200,
+    "triangles": 77440,
+    "path": "assets/plants/plant_60.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 61,
+    "name": "Pink jasmine",
+    "vertices": 62960,
+    "triangles": 87680,
+    "path": "assets/plants/plant_61.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 62,
+    "name": "Winter jasmine",
+    "vertices": 26160,
+    "triangles": 34688,
+    "path": "assets/plants/plant_62.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 63,
+    "name": "Dahlia 'Caf\u00e9 au Lait'",
+    "vertices": 45375,
+    "triangles": 70760,
+    "path": "assets/plants/plant_63.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 64,
+    "name": "Tulip 'Queen of Night'",
+    "vertices": 3310,
+    "triangles": 5160,
+    "path": "assets/plants/plant_64.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 65,
+    "name": "Blue delphinium",
+    "vertices": 31544,
+    "triangles": 44768,
+    "path": "assets/plants/plant_65.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 66,
+    "name": "Purple lupin",
+    "vertices": 53592,
+    "triangles": 75120,
+    "path": "assets/plants/plant_66.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 67,
+    "name": "Burgundy hollyhock",
+    "vertices": 13676,
+    "triangles": 21568,
+    "path": "assets/plants/plant_67.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 68,
+    "name": "Slender weaver's bamboo",
+    "vertices": 60464,
+    "triangles": 76440,
+    "path": "assets/plants/plant_68.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 69,
+    "name": "Golden bamboo",
+    "vertices": 60464,
+    "triangles": 76440,
+    "path": "assets/plants/plant_69.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 70,
+    "name": "Black bamboo",
+    "vertices": 60464,
+    "triangles": 76440,
+    "path": "assets/plants/plant_70.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 71,
+    "name": "Himalayan blue bamboo",
+    "vertices": 60464,
+    "triangles": 76440,
+    "path": "assets/plants/plant_71.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 72,
+    "name": "Red bamboo 'Jiuzhaigou'",
+    "vertices": 46303,
+    "triangles": 61698,
+    "path": "assets/plants/plant_72.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 73,
+    "name": "Rose 'Mister Lincoln'",
+    "vertices": 48572,
+    "triangles": 74852,
+    "path": "assets/plants/plant_73.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 74,
+    "name": "Rose 'Iceberg'",
+    "vertices": 89135,
+    "triangles": 137376,
+    "path": "assets/plants/plant_74.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 75,
+    "name": "Rose 'Golden Celebration'",
+    "vertices": 51812,
+    "triangles": 79972,
+    "path": "assets/plants/plant_75.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 76,
+    "name": "Rose 'Just Joey'",
+    "vertices": 41444,
+    "triangles": 63588,
+    "path": "assets/plants/plant_76.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 77,
+    "name": "Rose 'Scentimental'",
+    "vertices": 48572,
+    "triangles": 74852,
+    "path": "assets/plants/plant_77.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 78,
+    "name": "Giant redwood",
+    "vertices": 175904,
+    "triangles": 162920,
+    "path": "assets/plants/plant_78.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 79,
+    "name": "Coast redwood",
+    "vertices": 130544,
+    "triangles": 122600,
+    "path": "assets/plants/plant_79.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 80,
+    "name": "Giant bamboo",
+    "vertices": 39930,
+    "triangles": 51444,
+    "path": "assets/plants/plant_80.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 81,
+    "name": "Ginkgo",
+    "vertices": 95347,
+    "triangles": 145492,
+    "path": "assets/plants/plant_81.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 82,
+    "name": "Fig",
+    "vertices": 52346,
+    "triangles": 78620,
+    "path": "assets/plants/plant_82.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 83,
+    "name": "Pear",
+    "vertices": 98210,
+    "triangles": 152708,
+    "path": "assets/plants/plant_83.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 84,
+    "name": "Peach",
+    "vertices": 63574,
+    "triangles": 88084,
+    "path": "assets/plants/plant_84.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 85,
+    "name": "Plum",
+    "vertices": 97090,
+    "triangles": 151588,
+    "path": "assets/plants/plant_85.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 86,
+    "name": "Apricot",
+    "vertices": 97090,
+    "triangles": 151588,
+    "path": "assets/plants/plant_86.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 87,
+    "name": "Nectarine",
+    "vertices": 63574,
+    "triangles": 88084,
+    "path": "assets/plants/plant_87.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 88,
+    "name": "Orange",
+    "vertices": 61810,
+    "triangles": 95140,
+    "path": "assets/plants/plant_88.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 89,
+    "name": "Mandarin",
+    "vertices": 61810,
+    "triangles": 95140,
+    "path": "assets/plants/plant_89.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 90,
+    "name": "Lime",
+    "vertices": 61810,
+    "triangles": 95140,
+    "path": "assets/plants/plant_90.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 91,
+    "name": "Avocado",
+    "vertices": 61810,
+    "triangles": 95140,
+    "path": "assets/plants/plant_91.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 92,
+    "name": "Snow gum",
+    "vertices": 32445,
+    "triangles": 39672,
+    "path": "assets/plants/plant_92.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 93,
+    "name": "Alpine snow gum",
+    "vertices": 42980,
+    "triangles": 52416,
+    "path": "assets/plants/plant_93.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 94,
+    "name": "Red flowering gum",
+    "vertices": 122034,
+    "triangles": 186048,
+    "path": "assets/plants/plant_94.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 95,
+    "name": "Waratah",
+    "vertices": 49938,
+    "triangles": 80290,
+    "path": "assets/plants/plant_95.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 96,
+    "name": "Gymea lily",
+    "vertices": 17310,
+    "triangles": 26900,
+    "path": "assets/plants/plant_96.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 97,
+    "name": "Globe artichoke",
+    "vertices": 19270,
+    "triangles": 30352,
+    "path": "assets/plants/plant_97.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 98,
+    "name": "Rhubarb",
+    "vertices": 1176,
+    "triangles": 1896,
+    "path": "assets/plants/plant_98.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 99,
+    "name": "Asparagus",
+    "vertices": 5544,
+    "triangles": 6288,
+    "path": "assets/plants/plant_99.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 100,
+    "name": "Broccoli",
+    "vertices": 13465,
+    "triangles": 22008,
+    "path": "assets/plants/plant_100.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 101,
+    "name": "Cauliflower",
+    "vertices": 13300,
+    "triangles": 21704,
+    "path": "assets/plants/plant_101.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 102,
+    "name": "Capsicum",
+    "vertices": 5268,
+    "triangles": 8544,
+    "path": "assets/plants/plant_102.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 103,
+    "name": "Brussels sprouts",
+    "vertices": 8615,
+    "triangles": 13940,
+    "path": "assets/plants/plant_103.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 104,
+    "name": "Leek",
+    "vertices": 1044,
+    "triangles": 1344,
+    "path": "assets/plants/plant_104.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 105,
+    "name": "Hemp",
+    "vertices": 16181,
+    "triangles": 21372,
+    "path": "assets/plants/plant_105.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_expansion.blend"
   }
 ]

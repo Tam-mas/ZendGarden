@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image,ImageDraw,ImageFont,ImageOps
 ROOT=Path(__file__).resolve().parents[1]
 DEST=ROOT/'captures/plants'
-specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
+specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())[:60]
 font_path=Path('/System/Library/Fonts/Helvetica.ttc')
 def font(size):
     return ImageFont.truetype(str(font_path),size) if font_path.exists() else ImageFont.load_default()

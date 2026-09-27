@@ -10,7 +10,7 @@ The game is in development, and its source is publicly available as an **open-so
 
 ## What you can do
 
-- Grow **60 plant varieties**, including flowers, grasses, groundcover, shrubs, trees, Australian natives, and edible plants.
+- Grow **106 plant varieties**, including flowers, grasses, groundcover, shrubs, trees, Australian natives, and edible plants.
 - Combine plants of different heights in the same area. Trees sit between the smaller planting positions, and each plant has a little natural variation in its mature height.
 - Water, prune, harvest, move, and rearrange your planting as your garden develops.
 - Earn petals through harvests and garden requests, discover plants, and unlock more growing space.

@@ -17,12 +17,15 @@ func inspect(node: Node) -> void:
  for child in node.get_children(): inspect(child)
 
 func verify() -> void:
+ if GardenCatalogue.ROWS.size()!=106 or GardenCatalogue.GROWTH_DAYS.size()!=106: failures.append("Incomplete expanded catalogue")
  for data in GardenCatalogue.plants():
+  var before=leaf_surfaces
   var model=GardenArt.plant(data)
   root.add_child(model)
   if model.get_node_or_null("Bloom")==null: failures.append("Missing growth/harvest bloom group: "+str(data.id))
   inspect(model)
+  if leaf_surfaces==before: failures.append("Missing wind foliage for plant "+str(data.id))
   model.free()
- if leaf_surfaces<60: failures.append("Catalogue has missing leaf materials")
+ if leaf_surfaces<GardenCatalogue.ROWS.size(): failures.append("Catalogue has missing leaf materials")
  print("PLANT_MODELS_RESULT: ",JSON.stringify(failures))
  quit(0 if failures.is_empty() else 1)

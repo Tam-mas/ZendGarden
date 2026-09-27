@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 14:01] Added
+
+**Tech:** `botanical_expansion_forms.py`, `build_botanical_expansion.py`, `botanical_expansion.blend`, `GardenCatalogue` — 46 detailed botanical assets and catalogue entries, for 106 total.
+
+**Dev:** Append IDs 60–105 for the approved 40 plants plus broccoli, cauliflower, capsicum, Brussels sprouts, leek and hemp. Model species-specific culms, needles, fans, compound/toothed leaves, petals, stamens and fruit; embed pigment, normal and roughness maps, including striped roses and mottled gum bark. Preserve original IDs/assets and Grasses entries, add growth/season metadata and jasmine climbing support, generate portraits, and extend asset/import/UI checks to the full catalogue. Keep editable expansion sources separate, share geometry primitives without scene side effects, and rebuild the two libraries sequentially. Research and rendering workflows are documented alongside the sources.
+
+**Plain:** Adds 46 new detailed plants with recognisable shapes and colours, including bamboo varieties, redwoods, snow gums, roses, jasmine, fruit trees, vegetables and hemp.
+
+**Why:** Gives the garden a wider, more believable range of planting choices while preserving existing gardens.
+
 ### [2026-09-27 13:00] Added
 
 **Tech:** `GardenTools.gather`, `repeat_mouse`, `garden.gd`, `touch_controls.gd` — area gathering, independent reach upgrades and held-input harvesting.

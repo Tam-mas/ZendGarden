@@ -2014,7 +2014,7 @@ func run_smoke_test() -> void:
  # Camera validation: exact eye position, full vertical look and saved gardening compatibility.
  if camera.position.distance_to(player.position+Vector3(0,1.62,0))>.02: failures.append("Camera is not first person")
  if player.visible: failures.append("First-person body obstructs the camera")
- for id in range(60):
+ for id in range(GardenCatalogue.ROWS.size()):
   if not ResourceLoader.exists("res://assets/plants/plant_%02d.glb" % id): failures.append("Missing Blender plant "+str(id))
  player.position=GardenTerrain.point(Vector3(0,0,-23))+Vector3(0,.1,0)
  pitch=.28
