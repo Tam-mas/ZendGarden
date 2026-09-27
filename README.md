@@ -2,7 +2,7 @@
 
 **A quiet place to plant, grow, and make your own.**
 
-[**Enter the garden →**](https://zendgarden.pages.dev)
+[**Enter the garden →**](https://zend.garden)
 
 Zend Garden is a cosy, first-person gardening game beside a mountain lake. Start with a small patch of soil, wander among the flowers, and gradually turn your corner of the valley into somewhere you want to spend time.
 
@@ -25,7 +25,7 @@ There is no need to keep up. Plants do not die from neglect, requests have no de
 
 ## Your first visit
 
-Open [Zend Garden in your browser](https://zendgarden.pages.dev) and choose **Enter the garden**. Allow time for the first download, which includes the game's detailed models and artwork.
+Open [Zend Garden in your browser](https://zend.garden) and choose **Enter the garden**. Allow time for the first download, which includes the game's detailed models and artwork.
 
 Use the **arrow keys** to walk and the **mouse** to look around. Press **Tab** to open the garden menus, choose some seeds, and click on a planting spot. Water your new plants, explore the shop, or press **G** to welcome the next morning.
 
