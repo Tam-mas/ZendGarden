@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 18:25] Changed
+
+**Tech:** `.github/workflows/web-build.yml` — refresh the GitHub Actions build dependencies.
+
+**Dev:** Update checkout to 7.0.1, setup-python to 7.0.0 and upload-artifact to 7.0.1 through the pending Dependabot pull requests. Keep immutable commit pins, read-only repository permissions, disabled credential persistence and the existing build configuration.
+
+**Plain:** The automated tools used to build and package the browser game are up to date.
+
+**Why:** Keeps the release process compatible with supported build tooling and its fixes.
+
 ### [2026-09-27 16:03] Changed
 
 **Tech:** `web/shell.html`, `web/art/garden-woodland.jpg` — current in-game welcome-page background.
