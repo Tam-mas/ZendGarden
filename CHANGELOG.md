@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 16:03] Changed
+
+**Tech:** `web/shell.html`, `web/art/garden-woodland.jpg` — current in-game welcome-page background.
+
+**Dev:** Replace the outdated lakeside backdrop with the current garden capture used in the README, showing the detailed planting and expanded mountain woodland. Encode the screenshot as a compact JPEG and use a new asset filename so returning browsers request the updated image.
+
+**Plain:** The website's welcome screen now shows the garden as it looks today.
+
+**Why:** Gives new players an accurate first impression of the updated game.
+
 ### [2026-09-27 15:50] Changed
 
 **Tech:** `README.md`, `docs/player-guide.md`, `docs/development.md`, `web/shell.html`, `build_environment.py` — player-facing introduction, welcome-page controls and denser mountain woodland.
