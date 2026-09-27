@@ -211,10 +211,18 @@ Every shop item has an exported model in **`assets/shop/`**:
 - Import the matching `.glb` into Blender or a glTF viewer to inspect its geometry and materials. Sign lettering is a Godot label and is preserved in the `.tscn`, rather than the GLB.
 - Examples: `greenhouse.tscn`, `bath.tscn`, `stone.tscn`, and their `.glb` counterparts.
 
-The game currently builds these models from `scripts/garden_art.gd` (`furnishing`). These exports are inspection copies; editing one does not change the runtime model. After changing the generator, refresh the copies with:
+The game loads the Blender models directly from `assets/shop/`, with editable sources in `art_source/shop_library.blend`. Animals use `art_source/companions.blend` and `art_source/wildlife_library.blend`. These models include embedded colour, normal and roughness maps; Godot keeps the embedded textures compressed and generates mesh LODs on import.
+
+Rebuild the models with Blender, then refresh the Godot inspection scenes:
 
 ```sh
+blender --background art_source/workshop.blend --python art_source/build_shop.py
+blender --background art_source/workshop.blend --python art_source/build_companions.py
+blender --background art_source/workshop.blend --python art_source/build_wildlife.py
+godot --headless --path . --editor --import
 godot --headless --path . --script tools/export_shop_models.gd
 ```
+
+The inspection-scene command preserves the Blender GLBs. See [the detailed asset workflow](art_source/detail/README.md) for model coverage, animation contracts and visual review commands.
 
 Bird-bath behaviour lives in `scripts/bath_life.gd`. Bath visitors leave at night, and calls fade with distance. The four starting beds have distinct gentle music themes: the beginning, waterside, woodland, and terrace. Later beds reuse these themes. Moving between beds crossfades the tracks; music and nature volume settings still apply. Original audio sources can be regenerated with `python3 tools/build_audio.py`.

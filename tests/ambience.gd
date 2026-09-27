@@ -2,10 +2,23 @@ extends RefCounted
 
 static func run(g, failures: Array) -> void:
  var greenhouse=GardenArt.furnishing("greenhouse")
- var posts=0
- for node in greenhouse.get_children():
-  if node is MeshInstance3D and node.mesh is BoxMesh and is_equal_approx(node.mesh.size.y,2.3): posts+=1
- if posts!=6: failures.append("Greenhouse needs six full-height side supports")
+ var triangles=[]
+ collect_triangles(greenhouse,Transform3D.IDENTITY,triangles)
+ for x in [-1.6,1.6]:
+  for z in [-1.4,-.7,0.0,.7,1.4]:
+   var supported=false
+   for tri in triangles:
+    var bottom=10.0
+    var top=-10.0
+    var in_column=true
+    for point in tri:
+     in_column=in_column and absf(point.x-x)<.06 and absf(point.z-z)<.06
+     bottom=minf(bottom,point.y)
+     top=maxf(top,point.y)
+    if in_column and bottom<.15 and top>2.3:
+     supported=true
+     break
+   if not supported: failures.append("Greenhouse missing full-height support at "+str(Vector2(x,z)))
  greenhouse.free()
  for item in GardenCatalogue.furnishings():
   if not ResourceLoader.exists("res://assets/shop/"+item.kind+".tscn"): failures.append("Missing inspectable shop model: "+item.kind)
@@ -56,3 +69,16 @@ static func run(g, failures: Array) -> void:
  await RenderingServer.frame_post_draw
  g.get_viewport().get_texture().get_image().save_png("/tmp/garden-bath.png")
  print("AMBIENCE_RESULT: ",failures)
+
+# Inspect the actual imported triangles; supports are now joined Blender meshes.
+static func collect_triangles(node: Node3D, parent_transform: Transform3D, target: Array) -> void:
+ var transform=parent_transform*node.transform
+ if node is MeshInstance3D:
+  for surface in range(node.mesh.get_surface_count()):
+   var arrays=node.mesh.surface_get_arrays(surface)
+   var vertices=arrays[Mesh.ARRAY_VERTEX]
+   var indices=arrays[Mesh.ARRAY_INDEX]
+   for i in range(0,indices.size(),3):
+    target.append([transform*vertices[indices[i]],transform*vertices[indices[i+1]],transform*vertices[indices[i+2]]])
+ for child in node.get_children():
+  if child is Node3D: collect_triangles(child,transform,target)

@@ -1562,7 +1562,9 @@ func stock_fish() -> void:
 
 func make_fish(parent: Node3D) -> void:
  for j in range(4):
-  var fish=Art.ball(parent,Vector3(cos(j*1.7),0.09,sin(j*1.7)),Vector3(0.21,0.06,0.09),Color("efd3a0") if j%2 else Color("d99270"))
+  var fish=Art.detailed_model("wildlife","fish")
+  parent.add_child(fish)
+  fish.position=Vector3(cos(j*1.7),0.09,sin(j*1.7))
   fish.name="Fish"+str(j)
 
 func care_effect(pos: Vector3, color: Color) -> void:

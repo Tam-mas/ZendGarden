@@ -17,6 +17,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$mouse_log" || ! rg -Fq 'MOUSE_LOOK_RESULT: []' 
   cat "$mouse_log"
   exit 1
 fi
+detail_log="$(mktemp -t zend-garden-detail)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/detail_models.gd > "$detail_log" 2>&1 || { cat "$detail_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$detail_log" || ! rg -Fq 'DETAIL_MODELS_RESULT: []' "$detail_log"; then
+  cat "$detail_log"
+  exit 1
+fi
 wildlife_log="$(mktemp -t zend-garden-wildlife)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/wildlife_direction.gd > "$wildlife_log" 2>&1 || { cat "$wildlife_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$wildlife_log" || ! rg -Fq 'WILDLIFE_DIRECTION_RESULT: []' "$wildlife_log"; then

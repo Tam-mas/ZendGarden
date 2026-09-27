@@ -71,38 +71,11 @@ func _process(delta: float) -> void:
   guest.node.get_node("Head").rotation.x=.3*sin(guest.age*1.5) if not moving else 0.0
 
 static func model(kind: String, joey: bool = false) -> Node3D:
- var art=GardenArt
- var n=Node3D.new()
- n.name="KangarooWithJoey" if joey else kind.capitalize()
- var kangaroo=kind=="kangaroo"
- var fur=Color("a48766") if kangaroo else Color("b9afa1")
- var dark=Color("302820")
- var body_height=.87 if kangaroo else .25
- art.ball(n,Vector3(0,body_height,0),Vector3(.47,1.1,.53) if kangaroo else Vector3(.31,.36,.55),fur)
- var head=Node3D.new()
- head.name="Head"
- head.position=Vector3(0,1.46,-.28) if kangaroo else Vector3(0,.42,-.27)
- n.add_child(head)
- art.ball(head,Vector3.ZERO,Vector3(.29,.35,.34) if kangaroo else Vector3(.27,.25,.26),fur)
- art.ball(head,Vector3(0,-.06,-.17),Vector3(.19,.16,.27) if kangaroo else Vector3(.14,.10,.10),fur.lightened(.12))
- for side in [-1,1]:
-  var ear=art.ball(head,Vector3(side*.095,.25,.025),Vector3(.095,.40,.09) if kangaroo else Vector3(.075,.36,.075),fur)
-  ear.rotation.z=-side*.18
-  art.ball(head,Vector3(side*.095,.25,-.024),Vector3(.039,.25,.012),Color("cba394"))
-  art.ball(head,Vector3(side*.116,.02,-.12),Vector3.ONE*.035,dark)
-  art.ball(n,Vector3(side*.20,.35,.13),Vector3(.27,.58,.36) if kangaroo else Vector3(.18,.24,.23),fur.darkened(.08))
-  art.ball(n,Vector3(side*.18,.09,-.09),Vector3(.17,.14,.52) if kangaroo else Vector3(.12,.10,.25),fur)
-  if kangaroo: art.branch(n,Vector3(side*.2,1.12,-.12),Vector3(side*.17,.79,-.36),.055,fur)
- art.ball(head,Vector3(0,-.045,-.31 if kangaroo else -.23),Vector3(.075,.045,.055),dark)
- if kangaroo:
-  art.branch(n,Vector3(0,.48,.19),Vector3(0,.12,.90),.13,fur)
-  art.branch(n,Vector3(0,.12,.9),Vector3(0,.04,1.35),.055,fur)
-  if joey:
-   art.ball(n,Vector3(0,.83,-.27),Vector3(.34,.42,.16),fur.lightened(.23))
-   art.ball(n,Vector3(0,1.01,-.33),Vector3(.21,.07,.10),fur.darkened(.3))
-   art.ball(n,Vector3(0,1.09,-.34),Vector3(.16,.19,.19),fur.lightened(.1))
-   for side in [-1,1]:
-    art.ball(n,Vector3(side*.055,1.22,-.31),Vector3(.043,.18,.045),fur)
-    art.ball(n,Vector3(side*.065,1.11,-.41),Vector3.ONE*.021,dark)
- else: art.ball(n,Vector3(0,.3,.31),Vector3.ONE*.15,Color("ece3d2"))
+ var n=GardenArt.detailed_model("wildlife","kangaroo_joey" if kind=="kangaroo" and joey else kind)
+ var head=n.find_child("Head*",true,false) as Node3D
+ if head:
+  if head.get_parent()!=n:
+   head.owner=null
+   head.reparent(n,false)
+  head.name="Head"
  return n

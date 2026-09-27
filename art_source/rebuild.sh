@@ -7,4 +7,6 @@ BLENDER_BIN="${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender}"
 "$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_botanicals.py
 "$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_tools.py
 "$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_companions.py
+"$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_shop.py
+"$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_wildlife.py
 python3 tests/check_assets.py

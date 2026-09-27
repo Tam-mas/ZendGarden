@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 10:29] Changed
+
+**Tech:** `art_source/build_shop.py`, `build_companions.py`, `build_wildlife.py`, `scripts/garden_art.gd` — detailed Blender models and embedded PBR materials used directly in the game.
+
+**Dev:** Rebuilt all 11 shop structures and 13 animal models/variants with bevelled joinery, formed stone/clay surfaces, glazing, continuous companion body surfaces, articulated wings, feathers, fins and coat markings. Added deterministic colour/normal/roughness textures, packed editable Blender libraries, compressed Godot texture imports and shared model caching. Preserved sign labels, lantern lights, animal pivots, placement dimensions and existing save/behaviour contracts. Inspection exports now preserve Blender GLBs. Extended asset, pivot and greenhouse geometry validation; gameplay smoke tests pass.
+
+**Plain:** Every shop structure and animal has a more detailed model, with textured materials and finer visible features throughout the garden.
+
+**Why:** Makes close-up gardening, wildlife encounters and garden photography feel richer and more natural while preserving the game's interactions.
+
 ### [2026-09-26 08:28] Added
 
 **Tech:** `bath_life.gd`, `soundscape.gd`, `mountain.gdshader`, `assets/shop/` — bathing birds, regional ambience and inspectable shop models.

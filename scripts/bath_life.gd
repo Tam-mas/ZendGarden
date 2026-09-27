@@ -13,7 +13,6 @@ func setup(game) -> void:
  for i in range(2):
   var bird=GardenArt.visitor("songbird" if i==0 else "native bird")
   add_child(bird)
-  for side in [-1,1]: GardenArt.branch(bird,Vector3(side*.035,-.025,0),Vector3(side*.035,-.08,-.015),.008,Color("756d50"))
   birds.append(bird)
   var drops=Node3D.new()
   add_child(drops)
