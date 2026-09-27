@@ -31,6 +31,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$plant_log" || ! rg -Fq 'PLANT_MODELS_RESULT: []
   cat "$plant_log"
   exit 1
 fi
+preview_log="$(mktemp -t zend-garden-preview)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/plant_preview.gd > "$preview_log" 2>&1 || { cat "$preview_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$preview_log" || ! rg -Fq 'PLANT_PREVIEW_RESULT: []' "$preview_log"; then
+  cat "$preview_log"
+  exit 1
+fi
 wildlife_log="$(mktemp -t zend-garden-wildlife)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/wildlife_direction.gd > "$wildlife_log" 2>&1 || { cat "$wildlife_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$wildlife_log" || ! rg -Fq 'WILDLIFE_DIRECTION_RESULT: []' "$wildlife_log"; then

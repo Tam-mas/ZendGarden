@@ -1147,30 +1147,63 @@ func update_hover() -> void:
  var pid = ""
  if mode=="plant": pid="p"+str(selected)
  if mode=="build": pid="f"+str(selected_furniture)
- if mode=="move" and moved_index>=0: pid="p"+str(planted[moved_index].id)
+ if mode=="move" and moved_index>=0: pid="m"+str(moved_index)
  if mode=="move" and moved_object>=0: pid="o"+str(moved_object)
  if not pid.is_empty():
-  if preview_id!=pid:
-   if is_instance_valid(preview): preview.queue_free()
-   if pid.begins_with("p"): preview=Art.plant(catalogue[int(pid.substr(1))])
-   elif pid.begins_with("f"): preview=Art.furnishing(furniture[selected_furniture].kind)
-   else: preview=Art.furnishing(objects[moved_object].kind)
-   if pid.begins_with("f") and furniture[selected_furniture].kind=="sign": Art.set_sign_text(preview,sign_text,sign_color)
-   if pid.begins_with("o") and objects[moved_object].kind=="sign": Art.set_sign_text(preview,objects[moved_object].text,Color.from_string(objects[moved_object].text_color,Color("f1e5c7")))
-   add_child(preview)
-   preview_id=pid
-   ghost_material(preview)
-  preview.position=hover_cell
-  if pid.begins_with("f") or pid.begins_with("o"): preview.rotation.y=structure_rotation
-  preview.show()
-  var error=can_plant(selected,hover_cell,hover_plot) if mode=="plant" else ""
-  if mode=="move" and moved_index>=0: error=can_plant(int(planted[moved_index].id),hover_cell,hover_plot,moved_index)
-  if error!=preview_error or preview_id!=pid:
-   ghost_material(preview,Color(0.94,0.53,0.40,0.45) if not error.is_empty() else Color(0.82,0.95,0.66,0.4))
-  preview_error=error
+  update_placement_preview(pid)
+
+func update_placement_preview(pid: String) -> void:
+ var changed=preview_id!=pid or not is_instance_valid(preview)
+ if changed:
+  if is_instance_valid(preview): preview.queue_free()
+  if pid.begins_with("p"): preview=Art.plant(catalogue[int(pid.substr(1))])
+  elif pid.begins_with("m"): preview=Art.plant(catalogue[planted[moved_index].id])
+  elif pid.begins_with("f"): preview=Art.furnishing(furniture[selected_furniture].kind)
+  else: preview=Art.furnishing(objects[moved_object].kind)
+  if pid.begins_with("p"): preview.rotation.y=rng.randf()*TAU
+  if pid.begins_with("f") and furniture[selected_furniture].kind=="sign": Art.set_sign_text(preview,sign_text,sign_color)
+  if pid.begins_with("o") and objects[moved_object].kind=="sign": Art.set_sign_text(preview,objects[moved_object].text,Color.from_string(objects[moved_object].text_color,Color("f1e5c7")))
+  add_child(preview)
+  preview_id=pid
+ preview.position=hover_cell
+ if pid.begins_with("m"):
+  var source=planted[moved_index].node
+  preview.scale=source.scale
+  preview.rotation=source.rotation
+  preview.get_node("Bloom").visible=source.get_node("Bloom").visible
+ if pid.begins_with("f") or pid.begins_with("o"): preview.rotation.y=structure_rotation
+ preview.show()
+ var error=can_plant(selected,hover_cell,hover_plot) if mode=="plant" else ""
+ if mode=="move" and moved_index>=0: error=can_plant(int(planted[moved_index].id),hover_cell,hover_plot,moved_index)
+ if changed or error!=preview_error:
+  ghost_material(preview,Color(0.94,0.53,0.40,0.45) if not error.is_empty() else Color(0.82,0.95,0.66,0.4))
+ preview_error=error
 
 func ghost_material(node: Node, tint: Color = Color(0.82,0.95,0.66,0.4)) -> void:
- if node is MeshInstance3D: node.material_override=Art.mat(tint)
+ if node is MeshInstance3D:
+  # Keep the original surface maps, sidedness and leaf deformation. A flat
+  # mesh override erased botanical detail and ignored surface sidedness.
+  if not node.has_meta("preview_materials"):
+   var originals: Array=[]
+   for surface in range(node.mesh.get_surface_count()): originals.append(node.get_active_material(surface))
+   node.set_meta("preview_materials",originals)
+  node.material_override=null
+  node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+  var originals: Array=node.get_meta("preview_materials")
+  for surface in range(originals.size()):
+   var original=originals[surface]
+   var material: Material
+   if original is ShaderMaterial and original.shader.resource_path.ends_with("leaf_wind.gdshader"):
+    material=original.duplicate()
+    material.shader=load("res://shaders/leaf_preview.gdshader")
+    material.set_shader_parameter("preview_tint",tint)
+   elif original is StandardMaterial3D:
+    material=original.duplicate()
+    material.albedo_color=Color(original.albedo_color.r,original.albedo_color.g,original.albedo_color.b,1).lerp(Color(tint.r,tint.g,tint.b,1),.45)
+    material.albedo_color.a=original.albedo_color.a*tint.a
+    material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+   else: material=Art.mat(tint)
+   node.set_surface_override_material(surface,material)
  for child in node.get_children(): ghost_material(child,tint)
 
 func capacity_used(plot: int, excluding: int = -1) -> int:
@@ -1233,7 +1266,9 @@ func perform_action(repeating: bool=false) -> void:
   "plant":
    var error = can_plant(selected,hover_cell,hover_plot)
    if not error.is_empty(): toast(error); return
-   add_plant(selected,hover_cell,hover_plot)
+   var orientation=preview.rotation.y if is_instance_valid(preview) and preview_id=="p"+str(selected) else NAN
+   add_plant(selected,hover_cell,hover_plot,0.0,0.0,orientation)
+   preview_id="" # Give the next seed its own orientation.
    planted_total+=1
    action_cooldown=0.55/(1.0+int(upgrades.trowel))
    toast(catalogue[selected].name+" planted."+(" Resting until "+Catalogue.growing_seasons(selected)+"; a greenhouse allows year-round growth." if growth_conditions(planted.back())==0 else " A little beginning."))
@@ -1323,13 +1358,13 @@ func perform_action(repeating: bool=false) -> void:
  refresh_ui()
  refresh_wildlife()
 
-func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0) -> Dictionary:
+func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0, orientation: float = NAN) -> Dictionary:
  pos=GardenTerrain.point(pos)
  var n = Art.plant(catalogue[id])
  plant_root.add_child(n)
  if is_instance_valid(touch) and (settings.graphics=="mobile" or (settings.graphics=="auto" and touch_active())): touch.apply_detail(n,65.0)
  n.position=pos
- n.rotation.y=rng.randf()*TAU
+ n.rotation.y=orientation if is_finite(orientation) else rng.randf()*TAU
  var marker=Node3D.new()
  marker.name="PlantedSeedMarker"
  marker.position=pos
