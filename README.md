@@ -241,3 +241,7 @@ python3 tests/check_mountains.py
 ```
 
 The preview writes `captures/mountains/after-{west,north,east,south}.png` without loading a player save. Add `--rendering-method gl_compatibility` before `--script` to check the compatibility renderer. For a matched comparison, put the earlier exported environment at `captures/mountains/before.glb` and its shader at `captures/mountains/before.gdshader`, then append `-- --compare`. Add `--benchmark` after that to measure 120 frames per direction for each version under the same running conditions. `tests/check_mountains.py --baseline captures/mountains/before.glb` also checks that the playable garden geometry matches that baseline. The terrain check is included in `tests/run.sh`.
+
+### Detailed plant models and comparisons
+
+All 60 catalogue plants use the detailed botanical library, with curved leaves, refined branching, layered petals, flower centres, fruit details and embedded colour/normal/roughness textures. Editable source is `art_source/botanical_library.blend`. See [the plant detail workflow](art_source/plant_detail_workflow.md) for rebuilding, matched before-and-after renders and asset/runtime validation. Catalogue IDs and existing growth, pruning and harvesting behaviour are retained.

@@ -1,6 +1,10 @@
 shader_type spatial;
 render_mode cull_disabled, diffuse_lambert_wrap;
 uniform sampler2D leaf_texture : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D leaf_normal : hint_normal, filter_linear_mipmap, repeat_enable;
+uniform sampler2D leaf_roughness : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform bool has_normal_map=false;
+uniform bool has_roughness_map=false;
 uniform vec4 leaf_color : source_color = vec4(1.0);
 void vertex(){
  vec3 p=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;
@@ -10,6 +14,8 @@ void vertex(){
 }
 void fragment(){
  ALBEDO=texture(leaf_texture,UV).rgb*leaf_color.rgb;
- ROUGHNESS=.82;
+ ROUGHNESS=has_roughness_map ? texture(leaf_roughness,UV).g : .82;
+ if(has_normal_map) { NORMAL_MAP=texture(leaf_normal,UV).rgb; NORMAL_MAP_DEPTH=.55; }
+ BACKLIGHT=ALBEDO*.10;
  SPECULAR=.25;
 }

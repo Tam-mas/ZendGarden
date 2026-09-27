@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 11:46] Changed
+
+**Tech:** `art_source/botanical_detail.py`, `botanical_forms.py`, `scripts/garden_art.gd`, `shaders/leaf_wind.gdshader` — detailed models and PBR surface maps for all 60 catalogue plants.
+
+**Dev:** Rebuilt all plant GLBs and the packed editable botanical library with curved/veined blades, cupped rose-family petals and lettuce leaves, finer flower centres and bells, irregular tree branching with connected stems and root flares, and smoother fruit with stems/calyces. Added deterministic colour, normal and roughness textures; retained these maps in the wind shader and enabled compressed embedded imports. Removed obsolete extracted texture copies and refreshed all 60 menu portraits. Added whole-catalogue PBR/geometry/dimension checks, runtime material and bloom-group checks, and matched before/after portrait tooling. Catalogue IDs and growth/harvest contracts remain intact. Blender source checks, all 60 native and Compatibility portraits, and the full gameplay smoke suite pass.
+
+**Plain:** Every catalogue plant has a more detailed model and textured surfaces, with comparison images showing its old and new appearance.
+
+**Why:** Makes plants more natural to inspect and photograph while retaining their familiar planting and gardening behaviour.
+
 ### [2026-09-27 11:08] Changed
 
 **Tech:** `art_source/mountain_forms.py`, `build_environment.py`, `shaders/mountain.gdshader` — detailed alpine terrain and materials around the whole garden.

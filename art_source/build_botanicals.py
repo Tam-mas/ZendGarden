@@ -107,12 +107,17 @@ def flower(g,center,size,style,mat=0):
                 a=j*pi/2+k*.5
                 g.ellipsoid(c+Vector((cos(a)*size*.32,sin(a)*size*.32,k*size*.22)),(size*.24,size*.17,size*.27),mat,3,6)
     elif style=='rose':
-        for k in range(4):
-            for j in range(7+k*2):
-                a=j*2*pi/(7+k*2)+k*.7
-                r=size*(.2+k*.23)
-                g.leaf(c+Vector((cos(a)*r*.3,sin(a)*r*.3,k*size*.06)),c+Vector((cos(a)*r,sin(a)*r,size*(.5-k*.16))),size*(.25+k*.035),mat,.5,5)
-        g.ellipsoid(c+Vector((0,0,size*.12)),(size*.16,)*3,mat,4,7)
+        for ring in range(4):
+            count=13-ring*2
+            radius=size*(1.0-ring*.23)
+            for j in range(count):
+                a=j*2*pi/count+ring*2.39996
+                lower=c+Vector((cos(a)*size*.07,sin(a)*size*.07,-size*.20))
+                if hasattr(g,'cupped_blade'):
+                    g.cupped_blade(lower,a,radius,size*(.45-ring*.075),size*(.24+ring*.15),mat,.10)
+                else:
+                    g.leaf(lower,c+Vector((cos(a)*radius,sin(a)*radius,size*.3)),size*.25,mat,.3,6)
+        g.ellipsoid(c+Vector((0,0,size*.24)),(size*.08,size*.08,size*.15),mat,5,8)
     elif style=='bell':
         # Downward-curving trumpet with an open, flared rim.
         for j in range(7):
@@ -131,16 +136,23 @@ def flower(g,center,size,style,mat=0):
                 g.ellipsoid(c+Vector((cos(a)*r,sin(a)*r,size*.15)),(size*.034,)*3,2,2,5)
 
 specs=json.load(open(ROOT+'/art_source/plant_specs.json'))
+from botanical_detail import surfaces, texture_material, detail_geometry
+surface_maps=surfaces(ROOT)
+DetailedGeometry=detail_geometry(Geometry)
+for material_item,kind in [(stem,'smooth'),(bark,'bark'),(smooth_bark,'smooth'),(peeling_bark,'bark'),(pollen,'pollen'),(disk,'pollen')]+[(m,'leaf') for m in leaves]:
+    texture_material(material_item,kind,surface_maps)
 manifest=[]
 for idx,row in enumerate(specs):
     name,category,color,layer,days,climate,animal=row
     random.seed(idx*7381+69)
-    foliage=Geometry(); bloom=Geometry()
+    foliage=DetailedGeometry(name,'foliage'); bloom=DetailedGeometry(name,'bloom')
     petal=material(name+' petals / fruit',{'Lavender':'8164b5','Bottlebrush':'bb373c','Wattle':'ecc72e','Banksia':'d6a53b','Grevillea':'d96b55','Rosemary':'9eabcc','Tomato':'c84432','Chilli':'c53728','Aubergine':'4f305d','Pea':'739443','Cucumber':'4c7038','Apple':'c35d43','Lemon':'e3c64b','Olive':'454c31','Blueberry':'536387','Lilly pilly':'b5496e','Poppy':'da5845','Chamomile':'f6f1db'}.get(name,color),.72)
+    texture_material(petal,'fruit' if category=='Produce' or name in ['Apple','Lemon','Olive','Blueberry','Lilly pilly'] else 'petal',surface_maps)
     mats=[stem,*leaves,bark]
-    bloom_mats=[petal,disk if name in ['Sunflower','Poppy'] else pollen,pollen]
+    bloom_mats=[petal,disk if name in ['Sunflower','Poppy'] else pollen,pollen,stem]
     # Species-specific foliage colours do not recolour flowers or menu swatches.
     accent=material('Leaf '+name+' characteristic foliage',{'Japanese maple':'943f32','Blue fescue':'799fa7','Lettuce':'9eba65','Beetroot':'9a3c50'}.get(name,'547536'))
+    texture_material(accent,'leaf',surface_maps)
     mats += [smooth_bark,peeling_bark,accent]
     botanical_forms.build(name,category,layer,foliage,bloom,flower)
     root=bpy.data.objects.new('Plant_%02d_%s'%(idx,name.replace(' ','_')),None); scene.collection.objects.link(root)
@@ -151,9 +163,10 @@ for idx,row in enumerate(specs):
     bpy.context.view_layer.objects.active=leaf_obj
     path=ROOT+'/assets/plants/plant_%02d.glb'%idx
     bpy.ops.export_scene.gltf(filepath=path,export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,export_apply=True)
-    manifest.append({'id':idx,'name':name,'vertices':len(foliage.v)+len(bloom.v),'path':path,'morphology_version':2})
+    manifest.append({'id':idx,'name':name,'vertices':len(foliage.v)+len(bloom.v),'path':path,'morphology_version':3,'triangles':sum(len(f)-2 for f in foliage.f+bloom.f)})
     # Keep a readable botanical library arranged in the source workshop.
     root.location=(idx%10*4,idx//10*8,0)
 json.dump(manifest,open(ROOT+'/art_source/botanical_manifest.json','w'),indent=2)
+bpy.ops.file.pack_all()
 bpy.ops.wm.save_as_mainfile(filepath=ROOT+'/art_source/botanical_library.blend')
 result={'species':len(manifest),'vertices':sum(x['vertices'] for x in manifest),'source':ROOT+'/art_source/botanical_library.blend'}
