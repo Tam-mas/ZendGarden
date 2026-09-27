@@ -9,6 +9,7 @@ func set_mountain_material(node: Node, shader: Shader) -> void:
   var material=ShaderMaterial.new()
   material.shader=shader
   material.set_shader_parameter("strata",load("res://assets/textures/Mountain_strata.png"))
+  material.set_shader_parameter("rock_normal",load("res://assets/textures/Mountain_strata_normal.png"))
   node.material_override=material
  for child in node.get_children(): set_mountain_material(child,shader)
 
@@ -47,11 +48,12 @@ func review() -> void:
  camera.far=10000
  camera.fov=60
  stage.add_child(camera)
- DirAccess.make_dir_recursive_absolute("res://captures/mountains")
+ var review_dir="res://captures/woodland" if "--woodland" in OS.get_cmdline_user_args() else "res://captures/mountains"
+ DirAccess.make_dir_recursive_absolute(review_dir)
  var variants=["after"]
  if "--compare" in OS.get_cmdline_user_args(): variants=["before","after"]
  for variant in variants:
-  var path="res://captures/mountains/before.glb" if variant=="before" else "res://assets/environment/lake_garden.glb"
+  var path=review_dir+"/before.glb" if variant=="before" else "res://assets/environment/lake_garden.glb"
   var landscape: Node3D
   if variant=="before":
    var document=GLTFDocument.new()
@@ -65,7 +67,7 @@ func review() -> void:
    landscape=load(path).instantiate()
   stage.add_child(landscape)
   GardenLandscape.recede_landscape(landscape)
-  if variant=="before": set_mountain_material(landscape,load("res://captures/mountains/before.gdshader"))
+  if variant=="before": set_mountain_material(landscape,load(review_dir+"/before.gdshader"))
   var views={"west":Vector3(-1,.18,-.30),"north":Vector3(-.15,.15,-1),"east":Vector3(1,.20,-.15),"south":Vector3(.10,.15,1)}
   for label in views:
    camera.look_at(camera.position+views[label])
@@ -77,7 +79,7 @@ func review() -> void:
     print("MOUNTAIN_BENCHMARK: ",variant," ",label," fps=",snappedf(120.0/seconds,.1))
    await RenderingServer.frame_post_draw
    var suffix="-compat" if RenderingServer.get_current_rendering_method()=="gl_compatibility" else ""
-   var file="res://captures/mountains/"+variant+"-"+label+suffix+".png"
+   var file=review_dir+"/"+variant+"-"+label+suffix+".png"
    root.get_texture().get_image().save_png(file)
    print("MOUNTAIN_PREVIEW: ",file)
   landscape.free()

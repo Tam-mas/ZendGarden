@@ -37,7 +37,7 @@ Associate the domain with the Pages project before adding a DNS record manually.
 
 - Use a current browser with WebGL 2. Desktop supports keyboard and mouse; phones and tablets get automatic touch controls and a lighter graphics preset. Landscape orientation is recommended. Physical-device performance varies.
 - The browser uses Godot's Compatibility renderer. Some lighting effects differ from the native Forward+ version.
-- The first load downloads approximately 128 MiB. Loading time and frame rate depend on the connection and device; large gardens can be demanding.
+- The first load downloads the game and its art assets. The download size changes as the catalogue grows; the build log reports the current size. Loading time and frame rate depend on the connection and device; large gardens can be demanding.
 - Saves live in browser storage for that exact site, browser, and device. Clearing site data removes them. Saves on a preview URL, the `pages.dev` address, and your custom domain are separate. They are not cloud-synced or shared with the desktop game.
 - Use the in-game save button before leaving. Browsers may close a tab without sending the native game's normal shutdown event.
 - The game is single-threaded, so it does not require cross-origin isolation headers. Original pre-rendered music and nature loops use browser sample playback, independent of game frame rate; browser audio may pause until the player interacts with the game.

@@ -240,6 +240,7 @@ skyline.object('OuterMountainRidges',[rock])
 forest_sections={}
 forest_mats=[material('Forest evergreen','334d28'),material('Forest olive','536336'),material('Forest spring','657947')]
 forest_count=0
+forest_sites=[]
 for j in range(50000):
     x=random.uniform(-670,670); z=random.uniform(-1370,60)
     if j%4:
@@ -259,6 +260,7 @@ for j in range(50000):
     if h>treeline or slope>.78 or grove<-.3: continue
     if random.random()<smooth(treeline-65,treeline,h)*.86: continue
     forest_count+=1
+    forest_sites.append((x,z))
     key=(int(math.floor(x/120)),int(math.floor(z/120)))
     forest=forest_sections.setdefault(key,WorldGeometry())
     size=random.uniform(1.0,2.5)*(1-.35*smooth(165,270,h))
@@ -275,10 +277,69 @@ for j in range(50000):
         for k in range(5):
             a=k*2.4; r=size*.5
             forest.ellipsoid(V(x+cos(a)*r,h+size*(1.2+random.random()*.6),z+sin(a)*r),(size*.47,size*.45,size*.88),k%3,4,8)
+# Mature woodland fills the previously sparse lower and middle mountain slopes.
+# A separate RNG preserves the original scenery and lakeside hamlet placement.
+woodland_rng=random.Random(20260927)
+existing_forest_count=forest_count
+spacing=3.2
+occupied={}
+def remember_tree(x,z):
+    key=(math.floor(x/spacing),math.floor(z/spacing))
+    occupied.setdefault(key,[]).append((x,z))
+for x,z in forest_sites: remember_tree(x,z)
+added_by_direction={'west':0,'east':0,'north':0,'south':0}
+for attempt in range(220000):
+    if forest_count-existing_forest_count>=24000: break
+    x=woodland_rng.uniform(-1050,1050)
+    z=woodland_rng.uniform(-1640,1020)
+    # Mix open-slope sampling with dense bands on the slopes visible from the lake.
+    if attempt%3:
+        z=woodland_rng.uniform(-1480,900)
+        width=85+max(0,-z)*.085
+        x=woodland_rng.choice([-1,1])*(width+woodland_rng.uniform(25,370))-sin(z*.002)*50
+    width=85+max(0,-z)*.085
+    side=abs(x+sin(z*.002)*50)-width
+    h=surface_height(x,z)
+    if (side<10 and z<65) or h<LAKE_LEVEL+1.2 or (abs(x)<65 and -85<z<85): continue
+    slope=math.hypot((surface_height(x+5,z)-surface_height(x-5,z))/10,(surface_height(x,z+5)-surface_height(x,z-5))/10)
+    treeline=335+noise.fractal(Vector((x*.009,z*.010,6.2)),1,2,3)*48
+    grove=noise.fractal(Vector((x*.012,z*.010,9.3)),1,2,3)
+    # Match the 3x horizontal / 1.6x vertical landscape scale in Godot.
+    if h>treeline or slope*(1.6/3.0)>1.0 or grove<-.43: continue
+    if woodland_rng.random()<smooth(treeline-80,treeline,h)*.82: continue
+    cell=(math.floor(x/spacing),math.floor(z/spacing))
+    if any((x-px)**2+(z-pz)**2<spacing**2 for dx in [-1,0,1] for dz in [-1,0,1] for px,pz in occupied.get((cell[0]+dx,cell[1]+dz),[])): continue
+    remember_tree(x,z)
+    forest_count+=1
+    direction='south' if z>65 else 'north' if z<-1100 else 'west' if x<0 else 'east'
+    added_by_direction[direction]+=1
+    key=(math.floor(x/120),math.floor(z/120))
+    forest=forest_sections.setdefault(key,WorldGeometry())
+    size=woodland_rng.uniform(2.0,4.8)*(1-.30*smooth(235,380,h))
+    angle=woodland_rng.random()*2*pi
+    shade=woodland_rng.randrange(3)
+    if woodland_rng.random()<.88:
+        # Layered irregular crowns remain recognisable without dense branch meshes.
+        for level in range(4):
+            base=h+size*(.20+level*.65)
+            radius=size*.70*(1-level*.18)
+            st=len(forest.v)
+            for k in range(7):
+                a=angle+k*2*pi/7
+                rr=radius*woodland_rng.uniform(.82,1.15)
+                forest.v.append(V(x+cos(a)*rr,base+woodland_rng.uniform(-.15,.15),z+sin(a)*rr))
+            forest.v.append(V(x+sin(angle)*size*.09,base+size*1.35,z+cos(angle)*size*.09))
+            for k in range(7): forest.face((st+k,st+(k+1)%7,st+7),shade)
+    else:
+        for k in range(3):
+            a=angle+k*2.4
+            forest.ellipsoid(V(x+cos(a)*size*.32,h+size*(1.1+woodland_rng.random()*.35),z+sin(a)*size*.32),(size*.62,size*.62,size*.85),shade,3,7)
 forest_root=bpy.data.objects.new('ForestedMountainSlopes',None)
 scene.collection.objects.link(forest_root)
 for key,section in forest_sections.items():
     ob=section.object('ForestChunk_%s_%s'%key,forest_mats)
+    # Forest materials use solid pigments: omit unused UVs from the large batches.
+    for uv_layer in list(ob.data.uv_layers): ob.data.uv_layers.remove(uv_layer)
     ob.parent=forest_root
 
 # Tiny roofed lakeside settlements establish human scale below the garden.
@@ -306,5 +367,5 @@ for j in range(resolution+1):
     for i in range(resolution+1):
         if i in [0,resolution] or j in [0,resolution]: boundary.append(far.v[j*(resolution+1)+i][2])
 assert min(boundary)>LAKE_LEVEL+20, 'Water reaches the terrain boundary'
-json.dump({'lake_level':LAKE_LEVEL,'shore_segments':len(shoreline),'minimum_boundary_height':min(boundary),'forest_sections':len(forest_sections),'southern_forest_sections':sum(1 for key in forest_sections if key[1]>0),'terrain_resolution':resolution,'terrain_triangles':resolution*resolution*2,'outer_ridge_triangles':(rings-1)*sectors*2,'forest_trees':forest_count,'maximum_mountain_height':max(v[2] for v in far.v),'maximum_outer_height':max(v[2] for v in skyline.v)},open(ROOT+'/art_source/landscape_validation.json','w'),indent=2)
+json.dump({'lake_level':LAKE_LEVEL,'shore_segments':len(shoreline),'minimum_boundary_height':min(boundary),'forest_sections':len(forest_sections),'southern_forest_sections':sum(1 for key in forest_sections if key[1]>0),'terrain_resolution':resolution,'terrain_triangles':resolution*resolution*2,'outer_ridge_triangles':(rings-1)*sectors*2,'forest_trees':forest_count,'added_forest_trees':forest_count-existing_forest_count,'added_forest_by_direction':added_by_direction,'forest_triangles':sum(sum(len(f)-2 for f in section.f) for section in forest_sections.values()),'maximum_mountain_height':max(v[2] for v in far.v),'maximum_outer_height':max(v[2] for v in skyline.v)},open(ROOT+'/art_source/landscape_validation.json','w'),indent=2)
 result={'environment':ROOT+'/assets/environment/lake_garden.glb','objects':len(scene.objects)}

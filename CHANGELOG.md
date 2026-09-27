@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 15:50] Changed
+
+**Tech:** `README.md`, `docs/player-guide.md`, `docs/development.md`, `web/shell.html`, `build_environment.py` — player-facing introduction, welcome-page controls and denser mountain woodland.
+
+**Dev:** Rewrite the README around the 106-plant game, its tools, visitors and creative play, moving detailed controls and development instructions into linked guides. Remove the requested welcome-page phrases and show arrow keys for movement. Add 24,000 deterministic, spaced trees across all four background directions, using the runtime landscape proportions for slope rejection, a varied treeline and clearings. Preserve the original forest, lake, terrain and hamlet placement; omit unused forest UVs to keep the environment within its existing asset budget. Extend forest coverage checks and add a separate matched woodland review mode.
+
+**Plain:** The public page explains the game more clearly, and the mountain slopes have much fuller woodland.
+
+**Why:** Helps new players understand the garden and makes its surroundings feel more alive.
+
 ### [2026-09-27 14:01] Added
 
 **Tech:** `botanical_expansion_forms.py`, `build_botanical_expansion.py`, `botanical_expansion.blend`, `GardenCatalogue` — 46 detailed botanical assets and catalogue entries, for 106 total.

@@ -43,6 +43,12 @@ assert lake and all(abs(v[1]+39)<.001 for v in lake),'Lake height changed'
 validation=json.loads((ROOT/'art_source/landscape_validation.json').read_text())
 assert validation['minimum_boundary_height']>validation['lake_level']+20,'Open shoreline at terrain edge'
 assert validation['southern_forest_sections']>=10,'Southern woodland missing'
+assert validation['forest_trees']>=20000, 'Background woodland is too sparse'
+assert min(validation['added_forest_by_direction'].values())>=1000, 'Woodland expansion missing a direction'
+forest_triangles=sum(doc['accessors'][p['indices']]['count']//3 for node in doc['nodes'] if node.get('name','').startswith('ForestChunk_') for p in doc['meshes'][node['mesh']]['primitives'])
+assert forest_triangles==validation['forest_triangles'], 'Stale forest export metadata'
+assert forest_triangles<1800000, 'Forest geometry budget exceeded'
+report['woodland']={'trees':validation['forest_trees'],'triangles':forest_triangles}
 assert path.stat().st_size<95*1024*1024,'Landscape exceeded previous 98 MiB asset budget'
 if args.baseline:
     before,read_before=glb(args.baseline)
