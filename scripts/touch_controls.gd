@@ -285,9 +285,11 @@ func _process(delta: float) -> void:
  buttons.tools.visible=not g.photo_mode
  undo_time=maxf(0,undo_time-delta)
  buttons.undo.visible=undo_time>0 and not removed.is_empty() and not g.photo_mode
- if held and g.mode in ["water","rake","hoe"]:
+ if held and g.mode in ["water","rake","hoe","harvest"]:
   repeat_time-=delta
-  if repeat_time<=0: act(); repeat_time=.3
+  if repeat_time<=0:
+   act(true)
+   repeat_time=GardenTools.GATHER_INTERVAL if g.mode=="harvest" else .3
 
 func _input(event: InputEvent) -> void:
  if enabled and g.settings.controls=="auto" and event is InputEventKey and event.pressed and not blocked() and event.physical_keycode in [KEY_W,KEY_A,KEY_S,KEY_D,KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT]:
@@ -313,7 +315,7 @@ func _input(event: InputEvent) -> void:
   for key in buttons:
    var b=buttons[key]
    if b.visible and not b.disabled and b.get_global_rect().has_point(event.position):
-    if key=="action": action_id=event.index; held=true; repeat_time=.3
+    if key=="action": action_id=event.index; held=true; repeat_time=GardenTools.GATHER_INTERVAL if g.mode=="harvest" else .3
     b.pressed.emit()
     get_viewport().set_input_as_handled()
     return
@@ -341,7 +343,7 @@ func _notification(what: int) -> void:
   reset_gestures()
   if is_instance_valid(g) and enabled and not g.smoke: g.save_game()
 
-func act() -> void:
+func act(repeating: bool=false) -> void:
  if blocked() or not g.hover_valid: return
  removed.clear()
  if g.mode=="remove":
@@ -361,7 +363,7 @@ func act() -> void:
     removed.erase("node")
     removed["plant"]=false
  var count=g.planted.size()+g.objects.size()
- g.perform_action()
+ g.perform_action(repeating)
  if count==g.planted.size()+g.objects.size(): removed.clear()
  else: undo_time=12.0
 

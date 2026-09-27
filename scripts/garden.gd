@@ -39,7 +39,7 @@ var coins = 80
 var day = 1
 var clock_time = 0.39
 var inventory: Dictionary = {}
-var upgrades = {"can":0,"shears":0,"trowel":0,"rake":0}
+var upgrades = {"can":0,"shears":0,"trowel":0,"rake":0,"gather":0}
 var automation: Dictionary = {}
 var expansions: Dictionary = {}
 var orders: Array = []
@@ -140,7 +140,7 @@ var climate: GardenClimate
 func _ready() -> void:
  GardenTerrain.offsets.clear()
  rng.seed = 7183
- smoke = "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
+ smoke = "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
  if smoke: SAVE_PATH="user://smoke-test-save.json"
  load_game()
  GardenExpansion.prepare(self)
@@ -168,7 +168,8 @@ func _ready() -> void:
  refresh_ui()
  if planted.is_empty() and loaded_data.is_empty(): starter_garden()
  if not settings.intro_seen and not smoke: show_welcome()
- if "--tools-test" in OS.get_cmdline_user_args(): call_deferred("run_tools_test")
+ if "--gather-test" in OS.get_cmdline_user_args(): call_deferred("run_gather_test")
+ elif "--tools-test" in OS.get_cmdline_user_args(): call_deferred("run_tools_test")
  elif "--touch-test" in OS.get_cmdline_user_args(): call_deferred("run_touch_test")
  elif "--ground-test" in OS.get_cmdline_user_args(): call_deferred("run_ground_test")
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
@@ -646,10 +647,10 @@ func refresh_sidebar() -> void:
    list_box.add_child(button("Petals: 65  Expand bed capacity +80",expand_bed))
    add_note("TOOLS  ·  first upgrades day 3, master day 18",14)
    add_note("Hoe included: 9 to equip, R to raise/lower. Pruner upgrades grow the square by 10% each; [ / ] adjust its size.")
-   for kind in ["can","shears","trowel","rake"]:
+   for kind in ["can","shears","trowel","rake","gather"]:
     var k: String = kind
     var level: int = int(upgrades[k])
-    var names = {"can":"Watering can", "shears":"Pruning shears", "trowel":"Planting trowel", "rake":"Garden rake"}
+    var names = {"can":"Watering can", "shears":"Pruning shears", "trowel":"Planting trowel", "rake":"Garden rake", "gather":"Gather reach"}
     list_box.add_child(button(names[k]+(" · complete" if level>=2 else " +"+str(level+1)+"   Petals: "+str(45+level*45)),func(): buy_tool(k)))
    add_note("ORNAMENTS & STRUCTURES",14)
    for i in range(furniture.size()):
@@ -700,6 +701,8 @@ func refresh_sidebar() -> void:
    add_note("PRUNING & PATHS",15)
    add_note("Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. Border clearing and raked paths are saved. Rake open ground to remove grass and leave visible grooves; move or prune plants first. Upgrades widen existing patches. New patches can reveal up to four petals per day.")
    add_note("Manual watering gives the ground +20% growth for one game day. Rewatering refreshes the timer; rain and soakers do not apply this bonus. The hoe reshapes unlocked dry ground; R switches raise/lower. [ / ] resize the pruning square within purchased limits.")
+   add_note("GATHERING",15)
+   add_note("Hold Gather (5 / left click) and sweep across plants. Every ready plant in the highlighted square is collected, on every layer; unready plants are left growing. Gather reach upgrades in the Shop widen the square from 1.3 m to 2.1 m, then 2.9 m. Border plants still yield once per day.")
    add_note("WELCOMING WILDLIFE",15)
    add_note("Rabbits occasionally visit open ground. A shop beehive brings its own daytime bees.")
    add_note("Native plants -> native birds\nTwo flowering plants or produce -> lady beetles\nThree flowering plants -> bees & butterflies\nTrees or bird baths -> songbirds\nPonds -> frogs & dragonflies\nMoss and dusk -> fireflies\nFish -> stock a placed pond in the shop")
@@ -761,7 +764,7 @@ func update_hud() -> void:
   if index>=0 and growth_conditions(planted[index])==0: status_label.text+="\nResting until "+Catalogue.growing_seasons(planted[index].id)
  for key in mode_buttons:
   mode_buttons[key].add_theme_stylebox_override("normal",GardenTheme.frame("button",Color("efcd8c") if key==mode else Color.WHITE,8))
- var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Water ground: +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Click a mature plant to gather  ·  It will bloom again", "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+ var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Water ground: +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  tip_label.text = tips.get(mode,"")
  if mode=="build" or (mode=="move" and moved_object>=0): tip_label.text+="  ·  Q/E rotate 15°"
  if hover_valid and not preview_error.is_empty() and mode=="plant": status_label.text=preview_error
@@ -863,7 +866,7 @@ func _process(delta: float) -> void:
  climate.apply(self)
  action_cooldown = maxf(0,action_cooldown-delta)
  update_hover()
- if mode=="hoe" and not touch_active() and gameplay_active() and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and action_cooldown<=0: perform_action()
+ GardenTools.repeat_mouse(self)
  animate_garden(delta)
  toast_time -= delta
  toast_label.visible = toast_time>0 and not photo_mode and not day_transition
@@ -1133,10 +1136,11 @@ func update_hover() -> void:
  if mode=="rake":cursor_scale=(1.1+int(upgrades.rake)*.4)/GRID
  elif mode=="prune":cursor_scale=GardenTools.prune_width(self)/GRID
  elif mode=="hoe":cursor_scale=GardenTools.HOE_WIDTH/GRID
+ elif mode=="harvest":cursor_scale=GardenTools.gather_width(self)/GRID
  elif mode=="water":cursor_scale=(.65+int(upgrades.can)*1.25)*2/GRID
  grid_cursor.scale=Vector3(cursor_scale,1,cursor_scale)
  grid_cursor.show()
- if mode in ["water","prune","hoe"]:GardenTools.cursor(self,hover_cell,cursor_scale*GRID,mode!="prune")
+ if mode in ["water","prune","hoe","harvest"]:GardenTools.cursor(self,hover_cell,cursor_scale*GRID,mode in ["water","hoe"])
  if bed_at(hover_cell)>=0 and mode in ["plant","move","build"]:
   grid_root.position=plots[hover_plot].center+Vector3(GRID*.5,0,GRID*.5) if layer==3 else plots[hover_plot].center
   for tile in grid_root.get_children():
@@ -1213,13 +1217,16 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
    if i!=excluding and int(catalogue[int(planted[i].id)].layer)==3 and Vector2(planted[i].pos.x-pos.x,planted[i].pos.z-pos.z).length()<TREE_SPACING-0.001: return "Give this tree’s roots a little more room (1.15 m between trees)."
  return ""
 
-func perform_action() -> void:
- if day_transition: return
+func perform_action(repeating: bool=false) -> void:
+ if day_transition or photo_mode: return
  if mode=="walk": return
  if not hover_valid:
   toast("Walk a little closer to an open garden area.")
   return
  if action_cooldown>0: return
+ if mode=="harvest":
+  GardenTools.gather(self,repeating)
+  return
  animate_tool_action()
  var idx = plant_at(hover_cell,selected_layer)
  if idx<0:
@@ -1267,17 +1274,6 @@ func perform_action() -> void:
    else: toast("Watered ground: +20%% growth for one game day. Refreshed %d plants."%count if mode=="water" else "Tended %d plants."%count)
    if mode=="prune": toast("Collected %d items for your basket. Trimmed %d; cleared %d planted plants." % [basket_total()-collected_before,count,cleared])
    action_cooldown=0.3
-  "harvest":
-   if idx<0:
-    var collected=0
-    for plant in wild_plants:
-     if plant.pos.distance_to(hover_cell)<=.65 and GardenCare.collect_wild(self,plant): collected+=1
-    toast("Collected %d border items. Border plants provide one item per day." % collected)
-   else:
-    var p=planted[idx]
-    if not collect_plant(p): toast("Still growing. Every morning brings a little more."); return
-    toast("Gathered "+catalogue[p.id].name+" for your basket. It will bloom again.")
-   action_cooldown=.3
   "remove":
    if idx>=0:
     planted[idx].marker.queue_free()
@@ -1504,7 +1500,7 @@ func buy_tool(kind: String) -> void:
  coins-=cost
  upgrades[kind]=level+1
  if kind=="shears": prune_width=GardenTools.prune_max(self)
- var notes = {"can":"Wider coverage and water lasts longer.","shears":"Pruning square grows 10%. Use [ / ] to resize within your purchased limit.","trowel":"Quicker planting between clicks.","rake":"Wider tidy patches and more found petals."}
+ var notes = {"can":"Wider coverage and water lasts longer.","shears":"Pruning square grows 10%. Use [ / ] to resize within your purchased limit.","trowel":"Quicker planting between clicks.","rake":"Wider tidy patches and more found petals.","gather":"Gather reach is now %.1f m square. Hold click and sweep across ready plants."%GardenTools.gather_width(self)}
  toast(notes[kind])
  refresh_ui()
 
@@ -2049,6 +2045,7 @@ func run_smoke_test() -> void:
  await preload("res://tests/orders.gd").run(self,failures)
  await preload("res://tests/ambience.gd").run(self,failures)
  await preload("res://tests/garden_tools.gd").run(self,failures)
+ await preload("res://tests/gathering.gd").run(self,failures)
  print("ZEND_GARDEN_TEST_RESULT: ","PASS" if failures.is_empty() else failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 
@@ -2105,4 +2102,9 @@ func run_tools_test() -> void:
  var failures=[]
  await preload("res://tests/garden_tools.gd").run(self,failures)
  print("TOOLS_TEST_RESULT: ",failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_gather_test() -> void:
+ var failures=[]
+ await preload("res://tests/gathering.gd").run(self,failures)
  get_tree().quit(0 if failures.is_empty() else 1)

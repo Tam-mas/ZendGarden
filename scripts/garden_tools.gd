@@ -5,6 +5,7 @@ const WATER_BOOST_DAYS=1.0
 const PRUNE_BASE=1.3
 const PRUNE_MIN=.4
 const HOE_WIDTH=3.0
+const GATHER_INTERVAL=.12
 
 static func now(g) -> float:
  return float(g.day)+g.clock_time
@@ -17,6 +18,31 @@ static func prune_width(g) -> float:
 
 static func in_square(a: Vector3,b: Vector3,width: float) -> bool:
  return absf(a.x-b.x)<=width*.5+.0001 and absf(a.z-b.z)<=width*.5+.0001
+
+static func gather_width(g) -> float:
+ return 1.3+.8*clampi(int(g.upgrades.get("gather",0)),0,2)
+
+static func gather(g, repeating: bool=false) -> void:
+ var width=gather_width(g)
+ var collected=0
+ for plant in g.planted:
+  if in_square(plant.pos,g.hover_cell,width) and g.collect_plant(plant):
+   collected+=1
+   g.care_effect(plant.pos,Color("efdda7"))
+ for plant in g.wild_plants:
+  if in_square(plant.pos,g.hover_cell,width) and GardenCare.collect_wild(g,plant):
+   collected+=1
+   g.care_effect(plant.pos,Color("efdda7"))
+ g.action_cooldown=GATHER_INTERVAL
+ if collected>0:
+  g.animate_tool_action()
+  g.toast("Gathered %d item%s for your basket. Hold and sweep to keep gathering."%[collected,"" if collected==1 else "s"])
+ elif not repeating:g.toast("No plants ready in this area. Hold and sweep to gather ripe plants.")
+
+static func repeat_mouse(g) -> void:
+ if g.mode not in ["hoe","harvest"] or g.touch_active() or not g.gameplay_active():return
+ if g.photo_mode or g.day_transition or not g.hover_valid or g.action_cooldown>0:return
+ if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):g.perform_action(true)
 
 static func resize_pruners(g, direction: int) -> void:
  if g.mode!="prune" or g.photo_mode or g.day_transition: return

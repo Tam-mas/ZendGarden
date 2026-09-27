@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 13:00] Added
+
+**Tech:** `GardenTools.gather`, `repeat_mouse`, `garden.gd`, `touch_controls.gd` — area gathering, independent reach upgrades and held-input harvesting.
+
+**Dev:** Gather checks every planted layer and nearby border plant in a visible square, using the existing readiness, regrowth, basket and daily border-yield rules. Hold left click or touch Gather to repeat at 0.12-second intervals while changing aim; empty passes remain quiet, and releasing input, opening menus, photo mode or day transitions stops collection. Separate 45/90-petal upgrades unlock on days 3/18 and widen the square from 1.3 to 2.1 to 2.9 metres. Existing saves default to the base Gather level. Added coverage for stacked plants, immature/out-of-range plants, repeat limits, mouse/touch input, purchase gates and save migration.
+
+**Plain:** Hold Gather and sweep over ready plants to collect them together, with shop upgrades for a wider gathering area.
+
+**Why:** Removes repeated clicking and makes dense, layered gardens easier to harvest.
+
 ### [2026-09-27 12:48] Added
 
 **Tech:** `scripts/garden_tools.gd`, `garden_sculpt.gd`, `terrain.gd`, `garden.gd`, `art_source/build_wildlife.py` — manual watering boost, adjustable pruning footprint, sculpting hoe and lady beetles.

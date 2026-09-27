@@ -93,6 +93,8 @@ Settings include reduced motion, mouse sensitivity, independent left/right and u
 
 Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Shop** or **Orders**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
 
+**Gather (5)** collects every ready plant in the highlighted square, including plants sharing a position on different layers. Hold the left mouse button and sweep your aim across the garden to keep collecting; unready plants stay untouched. On touch, hold **Gather** while looking around. The Shop’s **Gather reach** upgrades increase the square from **1.3 m → 2.1 m → 2.9 m**. They cost **45 petals from day 3**, then **90 petals from day 18**, independently of pruner upgrades. Border plants still provide only one item per day.
+
 Outside garden beds, three pruning cuts remove a plant. Planted varieties recover one cut each morning; cleared decorative border plants stay cleared. Pruning inside beds remains safe. To clear lawn grass, use the rake: it leaves a grooved earth path, and upgraded rakes can widen an existing patch. Move or prune plants before raking underneath them. New patches can reveal up to four petals per day.
 
 Tomato seeds cost **23 petals** to unlock. You can plant them in any season; they grow in **summer and autumn**, or year-round inside a greenhouse. The seed selection now explains when you need more petals.
@@ -174,7 +176,7 @@ Open **Shop → Custom garden sign** to write up to 64 characters and choose a t
 
 ### Playing on a phone or tablet
 
-Touch controls appear automatically; landscape orientation gives you the most room. Use the left thumbstick to walk, drag the view to look around, and choose a tool from **Tools**. Aim with the centre dot and tap the labelled action button. Hold **Water**, **Rake** or the hoe action to repeat. With pruners, use **Smaller / Larger**; with the hoe, tap **Mode: Raise / Lower** to switch direction. Placement offers rotation and cancel buttons; lifting a plant or ornament offers **Undo lift** for 12 seconds.
+Touch controls appear automatically; landscape orientation gives you the most room. Use the left thumbstick to walk, drag the view to look around, and choose a tool from **Tools**. Aim with the centre dot and tap the labelled action button. Hold **Gather**, **Water**, **Rake** or the hoe action to repeat. With pruners, use **Smaller / Larger**; with the hoe, tap **Mode: Raise / Lower** to switch direction. Placement offers rotation and cancel buttons; lifting a plant or ornament offers **Undo lift** for 12 seconds.
 
 **Garden** opens seeds, the shop, orders, settings, next morning and photo mode. Menus pause movement, and controls reset when the app loses focus. Text fields support the on-screen keyboard, and browser photos download to your device.
 
@@ -204,6 +206,7 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 | Gentle auto-pruner | 45 per bed | From day 7, removes stress from the bed’s plants each morning; does not collect items. |
 | Expand bed capacity | 65 | Adds 80 planting capacity to the current bed; repeatable. |
 | Watering can upgrades | 45, then 90 | Wider watering area and a longer-lasting water supply. |
+| Gather reach upgrades | 45, then 90 | From days 3 and 18; expands the gathering square to 2.1 m, then 2.9 m. Hold Gather to sweep across ready plants. |
 | Pruning shears upgrades | 45, then 90 | 10% longer pruning-square sides per upgrade and greater stress reduction; resize with [ / ]. |
 | Planting trowel upgrades | 45, then 90 | Shorter delay between planting actions. |
 | Garden rake upgrades | 45, then 90 | Wider raked paths and more petals per new patch, within the four-petal daily limit. |
