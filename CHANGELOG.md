@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-27 18:42] Fixed
+
+**Tech:** `garden.gd/update_placement_preview`, `ghost_material`, `leaf_preview.gdshader` — faithful botanical placement previews.
+
+**Dev:** Preserve surface textures, normal maps, sidedness and leaf wind in tinted preview materials without mutating shared plant resources. Reuse preview yaw when planting, mirror current scale/rotation/bloom state when moving, distinguish individual move targets, and apply blocked-placement tint immediately on preview creation. Add a regression check for all 106 models and preview state transitions to the test runner. New planting previews continue to show the mature form while seedlings grow into it.
+
+**Plain:** Plant previews keep their detailed shapes and orientation, and moving a plant shows its current size and flowers.
+
+**Why:** Makes it easier to judge how a plant will look and fit before placing it.
+
 ### [2026-09-27 18:25] Changed
 
 **Tech:** `.github/workflows/web-build.yml` — refresh the GitHub Actions build dependencies.
