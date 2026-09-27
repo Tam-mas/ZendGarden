@@ -40,7 +40,7 @@ static func run(g, failures: Array) -> void:
  if not is_equal_approx(g.objects.back().node.rotation.y,object.node.rotation.y): failures.append("Restored structure rotation differs")
  # Menus use a two-column catalogue with a portrait and actionable card for every species.
  g.set_mode("walk")
- g.unlocked_plants=range(60)
+ g.unlocked_plants=range(GardenCatalogue.ROWS.size())
  g.active_tab="Seeds"
  g.category="Trees"
  g.selected=28
@@ -52,8 +52,8 @@ static func run(g, failures: Array) -> void:
  g.toast_time=0
  g.refresh_ui()
  var cards=g.list_box.get_node("PlantCards")
- if cards.columns!=2 or cards.get_child_count()!=8: failures.append("Tree catalogue is not a two-column grid")
- for id in range(60):
+ if cards.columns!=2 or cards.get_child_count()!=22: failures.append("Tree catalogue is not a two-column grid")
+ for id in range(GardenCatalogue.ROWS.size()):
   if not ResourceLoader.exists("res://assets/ui/plants/%02d.png" % id): failures.append("Missing plant thumbnail "+str(id))
  for button in all_buttons(g.hud_top):
   if button.text in ["Seeds","Shop","Orders","Guide","Next morning  G","Photo  P"]: failures.append("Duplicate header button remains")
@@ -83,7 +83,7 @@ static func run(g, failures: Array) -> void:
  var screenshots={"sunset":false,"stars":false,"sunrise":false}
  var night_energy=1.0
  var elapsed=0.0
- while g.day_transition and elapsed<9:
+ while g.day_transition and elapsed<g.TRANSITION_SECONDS+3:
   await g.get_tree().process_frame
   elapsed+=g.get_process_delta_time()
   var stage=""

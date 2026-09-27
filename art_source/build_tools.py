@@ -39,7 +39,7 @@ def ring(p,major,minor,m,parent,rotation=(0,0,0)):
  bpy.ops.mesh.primitive_torus_add(major_radius=major,minor_radius=minor,major_segments=32,minor_segments=8,location=p,rotation=rotation)
  return finish(bpy.context.object,m,parent)
 
-for kind in ['can','shears','trowel','rake']:
+for kind in ['can','shears','trowel','rake','hoe']:
  root=bpy.data.objects.new('Held_'+kind,None);scene.collection.objects.link(root)
  if kind=='can':
   cyl((0,0,0),.115,.205,sage,root,top=.105)
@@ -68,6 +68,13 @@ for kind in ['can','shears','trowel','rake']:
   mesh=bpy.data.meshes.new('Curved trowel blade');mesh.from_pydata(verts,[],faces);mesh.update()
   ob=bpy.data.objects.new('Blade',mesh);scene.collection.objects.link(ob);finish(ob,steel,root)
   solid=ob.modifiers.new('Steel thickness','SOLIDIFY');solid.thickness=.003
+ elif kind=='hoe':
+  bar((0,-.42,0),(0,.22,.065),.018,wood,root)
+  bar((0,.19,.060),(0,.30,.11),.012,steel,root)
+  bar((0,.30,.11),(0,.30,.025),.012,steel,root)
+  blade=box((0,.30,.01),(.22,.075,.018),steel,root)
+  blade.rotation_euler.x=.25
+  ring((0,-.34,0),.019,.004,dark,root,rotation=(math.pi/2,0,0))
  else:
   bar((0,-.40,0),(0,.25,.07),.016,wood,root)
   bar((-.13,.26,.07),(.13,.26,.07),.012,steel,root)
@@ -77,6 +84,6 @@ for kind in ['can','shears','trowel','rake']:
  for child in root.children:child.select_set(True)
  bpy.context.view_layer.objects.active=root
  bpy.ops.export_scene.gltf(filepath=str(ROOT/'assets/tools'/f'{kind}.glb'),export_format='GLB',use_selection=True,use_active_scene=True,export_apply=True)
- root.location.x=['can','shears','trowel','rake'].index(kind)*.7
+ root.location.x=['can','shears','trowel','rake','hoe'].index(kind)*.7
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'art_source/hand_tools.blend'))
 print('HAND_TOOLS_EXPORT: PASS')
