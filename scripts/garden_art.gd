@@ -58,6 +58,7 @@ static func plant(data: Dictionary, decorative: bool = false) -> Node3D:
  if ResourceLoader.exists(path):
   if not botanical_scenes.has(path): botanical_scenes[path]=load(path)
   var root=Node3D.new()
+  root.set_meta("terrain_anchor",true)
   var imported=botanical_scenes[path].instantiate()
   root.add_child(imported)
   add_leaf_wind(imported)
@@ -80,6 +81,10 @@ static func add_leaf_wind(node: Node) -> void:
      material.shader=load("res://shaders/leaf_wind.gdshader")
      material.set_shader_parameter("leaf_texture",original.albedo_texture)
      material.set_shader_parameter("leaf_color",original.albedo_color)
+     material.set_shader_parameter("leaf_normal",original.normal_texture)
+     material.set_shader_parameter("leaf_roughness",original.roughness_texture)
+     material.set_shader_parameter("has_normal_map",original.normal_enabled and original.normal_texture!=null)
+     material.set_shader_parameter("has_roughness_map",original.roughness_texture!=null)
      leaf_materials[key]=material
     node.set_surface_override_material(surface,leaf_materials[key])
  for child in node.get_children(): add_leaf_wind(child)

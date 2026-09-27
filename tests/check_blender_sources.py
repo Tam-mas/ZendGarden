@@ -3,7 +3,7 @@ import bpy,json
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 results=[]
-for name in ['botanical_library.blend','lake_garden.blend','companions.blend','shop_library.blend','wildlife_library.blend']:
+for name in ['botanical_library.blend','botanical_expansion.blend','lake_garden.blend','companions.blend','shop_library.blend','wildlife_library.blend','hand_tools.blend']:
     path=root/'art_source'/name
     bpy.ops.wm.open_mainfile(filepath=str(path),load_ui=False,use_scripts=False)
     meshes=[o for o in bpy.context.scene.objects if o.type=='MESH']

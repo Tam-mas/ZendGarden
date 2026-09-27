@@ -126,6 +126,53 @@ def insect(kind):
         ell('Bioluminescent abdomen',(0,-.001,.043),(.014,.013,.015),glow,r)
     return r
 
+def shell_spot(parent,x,z,radius):
+    vertices=[];faces=[]
+    for ring in range(5):
+        for k in range(32):
+            px=x+math.cos(k*math.tau/32)*radius*ring/4
+            pz=z+math.sin(k*math.tau/32)*radius*ring/4
+            y=.021+.025*math.sqrt(max(.001,1-(px/.033)**2-((pz-.008)/.043)**2))+.00045
+            vertices.append((px,y,pz))
+    for ring in range(4):
+        for k in range(32):
+            a=ring*32+k;b=ring*32+(k+1)%32
+            faces.append((a,a+32,b+32,b))
+    mesh('Flush elytron pigment',vertices,faces,black,parent,False)
+
+def lady_beetle():
+    r=pivot('lady_beetle')
+    scarlet=mat('Lady beetle scarlet wing cases',(.58,.022,.012),'shell',.30)
+    ell('Black abdomen',(0,.015,.004),(.057,.028,.078),black,r,24,16)
+    ell('Pronotum',(0,.025,-.028),(.050,.030,.027),black,r,24,16)
+    ell('Head',(0,.018,-.046),(.030,.023,.025),black,r,20,12)
+    for side in [-1,1]:
+        # Two closed wing covers share an elliptical dome with a fine central seam.
+        vertices=[]; faces=[]; rings=18; sectors=32
+        for j in range(rings+1):
+            theta=j*math.pi/(2*rings)
+            for k in range(sectors+1):
+                phi=k*math.pi/sectors
+                vertices.append((side*(.0002+.033*math.sin(theta)*math.sin(phi)),.021+.025*math.cos(theta),.008+.043*math.sin(theta)*math.cos(phi)))
+        for j in range(rings):
+            for k in range(sectors):
+                a=j*(sectors+1)+k; face=(a,a+1,a+sectors+2,a+sectors+1)
+                faces.append(face if side<0 else tuple(reversed(face)))
+        mesh('Scarlet elytron',vertices,faces,scarlet,r,False)
+
+        ell('Ivory pronotum marking',(side*.019,.034,-.032),(.011,.002,.010),p['ivory'],r,16,10)
+        ell('Eye',(side*.012,.023,-.048),(.007,.007,.007),black,r,12,8)
+        for x,z,radius in [(side*.012,-.011,.0045),(side*.021,.011,.0055),(side*.012,.034,.0045)]:
+            shell_spot(r,x,z,radius)
+        for j in range(3):
+            leg=pivot(('LegL' if side<0 else 'LegR')+str(j),(side*.017,.013,-.021+j*.022),r)
+            rod('Femur',(0,0,0),(side*.016,-.003,-.010+j*.005),.002,black,leg,vertices=8)
+            rod('Tibia',(side*.016,-.003,-.010+j*.005),(side*.025,-.012,-.016+j*.008),.0015,black,leg,.0008,8)
+        rod('Clubbed antenna',(side*.008,.025,-.055),(side*.019,.029,-.066),.0012,black,r,.0009,8)
+        ell('Antenna club',(side*.019,.029,-.066),(.004,.004,.005),black,r,12,8)
+    shell_spot(r,0,-.023,.0045)
+    return r
+
 def fish():
     r=pivot('fish');scales=mat('Copper koi scales',(.64,.22,.066),'scales',.34)
     ell('Fusiform fish',(0,0,0),(.22,.065,.080),scales,r)
@@ -142,8 +189,10 @@ def fish():
     return r
 
 roots=[]
-for kind in ['rabbit','kangaroo','kangaroo_joey','songbird','native_bird','frog','bee','butterfly','dragonfly','firefly','fish']:
-    r=mammal('kangaroo',True) if kind=='kangaroo_joey' else mammal(kind) if kind in ['rabbit','kangaroo'] else bird(kind) if kind in ['songbird','native_bird'] else frog() if kind=='frog' else fish() if kind=='fish' else insect(kind)
-    export(r,'wildlife',kind);roots.append(r)
+for kind in ['rabbit','kangaroo','kangaroo_joey','songbird','native_bird','frog','bee','butterfly','dragonfly','firefly','fish','lady_beetle']:
+    r=mammal('kangaroo',True) if kind=='kangaroo_joey' else mammal(kind) if kind in ['rabbit','kangaroo'] else bird(kind) if kind in ['songbird','native_bird'] else frog() if kind=='frog' else fish() if kind=='fish' else lady_beetle() if kind=='lady_beetle' else insect(kind)
+    if '--only-lady-beetle' not in sys.argv or kind=='lady_beetle':export(r,'wildlife',kind)
+    else:merge_meshes(r)
+    roots.append(r)
 for i,r in enumerate(roots):r.location=vec(((i%4)*1.8,0,(i//4)*2.2));r.hide_set(False)
 save('wildlife_library.blend')

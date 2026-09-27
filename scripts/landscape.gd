@@ -60,6 +60,7 @@ static func build(g) -> void:
  for i in range(g.plots.size()):
   var plot=g.plots[i]
   var sign=Art.sign_board()
+  sign.set_meta("terrain_anchor",true)
   sign.position=GardenTerrain.point(plot.center+Vector3(-4.1,0,5.15))
   g.world_root.add_child(sign)
   g.plot_signs.append(sign)

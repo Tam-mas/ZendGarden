@@ -10,10 +10,11 @@ static func restore_wild(g) -> void:
   plant.node.visible=cuts<3
   plant.node.scale=plant.scale*maxf(.1,1.0-cuts*.3)
 
-static func prune_wild(g, pos: Vector3, radius: float) -> int:
+static func prune_wild(g, pos: Vector3, radius: float, square: bool = false) -> int:
  var count=0
  for plant in g.wild_plants:
-  if not plant.node.visible or plant.pos.distance_to(pos)>radius: continue
+  var inside=GardenTools.in_square(plant.pos,pos,radius*2) if square else plant.pos.distance_to(pos)<=radius
+  if not plant.node.visible or not inside: continue
   collect_wild(g,plant)
   g.wild_pruning[plant.key]=mini(3,int(g.wild_pruning.get(plant.key,0))+1)
   count+=1

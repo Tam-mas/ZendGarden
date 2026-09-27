@@ -3,6 +3,7 @@ set -eu
 cd "$(dirname "$0")/.."
 python3 tests/check_assets.py
 python3 tests/check_mountains.py
+python3 tests/check_plants.py
 python3 tests/check_audio.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
@@ -22,6 +23,12 @@ detail_log="$(mktemp -t zend-garden-detail)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/detail_models.gd > "$detail_log" 2>&1 || { cat "$detail_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$detail_log" || ! rg -Fq 'DETAIL_MODELS_RESULT: []' "$detail_log"; then
   cat "$detail_log"
+  exit 1
+fi
+plant_log="$(mktemp -t zend-garden-plants)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/plant_models.gd > "$plant_log" 2>&1 || { cat "$plant_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$plant_log" || ! rg -Fq 'PLANT_MODELS_RESULT: []' "$plant_log"; then
+  cat "$plant_log"
   exit 1
 fi
 wildlife_log="$(mktemp -t zend-garden-wildlife)"
