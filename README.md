@@ -2,148 +2,52 @@
 
 **A quiet place to plant, grow, and make your own.**
 
-Zend Garden is a cozy first-person gardening game set in a peaceful lake valley. Fill your plots with flowers, shrubs, trees, and produce; add paths and ornaments; and watch your garden change with the weather and seasons. Wander among your plants, welcome animal companions, or find a favourite view and take a photo.
+[**Enter the garden →**](https://zend.garden)
 
-There is no rush to keep everything perfect. Plants do not die from neglect, and garden requests have no deadlines. Tend a small patch or gradually build a dense, layered garden at your own pace.
+Zend Garden is a cosy, first-person gardening game beside a mountain lake. Start with a small patch of soil, wander among the flowers, and gradually turn your corner of the valley into somewhere you want to spend time.
 
-The game is in development, and its source is publicly available as an **open-source release**.
+Grow a cottage garden full of roses and jasmine, make a bamboo retreat, plant an orchard, or fill your beds with vegetables. Shape the ground, lay winding paths and find a spot for a bench overlooking the water. Seasons, changing weather, birdsong and gentle music give the garden its own rhythm.
 
-## What you can do
+There is no need to keep up. Plants do not die from neglect, requests have no deadlines, and your garden waits while the game is closed. Spend a few minutes tending a bed or settle in for a longer afternoon of planting and exploring.
 
-- Grow **60 plant varieties**, including flowers, grasses, groundcover, shrubs, trees, Australian natives, and edible plants.
-- Combine plants of different heights in the same area. Trees sit between the smaller planting positions, and each plant has a little natural variation in its mature height.
-- Water, prune, harvest, move, and rearrange your planting as your garden develops.
-- Earn petals through harvests and garden requests, discover plants, and unlock more growing space.
-- Decorate with benches, lanterns, pots, ponds, pergolas, and other garden structures.
-- Enjoy changing seasons, weather, birds, bees, butterflies, and animal companions.
-- Use photo mode to explore freely and capture your favourite corners.
+![A flowering garden overlooking the lake and wooded mountains](docs/images/garden.png)
 
-## Play on the web or host your own garden
+## Make a garden that feels like yours
 
-The repository includes a browser export and an automatic Cloudflare Pages build. To publish it on your own domain, follow the [Cloudflare Pages setup guide](docs/cloudflare-pages.md). The browser edition uses keyboard and mouse, and saves your garden on that device in browser storage.
+- **Choose from 106 plants.** Flowers, grasses and groundcover, shrubs, trees, Australian natives and produce give you plenty of ways to mix colour, height and shape. Discover several bamboo varieties, giant and coast redwoods, snow gums, fruit trees, roses, jasmine and hemp, alongside artichokes, rhubarb, asparagus, broccoli, cauliflower, capsicum, Brussels sprouts and leeks.
+- **Build layers of planting.** Combine low plants, flowers, shrubs and trees in the same space. The detailed models have distinct leaves, petals, fruit and bark, so each part of the garden has its own character.
+- **Tend it your way.** Water the soil for a temporary 20% growth boost. Prune, move and rearrange plants as your ideas change. Upgrade your tools, adjust the pruning square, or hold Gather and sweep across an area to collect all the plants that are ready—even when they share a square.
+- **Shape the landscape.** Use the hoe to raise or lower ground and ease a hillside into a flatter planting space. Rake paths through the lawn and connect your favourite corners.
+- **Add places to linger.** Choose benches, lanterns, pots, ponds, bird baths, beehives, arbors, pergolas and a greenhouse. Write your own garden signs and make the place feel personal.
+- **Welcome a little wildlife.** Watch birds, bees, butterflies, lady beetles and other visitors, and spend time with your animal companions. Different planting and garden features bring different visitors.
+- **Grow at your own pace.** Earn petals through gathering and garden requests, discover more seeds and unlock more space. Move on to the next morning whenever you are ready.
+- **Enjoy the view.** Look out over the lake and wooded mountain slopes, listen to the garden's changing soundscape, or use photo mode to explore and capture a favourite scene.
 
-## Getting started
+## Your first visit
 
-These instructions run the game from source using the Godot editor.
+Open [Zend Garden in your browser](https://zend.garden) and choose **Enter the garden**. Allow time for the first download, which includes the game's detailed models and artwork.
 
-### Requirements
+Use the **arrow keys** to walk and the **mouse** to look around. Press **Tab** to open the garden menus, choose some seeds, and click on a planting spot. Water your new plants, explore the shop, or press **G** to welcome the next morning.
 
-- [Godot 4](https://godotengine.org/download/), standard edition. The project is configured for Godot 4.7 and has been tested with **Godot 4.7.2**.
-- [Git](https://git-scm.com/downloads) and [Git LFS](https://git-lfs.com/) to download the game and its 3D assets.
-- A computer that supports Godot's **Forward+** renderer.
-
-The game has been tested on an Apple silicon Mac. Windows and Linux have not yet been verified. **Blender is not required to play**; the repository includes the exported models used by the game.
-
-### Download and launch
-
-Install Git and Git LFS, then run:
-
-```sh
-git lfs install
-git clone https://github.com/Tam-mas/ZendGarden.git
-cd ZendGarden
-git lfs pull
-```
-
-The models and editable art files use Git LFS and add a few hundred megabytes to the download. Use the clone instructions above: a GitHub ZIP download may contain asset pointers instead of the models themselves.
-
-1. Open Godot's Project Manager and choose **Import**.
-2. Select `project.godot` from the downloaded folder.
-3. Open the project and allow the initial asset import to finish.
-4. Press **F5** to play.
-
-On macOS, you can also use `Play Zend Garden.command` if Godot is installed as `/Applications/Godot.app`.
-
-### Your first planting
-
-Press **Tab** to open the menus and choose a plant from the seed selection. Aim down at a garden plot and click to plant where the preview appears. Switch to the watering tool to tend it, then keep exploring or press **G** to move on to the next morning. The in-game guide explains the tools and garden systems in more detail.
-
-## Controls
-
-| Control | Action |
+| Key | What it does |
 | --- | --- |
-| **W A S D** | Walk |
+| **↑ ← ↓ →** or **W A S D** | Walk around |
 | **Mouse** | Look around |
-| **Shift** | Walk faster |
-| **Tab** | Open menus / return to looking around |
-| **Left click** | Use the selected tool at the centre crosshair |
-| **1–8** | Select wander, plant, water, prune, harvest, move, remove, or rake |
-| **L** | Change the target plant layer where plants overlap |
-| **G** | Advance to the next morning |
-| **E** | Greet a nearby companion |
-| **Q / E** while placing a structure | Rotate it |
-| **Mouse wheel** | Adjust the field of view |
-| **P** | Enter or leave photo mode |
-| **W A S D / Q E** in photo mode | Fly horizontally / down and up |
-| **Right mouse drag** in photo mode | Look around |
-| **F12** or **Capture** | Save a screenshot |
-| **Escape** | Open settings, dismiss the welcome guide, or leave photo mode |
+| **Tab** | Open menus or return to the garden |
+| **Left click** | Use your selected tool; hold Gather to keep collecting |
+| **1–9** | Choose a tool |
+| **[ / ]** with pruners | Make the pruning square smaller or larger within your upgrades |
+| **R** with the hoe | Switch between raising and lowering ground |
+| **G** | Go to the next morning |
+| **P** | Open photo mode |
+| **Escape** | Open settings or leave the current view |
 
-## Life in the garden
+The game also has touch controls, with options for control size and a left-handed layout. Settings let you adjust sound, camera sensitivity, reduced motion and graphics quality. See the [player guide](docs/player-guide.md) for the full controls, tool tips, shop details and saving help.
 
-A normal in-game day lasts about **10 minutes**, and each season lasts **12 days**. Different plants grow at different speeds, with sunlight, water, and the season affecting their progress. Dormant plants keep their growth progress, and a greenhouse can protect seasonal planting. Trees also provide shade for the plants beneath them.
+## Come back when you feel like it
 
-You can advance to the next morning whenever you want. The garden does not progress while the game is closed, so you can return without having missed anything.
+Your garden saves as you play. In the browser, it stays with the same browser, device and site address; it does not sync between devices. Use **Save** before closing the tab, and remember that clearing site data removes the garden saved there.
 
-Settings include reduced motion, mouse sensitivity, inverted look, field of view, separate audio volume controls, and an option to pause while menus are open.
+Zend Garden is still growing. It is free to play and open source, and feedback helps shape what comes next. If something feels confusing, breaks, or sparks an idea, [tell us on GitHub](https://github.com/Tam-mas/ZendGarden/issues). A screenshot and a description of what happened are always helpful.
 
-## Saves and photos
-
-Your garden saves automatically every 20 seconds, when a new day starts, and when the game closes normally. You can also save manually from the menu.
-
-The save file is named `garden_v1.json`; screenshots are stored in the `photos` folder alongside it. Standard save locations are:
-
-| System | Garden data folder |
-| --- | --- |
-| macOS | `~/Library/Application Support/Godot/app_userdata/Zend Garden/` |
-| Windows | `%APPDATA%\Godot\app_userdata\Zend Garden\` |
-| Linux | `~/.local/share/godot/app_userdata/Zend Garden/` |
-
-Some installations use different locations; see [Godot's user data paths](https://docs.godotengine.org/en/stable/tutorials/io/data_paths.html). Back up your save before experimenting with development changes or starting a fresh garden.
-
-## Feedback and contributions
-
-Bug reports, ideas, and contributions are welcome as the project prepares for its open-source release. Use [GitHub Issues](https://github.com/Tam-mas/ZendGarden/issues) to report a problem or suggest an improvement. For a bug, include your operating system, Godot version, what you expected, and the steps needed to reproduce it. Screenshots are helpful for visual issues.
-
-For code or art changes, keep each [pull request](https://github.com/Tam-mas/ZendGarden/pulls) focused and explain what changed and how you checked it. Discuss larger changes in an issue first so the scope is clear.
-
-### Project layout
-
-| Location | Contents |
-| --- | --- |
-| `project.godot` and `main.tscn` | Godot project and starting scene |
-| `scripts/` | Gameplay, interface, terrain, weather, and companions |
-| `shaders/` | Rendering effects |
-| `assets/` | Models, textures, and other runtime assets |
-| `art_source/` | Editable Blender files, generation scripts, and botanical references |
-| `tests/` | Asset checks and game smoke tests |
-
-### Checking changes
-
-The test runner requires **zsh**, **Python 3**, **ripgrep**, and Godot. On macOS with Godot in `/Applications/Godot.app`, run:
-
-```sh
-zsh tests/run.sh
-```
-
-For another Godot installation, provide the executable path:
-
-```sh
-GODOT_BIN="/path/to/godot" zsh tests/run.sh
-```
-
-The runner checks assets, imports the project, and runs wildlife and gameplay checks. The gameplay test opens a visible game window and uses a separate test save. Keep the window visible while it runs.
-
-### Working on plant models
-
-The game uses exported `.glb` models. Editing or regenerating the source art requires Blender; the existing workflow has been tested with Blender 5.2.1. To rebuild the generated assets:
-
-```sh
-BLENDER_BIN="/path/to/blender" zsh art_source/rebuild.sh
-```
-
-On macOS, the script defaults to Blender in `/Applications/Blender.app`. Run heavy exports sequentially, then open Godot to import the updated assets. See the [botanical references](art_source/botanical_references.md) for the plant forms that guide the stylized models.
-
-## License and release status
-
-MIT licensed. Use, fork, modify or share. Its up to you
+Want to explore how the game is made, run it on your computer, contribute, or host your own version? Visit the [development guide](docs/development.md) or [hosting guide](docs/cloudflare-pages.md). Code and original game assets are shared under the [MIT licence](LICENSE).

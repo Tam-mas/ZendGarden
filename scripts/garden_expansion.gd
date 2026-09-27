@@ -34,6 +34,7 @@ static func build_row(g, index: int) -> void:
  grass.generate_tangents()
  var ground=MeshInstance3D.new()
  ground.mesh=grass.commit()
+ ground.set_meta("editable_ground",true)
  var mat=StandardMaterial3D.new()
  mat.albedo_texture=load("res://assets/textures/Meadow_earth.png")
  mat.roughness=1.0
@@ -62,6 +63,7 @@ static func build_row(g, index: int) -> void:
   soil.generate_tangents()
   var bed=MeshInstance3D.new()
   bed.mesh=soil.commit()
+  bed.set_meta("editable_ground",true)
   var loam=StandardMaterial3D.new()
   loam.albedo_texture=load("res://assets/textures/Garden_loam.png")
   loam.roughness=1.0
@@ -71,11 +73,13 @@ static func build_row(g, index: int) -> void:
   for edge in range(20):
    for side in [-1,1]:
     var p=center+Vector3(-4.6+edge*.48,0,side*4.9)
-    g.Art.ball(root,GardenTerrain.point(p),Vector3(.5,.18,.33),Color("a3a087"))
+    var stone=g.Art.ball(root,GardenTerrain.point(p),Vector3(.5,.18,.33),Color("a3a087"))
+    stone.set_meta("terrain_anchor",true)
   if g.plot_signs.size()<=i:
-   var sign=Label3D.new()
-   sign.position=GardenTerrain.point(center+Vector3(-3.4,0,5.2))+Vector3(0,.65,0)
-   sign.font_size=30
-   sign.pixel_size=.003
+   var sign=g.Art.sign_board()
+   sign.set_meta("terrain_anchor",true)
+   sign.position=GardenTerrain.point(center+Vector3(-3.4,0,5.2))
    root.add_child(sign)
    g.plot_signs.append(sign)
+
+ if g.terrain_ready: GardenSculpt.scan(g,root)

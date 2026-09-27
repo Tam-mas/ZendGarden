@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/bath.glb" id="1_xo47d"]
+
+[node name="Bath" type="Node3D" unique_id=1375377616]
+
+[node name="Model" type="Node3D" parent="." unique_id=1374050081 instance=ExtResource("1_xo47d")]

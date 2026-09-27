@@ -6,9 +6,11 @@ var rainfall = 0.0
 var music_volume = 1.0
 var nature_volume = 1.0
 var players: Dictionary = {}
+var bed=0
+const MUSIC=["garden_music","water_music","woodland_music","terrace_music"]
 
 func _ready() -> void:
- for kind in ["garden_music", "day", "night", "rain"]:
+ for kind in ["garden_music","water_music","woodland_music","terrace_music", "day", "night", "rain","waterside","woodland"]:
   var stream = load("res://assets/audio/"+kind+".wav") as AudioStreamWAV
   var voice = AudioStreamPlayer.new()
   voice.stream = stream
@@ -21,12 +23,17 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
  var gains = {
-  "garden_music": music_volume,
+  "garden_music": music_volume if bed==0 else 0.0,
+  "water_music": music_volume if bed==1 else 0.0,
+  "woodland_music": music_volume if bed==2 else 0.0,
+  "terrace_music": music_volume if bed==3 else 0.0,
+  "waterside": nature_volume*daylight if bed==1 else 0.0,
+  "woodland": nature_volume*daylight if bed==2 else 0.0,
   "day": nature_volume*daylight*(1-rainfall*.7),
   "night": nature_volume*(1-daylight),
   "rain": nature_volume*rainfall
  }
  for kind in players:
   var voice: AudioStreamPlayer = players[kind]
-  var target = linear_to_db(maxf(.0001,float(gains[kind])))
-  voice.volume_db = lerpf(voice.volume_db,target,1-exp(-delta*4))
+  var gain=lerpf(db_to_linear(voice.volume_db),float(gains[kind]),1-exp(-delta*.5))
+  voice.volume_db=linear_to_db(maxf(.0001,gain))
