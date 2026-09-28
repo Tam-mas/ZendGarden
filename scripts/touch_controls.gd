@@ -9,6 +9,15 @@ var stick=Vector2.ZERO
 var stick_id=-1
 var look_id=-1
 var action_id=-1
+var finger_positions: Dictionary={}
+var display_size=Vector2.ZERO
+var status_panel: Panel
+var status_text: Label
+var context_panel: Panel
+var context_title: Label
+var context_hint: Label
+var walk_label: Label
+var context_keys: Array=[]
 var origin=Vector2.ZERO
 var radius=62.0
 var held=false
@@ -44,7 +53,16 @@ func setup(game) -> void:
   style.set_corner_radius_all(100)
   panel.add_theme_stylebox_override("panel",style)
   hud.add_child(panel)
+ status_panel=readout()
+ status_text=readout_label(status_panel,16)
+ context_panel=readout()
+ context_title=readout_label(context_panel,17)
+ context_hint=readout_label(context_panel,14)
+ walk_label=readout_label(hud,14)
+ walk_label.text="WALK"
+ walk_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
  add_button("garden","Garden",func(): show_drawer("garden"))
+ add_button("seeds","Seeds",func(): reset_gestures(); g.open_sidebar("Seeds"))
  add_button("tools","Tools",func(): show_drawer("tools"))
  add_button("action","Water",act)
  add_button("layer","Layer",func():
@@ -69,13 +87,31 @@ func setup(game) -> void:
  get_viewport().size_changed.connect(func(): last_size=Vector2.ZERO)
  configure()
 
+func readout() -> Panel:
+ var panel=Panel.new()
+ panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
+ panel.add_theme_stylebox_override("panel",GardenTheme.frame("button",Color(1,1,1,.94),10))
+ hud.add_child(panel)
+ return panel
+
+func readout_label(parent: Control, font_size: int) -> Label:
+ var text=g.label("",font_size,Color("fff0cc"))
+ text.mouse_filter=Control.MOUSE_FILTER_IGNORE
+ text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ text.max_lines_visible=2
+ parent.add_child(text)
+ return text
+
 func add_button(key: String, title: String, action: Callable) -> void:
  var b=g.button(title,action,Vector2(0,52))
- b.add_theme_font_size_override("font_size",18)
+ b.add_theme_font_size_override("font_size",17)
+ b.focus_mode=Control.FOCUS_NONE
+ b.clip_text=true
  hud.add_child(b)
  buttons[key]=b
 
 func configure() -> void:
+ reset_gestures()
  var previous=enabled
  enabled=g.settings.controls=="touch" or (g.settings.controls=="auto" and detected)
  window_size=get_window().size
@@ -88,6 +124,7 @@ func configure() -> void:
   if OS.has_feature("web"):
    var canvas=JavaScriptBridge.get_interface("document").getElementById("canvas")
    dimensions=Vector2(float(canvas.clientWidth),float(canvas.clientHeight))
+  display_size=dimensions
   var factor=maxf(1.0,minf(dimensions.x/1100.0,dimensions.y/760.0))
   get_window().content_scale_size=Vector2i(dimensions/factor)
  elif previous:
@@ -110,6 +147,8 @@ func configure() -> void:
   if is_instance_valid(drawer): drawer.queue_free(); drawer=null
  apply_graphics()
  last_size=Vector2.ZERO
+ # Establish coordinates before the next touch, not on the following frame.
+ if enabled: layout()
 
 func apply_graphics() -> void:
  var low=g.settings.graphics=="mobile" or (g.settings.graphics=="auto" and enabled)
@@ -137,6 +176,8 @@ func reset_gestures() -> void:
  action_id=-1
  stick=Vector2.ZERO
  held=false
+ repeat_time=0.0
+ finger_positions.clear()
 
 func close_menu() -> void:
  g.side_panel.hide()
@@ -159,21 +200,27 @@ func show_drawer(kind: String) -> void:
  add_child(drawer)
  var frame=VBoxContainer.new()
  drawer.add_child(frame)
+ frame.add_child(g.label("Choose a tool" if kind=="tools" else "Your garden",24))
  frame.add_child(g.button("Back to garden",close_menu,Vector2(0,48)))
  var scroll=ScrollContainer.new()
  scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  frame.add_child(scroll)
- var col=VBoxContainer.new()
+ var col=GridContainer.new()
+ col.columns=2
+ col.add_theme_constant_override("h_separation",8)
+ col.add_theme_constant_override("v_separation",8)
  col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  scroll.add_child(col)
  var choices=[["Seeds","Seeds"],["Shop","Shop"],["Orders","Orders"],["Guide","Guide"],["Settings","Settings"]]
  if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"],["hoe","Hoe"]]
  for entry in choices:
   var key=entry[0]
-  col.add_child(g.button(entry[1],func():
+  var choice=g.button(entry[1]+(" ✓" if kind=="tools" and g.mode==key else ""),func():
    close_menu()
    if kind=="tools": g.set_mode(key)
-   else: g.open_sidebar(key),Vector2(0,48)))
+   else: g.open_sidebar(key),Vector2(0,60))
+  choice.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+  col.add_child(choice)
  if kind=="garden":
   col.add_child(g.button("Next morning",func(): close_menu(); g.next_day(),Vector2(0,48)))
   col.add_child(g.button("Photo mode",func(): close_menu(); g.toggle_photo(),Vector2(0,48)))
@@ -186,43 +233,51 @@ func fit_drawer() -> void:
  drawer.size=Vector2(minf(400,size.x-24),size.y-24)
 
 func layout() -> void:
+ # A changed coordinate system invalidates fingers already on the glass.
+ reset_gestures()
  var size=get_viewport().get_visible_rect().size
  last_size=size
  hud.size=size
- var scale=float(g.settings.control_size)/100.0
- radius=58*scale
+ var scale=minf(float(g.settings.control_size)/100.0,(size.x-48)/234.0)
+ radius=54*scale
  var left=bool(g.settings.left_handed)
- origin=Vector2(size.x-radius-26 if left else radius+26,size.y-radius-24)
+ var margin=16.0
+ origin=Vector2(size.x-radius-margin if left else radius+margin,size.y-radius-32)
  stick_base.position=origin-Vector2.ONE*radius
  stick_base.size=Vector2.ONE*radius*2
  stick_knob.size=Vector2.ONE*radius*.72
- var action_x=24.0 if left else size.x-130.0*scale-24.0
- place("garden",Vector2(size.x-118,12),Vector2(104,48))
- place("tools",Vector2(action_x,size.y-198*scale),Vector2(130,50)*scale)
- place("action",Vector2(action_x,size.y-136*scale),Vector2(130,66)*scale)
- place("layer",Vector2(size.x/2-90,size.y-58),Vector2(180,46))
- place("cancel",Vector2(size.x/2-54,size.y-110),Vector2(108,46))
- place("left",Vector2(size.x/2-120,size.y-168),Vector2(115,48))
- place("right",Vector2(size.x/2+5,size.y-168),Vector2(115,48))
- place("greet",Vector2(action_x,size.y-136*scale),Vector2(130,66)*scale)
- place("undo",Vector2(size.x/2-60,64),Vector2(120,48))
- place("up",Vector2(size.x/2-110,size.y-116),Vector2(100,48))
- place("down",Vector2(size.x/2+10,size.y-116),Vector2(100,48))
- place("photo",Vector2(action_x,size.y-136*scale),Vector2(130,66)*scale)
- place("done",Vector2(size.x-118,12),Vector2(104,48))
- if size.x<600:
-  buttons.layer.position.y=size.y-244
-  buttons.cancel.position.y=size.y-296
-  buttons.left.position.y=size.y-352
-  buttons.right.position.y=size.y-352
+ walk_label.position=Vector2(origin.x-radius,size.y-28)
+ walk_label.size=Vector2(radius*2,22)
+ var action_width=126*scale
+ var action_x=margin if left else size.x-action_width-margin
+ var action_y=size.y-32-maxf(60,64*scale)
+ var tool_y=action_y-8-maxf(48,48*scale)
+ place("tools",Vector2(action_x,tool_y),Vector2(action_width,maxf(48,48*scale)))
+ for key in ["action","greet","photo"]:
+  place(key,Vector2(action_x,action_y),Vector2(action_width,maxf(60,64*scale)))
+ place("garden",Vector2(size.x-110,12),Vector2(98,48))
+ place("seeds",Vector2(size.x-204,12),Vector2(86,48))
+ place("done",buttons.garden.position,buttons.garden.size)
+ status_panel.position=Vector2(12,12)
+ status_panel.size=Vector2(minf(320,size.x-224),48)
+ status_text.position=Vector2(10,4)
+ status_text.size=Vector2(status_panel.size.x-20,40)
+ status_text.add_theme_font_size_override("font_size",14 if size.x<380 else 16)
+ place("undo",Vector2(size.x-132,68),Vector2(120,48))
+ var portrait=size.x<600
+ var context_width=minf(500,size.x-2*(maxf(radius*2,action_width)+32)) if not portrait else size.x-24
+ context_panel.size=Vector2(context_width,70)
+ context_panel.position=Vector2((size.x-context_width)/2,size.y-150 if not portrait else (72.0 if size.y<650 else tool_y-146))
+ context_title.position=Vector2(12,7)
+ context_title.size=Vector2(context_width-24,24)
+ context_title.max_lines_visible=1
+ context_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
+ context_hint.position=Vector2(12,32)
+ context_hint.size=Vector2(context_width-24,34)
  g.reticle.position=size/2-Vector2(8,18)
- g.toast_label.position=Vector2(16,65)
- g.toast_label.size.x=size.x-32
+ g.toast_label.size.x=minf(480,size.x-32)
+ g.toast_label.position=Vector2((size.x-g.toast_label.size.x)/2,72)
  g.toast_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
- g.compact_hud.position=Vector2(18,12)
- g.compact_hud.size.x=size.x-160
- g.compact_hud.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
- g.compact_hud.add_theme_font_size_override("font_size",16)
  g.transition_label.position=Vector2(16,size.y/2-40)
  g.transition_label.size.x=size.x-32
  var col=g.side_panel.get_child(0)
@@ -234,9 +289,25 @@ func layout() -> void:
  close_button.custom_minimum_size.y=48
  col.get_child(2).custom_minimum_size=Vector2(264,0)
  g.detail_label.hide()
- g.side_panel.position=Vector2(12,12)
- g.side_panel.size=Vector2(minf(430,size.x-24),size.y-24)
+ var menu_width=minf(480,size.x-24)
+ g.side_panel.position=Vector2((size.x-menu_width)/2,12)
+ g.side_panel.size=Vector2(menu_width,size.y-24)
+ context_keys=[]
  fit_drawer()
+
+func layout_context(keys: Array) -> void:
+ if keys==context_keys: return
+ context_keys=keys.duplicate()
+ if keys.is_empty(): return
+ var size=get_viewport().get_visible_rect().size
+ var width=context_panel.size.x
+ var button_width=minf(180,(width-8*(keys.size()-1))/keys.size())
+ var row_width=button_width*keys.size()+8*(keys.size()-1)
+ var x=context_panel.position.x+(width-row_width)/2
+ var y=buttons.tools.position.y-60 if size.x<600 else context_panel.position.y+context_panel.size.y+8
+ for index in range(keys.size()):
+  place(keys[index],Vector2(x+index*(button_width+8),y),Vector2(button_width,48))
+  buttons[keys[index]].add_theme_font_size_override("font_size",14 if keys.size()>3 else 16)
 
 func place(key: String, pos: Vector2, size: Vector2) -> void:
  buttons[key].position=pos
@@ -255,8 +326,12 @@ func _process(delta: float) -> void:
  if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  if blocked(): reset_gestures()
  for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel]: panel.hide()
- g.compact_hud.visible=not blocked()
- g.compact_hud.text="Day %d · %d petals\n%s" % [g.day,g.coins,g.status_label.text if g.mode!="walk" else g.plots[g.current_plot].name]
+ g.compact_hud.hide()
+ status_panel.visible=not blocked()
+ context_panel.visible=not blocked()
+ walk_label.visible=not blocked()
+ status_text.text="Day %d · %d petals\n%s" % [g.day,g.coins,GardenClimate.season(g.day)]
+ if last_size.x<380: status_text.text="Day %d\n%d petals"%[g.day,g.coins]
  for b in buttons.values(): b.visible=not blocked()
  stick_base.visible=not blocked()
  stick_knob.visible=not blocked()
@@ -269,22 +344,36 @@ func _process(delta: float) -> void:
  var rotating=g.mode=="build" or (g.mode=="move" and g.moved_object>=0)
  buttons.action.visible=g.mode!="walk" and not g.photo_mode
  buttons.action.disabled=not g.hover_valid
- if g.mode=="plant": g.compact_hud.text="%s · %d petals\n%s" % [g.catalogue[g.selected].name,g.coins,g.status_label.text]
  buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake","hoe":"Raise ground" if g.hoe_raise else "Lower ground"}.get(g.mode,"Use")
- buttons.layer.visible=g.mode!="walk" and not g.photo_mode
- buttons.layer.text="Layer: "+["Ground","Flowers","Shrubs","Trees"][g.selected_layer]
- if g.mode=="hoe":buttons.layer.text="Mode: "+("Raise" if g.hoe_raise else "Lower")+" · switch"
- buttons.cancel.visible=g.mode in ["build","move","plant"] and not g.photo_mode
+ context_title.text={"walk":"Explore your garden","water":"Water · +20% growth","prune":"Prune · %.2f m square"%GardenTools.prune_width(g),"harvest":"Gather · %.1f m square"%GardenTools.gather_width(g),"hoe":"Hoe · "+("raise ground" if g.hoe_raise else "lower ground")}.get(g.mode,g.mode.capitalize())
+ if g.mode=="plant": context_title.text="Plant · "+g.catalogue[g.selected].name
+ if g.mode=="build": context_title.text="Place · "+g.furniture[g.selected_furniture].name
+ context_hint.text="Drag the view to look. Choose Tools to start gardening." if g.mode=="walk" else g.status_label.text.replace("\n"," · ")
+ if g.mode in ["water","rake","hoe","harvest"]: context_hint.text="Aim at the ground. Hold "+buttons.action.text+" while looking around."
+ if g.mode=="plant" and not g.preview_error.is_empty(): context_hint.text=g.preview_error
+ if g.photo_mode:
+  context_title.text="Photo mode"
+  context_hint.text="Walk and drag to frame your picture."
+ buttons.layer.visible=g.mode in ["prune","move","remove","hoe"] and not g.photo_mode
+ buttons.layer.text=["Ground","Flowers","Shrubs","Trees"][g.selected_layer]+" ↻"
+ if g.mode=="hoe":buttons.layer.text="Switch to "+("lower" if g.hoe_raise else "raise")
+ buttons.cancel.visible=g.mode!="walk" and not g.photo_mode
+ buttons.cancel.text="Done"
  buttons.left.visible=(rotating or g.mode=="prune") and not g.photo_mode
- buttons.left.text="Smaller [" if g.mode=="prune" else "Turn left"
+ buttons.left.text="Smaller" if g.mode=="prune" else "Turn left"
  buttons.right.visible=(rotating or g.mode=="prune") and not g.photo_mode
- buttons.right.text="Larger ]" if g.mode=="prune" else "Turn right"
+ buttons.right.text="Larger" if g.mode=="prune" else "Turn right"
  buttons.greet.visible=g.mode=="walk" and not g.photo_mode and g.pets.any(func(p): return p.position.distance_to(g.player.position)<4)
  for key in ["up","down","photo","done"]: buttons[key].visible=g.photo_mode
+ buttons.seeds.visible=not g.photo_mode
  buttons.garden.visible=not g.photo_mode
  buttons.tools.visible=not g.photo_mode
  undo_time=maxf(0,undo_time-delta)
  buttons.undo.visible=undo_time>0 and not removed.is_empty() and not g.photo_mode
+ var options=[]
+ for key in ["layer","left","right","cancel","undo","up","down"]:
+  if buttons[key].visible: options.append(key)
+ layout_context(options)
  if held and g.mode in ["water","rake","hoe","harvest"]:
   repeat_time-=delta
   if repeat_time<=0:
@@ -301,39 +390,57 @@ func _input(event: InputEvent) -> void:
   detected=true
   configure()
  if not enabled: return
- if event is InputEventScreenTouch and not event.pressed:
+ if get_viewport().get_visible_rect().size!=last_size: layout()
+ if event is InputEventScreenTouch and (not event.pressed or event.canceled):
+  var owned=finger_positions.has(event.index)
+  finger_positions.erase(event.index)
   if event.index==stick_id: stick_id=-1; stick=Vector2.ZERO
   if event.index==look_id: look_id=-1
   if event.index==action_id: action_id=-1; held=false
+  if owned: get_viewport().set_input_as_handled()
+  return
  if blocked(): return
+ # Godot synthesizes mouse events for touchscreen UI. Gameplay has its own
+ # multitouch dispatch; consuming these prevents double actions and stolen focus.
  if event is InputEventMouse and event.device==-1:
-  for b in buttons.values():
-   if b.visible and b.get_global_rect().has_point(event.position):
-    get_viewport().set_input_as_handled()
-    return
+  get_viewport().set_input_as_handled()
+  return
  if event is InputEventScreenTouch and event.pressed:
+  if finger_positions.has(event.index):
+   get_viewport().set_input_as_handled()
+   return
+  finger_positions[event.index]=event.position
   for key in buttons:
    var b=buttons[key]
-   if b.visible and not b.disabled and b.get_global_rect().has_point(event.position):
-    if key=="action": action_id=event.index; held=true; repeat_time=GardenTools.GATHER_INTERVAL if g.mode=="harvest" else .3
-    b.pressed.emit()
+   if b.visible and b.get_global_rect().has_point(event.position):
+    if not b.disabled:
+     if key=="action" and action_id<0:
+      action_id=event.index; held=true
+      repeat_time=GardenTools.GATHER_INTERVAL if g.mode=="harvest" else .3
+     b.pressed.emit()
     get_viewport().set_input_as_handled()
     return
- if event is InputEventScreenDrag:
+ if event is InputEventScreenDrag and finger_positions.has(event.index):
+  # Web touch events can report another finger's relative movement when the
+  # changedTouches order changes. Compute displacement from this ID's position.
+  var movement: Vector2=event.position-finger_positions[event.index]
+  finger_positions[event.index]=event.position
   if event.index==stick_id:
    stick=((event.position-origin)/radius).limit_length(1.0)
    if stick.length()<.12: stick=Vector2.ZERO
-   get_viewport().set_input_as_handled()
   elif event.index==look_id:
-   g.apply_mouse_look(event.relative*1.7)
-   get_viewport().set_input_as_handled()
+   var css_scale=display_size/get_viewport().get_visible_rect().size
+   g.apply_mouse_look(movement*css_scale*1.7)
+  get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
  if not enabled or blocked(): return
- if event is InputEventScreenTouch and event.pressed:
-  if event.position.distance_to(origin)<radius*1.5 and stick_id<0:
-   stick_id=event.index
-   stick=((event.position-origin)/radius).limit_length(1.0)
+ if event is InputEventScreenTouch and event.pressed and not event.canceled:
+  if event.position.distance_to(origin)<radius*1.5:
+   # A second thumb in the movement zone must never become a looking finger.
+   if stick_id<0:
+    stick_id=event.index
+    stick=((event.position-origin)/radius).limit_length(1.0)
   elif look_id<0:
    look_id=event.index
   get_viewport().set_input_as_handled()
@@ -418,7 +525,7 @@ func welcome_page() -> void:
  col.add_theme_constant_override("separation",12)
  g.welcome.add_child(col)
  col.add_child(g.label("Welcome to your garden",24))
- var note=g.label("Left thumb: walk. Drag the view to look around.\n\nTools lets you plant, water, prune and gather. Aim with the centre dot, then tap the action button.\n\nGarden opens seeds, the shop, requests and settings. Turn your phone sideways for more room.",18)
+ var note=g.label("Hold the WALK stick and drag the view with your other thumb to look around.\n\nTools chooses your action. Aim with the centre dot, then tap or hold the large action button.\n\nSeeds and Garden stay at the top. Extra tool options appear above the bottom controls.",18)
  note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  note.custom_minimum_size.x=300
  col.add_child(note)

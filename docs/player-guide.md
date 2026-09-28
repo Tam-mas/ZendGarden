@@ -77,9 +77,11 @@ Open **Shop → Custom garden sign** to write up to 64 characters and choose a t
 
 ### Playing on a phone or tablet
 
-Touch controls appear automatically; landscape orientation gives you the most room. Use the left thumbstick to walk, drag the view to look around, and choose a tool from **Tools**. Aim with the centre dot and tap the labelled action button. Hold **Gather**, **Water**, **Rake** or the hoe action to repeat. With pruners, use **Smaller / Larger**; with the hoe, tap **Mode: Raise / Lower** to switch direction. Placement offers rotation and cancel buttons; lifting a plant or ornament offers **Undo lift** for 12 seconds.
+Touch controls appear automatically in portrait or landscape. Hold the **WALK** stick at the lower left and drag the view with your other thumb to look around at the same time. **Tools** and the large action button stay at the lower right. Aim with the centre dot, then tap the action button; hold **Gather**, **Water**, **Rake** or the hoe action to repeat while you look around.
 
-**Garden** opens seeds, the shop, orders, settings, next morning and photo mode. Menus pause movement, and controls reset when the app loses focus. Text fields support the on-screen keyboard, and browser photos download to your device.
+The top bar shows your day and petals, with **Seeds** and **Garden** shortcuts. The tool card explains your selected action, and its extra options sit in a row above the bottom controls. With pruners, use **Smaller / Larger**; tap the plant-layer button to change the target layer. With the hoe, tap **Switch to lower / raise**. Placement offers rotation controls, **Done** returns to walking, and removing a plant or ornament offers **Undo lift** for 12 seconds.
+
+**Garden** opens seeds, the shop, orders, settings, next morning and photo mode. Menus pause movement, and controls reset when the app loses focus or the screen changes orientation. Text fields support the on-screen keyboard, and browser photos download to your device.
 
 In **Settings**, choose Auto, Touch or Keyboard & mouse controls; switch to a left-handed layout; adjust touch-control size, look sensitivity and inversion; and choose graphics quality or 3D resolution. The automatic mobile graphics preset reduces rendering resolution, disables sun shadows, and limits distant decorative meshes. Menus stay at full resolution.
 
