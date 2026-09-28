@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-09-28 21:08] Fixed
+
+**Tech:** `GardenTouch._input`, `layout`, `layout_context` — independent touch aiming and responsive mobile HUD.
+
+**Dev:** Derive looking movement from consecutive positions belonging to the same finger ID, avoiding the web backend's cross-finger relative deltas. Preserve concurrent movement/action ownership, consume duplicate synthesized gameplay mouse events, and clear contacts on cancellation, focus loss and resize. Add fixed top status/Seeds/Garden controls, bottom thumb controls, a readable tool card, contextual actions and two-column tool menus; preserve left-handed and size settings. Cover alternating finger IDs, incorrect relative deltas, release/cancel/reuse and HUD bounds/overlaps at seven viewport sizes, three control sizes and both handedness options.
+
+**Plain:** Walking and looking together no longer makes the camera jump, and phones and tablets have clearer, consistently placed controls.
+
+**Why:** Makes the garden easier to navigate and tend with two thumbs.
+
 ### [2026-09-27 18:42] Fixed
 
 **Tech:** `garden.gd/update_placement_preview`, `ghost_material`, `leaf_preview.gdshader` — faithful botanical placement previews.

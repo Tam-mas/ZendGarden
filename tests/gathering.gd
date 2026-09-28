@@ -88,8 +88,16 @@ static func run(g, failures: Array) -> void:
  # Touch repeats through the same readiness and inventory rules.
  g.settings.controls="touch";g.touch.configure();g.touch.close_menu()
  g.hover_cell=near.pos;g.hover_valid=true;g.action_cooldown=0
- g.touch.held=true;g.touch.repeat_time=0;g.touch._process(.2)
+ g.touch._process(0)
+ var action_pos=g.touch.buttons.action.get_global_rect().get_center()
+ preload("res://tests/touch_controls.gd").press(9,action_pos)
+ near.age=float(g.catalogue[1].days);g.action_cooldown=0
+ g.touch.repeat_time=0;g.touch._process(.2)
  if near.age>=g.catalogue[1].days:failures.append("Holding touch Gather does not repeat")
+ preload("res://tests/touch_controls.gd").press(9,action_pos,false)
+ near.age=float(g.catalogue[1].days);g.action_cooldown=0
+ g.touch._process(.2)
+ if near.age!=g.catalogue[1].days:failures.append("Touch Gather continued after release")
  g.touch.reset_gestures()
  for p in g.planted:p.node.queue_free();p.marker.queue_free()
  wild_node.queue_free();g.wild_collection.erase("gather-test")
