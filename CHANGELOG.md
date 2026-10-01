@@ -1,5 +1,75 @@
 # Changelog
 
+### [2026-10-01 13:40] Changed
+
+**Tech:** `wrangler.jsonc`, `functions/_middleware.js`, `web/_routes.json` — activate and verify the production garden move.
+
+**Dev:** Create private R2 transfer storage with one-day abandoned-object cleanup, bind production only, and keep previews disabled. Deploy and verify the ordinary game with migration off before enabling it. Handle Pages' extensionless HTML routing without losing the moving page's cross-domain policy, with disabled-reader routes returning to the original game. Add an opt-in live Chrome check using isolated fixture saves; verify real R2 transfers, automatic navigation, exact-byte import, Godot startup, unchanged original storage, recovery access and retained latest progress on repeat visits. Record rollout/rollback deployments and ignore Wrangler's local cache.
+
+**Plain:** Visiting the old address now gently carries your garden to zend.garden while keeping its original copy safe.
+
+**Why:** Makes the move work on the real hosting setup, with a tested way to keep gardening if a transfer fails.
+
+### [2026-10-01 13:30] Fixed
+
+**Tech:** `garden.gd/browser_save_result`, `tests/migration_game.cjs` — browser save verification respects the production security policy.
+
+**Dev:** Replace JavaScript evaluation with direct JavaScriptBridge object calls for save-ready/failure notifications. A deployed Chrome check exposed the blocked callback before production activation; run actual exported runtime tests with CSP applied, covering both save versions and failed IndexedDB mounting without overwriting the saved bytes.
+
+**Plain:** The garden can finish its safety checks and open correctly under the live site's browser protections.
+
+**Why:** Keeps the protective save check compatible with the real deployment without relaxing browser security.
+
+### [2026-10-01 11:43] Added
+
+**Tech:** `web/migration*`, `functions/api/garden-transfer/[action].js`, `garden.gd/browser_save_check` — protected domain migration with player-facing moving and arrival notes.
+
+**Dev:** Add a read-only old-origin save reader, encrypted fifteen-minute transfer relay, separate immutable local recovery copies, staged and verified atomic promotion, explicit conflict choices, repeat-import receipts and game-session locks. Verify Godot’s mounted save before world creation to block blank-save autosave after an import/mount failure. Add an off switch and stay route, preserve save schema versions, increment player history to Update 6, and document private R2 binding/lifecycle, deployment and rollback. Test relay/encryption contracts, Chrome/WebKit failure paths with unchanged source bytes, actual exported Godot startup and failed storage mounting, and packaged site policy. Live activation remains off pending account resource setup and production verification.
+
+**Plain:** Returning players can gently move their garden to its new cozy home, with the original copy kept safe and a choice if another garden already lives there.
+
+**Why:** Makes the new address easy to adopt while keeping failed moves and rollbacks recoverable.
+
+### [2026-10-01 08:11] Added
+
+**Tech:** `GardenUpdates`, `GardenExperience.settings_page`, `settings.updates_seen` — dismissible player history and update counter.
+
+**Dev:** Add a quiet responsive What’s new dialog with curated, non-technical entries for visible changes. Returning players see unseen entries once; dismissal persists in the existing garden settings, and Settings can reopen the full history. New visitors continue onboarding without historical update interruptions. Derive the displayed version from the newest numbered entry, document future increments in AGENTS.md, and cover dismissal/reload, reopening, keyboard input and desktop/phone layouts.
+
+**Plain:** Players can see how the garden is evolving, close the update notes, and find them again in Settings.
+
+**Why:** Makes meaningful improvements easy to discover without repeatedly interrupting play.
+
+### [2026-10-01 08:11] Fixed
+
+**Tech:** `build_shop.py/greenhouse`, `shop_library.blend`, `assets/shop/greenhouse.glb` — roof glazing orientation.
+
+**Dev:** Align each roof pane’s width with the ridge and its long axis with the slope using an explicit orthonormal basis. Rebuild only the greenhouse using its existing suffixed source root and materials, retaining the other gallery assets and avoiding interactive scene changes. Verify all eight exported pane bays and roof-plane alignment, reproduce the failure against the previous GLB, render matched before/after views, and check packed source images.
+
+**Plain:** The greenhouse glass now sits correctly along both sides of the roof.
+
+**Why:** Removes the misplaced glass sheets sticking across the greenhouse roof.
+
+### [2026-10-01 08:11] Fixed
+
+**Tech:** `Soundscape.music_volume`, `default_bus_layout.tres/Music`, `GardenExperience` — exact music mute at zero.
+
+**Dev:** Route all four music loops through a dedicated Music bus, mute that bus immediately at zero, and set each music player’s linear output to exact zero instead of fading toward the former -80 dB floor. Keep loop timelines running and nature outside the music bus. Restore music when the slider rises, and cover immediate mute/unmute, routing, continued playback and saved settings through both focused and actual settings-slider tests.
+
+**Plain:** Moving Music volume all the way down completely silences the music while preserving nature sounds.
+
+**Why:** Lets players choose a fully music-free garden without residual notes or a waiting period.
+
+### [2026-10-01 07:44] Changed
+
+**Tech:** `tools/build_audio.py`, `Soundscape.update_location`, `tests/check_audio.py`, `tests/soundscape.gd` — compatible area themes and calmer ambience.
+
+**Dev:** Replace the transposed piano-like motifs and fixed C/G drone with four separately phrased felt-key, soft-pluck, low-flute and sustained-tone themes sharing a concert-tuned D/E/G/A/B palette. Render exact 64-second music phrases with wrapped note/reverb tails and 32-second circular nature loops; soften night insects and bird calls and remove the pitched water layer. Extend music fades, stabilize area boundaries, map later orchards/woodland by setting, and soften music at night/in rain while retaining independent volume settings. Add PCM pitch/level/loop checks and runtime coverage for theme selection, fades, playback pitch and mutes; document the musical direction and listening limits.
+
+**Plain:** Each part of the garden now has its own quieter, more spacious tune, with smoother changes between areas and softer nature sounds.
+
+**Why:** Removes distracting harmonic clashes and repetition so the garden feels more restful.
+
 ### [2026-09-28 21:08] Fixed
 
 **Tech:** `GardenTouch._input`, `layout`, `layout_context` — independent touch aiming and responsive mobile HUD.

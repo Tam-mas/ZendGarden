@@ -37,6 +37,8 @@ You can advance to the next morning whenever you want. The garden does not progr
 
 Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
 
+Move **Music volume** all the way down to silence the music completely; **Nature volume** controls birds, water, rain and other surroundings separately. **Settings → What’s new** shows short notes about meaningful improvements and the current update number. Returning players see new notes once, and can close them with the ×, the bottom button or Escape. Your garden remembers the dismissal.
+
 ### Pruning, paths, and visitors
 
 Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Shop** or **Orders**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
@@ -60,6 +62,12 @@ Lady beetles visit gardens with at least two flower plants or one produce plant.
 ## Saves and photos
 
 Your garden saves automatically every 20 seconds and when a new day starts. You can also save manually from the menu. The desktop game saves when it closes normally; in the browser, use Save before closing the tab.
+
+The garden’s new home is **zend.garden**. Once the move is enabled, visiting the old
+**zend.tammas.com** address in the same browser can carry your garden across while
+keeping its original copy there. If you already have a different garden at the new
+address, you can choose which to continue. Bookmark the new home for future visits;
+this does not synchronise progress between devices or browsers.
 
 The save file is named `garden_v1.json`; screenshots are stored in the `photos` folder alongside it. Standard save locations are:
 

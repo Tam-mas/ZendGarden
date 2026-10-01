@@ -1,5 +1,11 @@
 # Zend Garden execution notes
 
+## Player update history
+
+- For each meaningful player-visible change, add a short, non-technical entry at the top of `GardenUpdates.RELEASES` in `scripts/player_updates.gd` and use the next integer version. Keep existing numbers stable.
+- Describe the experience players will notice. Omit internal refactors, tooling, dependency maintenance and other invisible work from this history; continue recording those in the root `CHANGELOG.md` as required.
+- The latest entry determines the version shown in Settings and the dismissible What’s new panel. Preserve saved dismissal state and existing garden save compatibility.
+
 ## Blender on this Mac
 
 - Blender executable: `/Applications/Blender.app/Contents/MacOS/Blender`.

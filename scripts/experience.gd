@@ -66,11 +66,13 @@ static func finish(g) -> void:
  g.welcome_backdrop=null
  g.settings.intro_seen=true
  g.save_game()
- g.resume_controls()
+ if not GardenUpdates.maybe_show(g): g.resume_controls()
 
 static func settings_page(g) -> void:
  if is_instance_valid(g.touch): g.touch.settings_page()
  g.side_title.text="Make yourself at home"
+ g.add_note("ZEND GARDEN · UPDATE %d" % GardenUpdates.CURRENT_VERSION,13)
+ g.list_box.add_child(g.button("What’s new",func(): GardenUpdates.show(g)))
  g.add_note("MOUSE LOOK",15)
  for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
   if entry[0]=="request_notifications": g.add_note("COMFORT & QUIET",15)

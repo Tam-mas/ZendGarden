@@ -22,3 +22,4 @@ __pycache__/
 # Web exports and downloaded build tools
 /build/
 /.web-tools/
+/.wrangler/

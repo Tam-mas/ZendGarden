@@ -4,6 +4,7 @@ const Art = preload("res://scripts/garden_art.gd")
 const Catalogue = preload("res://scripts/catalogue.gd")
 const Soundscape = preload("res://scripts/soundscape.gd")
 var SAVE_PATH = "user://garden_v1.json"
+var save_load_blocked=false
 const GRID = 0.4
 const CAPACITY_MULTIPLIER = 4
 const TREE_SPACING = 1.15
@@ -98,6 +99,8 @@ var photo_mode = false
 var photo_panel: PanelContainer
 var welcome_backdrop: ColorRect
 var welcome: PanelContainer
+var updates_open=false
+var updates_return_to_game=false
 var ui_refresh = 0.0
 var rng = RandomNumberGenerator.new()
 var smoke = false
@@ -127,7 +130,7 @@ var sign_color=Color("f1e5c7")
 var editing_sign=-1
 
 var touch: GardenTouch
-var settings={"controls":"auto","left_handed":false,"control_size":100,"graphics":"auto","render_scale":0,"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
+var settings={"controls":"auto","left_handed":false,"control_size":100,"graphics":"auto","render_scale":0,"intro_seen":false,"updates_seen":0,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
 var request_popup: PanelContainer
 var request_unread=false
 var orders_button: Button
@@ -141,7 +144,15 @@ func _ready() -> void:
  rng.seed = 7183
  smoke = "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
  if smoke: SAVE_PATH="user://smoke-test-save.json"
+ if not browser_save_check():
+  save_load_blocked=true
+  set_process(false)
+  set_physics_process(false)
+  browser_save_result(false)
+  return
  load_game()
+ if OS.has_feature("web"):
+  browser_save_result(true)
  GardenExpansion.prepare(self)
  make_world()
  GardenSculpt.setup(self)
@@ -174,7 +185,7 @@ func _ready() -> void:
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
- elif not is_instance_valid(welcome): resume_controls()
+ elif not is_instance_valid(welcome) and not GardenUpdates.maybe_show(self): resume_controls()
 
 func touch_active() -> bool:
  return is_instance_valid(touch) and touch.enabled
@@ -819,6 +830,7 @@ func replenish_orders() -> void:
 func _process(delta: float) -> void:
  if not is_instance_valid(camera): return
  if is_instance_valid(welcome):
+  if updates_open: GardenUpdates.layout(self)
   return
  if is_instance_valid(request_popup):
   var show_note=request_popup_time>0 and settings.request_notifications and not photo_mode and not day_transition
@@ -1004,6 +1016,11 @@ func apply_mouse_look(movement: Vector2) -> void:
  pitch = clampf(pitch+movement.y*sensitivity*(-1 if settings.invert_y else 1),-1.45,1.45)
 
 func _unhandled_input(event: InputEvent) -> void:
+ if updates_open:
+  if event is InputEventKey and event.pressed and event.physical_keycode==KEY_ESCAPE:
+   GardenUpdates.dismiss(self)
+   get_viewport().set_input_as_handled()
+  return
  if touch_active() and (event is InputEventMouse or event is InputEventScreenTouch or event is InputEventScreenDrag): return
  if is_instance_valid(welcome): return
  if day_transition: return
@@ -1768,7 +1785,7 @@ func update_lighting() -> void:
  environment.environment.ambient_light_energy=.16+daylight*.38
  if is_instance_valid(ambient):
   ambient.daylight=daylight
-  ambient.bed=nearest_plot(player.position)%4
+  ambient.update_location(player.position,plots)
 
 func greet_pet() -> void:
  var nearest=0
@@ -1820,6 +1837,7 @@ func capture_photo() -> void:
   photo_panel.get_child(0).get_child(0).text="Photo downloaded" if OS.has_feature("web") else "Saved to user data / photos"
 
 func save_game() -> void:
+ if save_load_blocked: return
  var ps: Array=[]
  for p in planted: ps.append({"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
  var os: Array=[]
@@ -1830,6 +1848,38 @@ func save_game() -> void:
   file.store_string(JSON.stringify(data))
   file.close()
   DirAccess.rename_absolute(SAVE_PATH+".tmp",SAVE_PATH)
+
+func browser_save_result(safe: bool) -> void:
+ # Direct object calls work under the site's CSP, which prohibits JS eval.
+ var guard=JavaScriptBridge.get_interface("ZendSaveGuard")
+ if guard==null: return
+ if safe: guard.ready()
+ else: guard.fail()
+
+func browser_save_check() -> bool:
+ # The web loader supplies the fingerprint read before Godot mounts IndexedDB.
+ # A missing or damaged mounted save must halt before world creation/autosave.
+ if not OS.has_feature("web"): return true
+ var expected=""
+ for argument in OS.get_cmdline_user_args():
+  if argument.begins_with("--browser-save-check="): expected=argument.trim_prefix("--browser-save-check=")
+ if expected.is_empty(): return true
+ if expected=="empty": return not FileAccess.file_exists(SAVE_PATH)
+ if not FileAccess.file_exists(SAVE_PATH) or FileAccess.get_sha256(SAVE_PATH)!=expected: return false
+ var data=JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
+ if not data is Dictionary or int(data.get("version",0)) not in [1,2] or not data.get("plants") is Array: return false
+ var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
+ if plot_count%2: plot_count+=1
+ for p in data.plants:
+  if not p is Dictionary or int(p.get("id",-1))<0 or int(p.get("id",-1))>=catalogue.size() or int(p.get("plot",-1))<0 or int(p.get("plot",-1))>=plot_count: return false
+ for id in data.get("unlocked_plants",[]):
+  if int(id)<0 or int(id)>=catalogue.size(): return false
+ for key in data.get("automation",{}):
+  var index=int(str(key).trim_suffix("water").trim_suffix("prune"))
+  if index<0 or index>=plot_count: return false
+ for order in data.get("orders",[]):
+  if not order is Dictionary or int(order.get("plant",-1))<0 or int(order.get("plant",-1))>=catalogue.size(): return false
+ return true
 
 var loaded_data: Dictionary={}
 func load_game() -> void:

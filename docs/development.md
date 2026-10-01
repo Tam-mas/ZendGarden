@@ -89,7 +89,32 @@ godot --headless --path . --script tools/export_shop_models.gd
 
 The inspection-scene command preserves the Blender GLBs. See [the detailed asset workflow](../art_source/detail/README.md) for model coverage, animation contracts and visual review commands.
 
-Bird-bath behaviour lives in `scripts/bath_life.gd`. Bath visitors leave at night, and calls fade with distance. The four starting beds have distinct gentle music themes: the beginning, waterside, woodland, and terrace. Later beds reuse these themes. Moving between beds crossfades the tracks; music and nature volume settings still apply. Original audio sources can be regenerated with `python3 tools/build_audio.py`.
+Bird-bath behaviour lives in `scripts/bath_life.gd`. Bath visitors leave at night, and calls fade with distance.
+
+### Music and ambience
+
+The four areas have original synthesized themes with different melodies, spacing and instrument envelopes:
+
+| Area | Tune | Sound and mood |
+| --- | --- | --- |
+| The beginning | Room to Grow | Rounded felt-style keys; a small, welcoming melody with pauses |
+| Willow water | Still Ripples | Soft wooden/nylon-style plucks; unhurried phrases over water texture |
+| Fern hollow | Under the Ferns | Low flute-like swells; sparse, sheltered and airy |
+| Sunrise terrace | Morning Air | Warm sustained tones; slowly opening phrases with long releases |
+
+Meadow and wildflower gardens use Room to Grow, orchards use Morning Air, and later woodland gardens use Under the Ferns. All themes use the same suspended D/E/G/A/B pitch palette at A4=440 Hz, with a quiet D/A foundation. They have no percussion, detuned oscillators, metallic partials or pitch bends. The former tracks transposed one repeated motif into different keys while keeping a C/G accompaniment; the terrace's F-sharp against that low C was a likely source of the distracting pitch tension.
+
+Music loops are exactly 64 seconds. Notes and their quiet room tails wrap around the phrase boundary instead of splicing away a second of music. The former renderer reduced 32-second phrases to 31 seconds. Nature loops are exactly 32 seconds, with circular noise, quieter night insects and separately timed bird calls. Waterside ambience uses noise rather than a pitched water tone. Sources remain mono, 16-bit, 22.05 kHz PCM with forward looping, avoiding extra browser decoding requirements.
+
+Moving between areas crossfades the music with a 3.5-second smoothing time constant (about 8 seconds to reach 90% of the target gain). A 1.5-metre advantage in distance to the new area's centre is required before switching, preventing repeated changes at an area boundary. Music softens at night and in rain. Music and nature settings remain independent; the existing master volume still applies. Zero Music volume immediately mutes the dedicated Music bus and sets its players to zero linear gain. The loops keep advancing silently, preserving phrase alignment when music resumes; nature and bird-bath audio do not use that bus.
+
+Regenerate all ten sources with `python3 tools/build_audio.py`; only Python's standard library is required. Then import in Godot. `python3 tests/check_audio.py` checks exact phrase lengths, actual rendered fundamentals, accompaniment key, level balance, loop boundaries and import settings. `tests/soundscape.gd` checks area selection, boundary stability, forward looping, unmodified playback pitch, crossfades, weather balance and independent mute controls. The runtime check is included in `tests/run.sh`. These checks validate rendering and playback behaviour; musical feel still needs a listening review on headphones and speakers.
+
+### Player update history and version
+
+`scripts/player_updates.gd` holds a curated history of meaningful player-visible changes. Add a short entry at the top of `GardenUpdates.RELEASES` using the next integer version and a player-facing date, title and note. The latest entry determines `CURRENT_VERSION`, shown in Settings and What’s new. Keep numbers stable and leave invisible engineering work in the technical `CHANGELOG.md`.
+
+Returning players see only entries newer than `settings.updates_seen`. Close, Done/Back to the garden, or Escape stores the current version with the existing garden save. Settings → What’s new reopens the full history. New visitors finish the welcome walk without receiving historical notifications. This preference does not change the save schema version or reset existing gardens. `tests/player_updates.gd` covers history selection, saved dismissal, reopening and viewport bounds; `tests/experience.gd` exercises the actual Settings buttons and music slider.
 
 ### Working on the background mountains
 

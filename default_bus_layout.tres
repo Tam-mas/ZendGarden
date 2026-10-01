@@ -4,3 +4,6 @@
 bus/0/name = &"Master"
 bus/0/volume_db = -12.0
 bus/0/send = &""
+bus/1/name = &"Music"
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"

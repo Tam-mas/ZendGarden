@@ -8,7 +8,7 @@ const elements = new Map();
 const context = vm.createContext({
   Response, Request, URL, Blob, DecompressionStream, Uint8Array, crypto: webcrypto,
   console, location: { href: 'https://example.test/' }, window: {},
-  document: { getElementById(id) {
+  document: { addEventListener() {}, getElementById(id) {
     if (!elements.has(id)) elements.set(id, { addEventListener() {} });
     return elements.get(id);
   } },
