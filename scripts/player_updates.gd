@@ -4,6 +4,10 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":32,"date":"3 October 2026","title":"Make every bed your own","note":"Choose sand, pale Japanese gravel, bark mulch, slate, warm pebbles or dark compost in the garden shed. Buy each finish once, use it on any open bed, and switch back to garden soil freely. Your plants and shaped ground stay in place."},
+ {"version":31,"date":"3 October 2026","title":"Little grasses, softer edges","note":"Twelve new low-growing plants bring creeping lawn grasses, compact fescues, dwarf mondo grass, striped sedges and golden sweet flag. Find them in Grasses, with their own young leaves and mature shapes."},
+ {"version":30,"date":"3 October 2026","title":"A little space between visitors","note":"Visiting bird pairs now take separate approaches, arrive a moment apart and beat their wings at different times, with room to rest beside one another."},
+ {"version":29,"date":"3 October 2026","title":"A garden view to welcome you","note":"The start and welcome screens now open onto a richly planted garden, keeping the familiar timber borders and simple controls."},
  {"version":28,"date":"3 October 2026","title":"Familiar friends, a richer garden","note":"The original cat, dog, bee, frog and rabbit return with their familiar movement. The other animals, structures and held tools keep their new shapes and finer details."},
  {"version":27,"date":"3 October 2026","title":"Softer coats and smoother movement","note":"Mammals and birds now bend smoothly through their bodies and necks, with distinct coats, finer plumage and a heavier wombat walk. Timber, stone, buildings and held tools have richer surface detail while keeping their familiar shapes."},
  {"version":26,"date":"3 October 2026","title":"Finer details up close","note":"Look closer at your cat's coat, the kookaburra's plumage and the grain of the garden bench. These first detail improvements bring softer hair, more distinct feather surfaces and naturally weathered timber."},

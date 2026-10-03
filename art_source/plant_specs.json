@@ -1222,5 +1222,113 @@
     16,
     "sun",
     "bees"
+  ],
+  [
+    "Dwarf mondo grass",
+    "Grasses",
+    "426844",
+    0,
+    7,
+    "shade",
+    "birds"
+  ],
+  [
+    "Black mondo grass",
+    "Grasses",
+    "403c48",
+    0,
+    7,
+    "shade",
+    "birds"
+  ],
+  [
+    "Velvet zoysia",
+    "Grasses",
+    "81a658",
+    0,
+    7,
+    "sun",
+    "birds"
+  ],
+  [
+    "Buffalo grass",
+    "Grasses",
+    "97ac7a",
+    0,
+    7,
+    "sun",
+    "birds"
+  ],
+  [
+    "Creeping bentgrass",
+    "Grasses",
+    "72a35d",
+    0,
+    7,
+    "any",
+    "birds"
+  ],
+  [
+    "Creeping red fescue",
+    "Grasses",
+    "749269",
+    0,
+    7,
+    "any",
+    "birds"
+  ],
+  [
+    "Sheep's fescue",
+    "Grasses",
+    "889978",
+    0,
+    7,
+    "sun",
+    "birds"
+  ],
+  [
+    "Bearskin fescue",
+    "Grasses",
+    "76a149",
+    0,
+    7,
+    "sun",
+    "birds"
+  ],
+  [
+    "Blue moor grass",
+    "Grasses",
+    "82aaa4",
+    0,
+    7,
+    "any",
+    "birds"
+  ],
+  [
+    "Evergold sedge",
+    "Grasses",
+    "d5cd8b",
+    0,
+    7,
+    "shade",
+    "birds"
+  ],
+  [
+    "Snowline sedge",
+    "Grasses",
+    "cad7bd",
+    0,
+    7,
+    "shade",
+    "birds"
+  ],
+  [
+    "Dwarf golden sweet flag",
+    "Grasses",
+    "c2bb65",
+    0,
+    7,
+    "water",
+    "birds"
   ]
 ]

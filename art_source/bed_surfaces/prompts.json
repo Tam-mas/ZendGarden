@@ -1,0 +1,22 @@
+[
+  {
+    "name": "sand",
+    "prompt": "A single seamless tileable PBR albedo texture of natural pale warm beige fine desert sand for a realistic garden game. Orthographic straight top-down view of one uniform 1-metre square of sand, subtle tiny grains, very restrained irregular ripples, no dunes, no plants, no footprints, no objects. Neutral diffuse lighting, no directional light, no cast shadows, no baked ambient occlusion. All edges repeat seamlessly. Photorealistic surface detail. Square image, entire canvas is only sand. No text, no borders.",
+    "source": "art_source/bed_surfaces/sand.png"
+  },
+  {
+    "name": "gravel",
+    "prompt": "A single seamless tileable PBR albedo texture of Japanese garden gravel for a realistic garden game. Orthographic straight top-down view of one uniform 1-metre square densely covered with small 5-15mm rounded off-white and pale grey gravel grains, some variation in pale grey and warm ivory stone colour, no large rocks, no raked line motif, no plants or objects. Neutral diffuse lighting, restrained depth shading, no directional light or cast shadows. All edges repeat seamlessly. Photorealistic, square image, entire canvas only small gravel. No text or borders.",
+    "source": "art_source/bed_surfaces/gravel.png"
+  },
+  {
+    "name": "bark",
+    "prompt": "A single seamless tileable PBR albedo texture of natural fine pine bark garden mulch for a realistic garden game. Orthographic straight top-down view of one uniform 1-metre square densely covered with irregular slender bark chips 1-3cm long, natural warm brown, cinnamon and dark brown woody layers, random orientation, no large logs, no plants or objects. Neutral diffuse lighting, no directional light or cast shadows. All edges repeat seamlessly. Photorealistic surface, square image, whole canvas only bark mulch. No text or borders.",
+    "source": "art_source/bed_surfaces/bark.png"
+  },
+  {
+    "name": "slate",
+    "prompt": "A single seamless tileable PBR albedo texture of dark slate garden chippings for a realistic garden game. Orthographic straight top-down view of one uniform 1-metre square densely covered with small 1-2cm angular flat slate flakes, charcoal grey and muted blue-grey minerals, random orientation, no large rocks, no plants, no objects. Neutral diffuse lighting, restrained depth shading, no directional light or cast shadows. All edges repeat seamlessly. Photorealistic, square image, full canvas only slate chips. No text or borders.",
+    "source": "art_source/bed_surfaces/slate.png"
+  }
+]

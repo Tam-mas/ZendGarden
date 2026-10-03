@@ -1,3 +1,53 @@
+### [2026-10-03 21:46] Performance
+
+**Tech:** `export_presets.cfg`, `GardenArt.save_card`, `tools/prepare_bed_textures.py` — compact runtime image encodings and source-map export exclusions
+
+**Dev:** Convert 169 plant/ornament portraits and six landscape textures to WebP where smaller, verifying exact pixels and transparency for lossless conversions. Keep rebuild pigments in source folders while excluding separately imported copies of GLB-embedded maps. New opaque grass pigments use JPEG inside glTF, preserving normal/roughness maps; ground textures have mipmaps and the welcome photograph uses high-quality lossy compression. Browser export and source-library checks cover the resulting resources. The packaged site decreased from 667,383,235 to 663,674,270 bytes (3.54 MiB) despite the new plants and finishes; native/Compatibility, save and loader checks pass.
+
+**Plain:** Garden images take less space while retaining their detail and transparent edges.
+
+**Why:** Smaller downloads make entering the garden easier as its plant collection grows.
+
+### [2026-10-03 21:45] Added
+
+**Tech:** `GardenBedSurfaces`, `ground_detail.gdshader` — reusable whole-bed surface finishes
+
+**Dev:** Add soil, desert sand, Japanese gravel, pine bark mulch, slate chips, warm pebbles and dark compost to the Shop with previews and an unlocked-bed selector. A paid finish is owned permanently and can be reused or replaced freely. Copy actual sculpted soil triangles rather than changing collision, plants, capacity or care rules. Persist purchases and bed choices in compatible schema-2 saves, default missing fields to soil, and reject unknown/locked-bed records. Store the four generated material originals and exact built-in ImageGen prompts for rebuilds.
+
+**Plain:** Choose sand, stone, bark or earth for an entire bed without disturbing its plants.
+
+**Why:** Desert, woodland and Japanese-style gardens can each have an appropriate ground finish.
+
+### [2026-10-03 21:44] Added
+
+**Tech:** `build_low_grasses.py`, `GardenCatalogue` — twelve low-growing plants, IDs 136–147
+
+**Dev:** Build distinct creeping and clumping models with early growth stages through Blender MCP in an isolated library, preserving the active Blender scene. Add dwarf/black mondo, velvet zoysia, buffalo grass, creeping bentgrass/red fescue, sheep's/bearskin fescue, blue moor grass, Evergold/Snowline sedges and dwarf golden sweet flag. Preserve earlier IDs and saves; add searchable botanical names, model-rendered portraits and independent geometry/stature budgets.
+
+**Plain:** Twelve short and creeping plants bring softer edges and low carpets to the garden.
+
+**Why:** More choices at ground level make small gardens and layered plantings easier to design.
+
+### [2026-10-03 21:43] Fixed
+
+**Tech:** `GardenWildlifeMotion`, `refresh_wildlife` — visitor-pair spacing and independent animation phases
+
+**Dev:** Normal gameplay intentionally spawns native-bird and lorikeet pairs. Lorikeets previously shared arrival timing and almost identical routes. Assign species-specific pair slots, separate perches (including bird-bath rim positions), offset approaches and arrivals, and start animation clips at distinct phases. Verify a full 56-second visitor cycle for overlap and asynchronous wingbeats through the normal dispatcher.
+
+**Plain:** Visiting birds have room to fly and rest beside each other with more natural timing.
+
+**Why:** Bird pairs no longer look like synchronised copies.
+
+### [2026-10-03 21:42] Changed
+
+**Tech:** `web/shell.html`, `GardenExperience.welcome` — supplied garden photograph behind start screens
+
+**Dev:** Replace the browser's woodland backdrop with the supplied Bk.jpg composition, using full-resolution WebP in the browser shell/migration page and in-game welcome. Preserve existing timber framing and controls. Update exported-site checks to require the new image.
+
+**Plain:** A richly planted garden view welcomes players at the start screen.
+
+**Why:** The introduction now reflects the user's chosen garden image.
+
 # Changelog
 
 ### [2026-10-03 20:26] Changed

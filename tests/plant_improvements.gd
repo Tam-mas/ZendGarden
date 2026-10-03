@@ -45,7 +45,7 @@ func verify() -> void:
  g.category="Cacti & succulents"
  check(GardenSeedCollection.matching(g).size()==20,"New succulent category is incomplete")
  g.category="Grasses"
- check(GardenSeedCollection.matching(g).size()==24,"Grass additions or bamboo varieties missing")
+ check(GardenSeedCollection.matching(g).size()==36,"Grass additions or bamboo varieties missing")
  g.category="All";g.collection_query="Haworthia cooperi"
  check(GardenSeedCollection.matching(g).size()==1 and GardenSeedCollection.matching(g)[0].id==130,"Botanical-name search cannot find window haworthia")
  g.collection_query="";g.category="All"

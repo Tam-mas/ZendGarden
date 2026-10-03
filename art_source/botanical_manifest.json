@@ -1164,5 +1164,113 @@
     "path": "assets/plants/plant_135.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 136,
+    "name": "Dwarf mondo grass",
+    "vertices": 13076,
+    "triangles": 16464,
+    "path": "assets/plants/plant_136.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 137,
+    "name": "Black mondo grass",
+    "vertices": 13076,
+    "triangles": 16464,
+    "path": "assets/plants/plant_137.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 138,
+    "name": "Velvet zoysia",
+    "vertices": 16314,
+    "triangles": 21168,
+    "path": "assets/plants/plant_138.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 139,
+    "name": "Buffalo grass",
+    "vertices": 16314,
+    "triangles": 21168,
+    "path": "assets/plants/plant_139.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 140,
+    "name": "Creeping bentgrass",
+    "vertices": 16314,
+    "triangles": 21168,
+    "path": "assets/plants/plant_140.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 141,
+    "name": "Creeping red fescue",
+    "vertices": 16314,
+    "triangles": 21168,
+    "path": "assets/plants/plant_141.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 142,
+    "name": "Sheep's fescue",
+    "vertices": 11508,
+    "triangles": 14994,
+    "path": "assets/plants/plant_142.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 143,
+    "name": "Bearskin fescue",
+    "vertices": 11508,
+    "triangles": 14994,
+    "path": "assets/plants/plant_143.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 144,
+    "name": "Blue moor grass",
+    "vertices": 11508,
+    "triangles": 14994,
+    "path": "assets/plants/plant_144.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 145,
+    "name": "Evergold sedge",
+    "vertices": 16058,
+    "triangles": 23002,
+    "path": "assets/plants/plant_145.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 146,
+    "name": "Snowline sedge",
+    "vertices": 16058,
+    "triangles": 23002,
+    "path": "assets/plants/plant_146.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
+  },
+  {
+    "id": 147,
+    "name": "Dwarf golden sweet flag",
+    "vertices": 11508,
+    "triangles": 14994,
+    "path": "assets/plants/plant_147.glb",
+    "morphology_version": 3,
+    "source": "art_source/low_grasses.blend"
   }
 ]

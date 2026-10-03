@@ -1,6 +1,6 @@
 #migration { position: fixed; z-index: 30; inset: 0; overflow: auto; display: flex; align-items: flex-start; justify-content: center;
   padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
-  background: linear-gradient(#1c30284d, #1c302870), url('art/garden-woodland.jpg') center/cover;
+  background: linear-gradient(#1c30284d, #1c302870), url('art/garden-woodland.webp') center/cover;
   color: #e7ecdf; font: 17px/1.65 Georgia, serif; }
 .migration-card { margin: auto; width: min(520px, 100%); padding: 30px; border-radius: 16px; background: #24382ef5;
   box-shadow: 0 16px 60px #14221855; text-align: center; }

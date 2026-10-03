@@ -34,7 +34,7 @@ def longitudinal_stripe(m):
 selected=None
 if '--ids' in sys.argv:selected={int(x) for x in sys.argv[sys.argv.index('--ids')+1].split(',')}
 manifest=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())
-specs=json.loads((ROOT/'art_source/plant_specs.json').read_text());assert len(specs)==136
+specs=json.loads((ROOT/'art_source/plant_specs.json').read_text());assert len(specs)>=136
 Detailed=detail_geometry(Geometry)
 
 def save(idx,name,g,b,palette,bloom_palette,notes):

@@ -15,15 +15,29 @@ static func perch(g, entry: Dictionary) -> Vector3:
   var distance=obj.pos.distance_to(entry.target)
   if distance<nearest:
    nearest=distance
-   var lateral=sin(entry.phase)*.42
+   var count=int(entry.get("bird_count",1))
+   var slot=int(entry.get("bird_slot",0))
+   var lateral=(slot-(count-1)*.5)*.9 if count>1 else sin(entry.phase)*.42
    var rests={"bench":Vector3(lateral,1.12,.31),"arbor":Vector3(lateral,2.735,.50),"pergola":Vector3(lateral,2.735,.50),"trellis_screen":Vector3(lateral,1.95,0),"gazebo":Vector3(lateral,.523,1.14),"bath":Vector3(.3,1.07,.3)}
-   point=obj.node.to_global(rests[obj.kind]+Vector3(0,foot_clearance(entry.kind),0))
+   var rest: Vector3=rests[obj.kind]
+   if obj.kind=="bath" and count>1:
+    var angle=slot*TAU/count+.4
+    rest=Vector3(cos(angle)*.43,1.07,sin(angle)*.43)
+   point=obj.node.to_global(rest+Vector3(0,foot_clearance(entry.kind),0))
+ if nearest==INF and int(entry.get("bird_count",1))>1:
+  point.x+=(int(entry.get("bird_slot",0))-(int(entry.bird_count)-1)*.5)*.9
  return point
 
 static func flight_pose(entry: Dictionary, pos: Vector3, direction: Vector3, delta: float, clip: String="flight") -> void:
  entry.node.position=pos
  if direction.length_squared()>.00001:entry.node.rotation.y=atan2(-direction.x,-direction.z)
- if not GardenAnimalMotion.advance(entry.node,clip,delta) and entry.kind=="bee":
+ var animated=GardenAnimalMotion.advance(entry.node,clip,delta)
+ if animated and entry.kind in BIRDS and entry.get("pose_clip","")!=clip:
+  # Each bird enters a clip at its own point in the wingbeat, including when
+  # garden time is sampled by a preview rather than advanced frame by frame.
+  GardenAnimalMotion.player(entry.node).advance(fposmod(entry.phase*.173+float(entry.get("bird_slot",0))*.19,.8))
+  entry.pose_clip=clip
+ if not animated and entry.kind=="bee":
   for wing in entry.node.get_children():
    if str(wing.name).begins_with("Wing"):
     wing.rotation.z=sin(float(entry.get("motion_time",0))*35+entry.phase)*.8*float(wing.get_meta("side",1))
@@ -34,12 +48,13 @@ static func animate(g, entry: Dictionary, delta: float, time: float) -> bool:
  entry.motion_time=time
  var daylight=g.clock_time>.2 and g.clock_time<.8
  if kind in BIRDS:
-  # Paired lorikeets share arrival times, with a small spatial separation.
-  var cycle=fposmod(time+(0 if kind=="lorikeet" else entry.phase*5),92.0 if kind=="kookaburra" else 56.0)
+  # A loose pair arrives a moment apart. Distinct perches and approach routes
+  # prevent two copies sharing one transform and one synchronous wingbeat.
+  var slot=int(entry.get("bird_slot",0))
+  var cycle=fposmod(time+(slot*1.6 if kind=="lorikeet" else entry.phase*5),92.0 if kind=="kookaburra" else 56.0)
   var home=perch(g,entry)
   if kind=="magpie":home=GardenTerrain.point(entry.target)+Vector3(0,foot_clearance(kind),0)
-  if kind=="lorikeet":home.x+=.28*sin(entry.phase)
-  var away=home+Vector3(7,3,-5)
+  var away=home+Vector3(7+slot*1.4,3+slot*.5,-5+slot*1.8)
   entry.node.visible=daylight and cycle<36 and (kind!="kookaburra" or g.clock_time<.40)
   if not entry.node.visible:return true
   if cycle<5:

@@ -59,10 +59,11 @@ func render_cards() -> void:
   await process_frame
   await RenderingServer.frame_post_draw
   var portrait=viewport.get_texture().get_image()
-  portrait.save_png((review_directory+"/%02d.png" if review else "res://assets/ui/plants/%02d.png") % plant.id)
+  if review:portrait.save_png((review_directory+"/%02d.png")%plant.id)
+  else:GardenArt.save_card(portrait,"res://assets/ui/plants/%02d"%plant.id)
   if review and "--portraits" in OS.get_cmdline_user_args():
    portrait.resize(192,192,Image.INTERPOLATE_LANCZOS)
-   portrait.save_png("res://assets/ui/plants/%02d.png" % plant.id)
+   GardenArt.save_card(portrait,"res://assets/ui/plants/%02d"%plant.id)
   viewport.remove_child(model)
   model.queue_free()
  print("PLANT_CARD_RENDER: PASS — %d model portraits" % rendered)

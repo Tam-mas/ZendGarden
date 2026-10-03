@@ -36,7 +36,7 @@ static func build_row(g, index: int) -> void:
  ground.mesh=grass.commit()
  ground.set_meta("editable_ground",true)
  var mat=StandardMaterial3D.new()
- mat.albedo_texture=load("res://assets/textures/Meadow_earth.png")
+ mat.albedo_texture=load("res://assets/textures/Meadow_earth.webp")
  mat.roughness=1.0
  ground.material_override=GardenGroundFinish.material(false)
  root.add_child(ground)
@@ -65,7 +65,7 @@ static func build_row(g, index: int) -> void:
   bed.mesh=soil.commit()
   bed.set_meta("editable_ground",true)
   var loam=StandardMaterial3D.new()
-  loam.albedo_texture=load("res://assets/textures/Garden_loam.png")
+  loam.albedo_texture=load("res://assets/textures/Garden_loam.webp")
   loam.roughness=1.0
   bed.material_override=GardenGroundFinish.material(true)
   root.add_child(bed)

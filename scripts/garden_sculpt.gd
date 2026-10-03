@@ -221,3 +221,4 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  if is_instance_valid(g.player):g.player.position.y=maxf(g.player.position.y,GardenTerrain.point(g.player.position).y+.12)
  for entry in g.wildlife:
   if not entry.get("hive",false):entry.target=GardenTerrain.point(entry.target)
+ GardenBedSurfaces.rebuild(g,center)

@@ -176,7 +176,7 @@ static func update_cards(g) -> void:
   content.minimum_size_changed.connect(func():
    b.custom_minimum_size.y=maxf(minimum_height,content.get_combined_minimum_size().y+12))
   var portrait=TextureRect.new()
-  portrait.texture=load("res://assets/ui/plants/%02d.png" % id)
+  portrait.texture=load(GardenArt.card_path("res://assets/ui/plants/%02d" % id))
   portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
   portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
   portrait.custom_minimum_size=Vector2(96,106)

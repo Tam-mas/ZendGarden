@@ -192,8 +192,8 @@ static func recede_landscape(node: Node) -> void:
  if node is MeshInstance3D and str(node.name) in ["AlpineLakeValley","OuterMountainRidges"]:
   var material=ShaderMaterial.new()
   material.shader=load("res://shaders/mountain.gdshader")
-  material.set_shader_parameter("strata",load("res://assets/textures/Mountain_strata.png"))
-  material.set_shader_parameter("rock_normal",load("res://assets/textures/Mountain_strata_normal.png"))
+  material.set_shader_parameter("strata",load("res://assets/textures/Mountain_strata.webp"))
+  material.set_shader_parameter("rock_normal",load("res://assets/textures/Mountain_strata_normal.webp"))
   node.material_override=material
  if node is MeshInstance3D and str(node.name)=="ContourLake":
   var material=ShaderMaterial.new()
