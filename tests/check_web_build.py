@@ -14,6 +14,7 @@ assert gzip.decompress((root / 'index.wasm').read_bytes()).startswith(b'\x00asm'
 manifest = json.loads((root / 'pack.json').read_text())
 total = 0
 for index, chunk in enumerate(manifest['chunks']):
+    assert chunk['url'] == f"pack/{index:03d}-{chunk['sha256']}.bin", 'Chunk URL must identify its exact content'
     path = root / chunk['url']
     assert path.resolve().is_relative_to(root.resolve()), 'Chunk escaped build output'
     block = gzip.decompress(path.read_bytes())

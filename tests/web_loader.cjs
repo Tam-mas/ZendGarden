@@ -18,15 +18,36 @@ vm.runInContext(fs.readFileSync('web/loader.js', 'utf8'), context);
   const bytes = Buffer.from('GDPC fixture payload');
   const hash = Buffer.from(await webcrypto.subtle.digest('SHA-256', bytes)).toString('hex');
   for (const payload of [gzipSync(bytes), bytes]) {
-    context.fetch = async url => url === 'pack.json'
-      ? Response.json({ size: bytes.length, chunks: [{url: 'pack/000.bin', size: bytes.length, sha256: hash}] })
-      : new Response(payload);
+    context.fetch = async (url, options) => {
+      if (url === 'pack.json') {
+        assert.equal(options.cache, 'no-cache', 'Manifest must revalidate after an update');
+        return Response.json({ size: bytes.length, chunks: [{url: 'pack/000.bin', size: bytes.length, sha256: hash}] });
+      }
+      return new Response(payload);
+    };
     assert.deepEqual(Buffer.from(await context.loadPack()), bytes);
   }
+  // Same-size stale bytes and a truncated gzip must recover without disabling
+  // validation, even when an older manifest uses an unversioned chunk URL.
+  for (const bad of [gzipSync(Buffer.alloc(bytes.length)), gzipSync(bytes).subarray(0, 8)]) {
+    const requests = [];
+    context.fetch = async (url, options) => {
+      if (url === 'pack.json') return Response.json({size: bytes.length,
+        chunks: [{url:'pack/000.bin', size:bytes.length, sha256:hash}]});
+      requests.push({url, options});
+      return new Response(requests.length === 1 ? bad : gzipSync(bytes));
+    };
+    assert.deepEqual(Buffer.from(await context.loadPack()), bytes);
+    assert.equal(requests.length, 2, 'Retry only the failed piece once');
+    assert.equal(requests[1].url, `https://example.test/pack/000.bin?v=${hash}`);
+    assert.equal(requests[1].options.cache, 'reload');
+  }
+  let corruptRequests = 0;
   context.fetch = async url => url === 'pack.json'
     ? Response.json({size: bytes.length, chunks: [{url:'pack/000.bin', size:bytes.length, sha256:hash}]})
-    : new Response(gzipSync(Buffer.from('corrupt payload')));
+    : (corruptRequests++, new Response(gzipSync(Buffer.from('corrupt payload'))));
   await assert.rejects(context.loadPack(), /incomplete/);
+  assert.equal(corruptRequests, 2, 'Persistent corruption must fail after one retry');
   const original = async () => new Response(gzipSync(bytes));
   context.window.fetch = original;
   await context.initEngine({ async init() {
@@ -36,5 +57,5 @@ vm.runInContext(fs.readFileSync('web/loader.js', 'utf8'), context);
   assert.equal(context.window.fetch, original);
   await assert.rejects(context.initEngine({async init(){throw new Error('test failure');}}), /test failure/);
   assert.equal(context.window.fetch, original);
-  console.log('PASS: gzip and decoded assets, corruption detection, scoped WASM loading, and fetch restoration');
+  console.log('PASS: gzip/decoded assets, manifest revalidation, stale/truncated chunk recovery, bounded corruption rejection, scoped WASM loading and fetch restoration');
 })().catch(error => { console.error(error); process.exitCode = 1; });

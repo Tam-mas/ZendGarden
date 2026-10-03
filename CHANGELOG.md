@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 14:13] Fixed
+
+**Tech:** `tools/build_web.py/package_site`, `web/loader.js/loadChunk` — coherent browser downloads after updates.
+
+**Dev:** Include each decoded pack piece's SHA-256 in its filename so different deployments never reuse a URL for different bytes. Revalidate the manifest and retry failed transfers or integrity checks once with a cache-reloading checksum-qualified request; continue checking both size and digest before starting Godot. Reproduce the exact previous error using a four-hour HTTP-cached old piece and a new manifest in isolated browsers; cover same-size stale bytes, truncated gzip and persistent corruption, and validate exported filenames. Preserve saves and migration and record player Update 22. Live headers showed a four-hour asset cache while the manifest revalidated, and a fresh isolated Chrome profile loaded the preceding production build.
+
+**Plain:** The browser game keeps update files together and can recover automatically from an incomplete download.
+
+**Why:** Lets returning players open the garden reliably after an update without clearing their saved garden.
+
 ### [2026-10-03 13:58] Added
 
 **Tech:** `art_source/concepts/garden-expansion-2026-10` — structure and animal design references.
