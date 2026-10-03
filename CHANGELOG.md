@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 13:33] Changed
+
+**Tech:** `LICENSE`, `LICENSING.md`, `README.md` — custom free-play and source-sharing licence.
+
+**Dev:** Replace the current first-party MIT offer with the Zend Garden Free Play and Share-Alike Licence 1.0 for future releases. Require no paid game access or gameplay unlocks, complete corresponding source for distributed/publicly hosted derivatives and the same terms for derivative code and assets. Permit voluntary donations without privileges, separate services and gameplay media; retain third-party licences, contributor copyrights and permissions granted with earlier MIT copies. Describe the project as source available, explicitly disclose that the custom wording has not had legal review, and document that historical MIT forks cannot be retroactively restricted. Publish a licence-only GitHub change without including pending gameplay or asset changes. No player update number is added because this does not change play.
+
+**Plain:** Future versions and shared derivatives must stay free to play and share their editable source under the same rules.
+
+**Why:** Expresses the creator's wish to keep the garden freely playable and its derivatives available for others to modify.
+
 ### [2026-09-28 21:08] Fixed
 
 **Tech:** `GardenTouch._input`, `layout`, `layout_context` — independent touch aiming and responsive mobile HUD.
