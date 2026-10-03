@@ -2,6 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/pergola.glb" id="1_2ikkq"]
 
-[node name="Pergola" type="Node3D" unique_id=1596121920]
+[node name="Pergola" type="Node3D" unique_id=1922690591]
 
-[node name="Model" type="Node3D" parent="." unique_id=890782057 instance=ExtResource("1_2ikkq")]
+[node name="Model" type="Node3D" parent="." unique_id=591927249 instance=ExtResource("1_2ikkq")]

@@ -50,11 +50,8 @@ func _process(delta: float) -> void:
   present=present or (birds[i].visible and cycle>=5 and cycle<25)
   birds[i].position=bird_position(elapsed,i)
   birds[i].rotation.y=-.65 if i==0 else 2.5
-  birds[i].rotation.x=sin(elapsed*5)*.2 if cycle>=5 and cycle<12 else (sin(elapsed*12)*.14 if bathing else 0.0)
-  for wing in birds[i].get_children():
-   if str(wing.name).begins_with("Wing"):
-    var flutter=.65*sin(elapsed*28) if cycle<5 or cycle>=25 or bathing else -.75
-    wing.rotation.z=flutter*float(wing.get_meta("side",1))
+  var clip="flight" if cycle<5 or cycle>=25 else ("bathe" if bathing else ("drink" if cycle>=7 and cycle<12 else "perch"))
+  GardenAnimalMotion.advance(birds[i],clip,delta if active else 0.0)
   droplets[i].visible=daylight and bathing
   var j=0
   for drop in droplets[i].get_children():

@@ -93,6 +93,7 @@ var world_root: Node3D
 var plant_root: Node3D
 var object_root: Node3D
 var wildlife: Array = []
+var garden_animation_time=0.0
 var pets: Array = []
 var plot_signs: Array = []
 var grid_root: Node3D
@@ -314,10 +315,7 @@ func make_bridge(pos: Vector3, turn: bool) -> void:
  n.add_child(body)
  if turn: n.rotation.y = PI/2
  world_root.add_child(n)
- for j in range(14): Art.box(n,Vector3(-2.1+j*0.32,0.08,0),Vector3(0.29,0.15,1.8),Color("b9a180"))
- for z in [-0.9,0.9]:
-  for x in [-2.1,0,2.1]: Art.box(n,Vector3(x,0.55,z),Vector3(0.1,1.0,0.1),Color("9b876c"))
-  Art.box(n,Vector3(0,0.96,z),Vector3(4.5,0.1,0.1),Color("cbb694"))
+ n.add_child(Art.detailed_model("scenery","footbridge"))
 
 func make_player() -> void:
  player = CharacterBody3D.new()
@@ -1773,7 +1771,8 @@ func make_fish(parent: Node3D) -> void:
  for j in range(4):
   var fish=Art.detailed_model("wildlife","fish")
   parent.add_child(fish)
-  fish.position=Vector3(cos(j*1.7),0.09,sin(j*1.7))
+  fish.position=Vector3(cos(j*1.7),.005,sin(j*1.7))
+  fish.scale=Vector3.ONE*.45
   fish.name="Fish"+str(j)
 
 func care_effect(pos: Vector3, color: Color) -> void:
@@ -1792,10 +1791,12 @@ func refresh_wildlife() -> void:
  var pond_count=0
  var moss=0
  var produce=0
+ var grasses=0
  for p in planted:
   if catalogue[p.id].category=="Natives": native_count+=1
   if catalogue[p.id].category=="Flowers": flowers+=1
   if catalogue[p.id].category=="Produce": produce+=1
+  if catalogue[p.id].category=="Grasses":grasses+=1
   if catalogue[p.id].layer==3: trees+=1
   if p.id==13: moss+=1
  for obj in objects:
@@ -1808,6 +1809,13 @@ func refresh_wildlife() -> void:
  if trees>0: species.append("songbird")
  if pond_count>0: species.append_array(["dragonfly","frog"])
  if moss>0: species.append("firefly")
+ if flowers>=3:species.append_array(["blue banded bee","hoverfly"])
+ if native_count>=2:species.append_array(["fairy wren","leaf insect"])
+ if grasses>=2:species.append("mantis")
+ if trees>0:species.append_array(["kookaburra","magpie"])
+ if trees>0 and flowers>=3:species.append_array(["lorikeet","lorikeet"])
+ if native_count>=2 and trees>0:species.append("emperor gum moth")
+ if objects.any(func(obj):return obj.kind=="insect_hotel") and flowers<3:species.append_array(["blue banded bee","hoverfly"])
  var hive_targets=[]
  for obj in objects:
   if obj.kind=="hive":
@@ -1820,37 +1828,47 @@ func refresh_wildlife() -> void:
   add_child(n)
   var target=Vector3.ZERO
   if not planted.is_empty(): target=planted[i%planted.size()].pos
-  if kind=="lady beetle":
+  if kind in ["lady beetle","blue banded bee","hoverfly","butterfly","bee"]:
    var habitat=planted.filter(func(plant):return catalogue[plant.id].category in ["Flowers","Produce"])
+   if not habitat.is_empty():target=habitat[i%habitat.size()].pos
+  if kind in ["fairy wren","leaf insect","emperor gum moth","mantis","lorikeet","kookaburra","magpie"]:
+   var habitat=planted.filter(func(plant):return catalogue[plant.id].category=="Grasses" if kind=="mantis" else catalogue[plant.id].layer==3 if kind in ["lorikeet","kookaburra","magpie"] else catalogue[plant.id].category=="Natives")
    if not habitat.is_empty():target=habitat[i%habitat.size()].pos
   if kind in ["frog","dragonfly"]:
    for obj in objects:
     if obj.kind=="pond": target=obj.pos
   if i>=natural_count: target=hive_targets[i-natural_count]
+  var height=.75
+  if not planted.is_empty():
+   var selected=planted.filter(func(plant):return plant.pos.is_equal_approx(target))
+   var plant=selected[0] if not selected.is_empty() else planted[i%planted.size()]
+   height=clampf(catalogue[plant.id].height*.7,.12,2.0)
   var legs=[]
   if kind=="lady beetle":
    for side in ["L","R"]:
     for j in range(3):
-     var leg=n.find_child("Leg"+side+str(j),true,false)
+     var leg=n.find_child("Leg"+side+str(j)+"*",true,false)
      if leg:legs.append(leg)
-  wildlife.append({"legs":legs,"hive":i>=natural_count,"node":n,"kind":kind,"target":target,"phase":float(i)*1.73})
+  wildlife.append({"legs":legs,"hive":i>=natural_count,"node":n,"kind":kind,"target":target,"phase":float(i)*1.73,"height":height})
 
 func animate_garden(delta: float, sample_time: float = -1.0) -> void:
- var t=Time.get_ticks_msec()*0.001 if sample_time<0 else sample_time
+ if sample_time<0:garden_animation_time+=maxf(0,delta)
+ var t=garden_animation_time if sample_time<0 else sample_time
  for p in planted:
   p.node.rotation.z=sin(t*1.25+p.pos.x)*0.018
   # Vines extend visibly up nearby support frames as they mature.
   if catalogue[p.id].climber and p.age>=2 and not p.node.has_node("Vines"):
    for obj in objects:
-    if obj.kind in ["arbor","pergola"] and obj.pos.distance_to(p.pos)<3:
+    if obj.kind in ["arbor","pergola","trellis_screen","gazebo"] and obj.pos.distance_to(p.pos)<3:
      var vine=Node3D.new()
      vine.name="Vines"
      p.node.add_child(vine)
-     var end: Vector3=(obj.pos-p.pos)+Vector3(0,2.6,0)
+     var end: Vector3=(obj.pos-p.pos)+Vector3(0,1.9 if obj.kind=="trellis_screen" else 2.6,0)
      Art.branch(vine,Vector3(0,0.2,0),end,0.03,Color("7b9662"))
      for j in range(8): Art.ball(vine,end+Vector3(-1+j*0.27,0,0),Vector3(0.32,0.15,0.27),catalogue[p.id].color)
      break
  for entry in wildlife:
+  if GardenWildlifeMotion.animate(self,entry,delta,t):continue
   if entry.kind=="lady beetle":
    var crawl=t*.15+entry.phase
    var place: Vector3=entry.target+Vector3(cos(crawl)*.26,0,sin(crawl)*.26)
@@ -1859,7 +1877,7 @@ func animate_garden(delta: float, sample_time: float = -1.0) -> void:
    entry.node.rotation.y=atan2(-direction.x,-direction.z)
    entry.node.visible=clock_time>.2 and clock_time<.8
    entry.node.scale=Vector3.ONE*1.4
-   for leg in entry.legs:leg.rotation.z=sin(t*10+float(leg.name.hash()%7))*.14
+   GardenAnimalMotion.advance(entry.node,"crawl",delta)
    continue
   var phase=t*0.7+entry.phase
   var flight_height=0.8+sin(phase*1.3)*.25
@@ -1871,19 +1889,23 @@ func animate_garden(delta: float, sample_time: float = -1.0) -> void:
   entry.node.rotation.y=atan2(-travel.x,-travel.z)
   entry.node.visible=clock_time>0.7 or clock_time<0.2 if entry.kind=="firefly" else true
   if entry.get("hive",false): entry.node.visible=clock_time>.2 and clock_time<.8
+  var authored=GardenAnimalMotion.advance(entry.node,"hop" if entry.kind=="frog" else "flight",delta)
+  if authored:continue
   for wing in entry.node.get_children():
    if str(wing.name).begins_with("Wing"): wing.rotation.z=sin(t*(35 if entry.kind=="bee" else 13)+entry.phase)*.8*float(wing.get_meta("side",1))
  for j in range(pets.size()): pets[j].animate(self,delta,j)
  for obj in objects:
+  if obj.get("kind","")=="garden_swing":GardenAnimalMotion.advance(obj.node,"sway",delta)
   if obj.fish:
    for j in range(4):
     var fish=obj.node.get_node_or_null("Fish"+str(j))
     if fish:
-     fish.position=Vector3(cos(t*0.4+j*1.7),0.09,sin(t*0.4+j*1.7))*Vector3(1,1,0.8)
+     fish.position=Vector3(cos(t*0.4+j*1.7),.005,sin(t*0.4+j*1.7))*Vector3(1,1,0.8)
      # Fish bodies run along local +X and swim an ellipse, not a circle.
      var angle=t*.4+j*1.7
      var travel=Vector3(-sin(angle),0,.8*cos(angle))
      fish.rotation.y=atan2(-travel.z,travel.x)
+     GardenAnimalMotion.advance(fish,"swim",delta)
 
 func update_lighting() -> void:
  var angle=(clock_time-.25)*TAU

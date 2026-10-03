@@ -9,7 +9,6 @@ BLENDER_BIN="${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender}"
 "$BLENDER_BIN" --background --python art_source/build_botanical_additions.py
 "$BLENDER_BIN" --background --python art_source/build_plant_growth.py
 "$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_tools.py
-"$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_companions.py
-"$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_shop.py
-"$BLENDER_BIN" --background art_source/workshop.blend --python art_source/build_wildlife.py
+# The MCP-authored overhaul is the authoritative structure/animal library.
+"$BLENDER_BIN" --background --python art_source/overhaul/build.py
 python3 tests/check_assets.py

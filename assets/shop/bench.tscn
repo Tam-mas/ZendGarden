@@ -2,6 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/bench.glb" id="1_otb2y"]
 
-[node name="Bench" type="Node3D" unique_id=1108584213]
+[node name="Bench" type="Node3D" unique_id=2127306597]
 
-[node name="Model" type="Node3D" parent="." unique_id=2064191106 instance=ExtResource("1_otb2y")]
+[node name="Model" type="Node3D" parent="." unique_id=1490728925 instance=ExtResource("1_otb2y")]

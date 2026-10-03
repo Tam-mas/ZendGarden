@@ -36,7 +36,7 @@ static func run(g, failures: Array) -> void:
  g.collection_filters_open=true;g.refresh_sidebar()
  await image(g,"catalogue-filters")
  g.active_tab="Shop";g.refresh_sidebar()
- if g.list_box.get_node("OrnamentCards").get_child_count()!=11:failures.append("Shop cards missing ornaments")
+ if g.list_box.get_node("OrnamentCards").get_child_count()!=GardenCatalogue.furnishings().size():failures.append("Shop cards missing ornaments")
  # Scroll to ornaments using the real scroll container.
  g.list_box.get_parent().scroll_vertical=600
  await image(g,"ornament-shop")

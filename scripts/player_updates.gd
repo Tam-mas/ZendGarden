@@ -4,6 +4,9 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":25,"date":"3 October 2026","title":"Visitors with their own habits","note":"Watch for slow wombats, cautious echidnas and a rare fox beyond the garden. Four new birds arrive to perch or forage, while blue-banded bees, hoverflies, mantises, leaf insects and evening moths bring their own little routines."},
+ {"version":24,"date":"3 October 2026","title":"A more lifelike garden","note":"Your companions and garden wildlife have new shapes, detailed coats, feathers, wings and eyes. Legs bend as animals step, birds fold their wings to rest, and fish sway their tails as they swim."},
+ {"version":23,"date":"3 October 2026","title":"More places to make your own","note":"Discover ten new structures, from a potting bench and rain barrel to a gazebo, swing and tiered fountain. Familiar structures, the garden shed and bridges now have richer wood, stone, glass and finer details."},
  {"version":22,"date":"3 October 2026","title":"A smoother return to the garden","note":"Browser downloads now keep each update's game files together and automatically retry an incomplete piece, helping the garden open reliably after an update."},
  {"version":21,"date":"3 October 2026","title":"Enjoy an uninterrupted view","note":"Choose Enjoy the view, or press H, to tuck away the HUD, aiming guides and held tool. The garden keeps going around you. Press any key, or click or tap, to bring your usual view back."},
  {"version":20,"date":"3 October 2026","title":"Bamboo belongs with the grasses","note":"Find all six bamboo varieties alongside the ornamental grasses. Their size and place in your garden stay the same."},

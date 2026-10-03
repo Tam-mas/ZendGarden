@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/garden_swing.glb" id="1_8eupp"]
+
+[node name="Garden Swing" type="Node3D" unique_id=1752950831]
+
+[node name="Model" type="Node3D" parent="." unique_id=1154381362 instance=ExtResource("1_8eupp")]

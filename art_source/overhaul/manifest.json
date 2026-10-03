@@ -1,0 +1,783 @@
+{
+  "companions/cat": {
+    "bytes": 2730552,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet",
+      "stretch"
+    ],
+    "dimensions": [
+      0.39963753521442413,
+      0.6114680022001266,
+      1.0485932230949402
+    ],
+    "folder": "companions",
+    "kind": "cat",
+    "meshes": 30,
+    "triangles": 25872
+  },
+  "companions/dog": {
+    "bytes": 2769780,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet",
+      "sniff"
+    ],
+    "dimensions": [
+      0.5727996826171875,
+      0.9880808442831039,
+      1.5044128894805908
+    ],
+    "folder": "companions",
+    "kind": "dog",
+    "meshes": 31,
+    "triangles": 30770
+  },
+  "scenery/footbridge": {
+    "bytes": 1232864,
+    "clips": [],
+    "dimensions": [
+      4.5,
+      1.0699999537318945,
+      1.9082998633384705
+    ],
+    "folder": "scenery",
+    "kind": "footbridge",
+    "meshes": 3,
+    "triangles": 8320
+  },
+  "scenery/garden_shed": {
+    "bytes": 2615244,
+    "clips": [],
+    "dimensions": [
+      3.799999952316284,
+      4.937500476837158,
+      4.425000071525574
+    ],
+    "folder": "scenery",
+    "kind": "garden_shed",
+    "meshes": 8,
+    "triangles": 12688
+  },
+  "scenery/lakeside_cottage": {
+    "bytes": 3244144,
+    "clips": [],
+    "dimensions": [
+      3.8062063455581665,
+      4.517556667327881,
+      4.159999847412109
+    ],
+    "folder": "scenery",
+    "kind": "lakeside_cottage",
+    "meshes": 5,
+    "triangles": 30086
+  },
+  "shop/arbor": {
+    "bytes": 2325872,
+    "clips": [],
+    "dimensions": [
+      2.9000000953674316,
+      2.7350003719329834,
+      1.25
+    ],
+    "folder": "shop",
+    "kind": "arbor",
+    "meshes": 5,
+    "triangles": 14236
+  },
+  "shop/arched_bridge": {
+    "bytes": 1463444,
+    "clips": [],
+    "dimensions": [
+      4.050000190734863,
+      1.3949998822063208,
+      1.6200000047683716
+    ],
+    "folder": "shop",
+    "kind": "arched_bridge",
+    "meshes": 3,
+    "triangles": 10168
+  },
+  "shop/bath": {
+    "bytes": 847500,
+    "clips": [],
+    "dimensions": [
+      1.2106282711029053,
+      1.0738249307032675,
+      1.209375262260437
+    ],
+    "folder": "shop",
+    "kind": "bath",
+    "meshes": 3,
+    "triangles": 6464
+  },
+  "shop/bench": {
+    "bytes": 1235336,
+    "clips": [],
+    "dimensions": [
+      1.75,
+      1.1064353585243225,
+      0.7354343235492706
+    ],
+    "folder": "shop",
+    "kind": "bench",
+    "meshes": 3,
+    "triangles": 7012
+  },
+  "shop/compost_bays": {
+    "bytes": 1605152,
+    "clips": [],
+    "dimensions": [
+      3.3999998569488525,
+      1.1000000312924385,
+      1.199999988079071
+    ],
+    "folder": "shop",
+    "kind": "compost_bays",
+    "meshes": 3,
+    "triangles": 14564
+  },
+  "shop/fountain": {
+    "bytes": 881820,
+    "clips": [],
+    "dimensions": [
+      1.840000033378601,
+      1.0399999618530273,
+      1.840000033378601
+    ],
+    "folder": "shop",
+    "kind": "fountain",
+    "meshes": 3,
+    "triangles": 4736
+  },
+  "shop/garden_swing": {
+    "bytes": 1961844,
+    "clips": [
+      "sway"
+    ],
+    "dimensions": [
+      2.649999976158142,
+      2.360000018030405,
+      1.6700000762939453
+    ],
+    "folder": "shop",
+    "kind": "garden_swing",
+    "meshes": 5,
+    "triangles": 11732
+  },
+  "shop/gazebo": {
+    "bytes": 1748196,
+    "clips": [],
+    "dimensions": [
+      3.9200000762939453,
+      3.6050000190734863,
+      3.394819498062134
+    ],
+    "folder": "shop",
+    "kind": "gazebo",
+    "meshes": 4,
+    "triangles": 9402
+  },
+  "shop/greenhouse": {
+    "bytes": 2198036,
+    "clips": [],
+    "dimensions": [
+      3.3600001335144043,
+      3.0974998511373997,
+      3.279999852180481
+    ],
+    "folder": "shop",
+    "kind": "greenhouse",
+    "meshes": 5,
+    "triangles": 16230
+  },
+  "shop/hive": {
+    "bytes": 1543852,
+    "clips": [],
+    "dimensions": [
+      0.7799999713897705,
+      0.9775000214576721,
+      0.8364999890327454
+    ],
+    "folder": "shop",
+    "kind": "hive",
+    "meshes": 4,
+    "triangles": 6352
+  },
+  "shop/insect_hotel": {
+    "bytes": 1393956,
+    "clips": [],
+    "dimensions": [
+      1.1598069667816162,
+      1.8794323205947876,
+      0.550000011920929
+    ],
+    "folder": "shop",
+    "kind": "insect_hotel",
+    "meshes": 4,
+    "triangles": 13576
+  },
+  "shop/lantern": {
+    "bytes": 1428108,
+    "clips": [],
+    "dimensions": [
+      0.7990511655807495,
+      1.3915684819221497,
+      0.8003360629081726
+    ],
+    "folder": "shop",
+    "kind": "lantern",
+    "meshes": 3,
+    "triangles": 4700
+  },
+  "shop/pergola": {
+    "bytes": 2332108,
+    "clips": [],
+    "dimensions": [
+      2.9000000953674316,
+      2.7350001335144043,
+      2.9500001668930054
+    ],
+    "folder": "shop",
+    "kind": "pergola",
+    "meshes": 5,
+    "triangles": 14236
+  },
+  "shop/pond": {
+    "bytes": 2166884,
+    "clips": [],
+    "dimensions": [
+      3.865190029144287,
+      0.3953453004360199,
+      3.8270528316497803
+    ],
+    "folder": "shop",
+    "kind": "pond",
+    "meshes": 6,
+    "triangles": 12735
+  },
+  "shop/pot": {
+    "bytes": 898164,
+    "clips": [],
+    "dimensions": [
+      0.8259999752044678,
+      0.6449999809265137,
+      0.8259999752044678
+    ],
+    "folder": "shop",
+    "kind": "pot",
+    "meshes": 2,
+    "triangles": 4104
+  },
+  "shop/potting_bench": {
+    "bytes": 2096140,
+    "clips": [],
+    "dimensions": [
+      1.6799999475479126,
+      1.8900001049041748,
+      0.7019999921321869
+    ],
+    "folder": "shop",
+    "kind": "potting_bench",
+    "meshes": 7,
+    "triangles": 5376
+  },
+  "shop/rain_barrel": {
+    "bytes": 1745132,
+    "clips": [],
+    "dimensions": [
+      0.8340000212192535,
+      1.0774999856948853,
+      0.9194807708263397
+    ],
+    "folder": "shop",
+    "kind": "rain_barrel",
+    "meshes": 5,
+    "triangles": 5344
+  },
+  "shop/raised_bed": {
+    "bytes": 1336820,
+    "clips": [],
+    "dimensions": [
+      2.0,
+      0.3050000071525574,
+      1.35447496175766
+    ],
+    "folder": "shop",
+    "kind": "raised_bed",
+    "meshes": 4,
+    "triangles": 3116
+  },
+  "shop/sign": {
+    "bytes": 1022620,
+    "clips": [],
+    "dimensions": [
+      1.7999999523162842,
+      0.8799999952316284,
+      0.12520002573728561
+    ],
+    "folder": "shop",
+    "kind": "sign",
+    "meshes": 3,
+    "triangles": 2740
+  },
+  "shop/stone": {
+    "bytes": 423444,
+    "clips": [],
+    "dimensions": [
+      0.64360111951828,
+      0.23320040106773376,
+      0.4659692645072937
+    ],
+    "folder": "shop",
+    "kind": "stone",
+    "meshes": 1,
+    "triangles": 1216
+  },
+  "shop/trellis_screen": {
+    "bytes": 2329400,
+    "clips": [],
+    "dimensions": [
+      2.5299999713897705,
+      1.9500000476837158,
+      0.30000001192092896
+    ],
+    "folder": "shop",
+    "kind": "trellis_screen",
+    "meshes": 4,
+    "triangles": 19056
+  },
+  "wildlife/bee": {
+    "bytes": 461508,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.06429905816912651,
+      0.10248952731490135
+    ],
+    "folder": "wildlife",
+    "kind": "bee",
+    "meshes": 14,
+    "triangles": 7280
+  },
+  "wildlife/blue_banded_bee": {
+    "bytes": 575776,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.06429905816912651,
+      0.10248952731490135
+    ],
+    "folder": "wildlife",
+    "kind": "blue_banded_bee",
+    "meshes": 14,
+    "triangles": 7280
+  },
+  "wildlife/butterfly": {
+    "bytes": 1193408,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.17566505074501038,
+      0.06429905816912651,
+      0.10403460264205933
+    ],
+    "folder": "wildlife",
+    "kind": "butterfly",
+    "meshes": 17,
+    "triangles": 13904
+  },
+  "wildlife/dragonfly": {
+    "bytes": 560488,
+    "clips": [
+      "flight",
+      "perch"
+    ],
+    "dimensions": [
+      0.21799999475479126,
+      0.04869838338345289,
+      0.16873285174369812
+    ],
+    "folder": "wildlife",
+    "kind": "dragonfly",
+    "meshes": 14,
+    "triangles": 7372
+  },
+  "wildlife/echidna": {
+    "bytes": 2226896,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet"
+    ],
+    "dimensions": [
+      0.4573173522949219,
+      0.4474083483219147,
+      0.6042632758617401
+    ],
+    "folder": "wildlife",
+    "kind": "echidna",
+    "meshes": 26,
+    "triangles": 35632
+  },
+  "wildlife/emperor_gum_moth": {
+    "bytes": 1205684,
+    "clips": [
+      "flight",
+      "perch"
+    ],
+    "dimensions": [
+      0.22696459293365479,
+      0.06243286840617657,
+      0.1375168114900589
+    ],
+    "folder": "wildlife",
+    "kind": "emperor_gum_moth",
+    "meshes": 18,
+    "triangles": 11992
+  },
+  "wildlife/fairy_wren": {
+    "bytes": 2316444,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.20313987135887146,
+      0.16778990998864174,
+      0.33695999532938004
+    ],
+    "folder": "wildlife",
+    "kind": "fairy_wren",
+    "meshes": 18,
+    "triangles": 16808
+  },
+  "wildlife/firefly": {
+    "bytes": 562612,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.06429905816912651,
+      0.10173853859305382
+    ],
+    "folder": "wildlife",
+    "kind": "firefly",
+    "meshes": 14,
+    "triangles": 5888
+  },
+  "wildlife/fish": {
+    "bytes": 1242736,
+    "clips": [
+      "swim"
+    ],
+    "dimensions": [
+      0.550159364938736,
+      0.19200913608074188,
+      0.2600000202655792
+    ],
+    "folder": "wildlife",
+    "kind": "fish",
+    "meshes": 7,
+    "triangles": 6450
+  },
+  "wildlife/fox": {
+    "bytes": 1939312,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet"
+    ],
+    "dimensions": [
+      0.43812648952007294,
+      0.8578263968229294,
+      1.4190772771835327
+    ],
+    "folder": "wildlife",
+    "kind": "fox",
+    "meshes": 29,
+    "triangles": 23324
+  },
+  "wildlife/frog": {
+    "bytes": 1876064,
+    "clips": [
+      "idle",
+      "hop"
+    ],
+    "dimensions": [
+      0.35320377349853516,
+      0.15014110505580902,
+      0.31426866352558136
+    ],
+    "folder": "wildlife",
+    "kind": "frog",
+    "meshes": 9,
+    "triangles": 18450
+  },
+  "wildlife/hoverfly": {
+    "bytes": 674060,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.049198382534086704,
+      0.09488854184746742
+    ],
+    "folder": "wildlife",
+    "kind": "hoverfly",
+    "meshes": 14,
+    "triangles": 6800
+  },
+  "wildlife/kangaroo": {
+    "bytes": 1244176,
+    "clips": [
+      "idle",
+      "hop",
+      "graze"
+    ],
+    "dimensions": [
+      0.6599999070167542,
+      1.778800129890442,
+      1.789657711982727
+    ],
+    "folder": "wildlife",
+    "kind": "kangaroo",
+    "meshes": 23,
+    "triangles": 31686
+  },
+  "wildlife/kangaroo_joey": {
+    "bytes": 1464336,
+    "clips": [
+      "idle",
+      "hop",
+      "graze"
+    ],
+    "dimensions": [
+      0.6599999070167542,
+      1.778800129890442,
+      1.789657711982727
+    ],
+    "folder": "wildlife",
+    "kind": "kangaroo_joey",
+    "meshes": 34,
+    "triangles": 40926
+  },
+  "wildlife/kookaburra": {
+    "bytes": 2567680,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.4392324984073639,
+      0.33546992391347885,
+      0.6442000269889832
+    ],
+    "folder": "wildlife",
+    "kind": "kookaburra",
+    "meshes": 21,
+    "triangles": 16928
+  },
+  "wildlife/lady_beetle": {
+    "bytes": 650208,
+    "clips": [
+      "crawl",
+      "idle"
+    ],
+    "dimensions": [
+      0.08522966504096985,
+      0.04561496712267399,
+      0.11949999630451202
+    ],
+    "folder": "wildlife",
+    "kind": "lady_beetle",
+    "meshes": 9,
+    "triangles": 7616
+  },
+  "wildlife/leaf_insect": {
+    "bytes": 209796,
+    "clips": [
+      "idle",
+      "crawl"
+    ],
+    "dimensions": [
+      0.10257507115602493,
+      0.08504509553313255,
+      0.16065075993537903
+    ],
+    "folder": "wildlife",
+    "kind": "leaf_insect",
+    "meshes": 9,
+    "triangles": 2800
+  },
+  "wildlife/lorikeet": {
+    "bytes": 2843472,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.35894301533699036,
+      0.24824492633342743,
+      0.4939807206392288
+    ],
+    "folder": "wildlife",
+    "kind": "lorikeet",
+    "meshes": 18,
+    "triangles": 15680
+  },
+  "wildlife/magpie": {
+    "bytes": 2195304,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.4061751663684845,
+      0.29927491396665573,
+      0.5561899840831757
+    ],
+    "folder": "wildlife",
+    "kind": "magpie",
+    "meshes": 19,
+    "triangles": 16208
+  },
+  "wildlife/mantis": {
+    "bytes": 484384,
+    "clips": [
+      "idle",
+      "crawl"
+    ],
+    "dimensions": [
+      0.09639755636453629,
+      0.07927483692765236,
+      0.20069217681884766
+    ],
+    "folder": "wildlife",
+    "kind": "mantis",
+    "meshes": 11,
+    "triangles": 3328
+  },
+  "wildlife/native_bird": {
+    "bytes": 1899892,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.2963547110557556,
+      0.22272991761565208,
+      0.34907999634742737
+    ],
+    "folder": "wildlife",
+    "kind": "native_bird",
+    "meshes": 18,
+    "triangles": 14528
+  },
+  "wildlife/rabbit": {
+    "bytes": 1916776,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet",
+      "hop"
+    ],
+    "dimensions": [
+      0.48176801204681396,
+      0.578860153327696,
+      0.5776999890804291
+    ],
+    "folder": "wildlife",
+    "kind": "rabbit",
+    "meshes": 32,
+    "triangles": 26120
+  },
+  "wildlife/songbird": {
+    "bytes": 1904884,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.27569580078125,
+      0.2198949232697487,
+      0.3114500194787979
+    ],
+    "folder": "wildlife",
+    "kind": "songbird",
+    "meshes": 18,
+    "triangles": 14528
+  },
+  "wildlife/wombat": {
+    "bytes": 1790572,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet"
+    ],
+    "dimensions": [
+      0.5616000294685364,
+      0.5511128474026918,
+      0.9576941728591919
+    ],
+    "folder": "wildlife",
+    "kind": "wombat",
+    "meshes": 29,
+    "triangles": 28480
+  }
+}

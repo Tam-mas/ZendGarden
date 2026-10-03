@@ -188,9 +188,47 @@ static func detailed_model(folder: String, kind: String) -> Node3D:
  var path="res://assets/%s/%s.glb" % [folder,kind]
  if not detail_scenes.has(path): detail_scenes[path]=load(path)
  var scene=detail_scenes[path].instantiate()
- # Blender exports an identity scene wrapper around the asset root.
- if scene.get_child_count()==1 and scene.get_child(0) is Node3D:
-  var asset=scene.get_child(0)
+ # Promote the identity asset wrapper, retaining the AnimationPlayer beside it.
+ # Rewrite per-instance animation paths; cached PackedScene resources stay shared.
+ var asset: Node3D
+ var animation: AnimationPlayer
+ for child in scene.get_children():
+  if child is AnimationPlayer:animation=child
+  elif child is Node3D and not asset:asset=child
+ if animation and asset:
+  var prefix=str(asset.name)+"/"
+  for library_name in animation.get_animation_library_list():
+   var library=animation.get_animation_library(library_name).duplicate(true)
+   animation.remove_animation_library(library_name)
+   animation.add_animation_library(library_name,library)
+   for clip in library.get_animation_list():
+    var motion=library.get_animation(clip)
+    for i in range(motion.get_track_count()-1,-1,-1):
+     var path_text=str(motion.track_get_path(i))
+     if path_text==str(asset.name) or path_text.begins_with(str(asset.name)+":"):
+      motion.remove_track(i)
+     elif path_text.begins_with(prefix):
+      motion.track_set_path(i,NodePath(path_text.substr(prefix.length())))
+  for child in asset.get_children():
+   child.owner=null
+   child.reparent(scene,false)
+  scene.remove_child(asset)
+  asset.free()
+  var head=scene.find_child("Head*",false,false)
+  if head:
+   var old_name=str(head.name)
+   head.name="Head"
+   for library_name in animation.get_animation_library_list():
+    var library=animation.get_animation_library(library_name)
+    for clip in library.get_animation_list():
+     var motion=library.get_animation(clip)
+     for i in range(motion.get_track_count()):
+      var text=str(motion.track_get_path(i))
+      if text==old_name or text.begins_with(old_name+"/") or text.begins_with(old_name+":"):
+       motion.track_set_path(i,NodePath("Head"+text.substr(old_name.length())))
+  animation.root_node=NodePath("..")
+  animation.callback_mode_process=AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+ elif scene.get_child_count()==1 and asset:
   asset.owner=null
   scene.remove_child(asset)
   scene.free()

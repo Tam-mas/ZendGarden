@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 16:29] Changed
+
+**Tech:** `art_source/overhaul`, `GardenArt.detailed_model`, `GardenAnimalMotion`, `GardenWildlifeMotion` — MCP-authored model libraries and articulated wildlife playback
+
+**Dev:** Rebuilt 21 placeable structures, 26 animals and three scenery assets in isolated Blender MCP scenes, retaining the landscape and saved furnishing identifiers. Added packed PBR maps, 103 animal clips, inverse-kinematics steps with ankle compensation, private animation-path normalization and manual playback without root-motion ownership. Appended ten shop furnishings, added twelve species with distinct visiting routines, integrated rest and insect-hotel interactions, and refreshed shop cards and inspection scenes. Source textures are excluded from game exports, and the environment shed is consolidated from 462 meshes to eight material batches. Expanded model, source, movement, direction and structure-removal validation; kept per-model triangle budgets below 65,000.
+
+**Plain:** The garden has richer structures, more detailed animals and new visitors that move and behave in different ways.
+
+**Why:** Make close-up gardening and quiet wildlife watching more visually pleasing while preserving existing gardens.
+
 ### [2026-10-03 14:37] Added
 
 **Tech:** `art_source/concepts/wildlife-and-existing-structures-2026-10` — additional wildlife and faithful structure concept references.

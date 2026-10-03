@@ -2,6 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/pot.glb" id="1_hlkvj"]
 
-[node name="Pot" type="Node3D" unique_id=742153639]
+[node name="Pot" type="Node3D" unique_id=710943935]
 
-[node name="Model" type="Node3D" parent="." unique_id=1834131862 instance=ExtResource("1_hlkvj")]
+[node name="Model" type="Node3D" parent="." unique_id=1293192847 instance=ExtResource("1_hlkvj")]

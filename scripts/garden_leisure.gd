@@ -1,7 +1,7 @@
 class_name GardenLeisure
 extends RefCounted
 
-const VERBS={"bench":"Sit on bench","pergola":"Rest under pergola","pond":"Watch the pond"}
+const VERBS={"bench":"Sit on bench","pergola":"Rest under pergola","pond":"Watch the pond","gazebo":"Rest in gazebo","garden_swing":"Sit on swing"}
 
 static func target(g) -> Dictionary:
  if g.mode!="walk" or g.photo_mode or g.day_transition:return {}
@@ -31,15 +31,15 @@ static func rest(g, obj: Dictionary) -> void:
  g.rest_object=obj.node
  g.rest_kind=obj.kind
   # The bench back is local +Z; sit facing its open, local -Z side.
- var offset=Vector3(0,.65,-.08) if obj.kind=="bench" else (Vector3(0,0,1.65) if obj.kind=="pond" else Vector3.ZERO)
+ var offset=Vector3(0,.65,-.08) if obj.kind in ["bench","garden_swing"] else (Vector3(0,0,1.65) if obj.kind=="pond" else Vector3.ZERO)
  g.player.position=obj.node.to_global(offset)
- if obj.kind!="bench":g.player.position=GardenTerrain.point(g.player.position)+Vector3(0,.1,0)
+ if obj.kind not in ["bench","garden_swing"]:g.player.position=GardenTerrain.point(g.player.position)+Vector3(0,.1,0)
  g.player.velocity=Vector3.ZERO
  g.yaw=obj.node.rotation.y
- g.pitch=.38 if obj.kind=="pond" else (.2 if obj.kind=="bench" else .08)
+ g.pitch=.38 if obj.kind=="pond" else (.2 if obj.kind in ["bench","garden_swing"] else .08)
  g.side_panel.hide();g.resume_controls()
  if not g.touch_active():Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
- g.toast({"bench":"Take a seat. Invite a companion to share the view.","pergola":"A little shade and a quiet moment.","pond":"Watch the ripples"+(" and your fish." if obj.fish else ". Stock fish in Shop for little visitors.")}[obj.kind])
+ g.toast({"bench":"Take a seat. Invite a companion to share the view.","pergola":"A little shade and a quiet moment.","gazebo":"A sheltered seat and a quiet view.","garden_swing":"A gentle sway in the garden.","pond":"Watch the ripples"+(" and your fish." if obj.fish else ". Stock fish in Shop for little visitors.")}[obj.kind])
  g.update_camera(0)
 
 static func leave(g) -> void:

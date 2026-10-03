@@ -3,9 +3,10 @@
 import gzip
 import hashlib
 import json
+import sys
 from pathlib import Path
 
-root = Path(__file__).resolve().parents[1] / 'build/web'
+root = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else Path(__file__).resolve().parents[1] / 'build/web'
 for name in ('index.html', 'index.js', 'index.wasm', 'loader.js', 'pack.json', '_headers', '404.html',
              '_routes.json', 'moving.html', 'migration.css', 'migration.js', 'migration-storage.js', 'save-format.js'):
     assert (root / name).is_file(), f'Missing {name}'

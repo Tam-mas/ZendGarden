@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/fountain.glb" id="1_jij0v"]
+
+[node name="Fountain" type="Node3D" unique_id=1968247356]
+
+[node name="Model" type="Node3D" parent="." unique_id=41200087 instance=ExtResource("1_jij0v")]

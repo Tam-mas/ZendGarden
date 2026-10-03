@@ -17,20 +17,24 @@ func run() -> void:
  g.make_fish(pond)
  g.objects.append({"node":pond,"fish":true})
  var failures=[]
- for sample in range(24):
-  var t=sample*TAU/(24.0*.4)
-  var phase=sample*TAU/24.0
-  for entry in g.wildlife: entry.phase=phase-t*.7
+ for sample in range(48):
+  var t=sample*.31+.05
   g.animate_garden(0,t)
-  for entry in g.wildlife:
-   var position=entry.node.position
-   var tangent=Vector3(-position.z,0,position.x).normalized()
-   var forward=-entry.node.basis.z.normalized()
-   if forward.dot(tangent)<.999: failures.append(entry.kind+" faces away from travel")
+  var positions=[]
+  for entry in g.wildlife:positions.append(entry.node.position)
+  var fish_positions=[]
+  for j in range(4):fish_positions.append(pond.get_node("Fish"+str(j)).position)
+  g.animate_garden(0,t+.001)
+  for i in range(g.wildlife.size()):
+   var entry=g.wildlife[i]
+   var tangent: Vector3=entry.node.position-positions[i]
+   tangent.y=0
+   if tangent.length()>.000001 and (-entry.node.basis.z).normalized().dot(tangent.normalized())<.98:failures.append(entry.kind+" faces away from travel")
   for j in range(4):
    var fish=pond.get_node("Fish"+str(j))
-   var tangent=Vector3(-fish.position.z/.8,0,fish.position.x*.8).normalized()
-   if fish.basis.x.normalized().dot(tangent)<.999: failures.append("Fish does not face elliptical travel")
+   var tangent: Vector3=fish.position-fish_positions[j]
+   tangent.y=0
+   if fish.basis.x.normalized().dot(tangent.normalized())<.999:failures.append("Fish does not face elliptical travel")
  # Companions' local -Z noses and direction-based yaw already agree.
  for angle in range(24):
   var direction=Vector3(sin(angle),0,cos(angle))
