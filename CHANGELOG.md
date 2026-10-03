@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 17:24] Changed
+
+**Tech:** `art_source/overhaul/realism.py`, `GardenArt.soften_fur` — generated material assets and three realism prototypes
+
+**Dev:** Preserved six built-in image-generation albedo/opacity sources and exact prompts; added Blender tinting, coat UVs, curved outward-facing short-fur cards and separate contour/flight-feather materials. Exported revised cat, kookaburra and bench prototypes through MCP, retaining animation clips and dimensions. Refined jaw, hind limbs, tail, bird skull/neck/bill and feather UVs. Godot shares alpha-hashed fur materials, uses softer diffuse lighting and avoids tiny fur self-shadows. Reduced micro-normal/roughness map sizes while preserving 1K colour detail. Added checks for PNG hair alpha, runtime fur shading and existing grounded animation. Documented the remaining species anatomy, skin deformation, grooming, texture and performance work explicitly; this is not a finished realism pass for all models.
+
+**Plain:** The cat, kookaburra and bench have a first pass of finer coat, feather and wood details.
+
+**Why:** Establish and verify a material workflow for more believable close-up garden models.
+
 ### [2026-10-03 16:29] Changed
 
 **Tech:** `art_source/overhaul`, `GardenArt.detailed_model`, `GardenAnimalMotion`, `GardenWildlifeMotion` — MCP-authored model libraries and articulated wildlife playback

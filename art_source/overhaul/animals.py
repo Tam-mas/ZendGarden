@@ -4,14 +4,19 @@ from common_hq import *
 
 def joint(name,p,parent):return pivot(name,p,parent)
 
-def eye(parent,side,p,size,iris,cat=False):
+def eye(parent,side,p,size,iris,cat=False,coat=None):
     x,y,z=p;m=palette()
     anchor=joint('Eye socket',(side*x,y,z),parent)
     anchor.rotation_euler.z=-side*.9
-    ell('Dark eye socket',(0,0,0),(size*2.0,size*1.8,size*.75),m['black'],anchor,24,16)
-    ell('Living iris',(0,0,-size*.23),(size*1.55,size*1.55,size*.55),iris,anchor,24,16)
-    ell('Pupil',(0,0,-size*.47),(size*.38 if cat else size*.73,size*1.13 if cat else size*.73,size*.19),m['black'],anchor,20,12)
-    ell('Eye catchlight',(-size*.20,size*.29,-size*.60),(size*.18,size*.18,size*.10),m['ivory'],anchor,10,6)
+    ell('Recessed almond eye',(0,0,0),(size*2.15,size*1.25,size*.30),m['black'],anchor,24,16)
+    ell('Living iris',(0,0,-size*.14),(size*1.25,size*1.20,size*.22),iris,anchor,24,16)
+    ell('Pupil',(0,0,-size*.26),(size*.28 if cat else size*.70,size*.94 if cat else size*.70,size*.09),m['black'],anchor,20,12)
+    ell('Eye catchlight',(-size*.16,size*.23,-size*.32),(size*.09,size*.09,size*.05),m['ivory'],anchor,10,6)
+    if coat:
+        for upper in [True,False]:
+            points=[(math.cos(a)*size*1.07,math.sin(a)*size*(.64 if upper else .53),-size*.10) for a in np.linspace(0,math.pi,13)]
+            if not upper:points=[(x,-y,z) for x,y,z in points]
+            curve('Anatomical eyelid',points,[size*.13]*13,coat,anchor,6)
 
 def pinna(name,parent,p,width,height,coat,inner,fold=False,round_ear=False):
     e=joint(name,p,parent)
@@ -39,20 +44,23 @@ def quadruped(kind):
     nose=material('HQ nose leather',(.025,.019,.017),'stone',.34)
     iris=material('HQ amber green iris',(.22,.28,.063),None,.22) if cat else material('HQ amber brown iris',(.18,.079,.016),None,.22)
     body=joint('Body',(0,height,0),r)
-    profiles=[(-length*.48,-.012,width*.16,width*.30),(-length*.39,.005,width*.39,width*.48),
-        (-length*.23,.025,width*.51,width*.57),(0,0,width*.48,width*.52),
-        (length*.24,-.016,width*.53,width*.59),(length*.40,-.008,width*.42,width*.48),(length*.48,0,width*.08,width*.14)]
+    profiles=[(-length*.48,.004,width*.18,width*.26),(-length*.39,.005,width*.36,width*.46),
+        (-length*.27,.015,width*.46,width*.51),(-length*.12,.008,width*.45,width*.46),
+        (length*.08,.022,width*.38,width*.39),(length*.26,.002,width*.49,width*.52),
+        (length*.40,-.006,width*.37,width*.42),(length*.48,0,width*.09,width*.16)]
     torso=loft('Continuous shaped torso',profiles,coat,body,40)
-    if cat:torso.scale.z=.69
+    if cat or fox:torso.scale.z=.83
     if wombat:
         torso.scale.z=.78
-    if not echidna and not wombat:
+    if rabbit:
         chest=ell('Cream chest',(0,-width*.10,-length*.31),(width*.76,width*.80,length*.24),cream,body,32,20)
     # The neck flows into the shoulders; articulated head meets it at a real joint.
     head_y=height+(.12 if cat else .16 if dog else .13 if fox else .035 if wombat else .07 if rabbit else -.015)
     head_z=-length*.43
     neck=ell('Shoulder and neck',(0,head_y-height-.035,head_z+.07),(width*.65,width*.77,length*.29),coat,body,32,20)
     torso=fuse_surface([torso,neck],.009 if kind in ['cat','rabbit','echidna'] else .012)
+    from realism import coat_uv
+    coat_uv(torso)
     if dog or cat:
         torso.data.materials.append(cream)
         for face in torso.data.polygons:
@@ -62,9 +70,16 @@ def quadruped(kind):
     hw=width*(.47 if wombat else .42 if rabbit else .36 if cat else .37 if fox else .36)
     hl=.18 if cat else .28 if dog else .25 if fox else .24 if wombat else .16 if rabbit else .13
     hheight=hw*.80
-    headprofiles=[(-hl*.70,-.04,hw*.10,hheight*.13),(-hl*.56,-.025,hw*.35,hheight*.27),
-        (-hl*.32,0,hw*.70,hheight*.63),(-hl*.03,.018,hw,hheight),(hl*.30,.024,hw*.84,hheight*.91),(hl*.44,.010,hw*.32,hheight*.49)]
+    headprofiles=[(-hl*.72,-.035,hw*.15,hheight*.16),(-hl*.59,-.025,hw*.38,hheight*.28),
+        (-hl*.40,-.005,hw*.57,hheight*.43),(-hl*.20,.013,hw*.87,hheight*.70),
+        (hl*.02,.025,hw,hheight*.91),(hl*.23,.018,hw*.81,hheight*.84),(hl*.41,0,hw*.26,hheight*.42)]
     sculpt=loft('Sculpted skull and muzzle',headprofiles,coat,head,40)
+    # A feline jaw has a flatter underside; an ellipsoidal skull otherwise
+    # reads as a toy even after applying a detailed coat map.
+    if cat or fox:
+        for v in sculpt.data.vertices:
+            if v.co.z<-.035:v.co.z=-.035+(v.co.z+.035)*.42
+        sculpt.data.update()
     if dog:
         sculpt.data.materials.append(cream)
         for face in sculpt.data.polygons:
@@ -75,14 +90,14 @@ def quadruped(kind):
         ell('Nostril tip',(0,-.053,-.209),(.018,.014,.012),nose,head,16,10)
     else:
         for side in [-1,1]:
-            ell('Muzzle pad',(side*hw*.25,-.036,-hl*.51),(hw*.70,hheight*.51,hl*.39),cream if not wombat else coat,head,24,16)
+            ell('Muzzle pad',(side*hw*.22,-.038,-hl*.56),(hw*.47,hheight*.36,hl*.28),cream if not wombat else coat,head,24,16)
         nsize=(hw*(.40 if cat else .63),hheight*(.28 if cat else .44),.040 if wombat else .020 if cat else .029)
         ell('Nose pad',(0,-.025,-hl*.70),nsize,nose,head,24,16)
         curve('Mouth line',[(-hw*.30,-.070,-hl*.48),(0,-.078,-hl*.65),(hw*.30,-.070,-hl*.48)],[.0018]*3,nose,head,6)
     for side in [-1,1]:
-        eye(head,side,(hw*.77,.022,-hl*.26),.013 if cat else .012 if echidna else .016,iris,cat)
+        eye(head,side,(hw*.89,.018,-hl*.21),.013 if cat else .010 if echidna else .014,iris,cat,coat)
         if not echidna:
-            ear_h=.13 if cat else .16 if dog else .17 if fox else .095 if wombat else .245
+            ear_h=.115 if cat else .16 if dog else .155 if fox else .075 if wombat else .225
             pinna('EarL' if side<0 else 'EarR',head,(side*hw*.68,hheight*.62,hl*.12),hw*.77,ear_h,coat,skin,dog,wombat or rabbit)
         if kind in ['cat','dog','fox','rabbit']:
             for j in range(4):
@@ -95,9 +110,10 @@ def quadruped(kind):
             top=joint(('Front' if front else 'Back')+('L' if side<0 else 'R'),(x,-.055,z),body)
             upperlen=hip*.50;lowerlen=hip*.50
             radius=width*(.19 if wombat else .15 if rabbit else .12 if echidna else .135 if dog else .13)
-            curve('Contoured upper limb',[(0,0,0),(0,-upperlen*.35,.020 if not front else -.008),(0,-upperlen,.025 if not front else .005)],[radius,radius*.94,radius*.57],coat,top,16)
+            if not front and kind in ['cat','dog','fox','rabbit']:radius*=1.30
+            curve('Contoured upper limb',[(0,0,0),(0,-upperlen*.32,-.030 if not front else -.010),(0,-upperlen*.68,-.012 if not front else -.007),(0,-upperlen,.025 if not front else .005)],[radius,radius*.92,radius*.68,radius*.52],coat,top,16)
             low=joint('Lower'+('Front' if front else 'Back')+('L' if side<0 else 'R'),(0,-upperlen,.025 if not front else .005),top)
-            curve('Tapered shin',[(0,.016,0),(0,-lowerlen*.45,-.007),(0,-lowerlen+.035,-.018)],[radius*.62,radius*.46,radius*.40],cream if dog or cat else boot,low,14)
+            curve('Tapered shin',[(0,.016,0),(0,-lowerlen*.45,.023 if not front else -.007),(0,-lowerlen+.035,-.018)],[radius*.55,radius*.37,radius*.30],cream if dog or cat else boot,low,14)
             foot=joint('Paw'+('Front' if front else 'Back')+('L' if side<0 else 'R'),(0,-lowerlen,0),low)
             paw=(width*.27,.062 if wombat else .043,length*.18 if rabbit else .085)
             ell('Grounded shaped paw',(0,.025,-.040),paw,cream if dog or cat else boot,foot,24,12)
@@ -111,18 +127,14 @@ def quadruped(kind):
     if cat or dog or fox:
         ts=.37 if cat else .51 if dog else .54
         points=[(math.sin(t*2)*.018,t*.09,ts*t) for t in np.linspace(0,1,17)]
-        radii=[(.028 if cat else .080 if fox else .063)*(1-.88*t) for t in np.linspace(0,1,17)]
+        radii=[(.027*(1-.16*t) if cat else .036+.040*math.sin(math.pi*t)**.8 if fox else .037+.028*math.sin(math.pi*t))*(1 if t<.82 else max(.02,math.sqrt((1-t)/.18))) for t in np.linspace(0,1,17)]
         curve('Flowing tapered tail',points[:13] if fox or dog else points,radii[:13] if fox or dog else radii,coat,tail,16)
         if fox or dog:
             curve('Cream tail tip',points[12:],radii[12:],cream,tail,16)
     elif rabbit:ell('Cotton tail',(0,.025,.025),(.13,.13,.13),cream,tail,24,16)
     if dog:
         ell('Collie facial blaze',(0,.024,-hl*.29),(.045,.17,.024),cream,head,24,16)
-        for j in range(35):
-            a=j*math.tau/35
-            p=(math.cos(a)*width*.44,.03+math.sin(a)*width*.46,-length*.32)
-            end=(p[0]*1.18,p[1]-.055,p[2]+.09)
-            curve('Soft ruff lock',[p,((p[0]+end[0])*.5,p[1]-.015,p[2]+.035),end],[.023,.014,.0018],cream,body,6)
+        # The chest is now covered by laid fur cards rather than solid spikes.
     if cat or dog:
         collar=material('HQ sage woven collar',(.12,.24,.19),'fabric')
         # Thin fitted collar follows the neck rather than covering the whole chest.
@@ -267,14 +279,19 @@ def bird(kind):
         'magpie':(.38,.103,(.012,.016,.018),(.70,.72,.68),.21)}
     length,width,color,breastcolor,tail_length=specs[kind]
     plumage=material('HQ '+kind+' plumage',color,'feather')
+    flight_feathers=material('HQ '+kind+' flight feathers',color,'feather')
     breast=material('HQ '+kind+' breast',breastcolor,'feather')
     body=joint('Body',(0,width*.65,0),r)
     loft('Streamlined feathered body',[(-length*.42,0,width*.10,width*.14),(-length*.27,.012,width*.80,width*.82),
         (-length*.03,0,width,width*.96),(length*.22,-.014,width*.70,width*.65),(length*.37,-.018,width*.16,width*.20)],plumage,body,36)
     breast_mesh=ell('Soft breast',(0,-width*.30,-length*.08),(width*1.65,width*1.20,length*.57),breast,body,32,20)
-    head=joint('Head',(0,width*1.25,-length*.28),r)
+    ell('Feathered neck transition',(0,width*.76,-length*.26),(width*.93,width*.91,length*.29),breast,body,32,20)
+    head=joint('Head',(0,width*(1.56 if kind=='kookaburra' else 1.38),-length*.28),r)
     headcoat=material('HQ lorikeet cobalt head',(.034,.11,.37),'feather') if kind=='lorikeet' else material('HQ fairy-wren cobalt plumage',(.03,.21,.56),'feather') if kind=='fairy_wren' else breast if kind=='kookaburra' else plumage
-    skull=ell('Sculpted bird head',(0,.007,0),(width*(1.40 if kind=='kookaburra' else 1.55),width*(1.35 if kind=='kookaburra' else 1.55),width*(1.85 if kind=='kookaburra' else 1.60)),headcoat,head,36,24)
+    skull=loft('Anatomical bird skull',[(-width*.76,-width*.04,width*.19,width*.24),
+        (-width*.57,width*.06,width*.44,width*.42),(-width*.28,width*.12,width*.60,width*.60),
+        (width*.05,width*.12,width*.65,width*.66),(width*.36,width*.06,width*.56,width*.57),
+        (width*.64,-width*.03,width*.28,width*.34),(width*.73,-width*.08,width*.06,width*.12)],headcoat,head,36)
     if kind=='kookaburra':
         mask=material('HQ kookaburra eye stripe',(.12,.075,.041),'feather')
         skull.data.materials.append(mask)
@@ -287,13 +304,16 @@ def bird(kind):
         curve('Hooked upper beak',[(0,-.005,-width*.57),(0,-.012,-width*.89),(0,-.037,-width*.90)],[width*.28,width*.18,.001],beakmat,head,18)
         ell('Lower parrot beak',(0,-.035,-width*.70),(width*.36,width*.29,width*.30),beakmat,head,24,16)
     else:
-        loft('Tapered bird bill',[(-width*.65-beaklength,-.019,.0008,.001),(-width*.65-beaklength*.35,-.009,width*(.22 if kind=='kookaburra' else .15),width*(.18 if kind=='kookaburra' else .10)),(-width*.58,-.006,width*.25,width*(.22 if kind=='kookaburra' else .13))],beakmat,head,24)
+        loft('Tapered bird bill',[(-width*.65-beaklength,-.019,.002,.002),(-width*.65-beaklength*.70,-.012,width*.10,width*.06),(-width*.65-beaklength*.35,-.009,width*(.22 if kind=='kookaburra' else .15),width*(.18 if kind=='kookaburra' else .10)),(-width*.58,-.006,width*.25,width*(.22 if kind=='kookaburra' else .13))],beakmat,head,24)
+        if kind=='kookaburra':
+            lowerbill=material('HQ kookaburra pale lower bill',(.33,.30,.24),'stone',.46,size=512)
+            loft('Separate lower mandible',[(-width*.65-beaklength,-.021,.002,.001),(-width*.65-beaklength*.42,-.020,width*.20,width*.05),(-width*.59,-.016,width*.24,width*.085)],lowerbill,head,24)
         curve('Bill seam',[(-width*.15,-.012,-width*.61),(0,-.018,-width*.65-beaklength),(.0001,-.018,-width*.65-beaklength)],[.001,.0005,.0002],m['black'],head,6)
     iris=material('HQ bird chestnut iris',(.22,.065,.025),None,.24)
     for side in [-1,1]:
-        if kind in ['kookaburra','fairy_wren']:
+        if kind=='fairy_wren':
             ell('Species facial mask',(side*width*.48,.012,-width*.34),(width*.62,width*.28,width*.51),m['darkwood'] if kind=='kookaburra' else m['black'],head,24,16)
-        eye(head,side,(width*.64,.023,-width*.40),width*.080,iris)
+        eye(head,side,(width*.63,width*.11,-width*.33),width*.070,iris,coat=headcoat)
     wings=[];wrists=[]
     for side in [-1,1]:
         w=joint('WingL' if side<0 else 'WingR',(side*width*.59,width*.56,-length*.08),r);w['side']=side
@@ -301,7 +321,7 @@ def bird(kind):
         ell('Shoulder coverts',(side*width*.46,0,length*.025),(width*1.10,width*.34,length*.49),wingmat,w,28,16)
         wrist=joint('WristL' if side<0 else 'WristR',(side*length*.31,0,length*.04),w)
         for j in range(9):
-            feather('Layered primary',(side*length*.005,0,j*length*.010),(side*(length*.36+j*length*.012),-.01,length*(.02+j*.039)),length*.033,plumage,wrist,bend=width*.05)
+            feather('Layered primary',(side*length*.005,0,j*length*.010),(side*(length*.36+j*length*.012),-.01,length*(.02+j*.039)),length*.033,flight_feathers,wrist,bend=width*.05)
         for j in range(7):
             feather('Overlapping covert',(side*(j*.012),.006,-length*.075),(side*(length*.30+j*.007),.010,length*.08),length*.036,wingmat,w,bend=.004)
         if kind=='kookaburra':
@@ -313,7 +333,7 @@ def bird(kind):
     tail=joint('Tail',(0,width*.45,length*.27),r)
     for j in range(7):
         x=(j-3)*width*.12
-        feather('Separate tail feather',(x,0,0),(x*1.6,.10 if kind=='fairy_wren' else -.009,tail_length),width*.13,headcoat if kind=='fairy_wren' else plumage,tail,.008)
+        feather('Separate tail feather',(x,0,0),(x*1.6,.10 if kind=='fairy_wren' else -.009,tail_length),width*.13,headcoat if kind=='fairy_wren' else flight_feathers,tail,.008)
     legs=[]
     for side in [-1,1]:
         leg=joint('LegL' if side<0 else 'LegR',(side*width*.37,width*.07,length*.03),r)
@@ -373,6 +393,8 @@ def build(kind):
     else:
         from small_animals import make
         r=make(kind)
+    from realism import groom
+    groom(r,kind)
     record=export(r,folder,kind)
     i=len([o for o in bpy.context.scene.objects if o.parent is None and o.get('export_path')])-1
     r.location=vec(((i%6)*2.6,0,(i//6)*2.6));r.hide_set(False)

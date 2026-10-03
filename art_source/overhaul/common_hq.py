@@ -34,7 +34,8 @@ def scene(category):
 
 def texture(name, values, noncolor=False):
     n = values.shape[0]
-    im = bpy.data.images.new(name, width=n, height=n)
+    im = bpy.data.images.new(name, width=n, height=n, alpha=True)
+    im.alpha_mode='STRAIGHT'
     if noncolor: im.colorspace_settings.name = 'Non-Color'
     im.pixels.foreach_set(values.astype(np.float32).ravel())
     im.filepath_raw = str(TEX / (name + '.png'))
@@ -89,6 +90,9 @@ def material(name, color, style='stone', rough=.75, metal=0, alpha=1, size=1024)
         elif style == 'clay': field += .015*np.sin(y*560)+noise*.065
         else: field += noise*.05
         rgba=np.ones((size,size,4));rgba[:,:,:3]=np.clip(field[:,:,None]*np.array(color),0,1)
+        from realism import albedo
+        generated=albedo(name,color,style,size)
+        if generated is not None:rgba=generated
         tex=m.node_tree.nodes.new('ShaderNodeTexImage');tex.image=texture(name+'_albedo',rgba)
         m.node_tree.links.new(tex.outputs['Color'],bs.inputs['Base Color'])
         dy,dx=np.gradient(field)
@@ -97,11 +101,15 @@ def material(name, color, style='stone', rough=.75, metal=0, alpha=1, size=1024)
         normal[:,:,:3]=np.stack((-dx*strength,-dy*strength,np.ones_like(dx)),axis=-1)
         normal[:,:,:3]/=np.linalg.norm(normal[:,:,:3],axis=-1)[:,:,None]
         normal[:,:,:3]=normal[:,:,:3]*.5+.5
-        nt=m.node_tree.nodes.new('ShaderNodeTexImage');nt.image=texture(name+'_normal',normal,True)
+        nt=m.node_tree.nodes.new('ShaderNodeTexImage');nt.image=texture(name+'_normal',normal[::2,::2],True)
         nm=m.node_tree.nodes.new('ShaderNodeNormalMap');m.node_tree.links.new(nt.outputs['Color'],nm.inputs['Color']);m.node_tree.links.new(nm.outputs['Normal'],bs.inputs['Normal'])
         rm=np.ones((size,size,4));rm[:,:,:3]=np.clip(rough+(field-.96)*.18,.04,1)[:,:,None]
-        rt=m.node_tree.nodes.new('ShaderNodeTexImage');rt.image=texture(name+'_roughness',rm,True)
-        m.node_tree.links.new(rt.outputs['Color'],bs.inputs['Roughness'])
+        if style not in ['fur','tabby','feather']:
+            rt=m.node_tree.nodes.new('ShaderNodeTexImage');rt.image=texture(name+'_roughness',rm[::8,::8],True)
+            m.node_tree.links.new(rt.outputs['Color'],bs.inputs['Roughness'])
+        else:
+            bs.inputs['Roughness'].default_value=.86 if style in ['fur','tabby'] else .79
+            bs.inputs['Specular IOR Level'].default_value=.20
     MATS[name]=m
     return m
 
@@ -167,13 +175,21 @@ def feather(name, start, end, width, mat, parent, bend=.012):
     lateral=d.cross(Vector((0,1,0))).normalized()
     vs=[];fs=[]
     for k in range(25):
-        t=k/24;w=width*(max(0,math.sin(math.pi*t))**.35)
+        t=k/24
+        # Rounded closed tips and an asymmetric vane rather than sharp comb
+        # teeth. The narrow root stays underneath the overlapping coverts.
+        w=width*(math.sin(math.pi*t)**.23 if 0<t<1 else .08)
         center=a+d*t+Vector((0,bend*math.sin(math.pi*t),0))
-        vs += [center-lateral*w,center+Vector((0,.002,0)),center+lateral*w]
+        vs += [center-lateral*w*.82,center+Vector((0,.002,0)),center+lateral*w]
     for k in range(24):
         for j in range(2):
             v=k*3+j;fs.append((v,v+3,v+4,v+1))
-    return mesh(name,vs,fs,mat,parent,False)
+    o=mesh(name,vs,fs,mat,parent,False)
+    for poly in o.data.polygons:
+        for li in poly.loop_indices:
+            row,col=divmod(o.data.loops[li].vertex_index,3)
+            o.data.uv_layers.active.data[li].uv=(col/2,row/24)
+    return o
 
 def uv_grain(o):
     if o.type!='MESH' or not o.data.uv_layers:return
@@ -228,6 +244,9 @@ def retain_rest_transforms(path, transforms):
         if rest:
             node.pop('matrix',None)
             node.update(rest)
+    for mat in doc.get('materials',[]):
+        if mat.get('name','').startswith('Fur cards '):
+            mat['alphaMode']='MASK';mat['alphaCutoff']=.28;mat['doubleSided']=True
     blob=json.dumps(doc,separators=(',',':')).encode();blob+=b' '*((-len(blob))%4)
     total=12+8+len(blob)+len(tail)
     path.write_bytes(struct.pack('<4sII',b'glTF',2,total)+struct.pack('<I4s',len(blob),b'JSON')+blob+tail)

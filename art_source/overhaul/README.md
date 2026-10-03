@@ -4,6 +4,12 @@ Created on `codex/blender-garden-model-overhaul` through the connected Blender M
 
 This library supplies 21 placeable structures, 26 animal models, three permanent scenery models, and the upgraded environment. Existing furniture kind names, catalogue order and saved garden coordinates remain compatible. The ten new furnishing kinds are appended to the catalogue.
 
+The first realism/material prototypes (cat, kookaburra and bench) are described in
+[`REALISM.md`](REALISM.md), alongside the anatomy, grooming, baking and performance
+work needed for a complete realism pass. Six generated source textures and their exact
+built-in image-generation prompts are preserved in `textures/generated/`. These prototypes
+do not imply that every animal has already received a finished anatomical sculpt.
+
 ![Structure review](previews/structures.jpg)
 
 ![Animal review](previews/animals.jpg)

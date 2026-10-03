@@ -37,6 +37,17 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
   for node in doc['nodes']:
    if 'hq_rest_location' in node.get('extras',{}):
     assert 'translation' in node,(path,'missing neutral joint transform',node['name'])
+  for material in doc.get('materials',[]):
+   if material.get('name','').startswith('Fur cards '):
+    assert material.get('alphaMode')=='MASK' and material.get('doubleSided'),(path,'hair opacity export lost')
+    index=material['pbrMetallicRoughness']['baseColorTexture']['index']
+    image=doc['images'][doc['textures'][index]['source']]
+    assert image['mimeType']=='image/png',(path,'hair alpha compressed to JPEG')
+    view=doc['bufferViews'][image['bufferView']]
+    # MIME alone is insufficient: an RGB PNG cannot provide hair cutouts.
+    binary_start=20+length+8
+    png=data[binary_start+view.get('byteOffset',0):binary_start+view.get('byteOffset',0)+view['byteLength']]
+    assert png[:8]==b'\x89PNG\r\n\x1a\n' and png[25] in [4,6],(path,'hair PNG has no alpha channel')
  if path.name.startswith('plant_'):
 
   assert any('Foliage' in n.get('name','') for n in doc['nodes']),(path,'missing foliage')

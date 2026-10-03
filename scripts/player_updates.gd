@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":26,"date":"3 October 2026","title":"Finer details up close","note":"Look closer at your cat's coat, the kookaburra's plumage and the grain of the garden bench. These first detail improvements bring softer hair, more distinct feather surfaces and naturally weathered timber."},
  {"version":25,"date":"3 October 2026","title":"Visitors with their own habits","note":"Watch for slow wombats, cautious echidnas and a rare fox beyond the garden. Four new birds arrive to perch or forage, while blue-banded bees, hoverflies, mantises, leaf insects and evening moths bring their own little routines."},
  {"version":24,"date":"3 October 2026","title":"A more lifelike garden","note":"Your companions and garden wildlife have new shapes, detailed coats, feathers, wings and eyes. Legs bend as animals step, birds fold their wings to rest, and fish sway their tails as they swim."},
  {"version":23,"date":"3 October 2026","title":"More places to make your own","note":"Discover ten new structures, from a potting bench and rain barrel to a gazebo, swing and tiered fountain. Familiar structures, the garden shed and bridges now have richer wood, stone, glass and finer details."},

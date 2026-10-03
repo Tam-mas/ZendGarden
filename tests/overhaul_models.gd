@@ -21,6 +21,18 @@ func run() -> void:
   var model=GardenArt.detailed_model("companions" if kind in ["cat","dog"] else "wildlife",kind)
   root.add_child(model)
   model.position=Vector3(13,2,-7)
+  if kind=="cat":
+   var hair_count=0
+   for instance in model.find_children("*","MeshInstance3D",true,false):
+    for surface in range(instance.mesh.get_surface_count()):
+     var material=instance.mesh.surface_get_material(surface)
+     if material is StandardMaterial3D and str(material.resource_name).begins_with("Fur cards "):
+      hair_count+=1
+      var runtime_material=instance.get_surface_override_material(surface) as StandardMaterial3D
+      if not runtime_material or runtime_material.transparency!=BaseMaterial3D.TRANSPARENCY_ALPHA_HASH or not runtime_material.albedo_texture:
+       failures.append("Cat fur lost its opacity texture or soft game shading")
+      if instance.cast_shadow!=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:failures.append("Cat fur casts dotted self-shadows")
+   if hair_count==0:failures.append("Cat short-coat strips missing")
   var player=GardenAnimalMotion.player(model)
   if not player:
    failures.append(kind+" has no imported animations")

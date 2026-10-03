@@ -1,6 +1,6 @@
 {
   "companions/cat": {
-    "bytes": 2730552,
+    "bytes": 3427808,
     "clips": [
       "idle",
       "walk",
@@ -12,13 +12,13 @@
     ],
     "dimensions": [
       0.39963753521442413,
-      0.6114680022001266,
-      1.0485932230949402
+      0.6045285245636478,
+      1.0541147589683533
     ],
     "folder": "companions",
     "kind": "cat",
-    "meshes": 30,
-    "triangles": 25872
+    "meshes": 51,
+    "triangles": 32718
   },
   "companions/dog": {
     "bytes": 2769780,
@@ -120,7 +120,7 @@
     "triangles": 6464
   },
   "shop/bench": {
-    "bytes": 1235336,
+    "bytes": 754596,
     "clips": [],
     "dimensions": [
       1.75,
@@ -597,7 +597,7 @@
     "triangles": 40926
   },
   "wildlife/kookaburra": {
-    "bytes": 2567680,
+    "bytes": 2452264,
     "clips": [
       "flight",
       "perch",
@@ -606,14 +606,14 @@
       "forage"
     ],
     "dimensions": [
-      0.4392324984073639,
-      0.33546992391347885,
-      0.6442000269889832
+      0.439825102686882,
+      0.37368404120206833,
+      0.6443460583686829
     ],
     "folder": "wildlife",
     "kind": "kookaburra",
-    "meshes": 21,
-    "triangles": 16928
+    "meshes": 23,
+    "triangles": 18200
   },
   "wildlife/lady_beetle": {
     "bytes": 650208,

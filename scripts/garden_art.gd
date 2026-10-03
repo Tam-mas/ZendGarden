@@ -6,6 +6,7 @@ static var materials: Dictionary = {}
 static var botanical_scenes: Dictionary = {}
 static var leaf_materials: Dictionary = {}
 static var preview_materials: Dictionary = {}
+static var fur_materials: Dictionary = {}
 
 static func mat(color: Color, roughness: float = 0.9) -> StandardMaterial3D:
  var key = color.to_html() + str(roughness)
@@ -184,10 +185,30 @@ static func set_sign_text(node: Node3D, value: String, color: Color = Color("f1e
    face.modulate=Color(color.r,color.g,color.b,1.0)
 
 # Cache PackedScenes so repeated furnishings and wildlife share mesh/texture resources.
+static func soften_fur(node: Node) -> void:
+ if node is MeshInstance3D:
+  for surface in range(node.mesh.get_surface_count()):
+   var original=node.mesh.surface_get_material(surface)
+   if original is StandardMaterial3D and str(original.resource_name).begins_with("Fur cards "):
+    # The skin casts the animal's silhouette. Tiny cards casting onto their
+    # own skin create dark dotted self-shadows instead of a soft coat.
+    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    var key=str(original.get_instance_id())
+    if not fur_materials.has(key):
+     var material=original.duplicate() as StandardMaterial3D
+     material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_HASH
+     material.diffuse_mode=BaseMaterial3D.DIFFUSE_LAMBERT_WRAP
+     material.metallic_specular=.18
+     material.roughness=.88
+     fur_materials[key]=material
+    node.set_surface_override_material(surface,fur_materials[key])
+ for child in node.get_children():soften_fur(child)
+
 static func detailed_model(folder: String, kind: String) -> Node3D:
  var path="res://assets/%s/%s.glb" % [folder,kind]
  if not detail_scenes.has(path): detail_scenes[path]=load(path)
  var scene=detail_scenes[path].instantiate()
+ soften_fur(scene)
  # Promote the identity asset wrapper, retaining the AnimationPlayer beside it.
  # Rewrite per-instance animation paths; cached PackedScene resources stay shared.
  var asset: Node3D
