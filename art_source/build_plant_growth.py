@@ -9,12 +9,14 @@ sys.path.insert(0,str(ROOT/'art_source'))
 from botanical_geometry import Geometry, material
 from botanical_detail import detail_geometry
 from botanical_forms import compound, palmate, round_leaf
+from botanical_additions_data import ADDITIONS
+from botanical_additions_forms import grasses, succulents
 Detailed=detail_geometry(Geometry)
 scene=bpy.data.scenes.new('ZendGarden_PlantGrowth')
 bpy.context.window.scene=scene
 # Read existing authored organs and pigments without opening or saving their files.
 sources={}
-for filename in ['botanical_library.blend','botanical_expansion.blend']:
+for filename in ['botanical_library.blend','botanical_expansion.blend','botanical_additions.blend']:
     with bpy.data.libraries.load(str(ROOT/'art_source'/filename),link=False) as (src,dst):
         dst.objects=[n for n in src.objects if n.startswith('Plant_') or n.startswith('Foliage') or n.startswith('Bloom')]
     for obj in dst.objects:
@@ -23,8 +25,12 @@ for filename in ['botanical_library.blend','botanical_expansion.blend']:
 folder=ROOT/'assets/plants/growth';folder.mkdir(parents=True,exist_ok=True)
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
 report=[]
+selected=None
+if '--ids' in sys.argv:selected={int(x) for x in sys.argv[sys.argv.index('--ids')+1].split(',')}
 
 def family(name,category,layer):
+    if category=='Cacti & succulents':return 'succulent'
+    if category=='Grasses' and name in [r[0] for r in ADDITIONS[:10]]:return 'strap'
     if 'bamboo' in name.lower(): return 'bamboo'
     if 'redwood' in name.lower(): return 'conifer'
     if name in ['Blue fescue','Feather grass','Sedge','Fountain grass','Lomandra','Iris','Leek','Corn','Gymea lily','Kangaroo paw']:return 'strap'
@@ -107,17 +113,27 @@ for idx,row in enumerate(specs):
     height=max(v.co.z for v in foliage.data.vertices)
     kind=family(name,category,layer)
     # Reuse packed source PBR maps, retaining species' foliage identity.
-    leafm=next(m for m in foliage.data.materials if m and m.name.startswith('Leaf'))
+    leafm=next((m for m in foliage.data.materials if m and m.name.startswith('Leaf')),foliage.data.materials[1])
     young=next((m for m in foliage.data.materials if m and ('young' in m.name.lower() or 'new leaves' in m.name.lower())),leafm)
     palette=[foliage.data.materials[0],leafm,young]
     root=bpy.data.objects.new(f'Growth_{idx:02d}_{name}',None);scene.collection.objects.link(root)
     root['catalogue_id']=idx;root['family']=kind
     organs=[]
     for label,juvenile in [('Seedling',False),('Juvenile',True)]:
-        geometry=immature(name,kind,height,juvenile)
-        obj=geometry.object(label,palette);obj.parent=root;organs.append(obj)
+        stage_palette=palette
+        if idx>=106:
+            form=ADDITIONS[idx-106][-1];geometry=Geometry();unused=Geometry()
+            h=ADDITIONS[idx-106][-2]
+            if kind=='succulent':succulents(form,h,geometry,unused,True)
+            else:grasses(form,h,geometry,unused,True)
+            fraction=.45 if juvenile else .16
+            geometry.v=[tuple(Vector(v)*fraction) for v in geometry.v]
+            stage_palette=list(foliage.data.materials)
+        else:geometry=immature(name,kind,height,juvenile)
+        obj=geometry.object(label,stage_palette);obj.parent=root;organs.append(obj)
     buds=Geometry()
     points=centers(flowers.data,height)
+    if idx>=106 and len(points)>12:points=[points[int(i*len(points)/12)] for i in range(12)]
     if not points:
         # Non-flowering carpets and leafy crops develop new growing tips instead.
         tips=sorted((v.co.copy() for v in foliage.data.vertices),key=lambda v:v.z,reverse=True)
@@ -134,7 +150,8 @@ for idx,row in enumerate(specs):
     bpy.ops.object.select_all(action='DESELECT')
     for o in [root,*organs]:o.select_set(True)
     bpy.context.view_layer.objects.active=organs[0]
-    bpy.ops.export_scene.gltf(filepath=str(folder/f'growth_{idx:02d}.glb'),export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,export_apply=True)
+    if selected is None or idx in selected:
+        bpy.ops.export_scene.gltf(filepath=str(folder/f'growth_{idx:02d}.glb'),export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,export_apply=True)
     tris=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in organs)
     assert 0<tris<18000,(name,tris)
     report.append({'id':idx,'name':name,'family':kind,'height':round(height,4),'triangles':tris})

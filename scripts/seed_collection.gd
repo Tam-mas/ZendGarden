@@ -15,7 +15,7 @@ static func matching(g) -> Array:
  var filters: Dictionary=g.collection_filters
  for p in g.catalogue:
   if g.category!="All" and p.category!=g.category: continue
-  if not g.collection_query.strip_edges().is_empty() and not p.name.to_lower().contains(g.collection_query.strip_edges().to_lower()): continue
+  if not g.collection_query.strip_edges().is_empty() and not (p.name+" "+p.get("botanical_name","")).to_lower().contains(g.collection_query.strip_edges().to_lower()): continue
   if filters.view=="Favourites" and p.id not in g.favourite_plants: continue
   if filters.view=="Recently planted" and p.id not in g.recent_plants: continue
   if filters.view=="Discovered" and p.id not in g.unlocked_plants: continue
@@ -80,7 +80,10 @@ static func build(g) -> void:
  g.list_box.add_child(cats)
  for category in ["All"]+GardenCatalogue.CATEGORIES:
   var chosen=category
-  var b=g.button(category,func(): g.category=chosen; update_categories(g); update_cards(g),Vector2(81,40 if g.touch_active() else 30))
+  var caption="Cacti &\nsucculents" if category=="Cacti & succulents" else category
+  var b=g.button(caption,func(): g.category=chosen; update_categories(g); update_cards(g),Vector2(81,44 if category=="Cacti & succulents" else 40 if g.touch_active() else 30))
+  b.set_meta("category",category)
+  b.tooltip_text=category
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   b.add_theme_font_size_override("font_size",14)
   cats.add_child(b)
@@ -139,7 +142,7 @@ static func update_categories(g) -> void:
  var picker=g.list_box.get_node_or_null("CategoryPicker")
  if picker:picker.text="Category: "+g.category+(" ▴" if g.list_box.get_node("SeedCategories").visible else " ▾")
  for b in g.list_box.get_node("SeedCategories").get_children():
-  GardenTheme.choose(b,b.text==g.category)
+  GardenTheme.choose(b,b.get_meta("category",b.text)==g.category)
 
 static func update_cards(g) -> void:
  var cards=g.list_box.get_node_or_null("PlantCards")
@@ -160,6 +163,7 @@ static func update_cards(g) -> void:
   b.name="PlantCard%02d" % id
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   b.tooltip_text="%s · %.1f m mature model · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
+  if not p.get("botanical_name","").is_empty():b.tooltip_text=p.botanical_name+"\n"+b.tooltip_text
   if p.climber: b.tooltip_text+="\nClimbs nearby arbors and pergolas."
   GardenTheme.choose(b,id==g.selected)
   var content=VBoxContainer.new()

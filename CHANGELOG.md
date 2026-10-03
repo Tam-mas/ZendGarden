@@ -1,5 +1,85 @@
 # Changelog
 
+### [2026-10-03 13:33] Changed
+
+**Tech:** `LICENSE`, `LICENSING.md`, `README.md` — custom free-play and source-sharing licence.
+
+**Dev:** Replace the current first-party MIT offer with the Zend Garden Free Play and Share-Alike Licence 1.0 for future releases. Require no paid game access or gameplay unlocks, complete corresponding source for distributed/publicly hosted derivatives and the same terms for derivative code and assets. Permit voluntary donations without privileges, separate services and gameplay media; retain third-party licences, contributor copyrights and permissions granted with earlier MIT copies. Describe the project as source available, explicitly disclose that the custom wording has not had legal review, and document that historical MIT forks cannot be retroactively restricted. Publish a licence-only GitHub change without including pending gameplay or asset changes. No player update number is added because this does not change play.
+
+**Plain:** Future versions and shared derivatives must stay free to play and share their editable source under the same rules.
+
+**Why:** Expresses the creator's wish to keep the garden freely playable and its derivatives available for others to modify.
+
+### [2026-10-03 13:04] Added
+
+**Tech:** `GardenClearView, GardenInterface, GardenTouch` — HUD-free garden viewing.
+
+**Dev:** Add Enjoy the view buttons to the desktop HUD, Guide and touch Garden drawer, with H shortcut. Hide UI layers, held tools, selection outlines, cursors and placement previews while time, weather and wildlife continue. Freeze walking, preserve the tool/menu/pointer state, and consume the first return key/click/tap, including synthetic touch mouse presses and the complete return finger gesture. Measure plain instruction text using its actual wrapped height so it stays above the toolbar on compact windows. Keep save schema and dismissal settings unchanged. Native/Compatibility control and responsive-layout checks, the gardening smoke test, read-only Blender source checks and browser package/security checks pass. In the exported Chrome game, H hides the overlays and G restores the held can and HUD without advancing the saved day.
+
+**Plain:** Enjoy the garden with the interface and held tool hidden, then press any key or tap to return.
+
+**Why:** Gives players an uninterrupted view without losing their current gardening task.
+
+### [2026-10-03 13:04] Changed
+
+**Tech:** `Catalogue.ROWS, art_source/plant_specs.json` — six bamboo varieties in Grasses.
+
+**Dev:** Change only the category for IDs 68–72 and 80; preserve their IDs, growth days, capacities, placement layers and meshes. Update catalogue-count coverage to 24 grasses and 21 trees, including two-column tree-card coverage.
+
+**Plain:** All six bamboo varieties now appear in the Grasses seed category.
+
+**Why:** Keeps related plants together so they are easier to find.
+
+### [2026-10-03 13:04] Fixed
+
+**Tech:** `art_source/build_tools.py, assets/tools/can.glb` — rounded, attached can handle.
+
+**Dev:** Replace the angular floating rear handle with a curved enamel loop, two body-mounted collars and a dark grip. Adjust first-person placement to keep the loop in frame. Rebuild the can GLB and complete hand-tools source in an isolated Blender scene; support targeted --only exports. Verify the handle in actual native and browser hand views and confirm all source-library images are present.
+
+**Plain:** The watering can has a rounded handle that joins its body neatly and fits the hand view.
+
+**Why:** Makes the can more believable and comfortable to look at.
+
+### [2026-10-03 13:04] Added
+
+**Tech:** `GardenTools.repeat_mouse` — held desktop watering.
+
+**Dev:** Add watering to held mouse tool repetition, respecting the existing cooldown, aim, can upgrades, menus, photo mode and day-transition guards. Release stops watering; a return-from-view click is canceled until release.
+
+**Plain:** Hold and sweep the watering can across the ground to water an area.
+
+**Why:** Makes watering larger areas easier without repeated clicking.
+
+### [2026-10-03 12:40] Fixed
+
+**Tech:** `botanical_additions_forms.py/climber`, `assets/plants/plant_09.glb`, `assets/plants/plant_10.glb` — revised Sweet pea and Clematis flowers.
+
+**Dev:** Preserve IDs 9 and 10 and their foliage envelopes while rebuilding flowers with explicitly triangulated curved petals. Sweet pea has banner, wing and keel petals; Clematis has outward-facing sepals and fine cream stamens. Export matching buds and refresh catalogue portraits, with packed opaque PBR materials. Read revised sources last during growth rebuilds. Validate both renderers, previous placement envelopes, growth/preview contracts and the full game suite; record player Update 17.
+
+**Plain:** Sweet pea and Clematis now have clearer, naturally shaped flowers that face out into the garden.
+
+**Why:** Makes these climbing flowers easier to recognise and enjoy up close.
+
+### [2026-10-03 12:40] Added
+
+**Tech:** `GardenCatalogue`, `GardenSeedCollection`, `botanical_additions.blend`, `build_plant_growth.py` — ten ornamental grasses and twenty cacti/succulents.
+
+**Dev:** Append IDs 106–135 without changing existing rows, growth days or save schema 2. Add a compact two-line category button, common/botanical-name search, 30 mature GLBs, species-specific early growth meshes and model-rendered portraits. Author ribs, areoles, spines, joined pads, patterned blades, branching seed heads, fleshy rosettes, tubular jade leaves and split living stones from botanical references. Keep succulent surfaces opaque, disable leaf wind and restrain instance deformation. Preserve the 300-pixel ornate menu and plain shortcut text. Add coverage for catalogue counts, packed surfaces, rigid organ rendering and responsive category browsing. Full asset/runtime suite, read-only source-library checks, browser package/security checks and actual Chrome save migration tests pass; new plant IDs survive a browser save. Record player Update 16.
+
+**Plain:** The seed collection now offers ten more grasses and a new category of twenty cacti and succulents.
+
+**Why:** Gives gardeners more recognisable plant shapes and textures to combine in their gardens.
+
+### [2026-10-03 12:22] Fixed
+
+**Tech:** `web/save-format.js/validateSave` — accept saved watered-ground patch records.
+
+**Dev:** Match `GardenTools.water_ground` by validating each patch's finite `x`, `z`, `radius` and `until` fields instead of treating watered ground as scalar terrain offsets. Preserve save bytes and migration archives without conversion, including expired patches. The deployed validator reproduced the reported startup message with a valid watered save; validation fails before Godot starts or autosaves. Cover v1/v2 encrypted copies, migrated-save reloads, later progress, malformed-patch rejection and unchanged databases in Chrome and WebKit. Verify watered saves in the existing exported Godot runtime and retained bytes on mount failure; record player Update 15 and check update dismissal, the browser loader, package and security checks. Publish clean source commit `46225f4` as production deployment `def7b039` and verify live encrypted transfer, exact-byte import, actual Godot startup, watered-save reload, unchanged source storage and retained latest progress; GitHub Actions passes.
+
+**Plain:** Saved gardens with watered ground can open again after a refresh or a move to the new address.
+
+**Why:** Restores access to affected gardens while preserving their progress and recovery copies.
+
 ### [2026-10-03 11:07] Added
 
 **Tech:** `GardenLeisure`, `GardenCompanion`, `GardenTouch`, `garden.gd` — furniture viewpoints and companion invitations.

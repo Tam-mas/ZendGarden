@@ -12,7 +12,7 @@ static func run(g, failures: Array) -> void:
  g.settings.controls="keyboard"
  g.settings.request_notifications=false
  g.request_popup_time=0
- g.unlocked_plants=range(106)
+ g.unlocked_plants=range(GardenCatalogue.ROWS.size())
  g.day=7;g.clock_time=.4;g.coins=500
  g.player.position=GardenTerrain.point(Vector3(0,0,5))+Vector3(0,.1,0)
  g.yaw=0;g.pitch=.15
@@ -21,8 +21,17 @@ static func run(g, failures: Array) -> void:
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  g.side_panel.show();g.refresh_ui()
  var query=g.list_box.get_node("SeedSearch")
+ var succulent_button: Button
+ for button in g.list_box.get_node("SeedCategories").get_children():
+  if button.get_meta("category","")=="Cacti & succulents":succulent_button=button
+ if succulent_button==null:failures.append("New category button missing")
+ else:
+  succulent_button.pressed.emit()
+  if GardenSeedCollection.matching(g).size()!=20 or g.list_box.get_node("PlantCards").get_child_count()!=20:failures.append("New category does not show twenty seed cards")
+  await image(g,"succulent-category")
+ g.category="All"
  query.text="rose";query.text_changed.emit("rose")
- if GardenSeedCollection.matching(g).size()!=7: failures.append("Actual seed search missed rose varieties")
+ if GardenSeedCollection.matching(g).size()!=8: failures.append("Actual seed search missed rose varieties and black rose aeonium")
  await image(g,"catalogue-search")
  g.collection_filters_open=true;g.refresh_sidebar()
  await image(g,"catalogue-filters")
@@ -110,6 +119,12 @@ static func verify_readable_layouts(g, failures: Array) -> void:
       if caption is Label and not card.get_global_rect().grow(1).encloses(caption.get_global_rect()):
        failures.append("Card caption is clipped: "+caption.text+str(sample));break
    await image(g,"readable-%s-%dx%d-%s"%[sample[0],sample[1].x,sample[1].y,page.to_lower()])
+   if page=="Seeds":
+    g.category="Cacti & succulents";g.refresh_sidebar()
+    for frame in range(4):await g.get_tree().process_frame
+    if not bounds.encloses(g.side_panel.get_global_rect()):failures.append("Succulent category escapes compact menu: "+str(sample))
+    if g.list_box.get_node("PlantCards").get_child_count()!=20:failures.append("Responsive succulent category lost cards: "+str(sample))
+    await image(g,"succulents-%s-%dx%d"%[sample[0],sample[1].x,sample[1].y])
   if not g.touch_active():
    g.side_panel.hide();g.set_mode("walk")
    g.player.position=GardenTerrain.point(Vector3(0,0,6))+Vector3(0,.1,0)

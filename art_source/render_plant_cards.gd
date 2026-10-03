@@ -38,9 +38,14 @@ func render_cards() -> void:
  camera.current=true
  var catalogue=GardenCatalogue.plants()
  var rendered=0
+ var chosen: Array=[]
+ for arg in OS.get_cmdline_user_args():
+  if arg.begins_with("--ids="):
+   for id in arg.trim_prefix("--ids=").split(","):chosen.append(int(id))
  var review_directory="res://captures/botanical-review-compat" if "--compat-review" in OS.get_cmdline_user_args() else "res://captures/botanical-review"
  DirAccess.make_dir_recursive_absolute(review_directory)
  for plant in catalogue:
+  if not chosen.is_empty() and plant.id not in chosen:continue
   if "--new-only" in OS.get_cmdline_user_args() and plant.id<60: continue
   rendered+=1
   var model=GardenArt.plant(plant,true)
@@ -53,7 +58,11 @@ func render_cards() -> void:
   camera.far=100
   await process_frame
   await RenderingServer.frame_post_draw
-  viewport.get_texture().get_image().save_png((review_directory+"/%02d.png" if review else "res://assets/ui/plants/%02d.png") % plant.id)
+  var portrait=viewport.get_texture().get_image()
+  portrait.save_png((review_directory+"/%02d.png" if review else "res://assets/ui/plants/%02d.png") % plant.id)
+  if review and "--portraits" in OS.get_cmdline_user_args():
+   portrait.resize(192,192,Image.INTERPOLATE_LANCZOS)
+   portrait.save_png("res://assets/ui/plants/%02d.png" % plant.id)
   viewport.remove_child(model)
   model.queue_free()
  print("PLANT_CARD_RENDER: PASS — %d model portraits" % rendered)

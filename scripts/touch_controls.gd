@@ -1,6 +1,8 @@
 class_name GardenTouch
 extends CanvasLayer
 
+var view_return_fingers: Dictionary={}
+
 # Touch gestures own their finger IDs so walking, looking and actions can coexist.
 var g
 var enabled=false
@@ -226,6 +228,7 @@ func show_drawer(kind: String) -> void:
   if g.pets.any(func(p):return p.position.distance_to(g.player.position)<4):
    col.add_child(g.button("Pet companion",func():close_menu();g.greet_pet(),Vector2(0,48)))
   col.add_child(g.button("Photo mode",func(): close_menu(); g.toggle_photo(),Vector2(0,48)))
+  col.add_child(g.button("Enjoy the view",func(): close_menu(); GardenClearView.enter(g),Vector2(0,48)))
  fit_drawer()
 
 func fit_drawer() -> void:
@@ -322,12 +325,13 @@ func fit_popup(popup: Control) -> void:
  popup.position=(area+Vector2(24,24)-popup.size*factor)/2
 
 func _process(delta: float) -> void:
+ if g.clear_view:return
  if get_window().size!=window_size: configure()
  if not enabled: return
  if get_viewport().get_visible_rect().size!=last_size: layout()
  if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  if blocked(): reset_gestures()
- for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel]: panel.hide()
+ for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel,g.view_button]: panel.hide()
  g.compact_hud.hide()
  status_panel.visible=not blocked()
  context_panel.visible=not blocked() and not g.tutorial_state.get("active",false)
@@ -391,6 +395,12 @@ func _process(delta: float) -> void:
    repeat_time=GardenTools.GATHER_INTERVAL if g.mode=="harvest" else .3
 
 func _input(event: InputEvent) -> void:
+ if (event is InputEventScreenTouch or event is InputEventScreenDrag) and view_return_fingers.has(event.index):
+  if event is InputEventScreenTouch and (not event.pressed or event.canceled):view_return_fingers.erase(event.index)
+  get_viewport().set_input_as_handled()
+  return
+ if get_viewport().is_input_handled():return
+ if g.clear_view:return
  if enabled and g.settings.controls=="auto" and event is InputEventKey and event.pressed and not blocked() and event.physical_keycode in [KEY_W,KEY_A,KEY_S,KEY_D,KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT]:
   detected=false
   g.settings.controls="keyboard"

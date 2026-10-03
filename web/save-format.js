@@ -44,8 +44,13 @@ export function validateSave(bytes) {
     if (!object(order) || typeof order.person !== 'string'
       || !['plant', 'count', 'reward'].every(key => number(order[key]))) fail();
   }
-  for (const key of ['terrain', 'watered_ground', 'inventory', 'upgrades', 'expansions', 'path_widths']) {
+  for (const key of ['terrain', 'inventory', 'upgrades', 'expansions', 'path_widths']) {
     if (data[key] && Object.values(data[key]).some(value => !number(value))) fail();
+  }
+  // GardenTools.water_ground saves patch records, not scalar terrain offsets.
+  // Check their shape without converting bytes or dropping expired patches.
+  for (const patch of Object.values(data.watered_ground || {})) {
+    if (!object(patch) || !['x', 'z', 'radius', 'until'].every(key => number(patch[key]))) fail();
   }
   if ((data.clean_paths || []).some(key => typeof key !== 'string' || !/^-?\d+(?:\.\d+)?:-?\d+(?:\.\d+)?$/.test(key))) fail();
   if ((data.unlocked_plants || []).some(id => !Number.isInteger(id) || id < 0)) fail();

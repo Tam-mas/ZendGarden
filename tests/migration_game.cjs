@@ -32,8 +32,12 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
    page.on('console',message=>{if(message.text().includes('SCRIPT ERROR') || message.text().includes('ERROR:')) errors.push(message.text());});
    await page.goto(HOME+'/fixture');
    const original=JSON.stringify({version,day:17,coins:240,clock:.3,
-    plants:[{id:1,plot:0,pos:[1,-2],age:.7,water:2,stress:0,shape_seed:41}],objects:[],names:['Miso','Clover'],
+    plants:[{id:1,plot:0,pos:[1,-2],age:.7,water:2,stress:0,shape_seed:41},
+     ...(version===2?[{id:106,plot:0,pos:[-3,-4],age:8,water:2,stress:0,shape_seed:106},
+      {id:116,plot:0,pos:[3,-4],age:18,water:2,stress:0,shape_seed:116},
+      {id:135,plot:0,pos:[3,-2],age:16,water:2,stress:0,shape_seed:135}]:[])],objects:[],names:['Miso','Clover'],
     settings:{intro_seen:true,graphics:'mobile',music_volume:0},inventory:{'1':4},
+    watered_ground:{'2:-4':{x:1,z:-2,radius:.65,until:18.3}},
     ...(activeTutorial?{tutorial:{active:true,step:2,pos:[1,-2],plant:1,seed:41,morning:17}}:{})});
    await page.evaluate(async({original,SAVE})=>{
     await new Promise((resolve,reject)=>{
@@ -69,6 +73,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
       const m=await import('/migration-storage.js');return JSON.parse(new TextDecoder().decode(await m.readCurrent()));
      });
      assert.equal(save.version,2);assert.equal(save.coins,240);assert.equal(save.inventory['1'],4);
+     for(const id of [106,116,135])assert(save.plants.some(plant=>plant.id===id),'New botanical plant was lost during browser save');
      assert.equal(save.tutorial.active,true);
      // Leave the animated morning enough time to be presented in software WebGL.
      await page.waitForTimeout(14000);

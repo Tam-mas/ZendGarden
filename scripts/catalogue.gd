@@ -1,7 +1,7 @@
 class_name GardenCatalogue
 extends RefCounted
 
-const CATEGORIES = ["Flowers", "Grasses", "Shrubs", "Trees", "Natives", "Produce"]
+const CATEGORIES = ["Flowers", "Grasses", "Shrubs", "Trees", "Natives", "Produce", "Cacti & succulents"]
 const ROWS = [
  ["Cosmos", "Flowers", "efb0ba", 1, 2, "sun", "butterflies"],
  ["Lavender", "Flowers", "a894cc", 1, 3, "sun", "bees"],
@@ -71,11 +71,11 @@ const ROWS = [
  ["Blue delphinium", "Flowers", "497bc6", 1, 3, "sun", "bees"],
  ["Purple lupin", "Flowers", "8156aa", 1, 3, "sun", "bees"],
  ["Burgundy hollyhock", "Flowers", "7d263e", 1, 3, "sun", "bees"],
- ["Slender weaver's bamboo", "Shrubs", "598747", 2, 4, "sun", "birds"],
- ["Golden bamboo", "Shrubs", "c4b55b", 2, 4, "sun", "birds"],
- ["Black bamboo", "Shrubs", "343831", 2, 4, "sun", "birds"],
- ["Himalayan blue bamboo", "Shrubs", "719b9e", 2, 4, "sun", "birds"],
- ["Red bamboo 'Jiuzhaigou'", "Shrubs", "b25342", 2, 4, "sun", "birds"],
+ ["Slender weaver's bamboo", "Grasses", "598747", 2, 4, "sun", "birds"],
+ ["Golden bamboo", "Grasses", "c4b55b", 2, 4, "sun", "birds"],
+ ["Black bamboo", "Grasses", "343831", 2, 4, "sun", "birds"],
+ ["Himalayan blue bamboo", "Grasses", "719b9e", 2, 4, "sun", "birds"],
+ ["Red bamboo 'Jiuzhaigou'", "Grasses", "b25342", 2, 4, "sun", "birds"],
  ["Rose 'Mister Lincoln'", "Shrubs", "ab2335", 2, 4, "sun", "bees"],
  ["Rose 'Iceberg'", "Shrubs", "fff9e8", 2, 4, "sun", "bees"],
  ["Rose 'Golden Celebration'", "Shrubs", "eeb638", 2, 4, "sun", "bees"],
@@ -83,7 +83,7 @@ const ROWS = [
  ["Rose 'Scentimental'", "Shrubs", "be3047", 2, 4, "sun", "bees"],
  ["Giant redwood", "Trees", "568455", 3, 5, "sun", "birds"],
  ["Coast redwood", "Trees", "447859", 3, 5, "sun", "birds"],
- ["Giant bamboo", "Trees", "799856", 3, 5, "sun", "birds"],
+ ["Giant bamboo", "Grasses", "799856", 3, 5, "sun", "birds"],
  ["Ginkgo", "Trees", "91ac51", 3, 5, "sun", "birds"],
  ["Fig", "Trees", "824868", 3, 5, "sun", "birds"],
  ["Pear", "Trees", "b6b349", 3, 5, "sun", "birds"],
@@ -108,12 +108,43 @@ const ROWS = [
  ["Capsicum", "Produce", "cb3f31", 1, 3, "sun", "bees"],
  ["Brussels sprouts", "Produce", "7d995f", 1, 3, "sun", "bees"],
  ["Leek", "Produce", "a0b38b", 0, 3, "sun", "bees"],
- ["Hemp", "Produce", "6d9345", 1, 3, "sun", "bees"]
+ ["Hemp", "Produce", "6d9345", 1, 3, "sun", "bees"],
+ ["Zebra grass", "Grasses", "8fa15a", 1, 14, "sun", "birds"],
+ ["Feather reed grass", "Grasses", "b9a575", 1, 12, "any", "birds"],
+ ["Blue switchgrass", "Grasses", "819baf", 1, 14, "sun", "birds"],
+ ["Golden forest grass", "Grasses", "c5ba61", 0, 9, "shade", "butterflies"],
+ ["Japanese blood grass", "Grasses", "b95353", 0, 10, "sun", "butterflies"],
+ ["Purple moor grass", "Grasses", "aa957d", 1, 14, "any", "birds"],
+ ["Tufted hair grass", "Grasses", "bfb999", 1, 11, "shade", "birds"],
+ ["Quaking grass", "Grasses", "b1a17b", 0, 9, "sun", "birds"],
+ ["Autumn moor grass", "Grasses", "b3b968", 0, 9, "any", "birds"],
+ ["Pink muhly grass", "Grasses", "c792ab", 1, 12, "sun", "butterflies"],
+ ["Golden barrel cactus", "Cacti & succulents", "c9b66e", 1, 18, "sun", "bees"],
+ ["Bunny ears cactus", "Cacti & succulents", "a0b56a", 1, 14, "sun", "bees"],
+ ["Prickly pear", "Cacti & succulents", "79966b", 2, 18, "sun", "bees"],
+ ["Mexican fencepost cactus", "Cacti & succulents", "6d936b", 2, 22, "sun", "moths"],
+ ["Old man cactus", "Cacti & succulents", "d8d8cd", 1, 20, "sun", "moths"],
+ ["Ladyfinger cactus", "Cacti & succulents", "b5a06c", 0, 12, "sun", "bees"],
+ ["Star cactus", "Cacti & succulents", "97a58a", 0, 16, "sun", "bees"],
+ ["Holiday cactus", "Cacti & succulents", "d46e86", 1, 12, "shade", "butterflies"],
+ ["Mexican snowball", "Cacti & succulents", "a7beb8", 0, 10, "sun", "bees"],
+ ["Lipstick echeveria", "Cacti & succulents", "a19f6a", 0, 10, "sun", "bees"],
+ ["Hens and chicks", "Cacti & succulents", "8e9f73", 0, 9, "sun", "bees"],
+ ["Aloe vera", "Cacti & succulents", "80a18b", 1, 14, "sun", "birds"],
+ ["Century plant", "Cacti & succulents", "92aaa7", 2, 22, "sun", "moths"],
+ ["Zebra haworthia", "Cacti & succulents", "a2b298", 0, 10, "shade", "bees"],
+ ["Window haworthia", "Cacti & succulents", "a3c3a8", 0, 10, "shade", "bees"],
+ ["Jade plant", "Cacti & succulents", "669669", 2, 18, "any", "bees"],
+ ["Gollum jade", "Cacti & succulents", "799558", 1, 16, "any", "bees"],
+ ["Black rose aeonium", "Cacti & succulents", "53333e", 1, 16, "sun", "bees"],
+ ["Jelly bean sedum", "Cacti & succulents", "a38362", 0, 9, "sun", "bees"],
+ ["Living stones", "Cacti & succulents", "aa806b", 0, 16, "sun", "bees"]
 ]
 
 # Ideal watered growing days, not calendar deadlines. Twelve days form a season.
-const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12]
-const SEASONAL={0:["Spring","Summer"],3:["Summer"],4:["Spring","Summer"],6:["Spring"],7:["Spring","Summer"],8:["Spring"],9:["Spring"],11:["Spring","Summer"],21:["Spring"],23:["Autumn","Winter","Spring"],24:["Spring","Summer"],28:["Spring","Summer"],30:["Spring","Summer","Autumn"],33:["Spring","Summer"],35:["Spring","Summer","Autumn"],38:["Winter","Spring"],47:["Summer"],48:["Spring","Autumn","Winter"],49:["Summer","Autumn"],50:["Spring","Summer"],52:["Spring","Autumn"],53:["Summer"],54:["Spring","Summer"],55:["Summer"],56:["Summer"],57:["Summer"],58:["Spring","Autumn"],59:["Summer"],60:["Spring", "Summer"],61:["Spring"],62:["Winter", "Spring"],63:["Summer", "Autumn"],64:["Spring"],65:["Spring", "Summer"],66:["Spring", "Summer"],67:["Summer"],73:["Spring", "Summer", "Autumn"],74:["Spring", "Summer", "Autumn"],75:["Spring", "Summer", "Autumn"],76:["Spring", "Summer", "Autumn"],77:["Spring", "Summer", "Autumn"],82:["Summer", "Autumn"],83:["Summer", "Autumn"],84:["Summer"],85:["Summer"],86:["Summer"],87:["Summer"],94:["Summer"],95:["Spring"],96:["Spring", "Summer"],97:["Spring", "Summer"],98:["Spring", "Summer"],99:["Spring"],100:["Spring", "Autumn", "Winter"],101:["Spring", "Autumn", "Winter"],102:["Summer"],103:["Autumn", "Winter"],104:["Spring", "Autumn", "Winter"],105:["Spring", "Summer"]}
+const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16]
+const SEASONAL={0:["Spring","Summer"],3:["Summer"],4:["Spring","Summer"],6:["Spring"],7:["Spring","Summer"],8:["Spring"],9:["Spring"],11:["Spring","Summer"],21:["Spring"],23:["Autumn","Winter","Spring"],24:["Spring","Summer"],28:["Spring","Summer"],30:["Spring","Summer","Autumn"],33:["Spring","Summer"],35:["Spring","Summer","Autumn"],38:["Winter","Spring"],47:["Summer"],48:["Spring","Autumn","Winter"],49:["Summer","Autumn"],50:["Spring","Summer"],52:["Spring","Autumn"],53:["Summer"],54:["Spring","Summer"],55:["Summer"],56:["Summer"],57:["Summer"],58:["Spring","Autumn"],59:["Summer"],60:["Spring", "Summer"],61:["Spring"],62:["Winter", "Spring"],63:["Summer", "Autumn"],64:["Spring"],65:["Spring", "Summer"],66:["Spring", "Summer"],67:["Summer"],73:["Spring", "Summer", "Autumn"],74:["Spring", "Summer", "Autumn"],75:["Spring", "Summer", "Autumn"],76:["Spring", "Summer", "Autumn"],77:["Spring", "Summer", "Autumn"],82:["Summer", "Autumn"],83:["Summer", "Autumn"],84:["Summer"],85:["Summer"],86:["Summer"],87:["Summer"],94:["Summer"],95:["Spring"],96:["Spring", "Summer"],97:["Spring", "Summer"],98:["Spring", "Summer"],99:["Spring"],100:["Spring", "Autumn", "Winter"],101:["Spring", "Autumn", "Winter"],102:["Summer"],103:["Autumn", "Winter"],104:["Spring", "Autumn", "Winter"],105:["Spring", "Summer"],106:["Spring","Summer","Autumn"],107:["Spring","Summer","Autumn"],108:["Spring","Summer","Autumn"],110:["Spring","Summer","Autumn"],111:["Spring","Summer","Autumn"],113:["Spring","Summer","Autumn"],115:["Spring","Summer","Autumn"],116:["Spring","Summer","Autumn"],117:["Spring","Summer","Autumn"],118:["Spring","Summer","Autumn"],119:["Spring","Summer","Autumn"],120:["Spring","Summer","Autumn"],121:["Spring","Summer","Autumn"],122:["Spring","Summer","Autumn"],124:["Spring","Summer","Autumn"],125:["Spring","Summer","Autumn"],127:["Spring","Summer","Autumn"],128:["Spring","Summer","Autumn"],129:["Spring","Summer","Autumn"],130:["Spring","Summer","Autumn"],131:["Spring","Summer","Autumn"],132:["Spring","Summer","Autumn"],134:["Spring","Summer","Autumn"],135:["Spring","Summer","Autumn"],123:["Autumn","Winter","Spring"],133:["Autumn","Winter","Spring"]}
+const BOTANICAL_NAMES={106: "Miscanthus sinensis 'Zebrinus'", 107: "Calamagrostis × acutiflora 'Karl Foerster'", 108: "Panicum virgatum 'Heavy Metal'", 109: "Hakonechloa macra 'Aureola'", 110: "Imperata cylindrica 'Red Baron'", 111: "Molinia caerulea subsp. arundinacea 'Transparent'", 112: "Deschampsia cespitosa", 113: "Briza media", 114: "Sesleria autumnalis", 115: "Muhlenbergia capillaris", 116: "Echinocactus grusonii", 117: "Opuntia microdasys", 118: "Opuntia ficus-indica", 119: "Pachycereus marginatus", 120: "Cephalocereus senilis", 121: "Mammillaria elongata", 122: "Astrophytum asterias", 123: "Schlumbergera truncata", 124: "Echeveria elegans", 125: "Echeveria agavoides 'Lipstick'", 126: "Sempervivum tectorum", 127: "Aloe vera", 128: "Agave americana", 129: "Haworthiopsis attenuata", 130: "Haworthia cooperi", 131: "Crassula ovata", 132: "Crassula ovata 'Gollum'", 133: "Aeonium 'Zwartkop'", 134: "Sedum × rubrotinctum", 135: "Lithops aucampiae"}
 
 static func saved_age(id: int, age: float, version: int) -> float:
  return age/float(ROWS[id][4])*GROWTH_DAYS[id] if version==1 else age
@@ -126,6 +157,7 @@ static func plants() -> Array:
  for i in range(ROWS.size()):
   var r = ROWS[i]
   result.append({"id": i, "name": r[0], "category": r[1], "color": Color(r[2]), "layer": r[3], "days": GROWTH_DAYS[i], "seasons": SEASONAL.get(i,[]), "condition": r[5], "animal": r[6], "capacity": [1, 2, 4, 7][r[3]], "price": 8 + r[3] * 12 + (i % 4) * 3, "value": 7 + r[3] * 5, "climber": r[0] in ["Sweet pea", "Clematis", "Pea", "Cucumber", "Common jasmine", "Pink jasmine"]})
+  result.back()["botanical_name"]=BOTANICAL_NAMES.get(i,"")
   result.back()["height"]=GardenPlantProfiles.HEIGHTS[i]
  return result
 

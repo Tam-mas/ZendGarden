@@ -6,6 +6,7 @@ python3 tests/check_greenhouse.py
 python3 tests/check_mountains.py
 python3 tests/check_plants.py
 python3 tests/check_plant_growth.py
+python3 tests/check_botanical_additions.py
 python3 tests/check_audio.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
@@ -80,6 +81,14 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$compat_log" || ! rg -Fq 'IMPROVEMENTS_IN_GAME_R
   cat "$compat_log"
   exit 1
 fi
+for renderer in forward_plus gl_compatibility; do
+  view_log="$(mktemp -t zend-garden-view-water)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --view-water-test > "$view_log" 2>&1 || { cat "$view_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$view_log" || ! rg -Fq 'VIEW_WATER_RESULT: []' "$view_log"; then
+    cat "$view_log"
+    exit 1
+  fi
+done
 for feature in tutorial inhabit; do
   feature_log="$(mktemp -t zend-garden-$feature)"
   "$GODOT_BIN" --always-on-top --path "$PWD" -- --"$feature"-test > "$feature_log" 2>&1 || { cat "$feature_log"; exit 1; }

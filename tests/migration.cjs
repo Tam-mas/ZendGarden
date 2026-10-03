@@ -10,7 +10,9 @@ global.document = {body:{dataset:{}}};
   const {sealCopy, unsealCopy} = await import('../web/migration.js');
   const originals = [1,2].map(version => new TextEncoder().encode(JSON.stringify({version, day:17,
     plants:[{id:0,plot:0,pos:[1.2,-2],age:.8,water:2,stress:0}], objects:[],
-    settings:{intro_seen:true,music_volume:0},names:['Miso','Clover']})));
+    settings:{intro_seen:true,music_volume:0},names:['Miso','Clover'],
+    watered_ground:{'2:-4':{x:1,z:-2,radius:.65,until:18.3},
+      '0:0':{x:0,z:0,radius:1.9,until:16.2}}})));
   const copies = new Map();
   const env = {ZEND_MIGRATION_ENABLED:'true',GARDEN_TRANSFERS:{
     async put(key, body) { copies.set(key,body); },
@@ -62,7 +64,9 @@ global.document = {body:{dataset:{}}};
   assert.equal((await call('create',{iv:'a'.repeat(16),ciphertext:'a'.repeat(8*1024*1024)},format.SOURCE_ORIGIN)).status,413);
   for(const data of [{version:2,plants:null},{version:3,plants:[]},{version:2,plants:[],names:{}},
     {version:2,plants:[{id:0,plot:0,pos:[0,0],age:1,water:1}]},
-    {version:2,plants:[],player:[0]}, {version:2,plants:[],climate:{values:[]}}]) {
+    {version:2,plants:[],player:[0]}, {version:2,plants:[],climate:{values:[]}},
+    ...[2,null,[],{x:1,z:2,radius:.65},{x:1,z:2,radius:'wide',until:18.3}]
+      .map(patch=>({version:2,plants:[],watered_ground:{'2:4':patch}}))]) {
     assert.throws(()=>format.validateSave(new TextEncoder().encode(JSON.stringify(data))));
   }
   await assert.rejects(unsealCopy({},sealed.secret),/incomplete/);

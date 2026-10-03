@@ -67,7 +67,7 @@
     "name": "Sweet pea",
     "family": "herb",
     "height": 1.4636,
-    "triangles": 6576
+    "triangles": 4848
   },
   {
     "id": 10,
@@ -740,5 +740,215 @@
     "family": "compound",
     "height": 1.85,
     "triangles": 8400
+  },
+  {
+    "id": 106,
+    "name": "Zebra grass",
+    "family": "strap",
+    "height": 1.6671,
+    "triangles": 6288
+  },
+  {
+    "id": 107,
+    "name": "Feather reed grass",
+    "family": "strap",
+    "height": 1.5523,
+    "triangles": 6288
+  },
+  {
+    "id": 108,
+    "name": "Blue switchgrass",
+    "family": "strap",
+    "height": 1.2406,
+    "triangles": 6288
+  },
+  {
+    "id": 109,
+    "name": "Golden forest grass",
+    "family": "strap",
+    "height": 0.389,
+    "triangles": 6288
+  },
+  {
+    "id": 110,
+    "name": "Japanese blood grass",
+    "family": "strap",
+    "height": 0.5653,
+    "triangles": 4704
+  },
+  {
+    "id": 111,
+    "name": "Purple moor grass",
+    "family": "strap",
+    "height": 1.7673,
+    "triangles": 6288
+  },
+  {
+    "id": 112,
+    "name": "Tufted hair grass",
+    "family": "strap",
+    "height": 0.9856,
+    "triangles": 6288
+  },
+  {
+    "id": 113,
+    "name": "Quaking grass",
+    "family": "strap",
+    "height": 0.663,
+    "triangles": 6288
+  },
+  {
+    "id": 114,
+    "name": "Autumn moor grass",
+    "family": "strap",
+    "height": 0.4645,
+    "triangles": 6288
+  },
+  {
+    "id": 115,
+    "name": "Pink muhly grass",
+    "family": "strap",
+    "height": 0.9856,
+    "triangles": 6288
+  },
+  {
+    "id": 116,
+    "name": "Golden barrel cactus",
+    "family": "succulent",
+    "height": 0.6,
+    "triangles": 10512
+  },
+  {
+    "id": 117,
+    "name": "Bunny ears cactus",
+    "family": "succulent",
+    "height": 0.644,
+    "triangles": 13992
+  },
+  {
+    "id": 118,
+    "name": "Prickly pear",
+    "family": "succulent",
+    "height": 1.425,
+    "triangles": 13704
+  },
+  {
+    "id": 119,
+    "name": "Mexican fencepost cactus",
+    "family": "succulent",
+    "height": 1.85,
+    "triangles": 2736
+  },
+  {
+    "id": 120,
+    "name": "Old man cactus",
+    "family": "succulent",
+    "height": 0.95,
+    "triangles": 10160
+  },
+  {
+    "id": 121,
+    "name": "Ladyfinger cactus",
+    "family": "succulent",
+    "height": 0.3,
+    "triangles": 4400
+  },
+  {
+    "id": 122,
+    "name": "Star cactus",
+    "family": "succulent",
+    "height": 0.13,
+    "triangles": 7248
+  },
+  {
+    "id": 123,
+    "name": "Holiday cactus",
+    "family": "succulent",
+    "height": 0.2872,
+    "triangles": 5424
+  },
+  {
+    "id": 124,
+    "name": "Mexican snowball",
+    "family": "succulent",
+    "height": 0.2266,
+    "triangles": 4880
+  },
+  {
+    "id": 125,
+    "name": "Lipstick echeveria",
+    "family": "succulent",
+    "height": 0.2797,
+    "triangles": 4240
+  },
+  {
+    "id": 126,
+    "name": "Hens and chicks",
+    "family": "succulent",
+    "height": 0.2,
+    "triangles": 3664
+  },
+  {
+    "id": 127,
+    "name": "Aloe vera",
+    "family": "succulent",
+    "height": 0.6408,
+    "triangles": 6928
+  },
+  {
+    "id": 128,
+    "name": "Century plant",
+    "family": "succulent",
+    "height": 1.089,
+    "triangles": 6608
+  },
+  {
+    "id": 129,
+    "name": "Zebra haworthia",
+    "family": "succulent",
+    "height": 0.1876,
+    "triangles": 8272
+  },
+  {
+    "id": 130,
+    "name": "Window haworthia",
+    "family": "succulent",
+    "height": 0.064,
+    "triangles": 8928
+  },
+  {
+    "id": 131,
+    "name": "Jade plant",
+    "family": "succulent",
+    "height": 0.6549,
+    "triangles": 11304
+  },
+  {
+    "id": 132,
+    "name": "Gollum jade",
+    "family": "succulent",
+    "height": 0.5115,
+    "triangles": 5760
+  },
+  {
+    "id": 133,
+    "name": "Black rose aeonium",
+    "family": "succulent",
+    "height": 0.6668,
+    "triangles": 4432
+  },
+  {
+    "id": 134,
+    "name": "Jelly bean sedum",
+    "family": "succulent",
+    "height": 0.2117,
+    "triangles": 13968
+  },
+  {
+    "id": 135,
+    "name": "Living stones",
+    "family": "succulent",
+    "height": 0.0429,
+    "triangles": 2368
   }
 ]

@@ -19,7 +19,7 @@ For matched comparison images, run `tools/preview_plants.gd -- --before` in Godo
 
 ## 46-plant expansion (IDs 60–105)
 
-The catalogue now has 106 entries. `botanical_expansion_forms.py` contains the
+The first expansion brought the catalogue to 106 entries. `botanical_expansion_forms.py` contains the
 new morphology, `botanical_geometry.py` holds side-effect-free primitives shared
 with the original builder, and `build_botanical_expansion.py` exports only the
 46 additions into `botanical_expansion.blend`. The original 60 GLBs are preserved.
@@ -42,7 +42,7 @@ Budget: original 60 remain below 2.6M triangles, the new collection below 3.6M,
 and each model below 200k before Godot's generated LODs. The expansion has a
 higher proportion of trees and woody plants than the original collection.
 
-## Growth stages and individual shape (all 106 plants)
+## Growth stages and individual shape (all 136 plants)
 
 `build_plant_growth.py` reads the two mature botanical libraries without changing
 or saving them. It builds separate Seedling, Juvenile and Buds meshes in
@@ -67,7 +67,7 @@ When run by Codex, Blender and Godot use approved normal OS access, as described
 in AGENTS.md. A separate process preserves the interactive Blender scene. The
 read-only `tests/check_blender_sources.py` now includes the growth library.
 
-The supplementary meshes total 572,200 triangles, below the 650,000 budget.
+The supplementary meshes total 572,200 triangles, below the 900,000 budget.
 Runtime stages change at 20%, 52% and 78% growth, with full blooms/fruit at 100%.
 The mature model and original height/pruning scale remain authoritative.
 Supplementary scenes load only when an early stage is needed; hidden stages do
@@ -89,3 +89,9 @@ hardware performance remains unmeasured.
 
 Shop thumbnails are rendered from the existing ornament GLBs with
 `tools/render_ornament_cards.gd` and saved under `assets/ui/shop/`.
+
+## Grasses and cacti/succulents (IDs 106–135)
+
+The catalogue now has 136 entries. See `botanical_additions_references.md` for the ten grasses and twenty cacti/succulents and the revised Sweet pea/Clematis flowers. `botanical_additions.blend` is an isolated 32-plant source library. Rebuild it after the two older libraries and before growth stages. Growth sources load the additions last so IDs 9 and 10 use revised flowers. Both additions and growth builders accept `-- --ids 9,10,106,...` to limit GLB writes. The growth library contains all 136 species. The thirty new mature meshes have a separate 900,000 triangle budget; the full mature library budget is 7,100,000. Growth stage geometry has a 900,000 triangle budget. The original 0–105 IDs, legacy growth-day conversions and schema 2 saves stay stable.
+
+To render only additions/revisions use `art_source/render_plant_cards.gd -- --ids=9,10,106,...`, adding `--review` for large portraits or `--compat-review` with Compatibility rendering. `tools/compose_additions_reviews.py` labels the real game renders. Run `tests/check_botanical_additions.py` after generating portraits.

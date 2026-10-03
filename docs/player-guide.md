@@ -23,7 +23,7 @@ use **L**, or the touch **Layer** button, to inspect plants sharing a spot.
 | **Mouse** | Look around |
 | **Shift** | Walk faster |
 | **Tab** | Open menus / return to looking around |
-| **Left click** | Use the selected tool at the centre crosshair |
+| **Left click** | Use the selected tool at the centre crosshair; hold and sweep to water or gather |
 | **1–9** | Select wander, plant, water, prune, harvest, move, remove, rake, or hoe |
 | **[ / ]** with pruners | Shrink / expand the square within purchased limits |
 | **R** with the hoe | Switch between raising and lowering ground |
@@ -34,6 +34,7 @@ use **L**, or the touch **Layer** button, to inspect plants sharing a spot.
 | **C** | Call both companions over |
 | **Q / E** while placing a structure | Rotate it |
 | **Mouse wheel** | Adjust the field of view |
+| **H** | Hide HUD, aiming guides and held tool; press any key or click/tap to return |
 | **P** | Enter or leave photo mode |
 | **W A S D / Q E** in photo mode | Fly horizontally / down and up |
 | **Right mouse drag** in photo mode | Look around |
@@ -66,6 +67,8 @@ Outside garden beds, three pruning cuts remove a plant. Planted varieties recove
 Tomato seeds cost **23 petals** to unlock. You can plant them in any season; they grow in **summer and autumn**, or year-round inside a greenhouse. The seed selection now explains when you need more petals.
 
 Rabbits occasionally visit open areas. Kangaroo visits are currently disabled. Buy a **Beehive for 65 petals** from the shop and place it to attract its own daytime bees.
+
+Hold left click and sweep across the soil to water an area; release to stop. Touch controls also let you hold Water and move your aim. Can upgrades keep their wider reach and longer water supply.
 
 Manually watering ground grants **20% faster growth for one in-game day** (ten minutes while the game clock is running). It also benefits plants placed on that soil during the boost. Rewatering refreshes the duration without stacking; rain and soaker systems only provide normal water. Darkened soil marks the active area. Growth is still applied at each new morning.
 
@@ -148,3 +151,7 @@ Pressing **G** advances to the next morning with a 12-second transition. The red
 In **Wander**, face a nearby bench, pergola or pond and press **E**. Benches offer a seated view, pergolas a shaded pause, and ponds a view over the water and stocked fish. While resting on desktop, use the mouse to choose **Invite Miso/Clover to settle**, and hold the right mouse button to look around. **F** pets the nearest companion within reach. Press **E** or start walking to stand; choosing a tool also returns you to safe ground.
 
 On touch, the large **Interact** button changes to **Sit on bench**, **Rest under pergola**, **Watch the pond**, **Pet companion** or **Stand up** when available. **Garden** offers individual Call buttons, and invitations to settle while resting. You can also call a companion from **Guide**. Companions walk over on their own, settle for a while and resume wandering. Cats sometimes stretch in daylight; dogs pause to sniff. There are no care chores.
+
+### Enjoy the view
+
+Press **H**, use **Enjoy the view** at the top right of the walking HUD or in **Guide**, or choose **Garden → Enjoy the view** on touch. The HUD, held tool and aiming guides disappear while the weather, wildlife and garden clock continue. Mouse look still works. Press any key, or click or tap, to return to your previous tool and menu. The return input only restores the interface.

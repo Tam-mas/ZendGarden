@@ -74,18 +74,20 @@
   {
     "id": 9,
     "name": "Sweet pea",
-    "vertices": 6544,
-    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_09.glb",
+    "vertices": 11440,
+    "triangles": 19120,
+    "path": "assets/plants/plant_09.glb",
     "morphology_version": 3,
-    "triangles": 10864
+    "source": "art_source/botanical_additions.blend"
   },
   {
     "id": 10,
     "name": "Clematis",
-    "vertices": 10144,
-    "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_10.glb",
+    "vertices": 28736,
+    "triangles": 44720,
+    "path": "assets/plants/plant_10.glb",
     "morphology_version": 3,
-    "triangles": 15280
+    "source": "art_source/botanical_additions.blend"
   },
   {
     "id": 11,
@@ -892,5 +894,275 @@
     "path": "assets/plants/plant_105.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
+  },
+  {
+    "id": 106,
+    "name": "Zebra grass",
+    "vertices": 16094,
+    "triangles": 21336,
+    "path": "assets/plants/plant_106.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 107,
+    "name": "Feather reed grass",
+    "vertices": 15294,
+    "triangles": 22136,
+    "path": "assets/plants/plant_107.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 108,
+    "name": "Blue switchgrass",
+    "vertices": 18494,
+    "triangles": 24536,
+    "path": "assets/plants/plant_108.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 109,
+    "name": "Golden forest grass",
+    "vertices": 9994,
+    "triangles": 13176,
+    "path": "assets/plants/plant_109.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 110,
+    "name": "Japanese blood grass",
+    "vertices": 3914,
+    "triangles": 5046,
+    "path": "assets/plants/plant_110.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 111,
+    "name": "Purple moor grass",
+    "vertices": 19910,
+    "triangles": 26360,
+    "path": "assets/plants/plant_111.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 112,
+    "name": "Tufted hair grass",
+    "vertices": 19910,
+    "triangles": 26360,
+    "path": "assets/plants/plant_112.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 113,
+    "name": "Quaking grass",
+    "vertices": 12594,
+    "triangles": 18776,
+    "path": "assets/plants/plant_113.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 114,
+    "name": "Autumn moor grass",
+    "vertices": 9594,
+    "triangles": 13576,
+    "path": "assets/plants/plant_114.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 115,
+    "name": "Pink muhly grass",
+    "vertices": 27110,
+    "triangles": 35960,
+    "path": "assets/plants/plant_115.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 116,
+    "name": "Golden barrel cactus",
+    "vertices": 20120,
+    "triangles": 32764,
+    "path": "assets/plants/plant_116.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 117,
+    "name": "Bunny ears cactus",
+    "vertices": 16488,
+    "triangles": 24692,
+    "path": "assets/plants/plant_117.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 118,
+    "name": "Prickly pear",
+    "vertices": 25664,
+    "triangles": 38108,
+    "path": "assets/plants/plant_118.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 119,
+    "name": "Mexican fencepost cactus",
+    "vertices": 13842,
+    "triangles": 22472,
+    "path": "assets/plants/plant_119.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 120,
+    "name": "Old man cactus",
+    "vertices": 26438,
+    "triangles": 42072,
+    "path": "assets/plants/plant_120.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 121,
+    "name": "Ladyfinger cactus",
+    "vertices": 35394,
+    "triangles": 51040,
+    "path": "assets/plants/plant_121.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 122,
+    "name": "Star cactus",
+    "vertices": 6784,
+    "triangles": 10940,
+    "path": "assets/plants/plant_122.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 123,
+    "name": "Holiday cactus",
+    "vertices": 19935,
+    "triangles": 34920,
+    "path": "assets/plants/plant_123.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 124,
+    "name": "Mexican snowball",
+    "vertices": 7754,
+    "triangles": 15180,
+    "path": "assets/plants/plant_124.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 125,
+    "name": "Lipstick echeveria",
+    "vertices": 2602,
+    "triangles": 5020,
+    "path": "assets/plants/plant_125.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 126,
+    "name": "Hens and chicks",
+    "vertices": 7448,
+    "triangles": 14292,
+    "path": "assets/plants/plant_126.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 127,
+    "name": "Aloe vera",
+    "vertices": 4842,
+    "triangles": 8380,
+    "path": "assets/plants/plant_127.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 128,
+    "name": "Century plant",
+    "vertices": 4710,
+    "triangles": 8128,
+    "path": "assets/plants/plant_128.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 129,
+    "name": "Zebra haworthia",
+    "vertices": 18602,
+    "triangles": 29020,
+    "path": "assets/plants/plant_129.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 130,
+    "name": "Window haworthia",
+    "vertices": 7174,
+    "triangles": 12892,
+    "path": "assets/plants/plant_130.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 131,
+    "name": "Jade plant",
+    "vertices": 10668,
+    "triangles": 19748,
+    "path": "assets/plants/plant_131.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 132,
+    "name": "Gollum jade",
+    "vertices": 7212,
+    "triangles": 12356,
+    "path": "assets/plants/plant_132.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 133,
+    "name": "Black rose aeonium",
+    "vertices": 12770,
+    "triangles": 25128,
+    "path": "assets/plants/plant_133.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 134,
+    "name": "Jelly bean sedum",
+    "vertices": 11193,
+    "triangles": 20944,
+    "path": "assets/plants/plant_134.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
+  },
+  {
+    "id": 135,
+    "name": "Living stones",
+    "vertices": 5992,
+    "triangles": 9404,
+    "path": "assets/plants/plant_135.glb",
+    "morphology_version": 3,
+    "source": "art_source/botanical_additions.blend"
   }
 ]

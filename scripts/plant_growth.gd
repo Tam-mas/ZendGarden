@@ -7,10 +7,10 @@ static func stage(fraction: float, data: Dictionary) -> String:
  if fraction<.20: return "Seedling"
  if fraction<.52: return "Developing leaves"
  if fraction<.78:
-  if data.id in [13,14,15,16,17,18,25,29,30,32,44,45,68,69,70,71,72,78,79,80,81]: return "New growing tips"
+  if data.id in [13,14,15,16,17,18,25,29,30,32,44,45,68,69,70,71,72,78,79,80,81,110,119,120,128,133]: return "New growing tips"
   return "Developing harvest" if data.category=="Produce" or data.id in [27,31,34,35,42,82,83,84,85,86,87,88,89,90,91] else "Budding"
  if fraction<1.0:
-  if data.id in [13,14,15,16,17,18,25,29,30,32,44,45,68,69,70,71,72,78,79,80,81]: return "Filling out"
+  if data.id in [13,14,15,16,17,18,25,29,30,32,44,45,68,69,70,71,72,78,79,80,81,110,119,120,128,133]: return "Filling out"
   return "Ripening" if data.category=="Produce" or data.id in [27,31,34,35,42,82,83,84,85,86,87,88,89,90,91] else "Flowering"
  return "Ready to gather"
 
@@ -48,12 +48,13 @@ static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: i
   buds.scale=Vector3.ONE*lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1))
  node.set_meta("growth_fraction",fraction)
  node.set_meta("shape_seed",shape_seed)
- variation(node,shape_seed,float(data.get("height",1.0)))
+ variation(node,shape_seed,float(data.get("height",1.0)),.15 if data.category=="Cacti & succulents" else 1.0)
 
-static func variation(node: Node, seed_value: int, height: float) -> void:
+static func variation(node: Node, seed_value: int, height: float, amount: float=1.0) -> void:
  var rng=RandomNumberGenerator.new()
  rng.seed=seed_value
  var shape=Vector4(rng.randf_range(-.045,.045),rng.randf_range(-.045,.045),rng.randf_range(-.12,.12),rng.randf_range(0,TAU))
+ shape.x*=amount;shape.y*=amount;shape.z*=amount
  set_shape(node,shape,maxf(.1,height))
 
 static func set_shape(node: Node, shape: Vector4, height: float) -> void:

@@ -2,6 +2,9 @@ extends RefCounted
 
 static func run(g, failures: Array) -> void:
  g.set_process(false)
+ g.day_transition=false
+ g.photo_mode=false
+ GardenLeisure.leave(g)
  g.settings.request_notifications=false
  g.dismiss_request()
  g.set_mode("walk")

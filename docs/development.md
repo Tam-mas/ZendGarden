@@ -133,7 +133,7 @@ The preview writes `captures/mountains/after-{west,north,east,south}.png` withou
 
 ### Detailed plant models and comparisons
 
-All 106 catalogue plants use detailed botanical models, with curved leaves, refined branching, layered petals, flower centres, fruit details and embedded colour/normal/roughness textures. Editable sources are `art_source/botanical_library.blend` (original 60) and `art_source/botanical_expansion.blend` (46 additions). See [the plant detail workflow](../art_source/plant_detail_workflow.md) for rebuilding, matched before-and-after renders and asset/runtime validation. Catalogue IDs and existing growth, pruning and harvesting behaviour are retained.
+All 136 catalogue plants use detailed botanical models, with curved leaves, refined branching, layered petals, flower centres, fruit details and embedded colour/normal/roughness textures. Editable sources are `art_source/botanical_library.blend` (original 60) and `art_source/botanical_expansion.blend` (46 additions) and `art_source/botanical_additions.blend` (30 grasses/cacti/succulents plus revised Sweet pea/Clematis). See [the plant detail workflow](../art_source/plant_detail_workflow.md) for rebuilding, matched before-and-after renders and asset/runtime validation. Catalogue IDs and existing growth, pruning and harvesting behaviour are retained.
 
 ### Reviewing background woodland
 

@@ -112,6 +112,10 @@ var detail_label: Label
 var mode_buttons: Dictionary = {}
 var toast_time = 0.0
 var photo_mode = false
+var clear_view=false
+var clear_view_state: Dictionary={}
+var clear_view_hold_guard=false
+var view_button: Button
 var photo_panel: PanelContainer
 var welcome_backdrop: ColorRect
 var welcome: PanelContainer
@@ -164,7 +168,7 @@ var climate: GardenClimate
 func _ready() -> void:
  GardenTerrain.offsets.clear()
  rng.seed = 7183
- smoke = "--improvements-test" in OS.get_cmdline_user_args() or "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
+ smoke = "--view-water-test" in OS.get_cmdline_user_args() or "--improvements-test" in OS.get_cmdline_user_args() or "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
  if smoke: SAVE_PATH="user://smoke-test-save.json"
  if "--inhabit-test" in OS.get_cmdline_user_args() or "--tutorial-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
@@ -205,6 +209,7 @@ func _ready() -> void:
  if "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
  elif "--inhabit-test" in OS.get_cmdline_user_args():call_deferred("run_inhabit_test")
  elif "--structure-test" in OS.get_cmdline_user_args():call_deferred("run_structure_test")
+ elif "--view-water-test" in OS.get_cmdline_user_args(): call_deferred("run_view_water_test")
  elif "--improvements-test" in OS.get_cmdline_user_args(): call_deferred("run_improvements_test")
  elif "--gather-test" in OS.get_cmdline_user_args(): call_deferred("run_gather_test")
  elif "--tools-test" in OS.get_cmdline_user_args(): call_deferred("run_tools_test")
@@ -226,6 +231,7 @@ func resume_controls() -> void:
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if touch_active() or not rest_kind.is_empty() else Input.MOUSE_MODE_CAPTURED
 
 func gameplay_active() -> bool:
+ if clear_view:return true
  return not touch.blocked() if touch_active() else (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED or (not rest_kind.is_empty() and not side_panel.visible))
 
 func make_world() -> void:
@@ -354,6 +360,7 @@ func make_camera() -> void:
   var path="res://assets/tools/"+kind+".glb"
   if ResourceLoader.exists(path):
    var model=load(path).instantiate()
+   if kind=="can":model.position=Vector3(-.05,.065,-.15)
    held_tool.add_child(model)
    tool_models[kind]=model
    model.hide()
@@ -531,6 +538,10 @@ func make_ui() -> void:
  compact_hud.add_theme_color_override("font_shadow_color",Color("302417"))
  compact_hud.add_theme_constant_override("shadow_offset_y",2)
  ui.add_child(compact_hud)
+ view_button=button("Enjoy the view · H",func():GardenClearView.enter(self),Vector2(158,36))
+ view_button.add_theme_font_size_override("font_size",14)
+ view_button.tooltip_text="Hide the HUD and held tool. Press any key, or click/tap, to return."
+ ui.add_child(view_button)
  inspector_panel=panel_at(Vector2(1054,278),Vector2(362,0))
  inspector_label=label("",15)
  inspector_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -721,6 +732,8 @@ func refresh_sidebar() -> void:
   "Settings":
    GardenExperience.settings_page(self)
   "Guide":
+   list_box.add_child(button("Enjoy the view · H",func():GardenClearView.enter(self)))
+   add_note("Hide the interface and held tool to enjoy the garden. Press any key, or click/tap, to return. Mouse look still works.")
    GardenExperience.journey(self)
    side_title.text = "A field companion"
    add_note("GROWING IN LAYERS",15)
@@ -729,7 +742,7 @@ func refresh_sidebar() -> void:
    add_note("A day lasts 10 minutes; Next morning in the Garden menu (G on keyboard) plays a twelve-second sunset, starry night and sunrise. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
    add_note("PRUNING & PATHS",15)
    add_note("Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. Border clearing and raked paths are saved. Rake open ground to remove grass and leave visible grooves; move or prune plants first. Upgrades widen existing patches. New patches can reveal up to four petals per day.")
-   add_note("Manual watering gives the ground +20% growth for one game day. Rewatering refreshes the timer; rain and soakers do not apply this bonus. The hoe reshapes unlocked dry ground; R switches raise/lower. [ / ] resize the pruning square within purchased limits.")
+   add_note("Hold left click and sweep to water an area. Manual watering gives the ground +20% growth for one game day. Rewatering refreshes the timer; rain and soakers do not apply this bonus. The hoe reshapes unlocked dry ground; R switches raise/lower. [ / ] resize the pruning square within purchased limits.")
    add_note("GATHERING",15)
    add_note("Hold Gather (5 / left click) and sweep across plants. Every ready plant in the highlighted square is collected, on every layer; unready plants are left growing. Gather reach upgrades in the Shop widen the square from 1.3 m to 2.1 m, then 2.9 m. Border plants still yield once per day.")
    add_note("WELCOMING WILDLIFE",15)
@@ -769,6 +782,7 @@ func update_hud() -> void:
  rotation_panel.visible=not photo_mode and not day_transition and (mode=="build" or (mode=="move" and moved_object>=0))
  hud_tools.visible=menus
  hud_foot.hide()
+ view_button.visible=not touch_active() and not menus and not photo_mode and not day_transition
  compact_hud.visible=not menus and not photo_mode and not day_transition
  hud_capacity.visible=not photo_mode and not day_transition and ((hover_valid and mode!="walk") or (menus and active_tab=="Shop"))
  tip_label.visible=not photo_mode and not day_transition
@@ -790,7 +804,7 @@ func update_hud() -> void:
   status_label.text+="\n"+catalogue[p.id].name+" · "+("ready" if p.age>=catalogue[p.id].days else str(int(100*p.age/catalogue[p.id].days))+"% grown")
  for key in mode_buttons:
   GardenTheme.choose(mode_buttons[key],key==mode)
- var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E sit / rest / greet  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Water ground: +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+ var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E sit / rest / greet  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Hold click and sweep to water · +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  tip_label.text = tips.get(mode,"")
  if not rest_kind.is_empty():tip_label.text="Right-drag to look · Choose a companion to invite · F pet · WASD or E stand · Tab menus"
  if mode=="build" or (mode=="move" and moved_object>=0): tip_label.text+="  ·  Q/E rotate 15°"
@@ -855,13 +869,13 @@ func _process(delta: float) -> void:
   elif not touch_active(): GardenInterface.fit_popup(self,welcome)
   return
  if is_instance_valid(request_popup):
-  var show_note=request_popup_time>0 and not tutorial_state.get("active",false) and settings.request_notifications and not photo_mode and not day_transition
+  var show_note=request_popup_time>0 and not tutorial_state.get("active",false) and settings.request_notifications and not photo_mode and not day_transition and not clear_view
   if show_note and not request_popup.visible: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
   request_popup.visible=show_note
   if show_note and not touch_active(): GardenInterface.fit_popup(self,request_popup,false)
  var input_focus = get_viewport().gui_get_focus_owner() is LineEdit
  var move = Vector3.ZERO
- if not day_transition and not input_focus and not is_instance_valid(welcome) and (gameplay_active() or (photo_mode and not touch_active())):
+ if not clear_view and not day_transition and not input_focus and not is_instance_valid(welcome) and (gameplay_active() or (photo_mode and not touch_active())):
   var arrows=navigation_input()
   move=Vector3(arrows.x,0,arrows.y)
   if touch_active(): move=Vector3(touch.stick.x,0,touch.stick.y)
@@ -877,8 +891,9 @@ func _process(delta: float) -> void:
   player.velocity.z = move.z*speed if accessible(next) else 0.0
   if not player.is_on_floor(): player.velocity.y -= 18.0*delta
   else: player.velocity.y = 0
+  if clear_view:player.velocity=Vector3.ZERO
   walk_motion(Vector3(player.velocity.x,0,player.velocity.z)*delta)
-  if rest_kind.is_empty():player.move_and_slide()
+  if rest_kind.is_empty() and not clear_view:player.move_and_slide()
   else:player.velocity=Vector3.ZERO
   var stride=sin(Time.get_ticks_msec()*0.012)*0.45*minf(1,move.length())
   player.get_node("LegLeft").rotation.x=stride
@@ -925,7 +940,7 @@ func update_camera(_delta: float) -> void:
  camera.rotation=Vector3(-pitch,yaw,0)
  if day_transition and not settings.reduced_motion:
   camera.rotation.x=lerpf(-pitch,.40,sin(transition_elapsed/TRANSITION_SECONDS*PI)*.85)
- if is_instance_valid(reticle): reticle.visible=not photo_mode and not day_transition and gameplay_active()
+ if is_instance_valid(reticle): reticle.visible=not clear_view and not photo_mode and not day_transition and gameplay_active()
  if is_instance_valid(held_tool):
   var tools_by_mode={"water":"can","prune":"shears","harvest":"shears","plant":"trowel","remove":"trowel","rake":"rake","hoe":"hoe"}
   var active=tools_by_mode.get(mode,"")
@@ -1043,7 +1058,13 @@ func apply_mouse_look(movement: Vector2) -> void:
  yaw -= movement.x*sensitivity*(-1 if settings.invert_x else 1)
  pitch = clampf(pitch+movement.y*sensitivity*(-1 if settings.invert_y else 1),-1.45,1.45)
 
+func _input(event: InputEvent) -> void:
+ GardenClearView.input(self,event)
+
 func _unhandled_input(event: InputEvent) -> void:
+ if clear_view:
+  if event is InputEventMouseMotion:apply_mouse_look(event.relative)
+  return
  if updates_open:
   if event is InputEventKey and event.pressed and event.physical_keycode==KEY_ESCAPE:
    GardenUpdates.dismiss(self)
@@ -1083,6 +1104,7 @@ func _unhandled_input(event: InputEvent) -> void:
    KEY_R: GardenTools.toggle_hoe(self)
    KEY_G: if not photo_mode: next_day()
    KEY_P: toggle_photo()
+   KEY_H: GardenClearView.enter(self)
    KEY_TAB:
     if not rest_kind.is_empty():
      side_panel.visible=not side_panel.visible
@@ -1161,7 +1183,7 @@ func update_hover() -> void:
  grid_root.hide()
  if is_instance_valid(preview): preview.hide()
  hover_valid=false
- if day_transition or photo_mode or is_instance_valid(welcome): return
+ if clear_view or day_transition or photo_mode or is_instance_valid(welcome): return
  if touch_active() and not gameplay_active(): return
  if not touch_active() and Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and get_viewport().gui_get_hovered_control()!=null: return
  var mouse = get_viewport().get_visible_rect().size*0.5 if gameplay_active() else get_viewport().get_mouse_position()
@@ -1352,7 +1374,7 @@ func aimed_object() -> int:
  return -1
 
 func perform_action(repeating: bool=false) -> void:
- if day_transition or photo_mode: return
+ if clear_view or day_transition or photo_mode: return
  if mode=="walk": return
  if not hover_valid:
   toast("Walk a little closer to an open garden area.")
@@ -2325,4 +2347,11 @@ func run_inhabit_test() -> void:
  var failures=[]
  await preload("res://tests/leisure.gd").run(self,failures)
  print("LEISURE_RESULT: ",failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_view_water_test() -> void:
+ get_tree().create_timer(45).timeout.connect(func():push_error("View/water test timed out");get_tree().quit(1))
+ var failures=[]
+ await preload("res://tests/view_and_watering.gd").run(self,failures)
+ print("VIEW_WATER_RESULT: ",JSON.stringify(failures))
  get_tree().quit(0 if failures.is_empty() else 1)

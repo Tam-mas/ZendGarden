@@ -1,21 +1,128 @@
-MIT License
+Zend Garden Free Play and Share-Alike Licence 1.0
 
 Copyright (c) 2026 Tam-mas
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This is a custom source-available licence. It is not the GNU GPL,
+a PolyForm licence, or an Open Source Initiative approved licence.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Scope and definitions
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+"Licensor" means a copyright holder offering material under these terms.
+"You" means a person or organisation exercising the permissions below.
+"Covered Material" means the Zend Garden code, original artwork, models,
+music, documentation and other material that the Licensor explicitly
+provides under this licence, and adaptations of that material.
+"Derivative Game" means a game or application that incorporates or adapts
+Covered Material, including a modified version, port, expansion or fork.
+An independent work merely distributed alongside Covered Material, without
+incorporating or adapting it, is not a Derivative Game.
+
+Material identified as belonging to a third party remains subject to its
+own licence. These terms do not replace the licences of Godot, libraries,
+tools, fonts or other independently licensed components. The Licensor
+grants only rights that the Licensor has authority to grant. These terms
+do not restrict rights you have under applicable law, including fair use
+or fair dealing, or under a separate licence already granted to you.
+
+2. Permission
+
+Subject to these conditions, the Licensor grants you a worldwide,
+non-exclusive, royalty-free copyright licence to use, run, study, copy,
+modify, host and distribute Covered Material and to make and distribute
+Derivative Games for noncommercial purposes. This grant lasts for the
+duration of the applicable copyright unless terminated under section 7.
+Noncommercial means not primarily intended for commercial advantage or
+monetary compensation, subject to the express exceptions in section 5.
+
+3. Free access and play
+
+Covered Material and Derivative Games must be available to their users
+without a required payment. You must not sell copies, charge for downloads
+or source access, charge for playing or hosting access, or require a paid
+subscription, membership, purchase, donation or bundle to access them.
+You must not charge for gameplay features, levels, cosmetic items, virtual
+currency, expansions or modifications containing Covered Material or
+forming part of a Derivative Game. These restrictions apply regardless
+of whether you operate for profit or as a nonprofit organisation.
+
+You must not monetise Covered Material or a Derivative Game through
+advertising, paid product placement or the sale of player data. Merely
+using a hosting or distribution service that charges you, rather than
+the game's users, does not breach this section.
+
+4. Source availability and share-alike
+
+Whenever you distribute or publicly host Covered Material or a Derivative
+Game, you must make the complete corresponding source for the version
+provided publicly downloadable without payment or compulsory registration.
+Provide a clear source link with the distribution or in an accessible
+place in the game or its hosting page. Keep that source available while
+providing the version and for at least three years after you stop.
+
+Corresponding source means the preferred editable form of all covered
+code and assets, your modifications and additions forming the Derivative
+Game, and scripts, project files and instructions reasonably necessary
+to build and modify it. It includes editable model and artwork sources
+where those are the preferred form for making changes. It does not
+require publishing users' saved gardens, personal data, credentials or
+unmodified general-purpose tools and independently licensed dependencies.
+Identify dependencies and preserve their applicable licence notices.
+
+You must provide your adaptations of Covered Material, and your code and
+assets forming a Derivative Game, under this same licence. Recipients
+must receive these same permissions and conditions, including free play,
+source availability and share-alike for their own derivatives. Independent
+third-party components may retain their own licences if those licences
+permit distribution alongside these terms. You must not impose additional
+terms or technological restrictions that prevent recipients from
+exercising these permissions over Covered Material or the Derivative Game.
+Private modifications that you neither distribute nor publicly host do
+not require publication.
+
+5. Donations, services and gameplay media
+
+You may accept genuinely voluntary donations if all users have the same
+access to the game, features, modifications and source whether or not
+they donate. Donations must not purchase access, content or privileges.
+You may charge for separately agreed support, teaching or development
+services, provided payment is not required to access or play Covered
+Material or a Derivative Game. Any Derivative Game distributed or publicly
+hosted as a result of those services must satisfy these same conditions.
+
+You may publish screenshots, gameplay videos, streams, reviews and
+tutorials, including on monetised channels. This exception does not
+permit selling playable games, code or asset files, or charging users
+for access to a game or its features.
+
+6. Notices and contributions
+
+Keep the copyright notice, this licence and applicable third-party
+notices with redistributed copies and source. Clearly describe your
+changes and do not misrepresent a derivative as an official release.
+No trademark permission or endorsement is granted.
+
+Unless explicitly agreed otherwise, a contribution you intentionally
+submit for inclusion in Covered Material is offered under this licence.
+Contributors retain their copyright. This clause is not a copyright
+assignment and does not grant permission to relicense their contributions
+under different terms.
+
+7. Termination and reinstatement
+
+Your permissions terminate automatically if you breach these conditions.
+For a first breach, they are reinstated if you stop the breach and remedy
+it within 30 days of receiving notice. The Licensor may also expressly
+reinstate them. Termination of your permissions does not terminate the
+permissions of recipients who remain in compliance. If the Licensor
+stops distributing the material, permissions already granted under this
+licence continue for compliant recipients.
+
+8. Disclaimer
+
+TO THE EXTENT PERMITTED BY LAW, COVERED MATERIAL IS PROVIDED "AS IS",
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+NO LICENSOR OR CONTRIBUTOR SHALL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM THE MATERIAL OR ITS USE, WHETHER IN CONTRACT,
+TORT OR OTHERWISE. NOTHING HERE EXCLUDES LIABILITY OR RIGHTS THAT
+APPLICABLE LAW DOES NOT ALLOW TO BE EXCLUDED.

@@ -22,6 +22,14 @@ func shape_value(node: Node):
 func _initialize() -> void:
  call_deferred("verify")
 
+func check_rigid(node: Node, name: String) -> void:
+ if node is MeshInstance3D:
+  for surface in range(node.mesh.get_surface_count()):
+   var material=node.get_active_material(surface)
+   if material is ShaderMaterial:
+    check(is_zero_approx(float(material.get_shader_parameter("wind_strength"))),"Succulent body or flower sways like a grass leaf: "+name)
+ for child in node.get_children():check_rigid(child,name)
+
 func verify() -> void:
  var g=ReviewGarden.new()
  root.add_child(g)
@@ -34,6 +42,13 @@ func verify() -> void:
  g.day=1
  g.active_tab="Seeds"
  g.refresh_sidebar()
+ g.category="Cacti & succulents"
+ check(GardenSeedCollection.matching(g).size()==20,"New succulent category is incomplete")
+ g.category="Grasses"
+ check(GardenSeedCollection.matching(g).size()==24,"Grass additions or bamboo varieties missing")
+ g.category="All";g.collection_query="Haworthia cooperi"
+ check(GardenSeedCollection.matching(g).size()==1 and GardenSeedCollection.matching(g)[0].id==130,"Botanical-name search cannot find window haworthia")
+ g.collection_query="";g.category="All"
  var search: LineEdit=g.list_box.get_node("SeedSearch")
  search.grab_focus()
  search.text="jasmine";search.text_changed.emit("jasmine")
@@ -75,6 +90,10 @@ func verify() -> void:
     check(stages.find_child("Buds*",true,false).visible==(fraction>=.52 and fraction<.78),"Bud visibility incorrect: "+data.name)
    check(model.get_node("MatureFoliage").visible==(fraction>=.52),"Mature foliage visibility incorrect: "+data.name)
    check(model.get_node("Bloom").visible==(fraction>=.78),"Flower/fruit visibility incorrect: "+data.name)
+  if data.category=="Cacti & succulents":
+   check_rigid(model,data.name)
+   var shape: Vector4=shape_value(model)
+   check(absf(shape.x)<.01 and absf(shape.y)<.01 and absf(shape.z)<.025,"Rigid succulent silhouette is excessively bent: "+data.name)
   model.queue_free()
   await process_frame
  var p=g.add_plant(0,Vector3.ZERO,0,1,1.1,.75,8123)
