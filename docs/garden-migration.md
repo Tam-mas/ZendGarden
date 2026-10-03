@@ -9,10 +9,18 @@ will not survive a deployment that uses this configuration.
 
 ## Production rollout record
 
+- Current production deployment, 3 October 2026: [def7b039](https://def7b039.zendgarden.pages.dev)
+  (`def7b039-664a-4445-ab12-47787e99dba5`), exported from commit
+  `46225f422bf3510b13c8263ffc7f512c55fd4288` with player Update 15.
+  The watered-ground validator now accepts the patch records written by the game.
+  A disposable live Chrome garden verified migration, exact-byte import, actual
+  game startup, reopening after refresh, unchanged old-domain storage and retained
+  latest progress on repeat visits. Migration remains enabled with the existing
+  private bucket binding. GitHub Actions passed for this source commit.
 - Original working production deployment: `380fb57a-c1fd-4a9d-be0d-f95bc249f7b3`
   ([original build](https://380fb57a.zendgarden.pages.dev)).
 - Verified new game with transfer disabled: [bda12c02](https://bda12c02.zendgarden.pages.dev).
-- Active migration deployment: [5c27f60f](https://5c27f60f.zendgarden.pages.dev).
+- Initial active migration deployment: [5c27f60f](https://5c27f60f.zendgarden.pages.dev).
 - An isolated Chrome profile verified the actual live R2 create/read/delete flow,
   six-second automatic move, exact-byte import, Godot startup, unchanged source
   bytes, the `?stay=1` recovery route, and retained new-domain progress on repeat visits.
