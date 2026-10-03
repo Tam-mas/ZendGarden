@@ -2,8 +2,11 @@
 set -eu
 cd "$(dirname "$0")/.."
 python3 tests/check_assets.py
+python3 tests/check_greenhouse.py
 python3 tests/check_mountains.py
 python3 tests/check_plants.py
+python3 tests/check_plant_growth.py
+python3 tests/check_botanical_additions.py
 python3 tests/check_audio.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
@@ -13,7 +16,19 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+audio_log="$(mktemp -t zend-garden-audio)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/soundscape.gd > "$audio_log" 2>&1 || { cat "$audio_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$audio_log" || ! rg -Fq 'SOUNDSCAPE_RESULT: []' "$audio_log"; then
+  cat "$audio_log"
+  exit 1
+fi
 mouse_log="$(mktemp -t zend-garden-mouse)"
+updates_log="$(mktemp -t zend-garden-updates)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/player_updates.gd > "$updates_log" 2>&1 || { cat "$updates_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$updates_log" || ! rg -Fq 'PLAYER_UPDATES_RESULT: []' "$updates_log"; then
+  cat "$updates_log"
+  exit 1
+fi
 "$GODOT_BIN" --headless --path "$PWD" --script tests/mouse_look.gd > "$mouse_log" 2>&1 || { cat "$mouse_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$mouse_log" || ! rg -Fq 'MOUSE_LOOK_RESULT: []' "$mouse_log"; then
   cat "$mouse_log"
@@ -38,11 +53,51 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$preview_log" || ! rg -Fq 'PLANT_PREVIEW_RESULT:
   exit 1
 fi
 wildlife_log="$(mktemp -t zend-garden-wildlife)"
+improvements_log="$(mktemp -t zend-garden-improvements)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/plant_improvements.gd > "$improvements_log" 2>&1 || { cat "$improvements_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$improvements_log" || ! rg -Fq 'PLANT_IMPROVEMENTS_RESULT: []' "$improvements_log"; then
+  cat "$improvements_log"
+  exit 1
+fi
 "$GODOT_BIN" --headless --path "$PWD" --script tests/wildlife_direction.gd > "$wildlife_log" 2>&1 || { cat "$wildlife_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$wildlife_log" || ! rg -Fq 'WILDLIFE_DIRECTION_RESULT: []' "$wildlife_log"; then
   cat "$wildlife_log"
   exit 1
 fi
+in_game_log="$(mktemp -t zend-garden-improvements-game)"
+"$GODOT_BIN" --always-on-top --path "$PWD" -- --improvements-test > "$in_game_log" 2>&1 || { cat "$in_game_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$in_game_log" || ! rg -Fq 'IMPROVEMENTS_IN_GAME_RESULT: []' "$in_game_log"; then
+  cat "$in_game_log"
+  exit 1
+fi
+compat_log="$(mktemp -t zend-garden-improvements-compat)"
+"$GODOT_BIN" --rendering-method gl_compatibility --always-on-top --path "$PWD" --script tests/plant_improvements.gd > "$compat_log" 2>&1 || { cat "$compat_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$compat_log" || ! rg -Fq 'PLANT_IMPROVEMENTS_RESULT: []' "$compat_log"; then
+  cat "$compat_log"
+  exit 1
+fi
+"$GODOT_BIN" --rendering-method gl_compatibility --always-on-top --path "$PWD" -- --improvements-test > "$compat_log" 2>&1 || { cat "$compat_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$compat_log" || ! rg -Fq 'IMPROVEMENTS_IN_GAME_RESULT: []' "$compat_log"; then
+  cat "$compat_log"
+  exit 1
+fi
+for renderer in forward_plus gl_compatibility; do
+  view_log="$(mktemp -t zend-garden-view-water)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --view-water-test > "$view_log" 2>&1 || { cat "$view_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$view_log" || ! rg -Fq 'VIEW_WATER_RESULT: []' "$view_log"; then
+    cat "$view_log"
+    exit 1
+  fi
+done
+for feature in tutorial inhabit; do
+  feature_log="$(mktemp -t zend-garden-$feature)"
+  "$GODOT_BIN" --always-on-top --path "$PWD" -- --"$feature"-test > "$feature_log" 2>&1 || { cat "$feature_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[[^]]' "$feature_log"; then
+    cat "$feature_log"
+    exit 1
+  fi
+  rg -q 'TUTORIAL_RESULT: \[\]|LEISURE_RESULT: \[\]' "$feature_log"
+done
 test_exit=0
 # macOS may stop drawing an obscured window; screenshot awaits need visible frames.
 "$GODOT_BIN" --always-on-top --path "$PWD" -- --smoke-test > "$logfile" 2>&1 || test_exit=$?

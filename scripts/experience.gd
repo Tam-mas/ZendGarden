@@ -1,76 +1,50 @@
 class_name GardenExperience
 extends RefCounted
 
-const PAGES = [
- ["A hilltop of your own", "Breathe in. There is room here for a small beginning.", "WASD to wander · Mouse to look\nTab opens your garden menus. Nothing needs to be perfect.", [28,29,35]],
- ["Plant a little possibility", "Choose a colour. Find a patch of earth. Begin.", "Open Seeds with Tab, choose a plant, aim at soil and click.\nDiscovered seeds are endless. A small marker shows where life is waiting.", [0,1,2]],
- ["Find your gentle rhythm", "Some things bloom tomorrow. Others ask for a season.", "Press 3 to water · Press 4 to prune · Press G for morning\nCare helps growth. Read each plant’s seasons in Seeds. Plants never die.", [7,20,47]],
- ["A garden that gives back", "A handful of flowers can become a neighbour’s joy.", "Press 5 to gather mature plants, then open Orders to deliver your basket.\nRequests have no deadline. Earn petals for seeds, tools and the garden shed.", [48,50,0]],
- ["Let it become yours", "More paths, new seasons, and familiar little visitors.", "New beds and seeds open over time. There is always room to grow.\nPress 6 to move things · Press P to take a photo.", [36,32,34]]
-]
-
-static func welcome(g, page: int = 0) -> void:
- if is_instance_valid(g.welcome): g.welcome.queue_free()
+static func welcome(g, _page: int = 0) -> void:
+ if is_instance_valid(g.welcome):g.welcome.queue_free()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ g.side_panel.hide()
  if not is_instance_valid(g.welcome_backdrop):
   g.welcome_backdrop=ColorRect.new()
-  g.welcome_backdrop.color=Color(.07,.12,.09,.65)
+  g.welcome_backdrop.color=Color(.07,.12,.09,.45)
   g.welcome_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
   g.welcome_backdrop.z_index=29
   g.ui.add_child(g.welcome_backdrop)
- g.welcome=g.panel_at(Vector2(375,120),Vector2(740,640))
+ var width=minf(400,g.get_viewport().get_visible_rect().size.x-32)
+ g.welcome=g.panel_at(Vector2.ZERO,Vector2(width,0))
  g.welcome.z_index=30
  var col=VBoxContainer.new()
- col.add_theme_constant_override("separation",16)
+ col.add_theme_constant_override("separation",12)
  g.welcome.add_child(col)
- var chapter=g.label("A LITTLE GROWTH, EVERY DAY    ·    %d / 5" % (page+1),13,Color("ccb47e"))
- chapter.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
- col.add_child(chapter)
- var art=HBoxContainer.new()
- art.alignment=BoxContainer.ALIGNMENT_CENTER
- col.add_child(art)
- for id in PAGES[page][3]:
-  var frame=PanelContainer.new()
-  frame.add_theme_stylebox_override("panel",GardenTheme.frame("button"))
-  var portrait=TextureRect.new()
-  portrait.texture=load("res://assets/ui/plants/%02d.png" % id)
-  portrait.custom_minimum_size=Vector2(170,200)
-  portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-  portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-  frame.add_child(portrait)
-  art.add_child(frame)
- for pair in [[PAGES[page][0],32],[PAGES[page][1],19],[PAGES[page][2],17]]:
-  var text=g.label(pair[0],pair[1])
-  text.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-  text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-  text.custom_minimum_size.x=690
-  col.add_child(text)
- var nav=HBoxContainer.new()
- nav.alignment=BoxContainer.ALIGNMENT_CENTER
- col.add_child(nav)
- if page>0: nav.add_child(g.button("← Back",func(): welcome(g,page-1),Vector2(130,44)))
- nav.add_child(g.button("Let’s grow something" if page==4 else "Continue ->",func():
-  if page==4: finish(g)
-  else: welcome(g,page+1),Vector2(250,44)))
- nav.add_child(g.button("Explore now",func(): finish(g),Vector2(150,44)))
- for control in nav.get_children(): control.focus_mode=Control.FOCUS_ALL
- nav.get_child(0).grab_focus()
- if not g.settings.reduced_motion:
-  col.modulate.a=0
-  g.create_tween().tween_property(col,"modulate:a",1.0,.45)
+ var title=g.label("A little garden, a first bloom",24)
+ title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ title.custom_minimum_size.x=width-28
+ col.add_child(title)
+ var note=g.label("Learn by planting a flower, giving it a drink, welcoming the morning and sharing a bloom. Take your time, or skip straight into your garden.",18)
+ note.custom_minimum_size.x=width-28
+ note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ col.add_child(note)
+ col.add_child(g.button("Start the welcome walk",func(): GardenTutorial.start(g),Vector2(0,48)))
+ col.add_child(g.button("Explore on my own",func(): finish(g),Vector2(0,44)))
+ if g.touch_active():g.touch.fit_popup(g.welcome)
+ else:GardenInterface.fit_popup(g,g.welcome)
 
 static func finish(g) -> void:
+ if g.tutorial_state.get("active",false):GardenTutorial.finish(g,false)
  if is_instance_valid(g.welcome): g.welcome.queue_free()
  g.welcome=null
  if is_instance_valid(g.welcome_backdrop): g.welcome_backdrop.queue_free()
  g.welcome_backdrop=null
  g.settings.intro_seen=true
  g.save_game()
- g.resume_controls()
+ if not GardenUpdates.maybe_show(g): g.resume_controls()
 
 static func settings_page(g) -> void:
  if is_instance_valid(g.touch): g.touch.settings_page()
  g.side_title.text="Make yourself at home"
+ g.add_note("ZEND GARDEN · UPDATE %d" % GardenUpdates.CURRENT_VERSION,13)
+ g.list_box.add_child(g.button("What’s new",func(): GardenUpdates.show(g)))
  g.add_note("MOUSE LOOK",15)
  for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
   if entry[0]=="request_notifications": g.add_note("COMFORT & QUIET",15)

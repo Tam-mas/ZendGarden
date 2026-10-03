@@ -22,6 +22,8 @@ static func drag(index: int, pos: Vector2, relative: Vector2) -> void:
  Input.flush_buffered_events()
 
 static func run(g, failures: Array) -> void:
+ var was_processing=g.is_processing()
+ g.set_process(false)
  var old_settings=g.settings.duplicate()
  var old_size=g.get_window().size
  g.settings.controls="touch"
@@ -29,7 +31,9 @@ static func run(g, failures: Array) -> void:
  g.set_mode("walk")
  g.dismiss_request()
  if is_instance_valid(g.welcome): GardenExperience.finish(g)
- await g.get_tree().process_frame
+ for frame in range(5):await g.get_tree().process_frame
+ # macOS can deliver the initial focus/resize event after its first drawn frames.
+ await g.get_tree().create_timer(.5).timeout
  var touch=g.touch
  touch.layout()
  if not g.touch_active() or Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: failures.append("Touch controls require mouse capture")
@@ -71,7 +75,7 @@ static func run(g, failures: Array) -> void:
  if not is_equal_approx(g.pitch,previous_pitch): failures.append("Other finger's relative delta changed camera pitch")
  var css_scale=touch.display_size/g.get_viewport().get_visible_rect().size
  var expected_yaw=previous_yaw-12*css_scale.x*1.7*.0022*float(g.settings.sensitivity)*(-1 if g.settings.invert_x else 1)
- if not is_equal_approx(g.yaw,expected_yaw): failures.append("Look did not follow its own finger position")
+ if not is_equal_approx(g.yaw,expected_yaw): failures.append("Look did not follow its own finger position: actual %s expected %s display %s viewport %s"%[g.yaw,expected_yaw,touch.display_size,g.get_viewport().get_visible_rect().size])
  press(0,touch.origin,false)
  drag(37,look_start+Vector2(20,0),Vector2(0,800))
  if not is_equal_approx(g.pitch,previous_pitch) or touch.look_id!=37: failures.append("Lifting the joystick finger disturbed looking")
@@ -129,6 +133,7 @@ static func run(g, failures: Array) -> void:
   g.get_window().size=size
   await g.get_tree().process_frame
   touch.configure()
+  for frame in range(5):await g.get_tree().process_frame
   touch.layout()
   g.open_sidebar("Settings")
   await g.get_tree().process_frame
@@ -157,7 +162,7 @@ static func run(g, failures: Array) -> void:
      for i in range(controls.size()):
       var rect=controls[i].get_global_rect()
       if rect.has_point(bounds.size/2): failures.append("HUD covers aiming point at "+str(size)+" "+mode)
-      if not bounds.encloses(rect): failures.append("HUD overflow at "+str(size)+" "+mode+" "+controls[i].name)
+      if not bounds.encloses(rect): failures.append("HUD overflow at "+str(size)+" "+mode+" "+controls[i].name+" rect "+str(rect)+" viewport "+str(bounds)+" last "+str(touch.last_size)+" display "+str(touch.display_size))
       for j in range(i):
        if rect.intersects(controls[j].get_global_rect()): failures.append("HUD overlap at "+str(size)+" "+mode+" "+controls[i].name+" / "+controls[j].name)
   g.settings.left_handed=false
@@ -196,4 +201,5 @@ static func run(g, failures: Array) -> void:
  g.get_window().size=old_size
  touch.configure()
  g.set_mode("walk")
+ g.set_process(was_processing)
  print("TOUCH_CONTROLS_RESULT: ",failures)

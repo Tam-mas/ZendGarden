@@ -1,108 +1,1226 @@
 [
- ["Cosmos", "Flowers", "efb0ba", 1, 2, "sun", "butterflies"],
- ["Lavender", "Flowers", "a894cc", 1, 3, "sun", "bees"],
- ["Daisy", "Flowers", "fff2d1", 1, 2, "any", "butterflies"],
- ["Sunflower", "Flowers", "f2bf53", 1, 3, "sun", "birds"],
- ["Foxglove", "Flowers", "c287b9", 1, 3, "shade", "bees"],
- ["Hydrangea", "Flowers", "a4bde2", 1, 3, "shade", "butterflies"],
- ["Peony", "Flowers", "e89aaa", 1, 4, "sun", "bees"],
- ["Poppy", "Flowers", "ee8868", 1, 2, "sun", "bees"],
- ["Iris", "Flowers", "7e87bd", 1, 3, "water", "butterflies"],
- ["Sweet pea", "Flowers", "dcb1d2", 1, 3, "sun", "butterflies"],
- ["Clematis", "Flowers", "b793d3", 1, 4, "any", "bees"],
- ["Nasturtium", "Flowers", "efa355", 0, 2, "sun", "bees"],
- ["Creeping thyme", "Grasses", "c8acd1", 0, 2, "sun", "bees"],
- ["Moss carpet", "Grasses", "85a568", 0, 2, "shade", "fireflies"],
- ["Blue fescue", "Grasses", "88b9b0", 0, 2, "sun", "birds"],
- ["Feather grass", "Grasses", "d3c59b", 0, 3, "sun", "birds"],
- ["Sedge", "Grasses", "a4b978", 0, 2, "water", "frogs"],
- ["Fountain grass", "Grasses", "c9a9ad", 0, 3, "sun", "birds"],
- ["Dichondra", "Grasses", "abc9a8", 0, 2, "any", "butterflies"],
- ["Chamomile", "Grasses", "f4df9d", 0, 2, "sun", "bees"],
- ["Rose", "Shrubs", "da8f9d", 2, 4, "sun", "bees"],
- ["Azalea", "Shrubs", "dfb0d0", 2, 3, "shade", "butterflies"],
- ["Rosemary", "Shrubs", "a0aed1", 2, 3, "sun", "bees"],
- ["Camellia", "Shrubs", "f1b8bd", 2, 4, "shade", "birds"],
- ["Lilac", "Shrubs", "b4a0c8", 2, 4, "sun", "butterflies"],
- ["Boxwood", "Shrubs", "87a366", 2, 3, "any", "birds"],
- ["Gardenia", "Shrubs", "f5efd4", 2, 4, "shade", "moths"],
- ["Blueberry", "Shrubs", "8097bc", 2, 3, "any", "birds"],
- ["Cherry blossom", "Trees", "eac0cd", 3, 5, "sun", "birds"],
- ["Silver birch", "Trees", "b2c986", 3, 5, "any", "birds"],
- ["Japanese maple", "Trees", "d8a17e", 3, 5, "shade", "birds"],
- ["Olive", "Trees", "9dac85", 3, 5, "sun", "birds"],
- ["Willow", "Trees", "aac68a", 3, 5, "water", "frogs"],
- ["Magnolia", "Trees", "f2d8d7", 3, 5, "any", "birds"],
- ["Lemon", "Trees", "e1ce72", 3, 4, "sun", "bees"],
- ["Apple", "Trees", "dca394", 3, 4, "sun", "birds"],
- ["Kangaroo paw", "Natives", "dca077", 1, 3, "sun", "native birds"],
- ["Billy buttons", "Natives", "ead073", 1, 2, "sun", "native birds"],
- ["Wattle", "Natives", "e6cb72", 2, 4, "sun", "native birds"],
- ["Bottlebrush", "Natives", "d4817e", 2, 4, "sun", "native birds"],
- ["Grevillea", "Natives", "e6a28d", 2, 3, "any", "native birds"],
- ["Banksia", "Natives", "dcb977", 2, 4, "sun", "native birds"],
- ["Lilly pilly", "Natives", "d995a6", 2, 4, "any", "native birds"],
- ["Waxflower", "Natives", "ebc8d9", 1, 3, "sun", "native birds"],
- ["Lomandra", "Natives", "b6be7e", 0, 2, "any", "native birds"],
- ["Eucalyptus", "Natives", "a7c5b1", 3, 5, "sun", "native birds"],
- ["Carrot", "Produce", "e9a364", 0, 2, "sun", "bees"],
- ["Tomato", "Produce", "db8977", 1, 3, "sun", "bees"],
- ["Lettuce", "Produce", "b8cf88", 0, 2, "any", "butterflies"],
- ["Pumpkin", "Produce", "e2a664", 0, 4, "sun", "bees"],
- ["Strawberry", "Produce", "e7999c", 0, 2, "any", "bees"],
- ["Radish", "Produce", "da8a9f", 0, 2, "any", "bees"],
- ["Pea", "Produce", "b9d2a0", 1, 3, "any", "butterflies"],
- ["Aubergine", "Produce", "a18eb1", 1, 3, "sun", "bees"],
- ["Basil", "Produce", "a6c486", 0, 2, "sun", "bees"],
- ["Corn", "Produce", "e5ce82", 1, 3, "sun", "birds"],
- ["Cucumber", "Produce", "99b979", 1, 3, "sun", "bees"],
- ["Chilli", "Produce", "e39d88", 1, 3, "sun", "bees"],
- ["Beetroot", "Produce", "a17e99", 0, 2, "any", "bees"],
- ["Melon", "Produce", "d5c482", 0, 4, "sun", "bees"],
- ["Common jasmine", "Flowers", "fff7e8", 1, 3, "sun", "bees"],
- ["Pink jasmine", "Flowers", "f5e8ea", 1, 3, "sun", "bees"],
- ["Winter jasmine", "Flowers", "efd131", 1, 3, "sun", "bees"],
- ["Dahlia 'Café au Lait'", "Flowers", "eed8c0", 1, 3, "sun", "bees"],
- ["Tulip 'Queen of Night'", "Flowers", "352039", 1, 3, "sun", "bees"],
- ["Blue delphinium", "Flowers", "497bc6", 1, 3, "sun", "bees"],
- ["Purple lupin", "Flowers", "8156aa", 1, 3, "sun", "bees"],
- ["Burgundy hollyhock", "Flowers", "7d263e", 1, 3, "sun", "bees"],
- ["Slender weaver's bamboo", "Shrubs", "598747", 2, 4, "sun", "birds"],
- ["Golden bamboo", "Shrubs", "c4b55b", 2, 4, "sun", "birds"],
- ["Black bamboo", "Shrubs", "343831", 2, 4, "sun", "birds"],
- ["Himalayan blue bamboo", "Shrubs", "719b9e", 2, 4, "sun", "birds"],
- ["Red bamboo 'Jiuzhaigou'", "Shrubs", "b25342", 2, 4, "sun", "birds"],
- ["Rose 'Mister Lincoln'", "Shrubs", "ab2335", 2, 4, "sun", "bees"],
- ["Rose 'Iceberg'", "Shrubs", "fff9e8", 2, 4, "sun", "bees"],
- ["Rose 'Golden Celebration'", "Shrubs", "eeb638", 2, 4, "sun", "bees"],
- ["Rose 'Just Joey'", "Shrubs", "eaa071", 2, 4, "sun", "bees"],
- ["Rose 'Scentimental'", "Shrubs", "be3047", 2, 4, "sun", "bees"],
- ["Giant redwood", "Trees", "568455", 3, 5, "sun", "birds"],
- ["Coast redwood", "Trees", "447859", 3, 5, "sun", "birds"],
- ["Giant bamboo", "Trees", "799856", 3, 5, "sun", "birds"],
- ["Ginkgo", "Trees", "91ac51", 3, 5, "sun", "birds"],
- ["Fig", "Trees", "824868", 3, 5, "sun", "birds"],
- ["Pear", "Trees", "b6b349", 3, 5, "sun", "birds"],
- ["Peach", "Trees", "e9a15c", 3, 5, "sun", "birds"],
- ["Plum", "Trees", "654d87", 3, 5, "sun", "birds"],
- ["Apricot", "Trees", "efa44f", 3, 5, "sun", "birds"],
- ["Nectarine", "Trees", "d95838", 3, 5, "sun", "birds"],
- ["Orange", "Trees", "eb9437", 3, 5, "sun", "birds"],
- ["Mandarin", "Trees", "ee9d36", 3, 5, "sun", "birds"],
- ["Lime", "Trees", "75a743", 3, 5, "sun", "birds"],
- ["Avocado", "Trees", "415d35", 3, 5, "sun", "birds"],
- ["Snow gum", "Natives", "a1b4a1", 3, 5, "sun", "native birds"],
- ["Alpine snow gum", "Natives", "a7b8ac", 3, 5, "sun", "native birds"],
- ["Red flowering gum", "Natives", "d83a3d", 3, 5, "sun", "native birds"],
- ["Waratah", "Natives", "c43048", 2, 4, "sun", "native birds"],
- ["Gymea lily", "Natives", "b9303d", 2, 4, "sun", "native birds"],
- ["Globe artichoke", "Produce", "8a9b73", 1, 3, "sun", "bees"],
- ["Rhubarb", "Produce", "b94855", 1, 3, "sun", "bees"],
- ["Asparagus", "Produce", "74a14c", 1, 3, "sun", "bees"],
- ["Broccoli", "Produce", "508053", 1, 3, "sun", "bees"],
- ["Cauliflower", "Produce", "ece8d2", 1, 3, "sun", "bees"],
- ["Capsicum", "Produce", "cb3f31", 1, 3, "sun", "bees"],
- ["Brussels sprouts", "Produce", "7d995f", 1, 3, "sun", "bees"],
- ["Leek", "Produce", "a0b38b", 0, 3, "sun", "bees"],
- ["Hemp", "Produce", "6d9345", 1, 3, "sun", "bees"]
+  [
+    "Cosmos",
+    "Flowers",
+    "efb0ba",
+    1,
+    2,
+    "sun",
+    "butterflies"
+  ],
+  [
+    "Lavender",
+    "Flowers",
+    "a894cc",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Daisy",
+    "Flowers",
+    "fff2d1",
+    1,
+    2,
+    "any",
+    "butterflies"
+  ],
+  [
+    "Sunflower",
+    "Flowers",
+    "f2bf53",
+    1,
+    3,
+    "sun",
+    "birds"
+  ],
+  [
+    "Foxglove",
+    "Flowers",
+    "c287b9",
+    1,
+    3,
+    "shade",
+    "bees"
+  ],
+  [
+    "Hydrangea",
+    "Flowers",
+    "a4bde2",
+    1,
+    3,
+    "shade",
+    "butterflies"
+  ],
+  [
+    "Peony",
+    "Flowers",
+    "e89aaa",
+    1,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Poppy",
+    "Flowers",
+    "ee8868",
+    1,
+    2,
+    "sun",
+    "bees"
+  ],
+  [
+    "Iris",
+    "Flowers",
+    "7e87bd",
+    1,
+    3,
+    "water",
+    "butterflies"
+  ],
+  [
+    "Sweet pea",
+    "Flowers",
+    "dcb1d2",
+    1,
+    3,
+    "sun",
+    "butterflies"
+  ],
+  [
+    "Clematis",
+    "Flowers",
+    "b793d3",
+    1,
+    4,
+    "any",
+    "bees"
+  ],
+  [
+    "Nasturtium",
+    "Flowers",
+    "efa355",
+    0,
+    2,
+    "sun",
+    "bees"
+  ],
+  [
+    "Creeping thyme",
+    "Grasses",
+    "c8acd1",
+    0,
+    2,
+    "sun",
+    "bees"
+  ],
+  [
+    "Moss carpet",
+    "Grasses",
+    "85a568",
+    0,
+    2,
+    "shade",
+    "fireflies"
+  ],
+  [
+    "Blue fescue",
+    "Grasses",
+    "88b9b0",
+    0,
+    2,
+    "sun",
+    "birds"
+  ],
+  [
+    "Feather grass",
+    "Grasses",
+    "d3c59b",
+    0,
+    3,
+    "sun",
+    "birds"
+  ],
+  [
+    "Sedge",
+    "Grasses",
+    "a4b978",
+    0,
+    2,
+    "water",
+    "frogs"
+  ],
+  [
+    "Fountain grass",
+    "Grasses",
+    "c9a9ad",
+    0,
+    3,
+    "sun",
+    "birds"
+  ],
+  [
+    "Dichondra",
+    "Grasses",
+    "abc9a8",
+    0,
+    2,
+    "any",
+    "butterflies"
+  ],
+  [
+    "Chamomile",
+    "Grasses",
+    "f4df9d",
+    0,
+    2,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rose",
+    "Shrubs",
+    "da8f9d",
+    2,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Azalea",
+    "Shrubs",
+    "dfb0d0",
+    2,
+    3,
+    "shade",
+    "butterflies"
+  ],
+  [
+    "Rosemary",
+    "Shrubs",
+    "a0aed1",
+    2,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Camellia",
+    "Shrubs",
+    "f1b8bd",
+    2,
+    4,
+    "shade",
+    "birds"
+  ],
+  [
+    "Lilac",
+    "Shrubs",
+    "b4a0c8",
+    2,
+    4,
+    "sun",
+    "butterflies"
+  ],
+  [
+    "Boxwood",
+    "Shrubs",
+    "87a366",
+    2,
+    3,
+    "any",
+    "birds"
+  ],
+  [
+    "Gardenia",
+    "Shrubs",
+    "f5efd4",
+    2,
+    4,
+    "shade",
+    "moths"
+  ],
+  [
+    "Blueberry",
+    "Shrubs",
+    "8097bc",
+    2,
+    3,
+    "any",
+    "birds"
+  ],
+  [
+    "Cherry blossom",
+    "Trees",
+    "eac0cd",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Silver birch",
+    "Trees",
+    "b2c986",
+    3,
+    5,
+    "any",
+    "birds"
+  ],
+  [
+    "Japanese maple",
+    "Trees",
+    "d8a17e",
+    3,
+    5,
+    "shade",
+    "birds"
+  ],
+  [
+    "Olive",
+    "Trees",
+    "9dac85",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Willow",
+    "Trees",
+    "aac68a",
+    3,
+    5,
+    "water",
+    "frogs"
+  ],
+  [
+    "Magnolia",
+    "Trees",
+    "f2d8d7",
+    3,
+    5,
+    "any",
+    "birds"
+  ],
+  [
+    "Lemon",
+    "Trees",
+    "e1ce72",
+    3,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Apple",
+    "Trees",
+    "dca394",
+    3,
+    4,
+    "sun",
+    "birds"
+  ],
+  [
+    "Kangaroo paw",
+    "Natives",
+    "dca077",
+    1,
+    3,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Billy buttons",
+    "Natives",
+    "ead073",
+    1,
+    2,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Wattle",
+    "Natives",
+    "e6cb72",
+    2,
+    4,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Bottlebrush",
+    "Natives",
+    "d4817e",
+    2,
+    4,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Grevillea",
+    "Natives",
+    "e6a28d",
+    2,
+    3,
+    "any",
+    "native birds"
+  ],
+  [
+    "Banksia",
+    "Natives",
+    "dcb977",
+    2,
+    4,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Lilly pilly",
+    "Natives",
+    "d995a6",
+    2,
+    4,
+    "any",
+    "native birds"
+  ],
+  [
+    "Waxflower",
+    "Natives",
+    "ebc8d9",
+    1,
+    3,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Lomandra",
+    "Natives",
+    "b6be7e",
+    0,
+    2,
+    "any",
+    "native birds"
+  ],
+  [
+    "Eucalyptus",
+    "Natives",
+    "a7c5b1",
+    3,
+    5,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Carrot",
+    "Produce",
+    "e9a364",
+    0,
+    2,
+    "sun",
+    "bees"
+  ],
+  [
+    "Tomato",
+    "Produce",
+    "db8977",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Lettuce",
+    "Produce",
+    "b8cf88",
+    0,
+    2,
+    "any",
+    "butterflies"
+  ],
+  [
+    "Pumpkin",
+    "Produce",
+    "e2a664",
+    0,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Strawberry",
+    "Produce",
+    "e7999c",
+    0,
+    2,
+    "any",
+    "bees"
+  ],
+  [
+    "Radish",
+    "Produce",
+    "da8a9f",
+    0,
+    2,
+    "any",
+    "bees"
+  ],
+  [
+    "Pea",
+    "Produce",
+    "b9d2a0",
+    1,
+    3,
+    "any",
+    "butterflies"
+  ],
+  [
+    "Aubergine",
+    "Produce",
+    "a18eb1",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Basil",
+    "Produce",
+    "a6c486",
+    0,
+    2,
+    "sun",
+    "bees"
+  ],
+  [
+    "Corn",
+    "Produce",
+    "e5ce82",
+    1,
+    3,
+    "sun",
+    "birds"
+  ],
+  [
+    "Cucumber",
+    "Produce",
+    "99b979",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Chilli",
+    "Produce",
+    "e39d88",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Beetroot",
+    "Produce",
+    "a17e99",
+    0,
+    2,
+    "any",
+    "bees"
+  ],
+  [
+    "Melon",
+    "Produce",
+    "d5c482",
+    0,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Common jasmine",
+    "Flowers",
+    "fff7e8",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Pink jasmine",
+    "Flowers",
+    "f5e8ea",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Winter jasmine",
+    "Flowers",
+    "efd131",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Dahlia 'Caf\u00e9 au Lait'",
+    "Flowers",
+    "eed8c0",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Tulip 'Queen of Night'",
+    "Flowers",
+    "352039",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Blue delphinium",
+    "Flowers",
+    "497bc6",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Purple lupin",
+    "Flowers",
+    "8156aa",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Burgundy hollyhock",
+    "Flowers",
+    "7d263e",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Slender weaver's bamboo",
+    "Grasses",
+    "598747",
+    2,
+    4,
+    "sun",
+    "birds"
+  ],
+  [
+    "Golden bamboo",
+    "Grasses",
+    "c4b55b",
+    2,
+    4,
+    "sun",
+    "birds"
+  ],
+  [
+    "Black bamboo",
+    "Grasses",
+    "343831",
+    2,
+    4,
+    "sun",
+    "birds"
+  ],
+  [
+    "Himalayan blue bamboo",
+    "Grasses",
+    "719b9e",
+    2,
+    4,
+    "sun",
+    "birds"
+  ],
+  [
+    "Red bamboo 'Jiuzhaigou'",
+    "Grasses",
+    "b25342",
+    2,
+    4,
+    "sun",
+    "birds"
+  ],
+  [
+    "Rose 'Mister Lincoln'",
+    "Shrubs",
+    "ab2335",
+    2,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rose 'Iceberg'",
+    "Shrubs",
+    "fff9e8",
+    2,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rose 'Golden Celebration'",
+    "Shrubs",
+    "eeb638",
+    2,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rose 'Just Joey'",
+    "Shrubs",
+    "eaa071",
+    2,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rose 'Scentimental'",
+    "Shrubs",
+    "be3047",
+    2,
+    4,
+    "sun",
+    "bees"
+  ],
+  [
+    "Giant redwood",
+    "Trees",
+    "568455",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Coast redwood",
+    "Trees",
+    "447859",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Giant bamboo",
+    "Grasses",
+    "799856",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Ginkgo",
+    "Trees",
+    "91ac51",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Fig",
+    "Trees",
+    "824868",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Pear",
+    "Trees",
+    "b6b349",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Peach",
+    "Trees",
+    "e9a15c",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Plum",
+    "Trees",
+    "654d87",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Apricot",
+    "Trees",
+    "efa44f",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Nectarine",
+    "Trees",
+    "d95838",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Orange",
+    "Trees",
+    "eb9437",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Mandarin",
+    "Trees",
+    "ee9d36",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Lime",
+    "Trees",
+    "75a743",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Avocado",
+    "Trees",
+    "415d35",
+    3,
+    5,
+    "sun",
+    "birds"
+  ],
+  [
+    "Snow gum",
+    "Natives",
+    "a1b4a1",
+    3,
+    5,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Alpine snow gum",
+    "Natives",
+    "a7b8ac",
+    3,
+    5,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Red flowering gum",
+    "Natives",
+    "d83a3d",
+    3,
+    5,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Waratah",
+    "Natives",
+    "c43048",
+    2,
+    4,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Gymea lily",
+    "Natives",
+    "b9303d",
+    2,
+    4,
+    "sun",
+    "native birds"
+  ],
+  [
+    "Globe artichoke",
+    "Produce",
+    "8a9b73",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rhubarb",
+    "Produce",
+    "b94855",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Asparagus",
+    "Produce",
+    "74a14c",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Broccoli",
+    "Produce",
+    "508053",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Cauliflower",
+    "Produce",
+    "ece8d2",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Capsicum",
+    "Produce",
+    "cb3f31",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Brussels sprouts",
+    "Produce",
+    "7d995f",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Leek",
+    "Produce",
+    "a0b38b",
+    0,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Hemp",
+    "Produce",
+    "6d9345",
+    1,
+    3,
+    "sun",
+    "bees"
+  ],
+  [
+    "Zebra grass",
+    "Grasses",
+    "8fa15a",
+    1,
+    14,
+    "sun",
+    "birds"
+  ],
+  [
+    "Feather reed grass",
+    "Grasses",
+    "b9a575",
+    1,
+    12,
+    "any",
+    "birds"
+  ],
+  [
+    "Blue switchgrass",
+    "Grasses",
+    "819baf",
+    1,
+    14,
+    "sun",
+    "birds"
+  ],
+  [
+    "Golden forest grass",
+    "Grasses",
+    "c5ba61",
+    0,
+    9,
+    "shade",
+    "butterflies"
+  ],
+  [
+    "Japanese blood grass",
+    "Grasses",
+    "b95353",
+    0,
+    10,
+    "sun",
+    "butterflies"
+  ],
+  [
+    "Purple moor grass",
+    "Grasses",
+    "aa957d",
+    1,
+    14,
+    "any",
+    "birds"
+  ],
+  [
+    "Tufted hair grass",
+    "Grasses",
+    "bfb999",
+    1,
+    11,
+    "shade",
+    "birds"
+  ],
+  [
+    "Quaking grass",
+    "Grasses",
+    "b1a17b",
+    0,
+    9,
+    "sun",
+    "birds"
+  ],
+  [
+    "Autumn moor grass",
+    "Grasses",
+    "b3b968",
+    0,
+    9,
+    "any",
+    "birds"
+  ],
+  [
+    "Pink muhly grass",
+    "Grasses",
+    "c792ab",
+    1,
+    12,
+    "sun",
+    "butterflies"
+  ],
+  [
+    "Golden barrel cactus",
+    "Cacti & succulents",
+    "c9b66e",
+    1,
+    18,
+    "sun",
+    "bees"
+  ],
+  [
+    "Bunny ears cactus",
+    "Cacti & succulents",
+    "a0b56a",
+    1,
+    14,
+    "sun",
+    "bees"
+  ],
+  [
+    "Prickly pear",
+    "Cacti & succulents",
+    "79966b",
+    2,
+    18,
+    "sun",
+    "bees"
+  ],
+  [
+    "Mexican fencepost cactus",
+    "Cacti & succulents",
+    "6d936b",
+    2,
+    22,
+    "sun",
+    "moths"
+  ],
+  [
+    "Old man cactus",
+    "Cacti & succulents",
+    "d8d8cd",
+    1,
+    20,
+    "sun",
+    "moths"
+  ],
+  [
+    "Ladyfinger cactus",
+    "Cacti & succulents",
+    "b5a06c",
+    0,
+    12,
+    "sun",
+    "bees"
+  ],
+  [
+    "Star cactus",
+    "Cacti & succulents",
+    "97a58a",
+    0,
+    16,
+    "sun",
+    "bees"
+  ],
+  [
+    "Holiday cactus",
+    "Cacti & succulents",
+    "d46e86",
+    1,
+    12,
+    "shade",
+    "butterflies"
+  ],
+  [
+    "Mexican snowball",
+    "Cacti & succulents",
+    "a7beb8",
+    0,
+    10,
+    "sun",
+    "bees"
+  ],
+  [
+    "Lipstick echeveria",
+    "Cacti & succulents",
+    "a19f6a",
+    0,
+    10,
+    "sun",
+    "bees"
+  ],
+  [
+    "Hens and chicks",
+    "Cacti & succulents",
+    "8e9f73",
+    0,
+    9,
+    "sun",
+    "bees"
+  ],
+  [
+    "Aloe vera",
+    "Cacti & succulents",
+    "80a18b",
+    1,
+    14,
+    "sun",
+    "birds"
+  ],
+  [
+    "Century plant",
+    "Cacti & succulents",
+    "92aaa7",
+    2,
+    22,
+    "sun",
+    "moths"
+  ],
+  [
+    "Zebra haworthia",
+    "Cacti & succulents",
+    "a2b298",
+    0,
+    10,
+    "shade",
+    "bees"
+  ],
+  [
+    "Window haworthia",
+    "Cacti & succulents",
+    "a3c3a8",
+    0,
+    10,
+    "shade",
+    "bees"
+  ],
+  [
+    "Jade plant",
+    "Cacti & succulents",
+    "669669",
+    2,
+    18,
+    "any",
+    "bees"
+  ],
+  [
+    "Gollum jade",
+    "Cacti & succulents",
+    "799558",
+    1,
+    16,
+    "any",
+    "bees"
+  ],
+  [
+    "Black rose aeonium",
+    "Cacti & succulents",
+    "53333e",
+    1,
+    16,
+    "sun",
+    "bees"
+  ],
+  [
+    "Jelly bean sedum",
+    "Cacti & succulents",
+    "a38362",
+    0,
+    9,
+    "sun",
+    "bees"
+  ],
+  [
+    "Living stones",
+    "Cacti & succulents",
+    "aa806b",
+    0,
+    16,
+    "sun",
+    "bees"
+  ]
 ]

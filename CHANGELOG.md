@@ -10,6 +10,236 @@
 
 **Why:** Expresses the creator's wish to keep the garden freely playable and its derivatives available for others to modify.
 
+### [2026-10-03 13:04] Added
+
+**Tech:** `GardenClearView, GardenInterface, GardenTouch` — HUD-free garden viewing.
+
+**Dev:** Add Enjoy the view buttons to the desktop HUD, Guide and touch Garden drawer, with H shortcut. Hide UI layers, held tools, selection outlines, cursors and placement previews while time, weather and wildlife continue. Freeze walking, preserve the tool/menu/pointer state, and consume the first return key/click/tap, including synthetic touch mouse presses and the complete return finger gesture. Measure plain instruction text using its actual wrapped height so it stays above the toolbar on compact windows. Keep save schema and dismissal settings unchanged. Native/Compatibility control and responsive-layout checks, the gardening smoke test, read-only Blender source checks and browser package/security checks pass. In the exported Chrome game, H hides the overlays and G restores the held can and HUD without advancing the saved day.
+
+**Plain:** Enjoy the garden with the interface and held tool hidden, then press any key or tap to return.
+
+**Why:** Gives players an uninterrupted view without losing their current gardening task.
+
+### [2026-10-03 13:04] Changed
+
+**Tech:** `Catalogue.ROWS, art_source/plant_specs.json` — six bamboo varieties in Grasses.
+
+**Dev:** Change only the category for IDs 68–72 and 80; preserve their IDs, growth days, capacities, placement layers and meshes. Update catalogue-count coverage to 24 grasses and 21 trees, including two-column tree-card coverage.
+
+**Plain:** All six bamboo varieties now appear in the Grasses seed category.
+
+**Why:** Keeps related plants together so they are easier to find.
+
+### [2026-10-03 13:04] Fixed
+
+**Tech:** `art_source/build_tools.py, assets/tools/can.glb` — rounded, attached can handle.
+
+**Dev:** Replace the angular floating rear handle with a curved enamel loop, two body-mounted collars and a dark grip. Adjust first-person placement to keep the loop in frame. Rebuild the can GLB and complete hand-tools source in an isolated Blender scene; support targeted --only exports. Verify the handle in actual native and browser hand views and confirm all source-library images are present.
+
+**Plain:** The watering can has a rounded handle that joins its body neatly and fits the hand view.
+
+**Why:** Makes the can more believable and comfortable to look at.
+
+### [2026-10-03 13:04] Added
+
+**Tech:** `GardenTools.repeat_mouse` — held desktop watering.
+
+**Dev:** Add watering to held mouse tool repetition, respecting the existing cooldown, aim, can upgrades, menus, photo mode and day-transition guards. Release stops watering; a return-from-view click is canceled until release.
+
+**Plain:** Hold and sweep the watering can across the ground to water an area.
+
+**Why:** Makes watering larger areas easier without repeated clicking.
+
+### [2026-10-03 12:40] Fixed
+
+**Tech:** `botanical_additions_forms.py/climber`, `assets/plants/plant_09.glb`, `assets/plants/plant_10.glb` — revised Sweet pea and Clematis flowers.
+
+**Dev:** Preserve IDs 9 and 10 and their foliage envelopes while rebuilding flowers with explicitly triangulated curved petals. Sweet pea has banner, wing and keel petals; Clematis has outward-facing sepals and fine cream stamens. Export matching buds and refresh catalogue portraits, with packed opaque PBR materials. Read revised sources last during growth rebuilds. Validate both renderers, previous placement envelopes, growth/preview contracts and the full game suite; record player Update 17.
+
+**Plain:** Sweet pea and Clematis now have clearer, naturally shaped flowers that face out into the garden.
+
+**Why:** Makes these climbing flowers easier to recognise and enjoy up close.
+
+### [2026-10-03 12:40] Added
+
+**Tech:** `GardenCatalogue`, `GardenSeedCollection`, `botanical_additions.blend`, `build_plant_growth.py` — ten ornamental grasses and twenty cacti/succulents.
+
+**Dev:** Append IDs 106–135 without changing existing rows, growth days or save schema 2. Add a compact two-line category button, common/botanical-name search, 30 mature GLBs, species-specific early growth meshes and model-rendered portraits. Author ribs, areoles, spines, joined pads, patterned blades, branching seed heads, fleshy rosettes, tubular jade leaves and split living stones from botanical references. Keep succulent surfaces opaque, disable leaf wind and restrain instance deformation. Preserve the 300-pixel ornate menu and plain shortcut text. Add coverage for catalogue counts, packed surfaces, rigid organ rendering and responsive category browsing. Full asset/runtime suite, read-only source-library checks, browser package/security checks and actual Chrome save migration tests pass; new plant IDs survive a browser save. Record player Update 16.
+
+**Plain:** The seed collection now offers ten more grasses and a new category of twenty cacti and succulents.
+
+**Why:** Gives gardeners more recognisable plant shapes and textures to combine in their gardens.
+
+### [2026-10-03 12:22] Fixed
+
+**Tech:** `web/save-format.js/validateSave` — accept saved watered-ground patch records.
+
+**Dev:** Match `GardenTools.water_ground` by validating each patch's finite `x`, `z`, `radius` and `until` fields instead of treating watered ground as scalar terrain offsets. Preserve save bytes and migration archives without conversion, including expired patches. The deployed validator reproduced the reported startup message with a valid watered save; validation fails before Godot starts or autosaves. Cover v1/v2 encrypted copies, migrated-save reloads, later progress, malformed-patch rejection and unchanged databases in Chrome and WebKit. Verify watered saves in the existing exported Godot runtime and retained bytes on mount failure; record player Update 15 and check update dismissal, the browser loader, package and security checks. Publish clean source commit `46225f4` as production deployment `def7b039` and verify live encrypted transfer, exact-byte import, actual Godot startup, watered-save reload, unchanged source storage and retained latest progress; GitHub Actions passes.
+
+**Plain:** Saved gardens with watered ground can open again after a refresh or a move to the new address.
+
+**Why:** Restores access to affected gardens while preserving their progress and recovery copies.
+
+### [2026-10-03 11:07] Added
+
+**Tech:** `GardenLeisure`, `GardenCompanion`, `GardenTouch`, `garden.gd` — furniture viewpoints and companion invitations.
+
+**Dev:** Add nearby facing interactions for benches, pergolas and ponds, respecting structure rotation. Resting exposes clickable companion invitations on desktop, right-drag look and safe exits through movement, tools or removed furniture; saves retain the pre-rest ground position. Add path-following call/settle commands, petting animation, sunny cat stretches and dog sniffing, using existing articulated models. Mirror actions in touch Interact and Garden controls, document controls and record Update 14. Validate real navigation, rotated furniture, pond camera direction, reach, save position, pet animations and touch commands in native and Compatibility renderers. The full project suite passes, and the local browser export passes package and security checks.
+
+**Plain:** Garden furniture now offers places to pause, with companions you can call, pet and invite to share the view.
+
+**Why:** Gives players more ways to enjoy and inhabit the garden they have made.
+
+### [2026-10-03 11:00] Added
+
+**Tech:** `GardenTutorial`, `GardenExperience`, `garden.gd` — interactive welcome walk.
+
+**Dev:** Replace the initial five-page welcome with an optional five-action garden lesson. Persist progress and the planted flower in an optional schema-2 field, handle removed lesson plants, and grant only that flower a first-morning bloom. Add a separate one-flower welcome request without replacing ordinary orders; prevent its replenishment. Add first-use terrain, layer and dormancy hints. Verify real tool actions, delivery accounting, saved progress, skipping, replay, actual touch buttons and desktop/phone card bounds without covering aiming or movement. Confirm in isolated Chrome profiles that both legacy saves load and a saved welcome lesson resumes through keyboard input and persists its next morning. Record Update 13.
+
+**Plain:** New gardeners can learn by growing and sharing their first flower, with the option to skip or resume later.
+
+**Why:** Makes the first garden experience easier to learn without remembering pages of instructions.
+
+### [2026-10-03 09:59] Changed
+
+**Tech:** `GardenTheme`, `GardenInterface`, `GardenSeedCollection`, `garden.gd/make_ui`, `GardenTouch`, `GardenUpdates` — original brown frames and a compact sidebar.
+
+**Dev:** Restore the existing wood/button textures, decorative borders and serif font family across menus, HUD panels, touch readouts and update history. Use a 300-pixel desktop sidebar instead of the previous 350–420-pixel range, with three-column categories, smaller reflowing desktop cards, constrained buttons and shorter shop labels. Retain search, filters, favourites, recent planting, shop previews, care inspection and structure selection. Remove background styles from shortcut instructions and the compact desktop readout, retaining only text shadows. Preserve responsive positioning and save fields; record player Update 12 and verify menu width across Seeds, Shop, Orders, Settings and Guide on desktop/phone layouts, plus browsing, touch gestures and saved update dismissal.
+
+**Plain:** The familiar warm brown frames return with a slimmer sidebar and unobtrusive shortcut text.
+
+**Why:** Restores the garden’s visual character and leaves more of the landscape visible while browsing.
+
+### [2026-10-03 09:40] Added
+
+**Tech:** `GardenStructureTarget`, `garden.gd/update_hover`, `perform_action`, `GardenTouch.act` — surface targeting and removal tint for placed structures.
+
+**Dev:** Cache two-sided mesh-derived picking shapes on a dedicated query-only collision layer, following rotated structures without changing walking collision. The Remove tool selects the closest visible surface within reach and before terrain, tints its materials warm red without changing shared resources, and displays the structure name and full refund. Use the same node target for dispatch and touch Undo, clear selection after removal or tool changes, and retain existing structure save and refund semantics. Cover all eleven structure types, overlapping plants, material restoration, reach, terrain occlusion, saved removal and restoration of custom signs and stocked ponds. Update the old synthetic stone-removal check to supply the selected object; settle viewport changes and pause world updates during injected touch tests. Add player Update 11.
+
+**Plain:** Point the Remove tool at a garden structure to see it turn red before packing it away.
+
+**Why:** Makes it clear which structure will be removed, even when aiming at its roof or a rotated part.
+
+### [2026-10-03 09:21] Changed
+
+**Tech:** `GardenTheme`, `GardenInterface`, `GardenSeedCollection`, `GardenTouch` — readable menu surfaces, typography and display-aware layout.
+
+**Dev:** Use the engine's bundled body font, larger text, opaque green surfaces, light portrait backdrops and persistent gold selected-state borders. Replace the fixed desktop UI scale with logical display pixels and position menus, tools, crosshair and readouts from the available viewport. Reflow card heights around wrapped captions, collapse categories on short screens, constrain dropdown widths, and remove duplicated seed-card detail from the sidebar. Verify desktop/phone menu bounds, caption containment, control-mode switching, desktop targeting and existing touch gestures; add Update 10 and update the player guide.
+
+**Plain:** Clearer text and calmer backgrounds make the garden menus easier to read on computers and phones.
+
+**Why:** Keeps controls legible while giving plant choices and the garden view more room.
+
+### [2026-10-03 09:20] Fixed
+
+**Tech:** `plant_shape.gdshaderinc`, `GardenPlantGrowth.set_shape`, `GardenPlantInspector`, `garden.gd/ghost_material` — bounded plant variation on Compatibility/WebGL.
+
+**Dev:** A full-world Compatibility render exposed exhaustion of the global instance-uniform buffer that isolated plant checks did not exercise. Compile ordinary shape uniforms for that renderer, give planted specimens private material values only when needed, reuse each specimen's owned materials when its shape changes, and retain shared identity values for decorative plants. Keep Forward+ instance uniforms and carry the same deformation into previews and outlines. Verify independent, repeatable plant shape, the full scene and its 142-plant dense bed. Use deferred node disposal in rendered tests, matching the game's lifecycle. Add rendered Compatibility checks to the regular suite and make the actual browser test reject native renderer errors as well as script failures.
+
+**Plain:** Plant variation remains reliable in browser gardens with many plants.
+
+**Why:** Prevents hardware shader limits from interrupting rendering as the garden fills out.
+
+### [2026-10-03 08:51] Added
+
+**Tech:** `GardenPlantInspector`, `garden.gd/aimed_plant`, `GardenTouch` — plant care inspector and consistent action target.
+
+**Dev:** Outline the aimed plant and explain its growth stage, watering, season, greenhouse protection, shade source, stress and temporary watering boost using the same conditions as growth. Restore shared materials when the target changes and cache outline/preview variants through renderer cleanup. Use the displayed target for move/remove and touch undo, and expose layer switching while inspecting on phones. Cover overlapping plants, actual move actions, preview removal and responsive desktop/phone views.
+
+**Plain:** Point at a plant to see how it is growing, what it needs and which plant your tool will reach.
+
+**Why:** Makes crowded gardens easier to tend and explains why a plant may be growing slowly.
+
+### [2026-10-03 08:51] Added
+
+**Tech:** `GardenSeedCollection`, `assets/ui/shop`, `garden.gd/save_game` — searchable seed collection, filters and saved favourites.
+
+**Dev:** Search all 106 species without rebuilding the input field, filter by growing season, light, authored mature height, colour and wildlife, and sort by name, height or growth time. Save favourites and the last twenty actual planting choices as optional version-2 save fields. Add ornament portraits rendered from the existing GLBs, touch-sized card controls, result counts and empty-state guidance. Verify filtering, persistent selection lists and real desktop/phone menus.
+
+**Plain:** Find plants more easily, keep favourite seeds close and preview decorations before placing them.
+
+**Why:** Reduces browsing time as the seed collection grows.
+
+### [2026-10-03 08:51] Added
+
+**Tech:** `build_plant_growth.py`, `GardenPlantGrowth`, `plant_shape.gdshaderinc` — supplementary growth models and persistent plant shape.
+
+**Dev:** Generate separate Seedling, Juvenile and Buds meshes for all 106 species in a new editable Blender library without rewriting the mature source libraries. Export embedded PBR maps with compressed imports; added geometry totals 572,200 triangles under a 650,000 budget. Switch organs through development, flowering or ripening while preserving existing height/pruning behavior. Apply coherent instance bending/twist to foliage, blooms, previews and outlines. Persist shape seed and orientation in version-2 saves, with deterministic defaults for old gardens; add asset, stage, save and read-only Blender source checks. Record player-facing Updates 7–9 without renumbering prior releases.
+
+**Plain:** Plants grow from small seedlings through young leaves and buds, with subtle differences in each planting.
+
+**Why:** Makes growth easier to see and garden arrangements feel more natural.
+
+### [2026-10-01 13:40] Changed
+
+**Tech:** `wrangler.jsonc`, `functions/_middleware.js`, `web/_routes.json` — activate and verify the production garden move.
+
+**Dev:** Create private R2 transfer storage with one-day abandoned-object cleanup, bind production only, and keep previews disabled. Deploy and verify the ordinary game with migration off before enabling it. Handle Pages' extensionless HTML routing without losing the moving page's cross-domain policy, with disabled-reader routes returning to the original game. Add an opt-in live Chrome check using isolated fixture saves; verify real R2 transfers, automatic navigation, exact-byte import, Godot startup, unchanged original storage, recovery access and retained latest progress on repeat visits. Record rollout/rollback deployments and ignore Wrangler's local cache.
+
+**Plain:** Visiting the old address now gently carries your garden to zend.garden while keeping its original copy safe.
+
+**Why:** Makes the move work on the real hosting setup, with a tested way to keep gardening if a transfer fails.
+
+### [2026-10-01 13:30] Fixed
+
+**Tech:** `garden.gd/browser_save_result`, `tests/migration_game.cjs` — browser save verification respects the production security policy.
+
+**Dev:** Replace JavaScript evaluation with direct JavaScriptBridge object calls for save-ready/failure notifications. A deployed Chrome check exposed the blocked callback before production activation; run actual exported runtime tests with CSP applied, covering both save versions and failed IndexedDB mounting without overwriting the saved bytes.
+
+**Plain:** The garden can finish its safety checks and open correctly under the live site's browser protections.
+
+**Why:** Keeps the protective save check compatible with the real deployment without relaxing browser security.
+
+### [2026-10-01 11:43] Added
+
+**Tech:** `web/migration*`, `functions/api/garden-transfer/[action].js`, `garden.gd/browser_save_check` — protected domain migration with player-facing moving and arrival notes.
+
+**Dev:** Add a read-only old-origin save reader, encrypted fifteen-minute transfer relay, separate immutable local recovery copies, staged and verified atomic promotion, explicit conflict choices, repeat-import receipts and game-session locks. Verify Godot’s mounted save before world creation to block blank-save autosave after an import/mount failure. Add an off switch and stay route, preserve save schema versions, increment player history to Update 6, and document private R2 binding/lifecycle, deployment and rollback. Test relay/encryption contracts, Chrome/WebKit failure paths with unchanged source bytes, actual exported Godot startup and failed storage mounting, and packaged site policy. Live activation remains off pending account resource setup and production verification.
+
+**Plain:** Returning players can gently move their garden to its new cozy home, with the original copy kept safe and a choice if another garden already lives there.
+
+**Why:** Makes the new address easy to adopt while keeping failed moves and rollbacks recoverable.
+
+### [2026-10-01 08:11] Added
+
+**Tech:** `GardenUpdates`, `GardenExperience.settings_page`, `settings.updates_seen` — dismissible player history and update counter.
+
+**Dev:** Add a quiet responsive What’s new dialog with curated, non-technical entries for visible changes. Returning players see unseen entries once; dismissal persists in the existing garden settings, and Settings can reopen the full history. New visitors continue onboarding without historical update interruptions. Derive the displayed version from the newest numbered entry, document future increments in AGENTS.md, and cover dismissal/reload, reopening, keyboard input and desktop/phone layouts.
+
+**Plain:** Players can see how the garden is evolving, close the update notes, and find them again in Settings.
+
+**Why:** Makes meaningful improvements easy to discover without repeatedly interrupting play.
+
+### [2026-10-01 08:11] Fixed
+
+**Tech:** `build_shop.py/greenhouse`, `shop_library.blend`, `assets/shop/greenhouse.glb` — roof glazing orientation.
+
+**Dev:** Align each roof pane’s width with the ridge and its long axis with the slope using an explicit orthonormal basis. Rebuild only the greenhouse using its existing suffixed source root and materials, retaining the other gallery assets and avoiding interactive scene changes. Verify all eight exported pane bays and roof-plane alignment, reproduce the failure against the previous GLB, render matched before/after views, and check packed source images.
+
+**Plain:** The greenhouse glass now sits correctly along both sides of the roof.
+
+**Why:** Removes the misplaced glass sheets sticking across the greenhouse roof.
+
+### [2026-10-01 08:11] Fixed
+
+**Tech:** `Soundscape.music_volume`, `default_bus_layout.tres/Music`, `GardenExperience` — exact music mute at zero.
+
+**Dev:** Route all four music loops through a dedicated Music bus, mute that bus immediately at zero, and set each music player’s linear output to exact zero instead of fading toward the former -80 dB floor. Keep loop timelines running and nature outside the music bus. Restore music when the slider rises, and cover immediate mute/unmute, routing, continued playback and saved settings through both focused and actual settings-slider tests.
+
+**Plain:** Moving Music volume all the way down completely silences the music while preserving nature sounds.
+
+**Why:** Lets players choose a fully music-free garden without residual notes or a waiting period.
+
+### [2026-10-01 07:44] Changed
+
+**Tech:** `tools/build_audio.py`, `Soundscape.update_location`, `tests/check_audio.py`, `tests/soundscape.gd` — compatible area themes and calmer ambience.
+
+**Dev:** Replace the transposed piano-like motifs and fixed C/G drone with four separately phrased felt-key, soft-pluck, low-flute and sustained-tone themes sharing a concert-tuned D/E/G/A/B palette. Render exact 64-second music phrases with wrapped note/reverb tails and 32-second circular nature loops; soften night insects and bird calls and remove the pitched water layer. Extend music fades, stabilize area boundaries, map later orchards/woodland by setting, and soften music at night/in rain while retaining independent volume settings. Add PCM pitch/level/loop checks and runtime coverage for theme selection, fades, playback pitch and mutes; document the musical direction and listening limits.
+
+**Plain:** Each part of the garden now has its own quieter, more spacious tune, with smoother changes between areas and softer nature sounds.
+
+**Why:** Removes distracting harmonic clashes and repetition so the garden feels more restful.
+
 ### [2026-09-28 21:08] Fixed
 
 **Tech:** `GardenTouch._input`, `layout`, `layout_context` — independent touch aiming and responsive mobile HUD.

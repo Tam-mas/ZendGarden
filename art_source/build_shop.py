@@ -3,7 +3,26 @@ import sys, math
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent/'detail'))
 from common import *
-scene_new('ZendGarden_DetailedShop'); m=palette()
+from mathutils import Matrix
+
+args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
+only=args[1] if len(args)==2 and args[0]=='--only' else None
+if args and only!='greenhouse': raise ValueError('Supported selective rebuild: --only greenhouse')
+if only:
+    # Run with shop_library.blend loaded in a separate background process.
+    gallery=next((scene for scene in bpy.data.scenes if any(
+        obj.parent is None and obj.name.split('.')[0]=='greenhouse' for obj in scene.objects)),None)
+    assert gallery, 'Load shop_library.blend for a selective rebuild'
+    bpy.context.window.scene=gallery
+    original=next(obj for obj in gallery.objects if obj.parent is None and obj.name.split('.')[0]=='greenhouse')
+    original_name=original.name
+    materials={material.name.split('.')[0]:material for obj in original.children_recursive
+               if obj.type=='MESH' for material in obj.data.materials}
+    m={key:materials[name] for key,name in {
+        'wood':'Weathered cedar','darkwood':'Oiled oak','stone':'Carved limestone',
+        'metal':'Aged bronze','glass':'Greenhouse glass'}.items()}
+else:
+    scene_new('ZendGarden_DetailedShop'); m=palette()
 
 def bolt(p,parent):ell('Recessed bronze fixing',p,(.025,.025,.013),m['metal'],parent,12,8)
 def beam(a,b,width,parent,material=None):
@@ -11,6 +30,7 @@ def beam(a,b,width,parent,material=None):
 
 def build(kind):
     r=pivot(kind)
+    if only: r.name=original_name
     if kind=='bench':
         for x in [-.65,.65]:
             for z in [-.23,.23]:
@@ -53,7 +73,14 @@ def build(kind):
             for y in [.2,1.22,2.30]:box('Glazing rail',(x,y,0),(.065,.055,2.87),m['darkwood'],r)
             for z in [-1.05,-.35,.35,1.05]:
                 for y in [.70,1.76]:box('Individual glass pane',(x,y,z),(.016,.98,.65),m['glass'],r,.002)
-                a=Vector((x,2.3,z));b=Vector((0,3.05,z));o=box('Roof glass',(a+b)*.5,(.016,(b-a).length-.03,.66),m['glass'],r,.002);o.rotation_euler=vec(b-a).to_track_quat('Z','Y').to_euler()
+                a=Vector((x,2.3,z));b=Vector((0,3.05,z))
+                o=box('Roof glass',(a+b)*.5,(.016,(b-a).length-.03,.66),m['glass'],r,.002)
+                # box() maps height to Blender Z and width to Blender Y.
+                # Keep the width parallel to the ridge; a generic track/up
+                # quaternion turned these panes 90 degrees out of the roof.
+                slope=vec(b-a).normalized();width=vec((0,0,1))
+                normal=width.cross(slope).normalized()
+                o.rotation_euler=Matrix((normal,width,slope)).transposed().to_euler()
             box('Gutter',(x,2.26,0),(.10,.075,3.05),m['metal'],r)
             rod('Downpipe',(x,.1,1.48),(x,2.28,1.48),.025,m['metal'],r)
             box('Potting shelf',(x*.78,.85,.22),(.48,.055,2.1),m['wood'],r)
@@ -135,7 +162,12 @@ def build(kind):
                 ell('Lily centre',(x,.10,z),(.055,.05,.055),m['ivory'],r)
     export(r,'shop',kind)
     return r
-roots=[build(k) for k in ['stone','pot','bench','lantern','arbor','pergola','greenhouse','pond','bath','hive','sign']]
-# Arrange editable source assets as a gallery; exported origins remain at ground centre.
-for i,r in enumerate(roots):r.location=vec(((i%4)*4.8,0,(i//4)*4.8));r.hide_set(False)
+if only:
+    old=original;location=old.location.copy()
+    for obj in list(old.children_recursive)+[old]:bpy.data.objects.remove(obj,do_unlink=True)
+    replacement=build(only);replacement.location=location;replacement.hide_set(False)
+else:
+    roots=[build(k) for k in ['stone','pot','bench','lantern','arbor','pergola','greenhouse','pond','bath','hive','sign']]
+    # Arrange editable source assets as a gallery; exported origins remain at ground centre.
+    for i,r in enumerate(roots):r.location=vec(((i%4)*4.8,0,(i//4)*4.8));r.hide_set(False)
 save('shop_library.blend')

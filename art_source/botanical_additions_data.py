@@ -1,0 +1,36 @@
+"""Append-only catalogue additions, with reference species and botanical habit."""
+GRASSES=[
+ ('Zebra grass',"Miscanthus sinensis 'Zebrinus'",'8fa15a',1,14,'sun','birds',1.65,'banded'),
+ ('Feather reed grass',"Calamagrostis × acutiflora 'Karl Foerster'",'b9a575',1,12,'any','birds',1.50,'reed'),
+ ('Blue switchgrass',"Panicum virgatum 'Heavy Metal'",'819baf',1,14,'sun','birds',1.20,'switch'),
+ ('Golden forest grass',"Hakonechloa macra 'Aureola'",'c5ba61',0,9,'shade','butterflies',.40,'forest'),
+ ('Japanese blood grass',"Imperata cylindrica 'Red Baron'",'b95353',0,10,'sun','butterflies',.55,'blood'),
+ ('Purple moor grass',"Molinia caerulea subsp. arundinacea 'Transparent'",'aa957d',1,14,'any','birds',1.70,'moor'),
+ ('Tufted hair grass','Deschampsia cespitosa','bfb999',1,11,'shade','birds',.95,'hair'),
+ ('Quaking grass','Briza media','b1a17b',0,9,'sun','birds',.65,'quaking'),
+ ('Autumn moor grass','Sesleria autumnalis','b3b968',0,9,'any','birds',.45,'sesleria'),
+ ('Pink muhly grass','Muhlenbergia capillaris','c792ab',1,12,'sun','butterflies',.95,'muhly'),
+]
+SUCCULENTS=[
+ ('Golden barrel cactus','Echinocactus grusonii','c9b66e',1,18,'sun','bees',.60,'barrel'),
+ ('Bunny ears cactus','Opuntia microdasys','a0b56a',1,14,'sun','bees',.70,'bunny'),
+ ('Prickly pear','Opuntia ficus-indica','79966b',2,18,'sun','bees',1.25,'pear'),
+ ('Mexican fencepost cactus','Pachycereus marginatus','6d936b',2,22,'sun','moths',1.85,'column'),
+ ('Old man cactus','Cephalocereus senilis','d8d8cd',1,20,'sun','moths',.95,'wool'),
+ ('Ladyfinger cactus','Mammillaria elongata','b5a06c',0,12,'sun','bees',.30,'finger'),
+ ('Star cactus','Astrophytum asterias','97a58a',0,16,'sun','bees',.13,'star'),
+ ('Holiday cactus','Schlumbergera truncata','d46e86',1,12,'shade','butterflies',.45,'holiday'),
+ ('Mexican snowball','Echeveria elegans','a7beb8',0,10,'sun','bees',.16,'snowball'),
+ ('Lipstick echeveria',"Echeveria agavoides 'Lipstick'",'a19f6a',0,10,'sun','bees',.20,'lipstick'),
+ ('Hens and chicks','Sempervivum tectorum','8e9f73',0,9,'sun','bees',.14,'hens'),
+ ('Aloe vera','Aloe vera','80a18b',1,14,'sun','birds',.65,'aloe'),
+ ('Century plant','Agave americana','92aaa7',2,22,'sun','moths',1.10,'agave'),
+ ('Zebra haworthia','Haworthiopsis attenuata','a2b298',0,10,'shade','bees',.18,'zebra'),
+ ('Window haworthia','Haworthia cooperi','a3c3a8',0,10,'shade','bees',.10,'window'),
+ ('Jade plant','Crassula ovata','669669',2,18,'any','bees',.85,'jade'),
+ ('Gollum jade',"Crassula ovata 'Gollum'",'799558',1,16,'any','bees',.65,'gollum'),
+ ('Black rose aeonium',"Aeonium 'Zwartkop'",'53333e',1,16,'sun','bees',.70,'aeonium'),
+ ('Jelly bean sedum','Sedum × rubrotinctum','a38362',0,9,'sun','bees',.23,'beans'),
+ ('Living stones','Lithops aucampiae','aa806b',0,16,'sun','bees',.06,'lithops'),
+]
+ADDITIONS=GRASSES+SUCCULENTS

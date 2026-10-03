@@ -35,6 +35,11 @@ Associate the domain with the Pages project before adding a DNS record manually.
 
 ## Browser behaviour
 
+For the protected move from `zend.tammas.com` to `zend.garden`, see
+[garden-migration.md](garden-migration.md) for the private transfer bucket, activation
+flag, player experience and rollback steps. The migration ships disabled until
+those resources are configured; ordinary game hosting remains available.
+
 - Use a current browser with WebGL 2. Desktop supports keyboard and mouse; phones and tablets get automatic touch controls and a lighter graphics preset. Landscape orientation is recommended. Physical-device performance varies.
 - The browser uses Godot's Compatibility renderer. Some lighting effects differ from the native Forward+ version.
 - The first load downloads the game and its art assets. The download size changes as the catalogue grows; the build log reports the current size. Loading time and frame rate depend on the connection and device; large gardens can be demanding.

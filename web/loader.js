@@ -2,6 +2,25 @@
 const play = document.getElementById('play');
 const statusText = document.getElementById('status');
 const progress = document.getElementById('progress');
+let migrationModule;
+let gardenReady = false;
+play.disabled = true;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    migrationModule = await import('./migration.js');
+    const ready = await migrationModule.prepareGarden();
+    gardenReady = !!ready;
+    play.disabled = !gardenReady;
+    // The arrival panel's Continue button is the player's entry gesture.
+    if (ready === 'enter') play.click();
+  } catch {
+    statusText.textContent = 'We could not check your garden safely. Please reload to try again.';
+    play.textContent = 'Try again';
+    play.dataset.retry = 'true';
+    play.disabled = false;
+  }
+});
 
 async function checkedFetch(url) {
   const response = await fetch(url);
@@ -62,26 +81,43 @@ async function loadPack() {
 
 play.addEventListener('click', async () => {
   if (play.dataset.retry) { location.reload(); return; }
+  if (!gardenReady) return;
   play.disabled = true;
   progress.hidden = false;
   statusText.textContent = 'Preparing your garden…';
+  let release = () => {};
   try {
+    const session = await migrationModule.beforeGameStart();
+    release = session.release;
     const missing = Engine.getMissingFeatures({ threads: false });
     if (missing.length) throw new Error(`This browser needs: ${missing.join(', ')}. Try a current browser with WebGL 2 support.`);
     const engine = new Engine({ ...window.ZEND_GODOT_CONFIG,
       canvas: document.getElementById('canvas'),
-      onExit: () => location.reload(),
+      onExit: () => { release(); location.reload(); },
     });
     // Use the supported manual loader so a single oversized .pck is unnecessary.
     const [, pack] = await Promise.all([initEngine(engine), loadPack()]);
     statusText.textContent = 'Opening the garden…';
     await engine.preloadFile(pack, 'index.pck');
-    await engine.start({ args: ['--main-pack', 'index.pck'] });
+    // Godot verifies the actual mounted file too: an IndexedDB sync failure must
+    // never quietly become a fresh garden that autosaves over the imported copy.
+    let guardTimer;
+    const saveReady = new Promise((resolve, reject) => {
+      guardTimer = setTimeout(() => reject(new Error('Your saved garden could not be confirmed. Please reload to try again.')), 30000);
+      window.ZendSaveGuard = {
+        ready: resolve,
+        fail: () => reject(new Error('Your saved garden could not be opened safely. Its recovery copies have been kept. Please reload to try again.')),
+      };
+    });
+    try {
+      await Promise.all([saveReady, engine.start({ args: ['--main-pack', 'index.pck', '--', `--browser-save-check=${session.expected}`] })]);
+    } finally { clearTimeout(guardTimer); delete window.ZendSaveGuard; }
     document.getElementById('welcome').hidden = true;
     document.getElementById('canvas').focus();
   } catch (error) {
+    release();
     console.error(error);
-    statusText.textContent = error.message || 'The garden could not load. Please try again.';
+    statusText.textContent = migrationModule?.playerMessage(error) || 'The garden could not load. Please try again.';
     progress.hidden = true;
     play.textContent = 'Try again';
     play.dataset.retry = 'true';

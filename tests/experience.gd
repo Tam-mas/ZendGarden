@@ -21,6 +21,23 @@ static func run(g, failures: Array) -> void:
  if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: failures.append("Request notification did not release the mouse")
  if not is_instance_valid(g.request_popup): failures.append("Request notification missing")
  g.open_sidebar("Settings")
+ var controls=g.list_box.get_children()
+ var music_slider: HSlider
+ for i in range(controls.size()-1):
+  if controls[i] is Label and controls[i].text=="Music volume": music_slider=controls[i+1]
+ if not is_instance_valid(music_slider):
+  failures.append("Music slider missing from settings")
+ else:
+  var old_music=music_slider.value
+  music_slider.value=0
+  if not AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")): failures.append("Actual music slider did not mute music immediately")
+  for kind in g.ambient.MUSIC:
+   if g.ambient.players[kind].volume_linear!=0.0: failures.append("Actual zero slider left residual music")
+  g.save_game()
+  var muted_save=JSON.parse_string(FileAccess.get_file_as_string(g.SAVE_PATH))
+  if float(muted_save.settings.music_volume)!=0.0: failures.append("Music mute setting was not saved")
+  music_slider.value=old_music
+  if AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")): failures.append("Actual music slider failed to unmute")
  await g.get_tree().create_timer(.4).timeout
  g.get_viewport().get_texture().get_image().save_png("res://captures/comfort-settings.png")
  var later=g.request_popup.get_child(0).get_child(3)
@@ -47,6 +64,26 @@ static func run(g, failures: Array) -> void:
  GardenExperience.finish(g)
  var saved=JSON.parse_string(FileAccess.get_file_as_string(g.SAVE_PATH))
  if not saved.settings.intro_seen or not saved.settings.reduced_motion: failures.append("Experience preferences not saved")
+ g.open_sidebar("Settings")
+ var history_button: Button
+ for control in g.list_box.get_children():
+  if control is Button and control.text=="What’s new": history_button=control
+ if not is_instance_valid(history_button):
+  failures.append("Update history missing from settings")
+ else:
+  history_button.pressed.emit()
+  if not g.updates_open: failures.append("Settings button did not open update history")
+  var update_clock=g.clock_time
+  await g.get_tree().create_timer(.2).timeout
+  if g.clock_time!=update_clock: failures.append("Updates dialog did not pause the garden")
+  g.get_viewport().get_texture().get_image().save_png("res://captures/updates-in-game.png")
+  var escape=InputEventKey.new()
+  escape.pressed=true
+  escape.physical_keycode=KEY_ESCAPE
+  g._unhandled_input(escape)
+  if g.updates_open or is_instance_valid(g.welcome_backdrop): failures.append("Escape did not dismiss update history")
+  saved=JSON.parse_string(FileAccess.get_file_as_string(g.SAVE_PATH))
+  if saved.settings.updates_seen!=GardenUpdates.CURRENT_VERSION: failures.append("Update dismissal was not stored in garden save")
  g.pets[0].routine_time=45
  g.pets[1].routine_time=45
  for i in range(2):

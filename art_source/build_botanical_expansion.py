@@ -54,9 +54,9 @@ bark=mat('branch bark','74624b','bark');smooth=pigment(mat('mottled snow gum bar
 pollen=mat('anthers','d9b445','pollen');cream=mat('ivory buds','f5edda','petal')
 selected=None
 if '--ids' in sys.argv:selected={int(i) for i in sys.argv[sys.argv.index('--ids')+1].split(',')}
-specs=json.loads((ROOT/'art_source/plant_specs.json').read_text());manifest=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())[:60]
-assert len(specs)==106
-for idx,row in enumerate(specs[60:],60):
+specs=json.loads((ROOT/'art_source/plant_specs.json').read_text());old_manifest=json.loads((ROOT/'art_source/botanical_manifest.json').read_text());manifest=old_manifest[:60]
+assert len(specs)>=106
+for idx,row in enumerate(specs[60:106],60):
     name,category,color,*_=row;random.seed(idx*7381+69)
     g=Detailed(name,'foliage');b=Detailed(name,'bloom')
     accent=mat(name+' characteristic pigment',color,'smooth' if 'bamboo' in name.lower() else 'leaf')
@@ -93,7 +93,7 @@ for idx,row in enumerate(specs[60:],60):
     manifest.append({'id':idx,'name':name,'vertices':len(g.v)+len(b.v),'triangles':sum(len(f)-2 for f in g.f+b.f),'path':str(path.relative_to(ROOT)),'morphology_version':3,'source':'art_source/botanical_expansion.blend'})
     root.location=((idx-60)%8*6,(idx-60)//8*15,0)
     print('EXPANSION_PLANT',idx,name,manifest[-1]['triangles'],flush=True)
-(ROOT/'art_source/botanical_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+(ROOT/'art_source/botanical_manifest.json').write_text(json.dumps(manifest+old_manifest[106:],indent=2)+'\n')
 bpy.ops.file.pack_all()
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'art_source/botanical_expansion.blend'))
 print('BOTANICAL_EXPANSION: PASS — 46 new plant assets')

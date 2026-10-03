@@ -4,6 +4,7 @@ const Art = preload("res://scripts/garden_art.gd")
 const Catalogue = preload("res://scripts/catalogue.gd")
 const Soundscape = preload("res://scripts/soundscape.gd")
 var SAVE_PATH = "user://garden_v1.json"
+var save_load_blocked=false
 const GRID = 0.4
 const CAPACITY_MULTIPLIER = 4
 const TREE_SPACING = 1.15
@@ -51,6 +52,15 @@ var companion_names = ["Miso", "Clover"]
 var selected = 0
 var selected_furniture = 0
 var category = "Flowers"
+var collection_query=""
+var collection_filters_open=false
+var collection_filters=default_collection_filters()
+var favourite_plants: Array=[]
+var recent_plants: Array=[]
+
+func default_collection_filters() -> Dictionary:
+ return {"view":"All plants","season":"Any season","light":"Any light","height":"Any height","colour":"Any colour","wildlife":"Any wildlife","sort":"Catalogue"}
+
 var active_tab = "Seeds"
 var mode = "walk"
 var selected_layer = 1
@@ -60,6 +70,13 @@ var current_plot = 0
 var hover_cell = Vector3.ZERO
 var hover_plot = -1
 var hover_valid = false
+var hover_target=-1
+var hover_object: Node3D
+var highlighted_structure: Node3D
+var highlighted_plant: Node3D
+var inspector_panel: PanelContainer
+var inspector_label: Label
+var inspector_lines: Array=[]
 var action_cooldown = 0.0
 var save_timer = 0.0
 var preview: Node3D
@@ -95,9 +112,21 @@ var detail_label: Label
 var mode_buttons: Dictionary = {}
 var toast_time = 0.0
 var photo_mode = false
+var clear_view=false
+var clear_view_state: Dictionary={}
+var clear_view_hold_guard=false
+var view_button: Button
 var photo_panel: PanelContainer
 var welcome_backdrop: ColorRect
 var welcome: PanelContainer
+var rest_object: Node3D
+var rest_kind=""
+var rest_return=Vector3.ZERO
+var leisure_panel: PanelContainer
+var tutorial_state: Dictionary={}
+var tutorial_panel: PanelContainer
+var updates_open=false
+var updates_return_to_game=false
 var ui_refresh = 0.0
 var rng = RandomNumberGenerator.new()
 var smoke = false
@@ -127,7 +156,7 @@ var sign_color=Color("f1e5c7")
 var editing_sign=-1
 
 var touch: GardenTouch
-var settings={"controls":"auto","left_handed":false,"control_size":100,"graphics":"auto","render_scale":0,"intro_seen":false,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
+var settings={"controls":"auto","left_handed":false,"control_size":100,"graphics":"auto","render_scale":0,"intro_seen":false,"updates_seen":0,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
 var request_popup: PanelContainer
 var request_unread=false
 var orders_button: Button
@@ -139,9 +168,19 @@ var climate: GardenClimate
 func _ready() -> void:
  GardenTerrain.offsets.clear()
  rng.seed = 7183
- smoke = "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
+ smoke = "--view-water-test" in OS.get_cmdline_user_args() or "--improvements-test" in OS.get_cmdline_user_args() or "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
  if smoke: SAVE_PATH="user://smoke-test-save.json"
+ if "--inhabit-test" in OS.get_cmdline_user_args() or "--tutorial-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
+ if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
+ if not browser_save_check():
+  save_load_blocked=true
+  set_process(false)
+  set_physics_process(false)
+  browser_save_result(false)
+  return
  load_game()
+ if OS.has_feature("web"):
+  browser_save_result(true)
  GardenExpansion.prepare(self)
  make_world()
  GardenSculpt.setup(self)
@@ -167,23 +206,33 @@ func _ready() -> void:
  refresh_ui()
  if planted.is_empty() and loaded_data.is_empty(): starter_garden()
  if not settings.intro_seen and not smoke: show_welcome()
- if "--gather-test" in OS.get_cmdline_user_args(): call_deferred("run_gather_test")
+ if "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
+ elif "--inhabit-test" in OS.get_cmdline_user_args():call_deferred("run_inhabit_test")
+ elif "--structure-test" in OS.get_cmdline_user_args():call_deferred("run_structure_test")
+ elif "--view-water-test" in OS.get_cmdline_user_args(): call_deferred("run_view_water_test")
+ elif "--improvements-test" in OS.get_cmdline_user_args(): call_deferred("run_improvements_test")
+ elif "--gather-test" in OS.get_cmdline_user_args(): call_deferred("run_gather_test")
  elif "--tools-test" in OS.get_cmdline_user_args(): call_deferred("run_tools_test")
  elif "--touch-test" in OS.get_cmdline_user_args(): call_deferred("run_touch_test")
  elif "--ground-test" in OS.get_cmdline_user_args(): call_deferred("run_ground_test")
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
- elif not is_instance_valid(welcome): resume_controls()
+ elif tutorial_state.get("active",false):
+  set_mode("walk")
+  GardenTutorial.build(self)
+ elif not is_instance_valid(welcome) and not GardenUpdates.maybe_show(self): resume_controls()
 
 func touch_active() -> bool:
  return is_instance_valid(touch) and touch.enabled
 
 func resume_controls() -> void:
- Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if touch_active() else Input.MOUSE_MODE_CAPTURED
+ if not side_panel.visible:get_viewport().gui_release_focus()
+ Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if touch_active() or not rest_kind.is_empty() else Input.MOUSE_MODE_CAPTURED
 
 func gameplay_active() -> bool:
- return not touch.blocked() if touch_active() else Input.mouse_mode==Input.MOUSE_MODE_CAPTURED
+ if clear_view:return true
+ return not touch.blocked() if touch_active() else (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED or (not rest_kind.is_empty() and not side_panel.visible))
 
 func make_world() -> void:
  world_root = Node3D.new()
@@ -311,6 +360,7 @@ func make_camera() -> void:
   var path="res://assets/tools/"+kind+".glb"
   if ResourceLoader.exists(path):
    var model=load(path).instantiate()
+   if kind=="can":model.position=Vector3(-.05,.065,-.15)
    held_tool.add_child(model)
    tool_models[kind]=model
    model.hide()
@@ -324,18 +374,20 @@ func label(text: String, size: int = 16, color: Color = Color("efdfbc")) -> Labe
  var l = Label.new()
  l.theme=menu_theme
  l.text = text
- l.add_theme_font_size_override("font_size",maxi(16,size) if touch_active() else size)
- l.add_theme_color_override("font_color",Color("cbb98e") if color in [Color("75816b"),Color("7b886f"),Color("82917c")] else color)
+ l.add_theme_font_size_override("font_size",maxi(16,size) if touch_active() else maxi(14,size))
+ l.add_theme_color_override("font_color",GardenTheme.MUTED if color in [Color("75816b"),Color("7b886f"),Color("82917c")] else color)
  return l
 
 func button(text: String, action: Callable, min_size: Vector2 = Vector2(0,38)) -> Button:
  var b = Button.new()
  b.text = text
+ b.clip_text=true
+ b.tooltip_text=text
  b.focus_mode = Control.FOCUS_NONE
  b.custom_minimum_size = Vector2(min_size.x,maxf(48,min_size.y)) if touch_active() else min_size
  b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
  b.theme=menu_theme
- b.add_theme_font_size_override("font_size",17 if touch_active() else 14)
+ b.add_theme_font_size_override("font_size",17 if touch_active() else 16)
  b.pressed.connect(action)
  return b
 
@@ -344,7 +396,7 @@ func panel_at(pos: Vector2, size: Vector2) -> PanelContainer:
  p.position = pos
  p.size = size
  p.theme=menu_theme
- p.add_theme_stylebox_override("panel",GardenTheme.frame())
+ p.add_theme_stylebox_override("panel",GardenTheme.frame("wood",Color.WHITE,14))
  ui.add_child(p)
  return p
 
@@ -374,13 +426,15 @@ func make_ui() -> void:
  tabs.add_theme_constant_override("separation",4)
  col.add_child(tabs)
  for tab in ["Seeds","Shop","Orders","Guide"]:
-  var tab_button=button(tab,func(): active_tab=tab; refresh_sidebar(),Vector2(0,32))
+  var tab_button=button(tab,func(): active_tab=tab; list_box.get_parent().set_deferred("scroll_vertical",0); refresh_sidebar(),Vector2(0,40))
+  tab_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+  tab_button.clip_text=true
   tabs.add_child(tab_button)
   if tab=="Orders": orders_button=tab_button
  side_title = label("The seed collection",22)
  col.add_child(side_title)
  var scroll = ScrollContainer.new()
- scroll.custom_minimum_size = Vector2(264,448)
+ scroll.custom_minimum_size = Vector2(264,80)
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  col.add_child(scroll)
@@ -388,7 +442,7 @@ func make_ui() -> void:
  list_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  list_box.add_theme_constant_override("separation",7)
  scroll.add_child(list_box)
- detail_label = label("",13,Color("75816b"))
+ detail_label = label("",13,GardenTheme.MUTED)
  detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  detail_label.custom_minimum_size.x = 256
  col.add_child(detail_label)
@@ -408,7 +462,7 @@ func make_ui() -> void:
  capacity_bar.add_theme_stylebox_override("background",GardenTheme.meter(Color("392b20")))
  capacity_bar.add_theme_stylebox_override("fill",GardenTheme.meter(Color("a8bd79")))
  cap_col.add_child(capacity_bar)
- status_label = label("",13,Color("7b886f"))
+ status_label = label("",13,GardenTheme.MUTED)
  status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  status_label.custom_minimum_size.x=320
  cap_col.add_child(status_label)
@@ -433,9 +487,10 @@ func make_ui() -> void:
  fc.add_child(label("Nothing here is ever too late.",12,Color("60482c")))
  tip_label = label("",15,Color("fff6dc"))
  tip_label.position = Vector2(356,753)
- tip_label.add_theme_color_override("font_shadow_color",Color("465947"))
+ tip_label.add_theme_color_override("font_shadow_color",Color("302417"))
  tip_label.add_theme_constant_override("shadow_offset_x",1)
  tip_label.add_theme_constant_override("shadow_offset_y",2)
+ tip_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  ui.add_child(tip_label)
  toast_label = label("",16,Color("49341e"))
  toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -477,14 +532,27 @@ func make_ui() -> void:
  reticle.add_theme_constant_override("shadow_offset_x",1)
  reticle.add_theme_constant_override("shadow_offset_y",1)
  ui.add_child(reticle)
- compact_hud=label("",15,Color("fff4d6"))
+ compact_hud=label("",16,GardenTheme.TEXT)
  compact_hud.position=Vector2(28,24)
  compact_hud.mouse_filter=Control.MOUSE_FILTER_IGNORE
- compact_hud.add_theme_color_override("font_shadow_color",Color("27372b"))
+ compact_hud.add_theme_color_override("font_shadow_color",Color("302417"))
  compact_hud.add_theme_constant_override("shadow_offset_y",2)
  ui.add_child(compact_hud)
+ view_button=button("Enjoy the view · H",func():GardenClearView.enter(self),Vector2(158,36))
+ view_button.add_theme_font_size_override("font_size",14)
+ view_button.tooltip_text="Hide the HUD and held tool. Press any key, or click/tap, to return."
+ ui.add_child(view_button)
+ inspector_panel=panel_at(Vector2(1054,278),Vector2(362,0))
+ inspector_label=label("",15)
+ inspector_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ inspector_label.custom_minimum_size.x=320
+ inspector_panel.add_child(inspector_label)
+ inspector_panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
+ inspector_panel.hide()
+ GardenInterface.layout(self,true)
 
 func open_sidebar(page: String) -> void:
+ list_box.get_parent().set_deferred("scroll_vertical",0)
  if touch_active(): touch.reset_gestures()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  var was_open = side_panel.visible and active_tab==page
@@ -567,70 +635,18 @@ func clear_list() -> void:
   c.queue_free()
 
 func add_note(text: String, size: int = 13) -> void:
- var l = label(text,size,Color("7b886f"))
+ var l = label(text,size,GardenTheme.MUTED)
  l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  l.custom_minimum_size.x = 254
  list_box.add_child(l)
 
 func refresh_sidebar() -> void:
+ for tab in side_panel.get_child(0).get_child(0).get_children():
+  GardenTheme.choose(tab,tab.text.begins_with(active_tab))
  clear_list()
  match active_tab:
   "Seeds":
-   side_title.text = "The seed collection"
-   var cats = GridContainer.new()
-   cats.columns = 3
-   list_box.add_child(cats)
-   for cat in Catalogue.CATEGORIES:
-    var chosen: String = cat
-    var cb = button(cat,func(): category=chosen; refresh_sidebar(),Vector2(81,30))
-    cb.add_theme_font_size_override("font_size",12)
-    if cat==category: cb.add_theme_stylebox_override("normal",GardenTheme.frame("button",Color("efd49b"),8))
-    cats.add_child(cb)
-   add_note("Seeds are endless once discovered. Plant in beds or on dry ground nearby; both share the area’s capacity.")
-   var cards=GridContainer.new()
-   cards.name="PlantCards"
-   cards.columns=2
-   cards.add_theme_constant_override("h_separation",8)
-   cards.add_theme_constant_override("v_separation",8)
-   list_box.add_child(cards)
-   for p in catalogue:
-    if p.category != category: continue
-    var id: int = p.id
-    var unlocked = id in unlocked_plants
-    var b=button("",func(): choose_plant(id),Vector2(120,150))
-    b.name="PlantCard%02d" % id
-    b.tooltip_text="%s · %s layer · %d growing days\n%s · %s" % [p.name,["Ground","Flower","Shrub","Canopy"][p.layer],p.days,Catalogue.growing_seasons(id),"Discovered" if unlocked else "Unlock for %d petals" % p.price]
-    b.add_theme_stylebox_override("normal",GardenTheme.frame("button",Color("efcd8c") if id==selected else Color.WHITE,4))
-    var content=VBoxContainer.new()
-    content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    content.offset_left=6
-    content.offset_right=-6
-    content.offset_top=6
-    content.offset_bottom=-6
-    content.add_theme_constant_override("separation",1)
-    content.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    b.add_child(content)
-    var portrait=TextureRect.new()
-    portrait.texture=load("res://assets/ui/plants/%02d.png" % id)
-    portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-    portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-    portrait.custom_minimum_size=Vector2(108,96)
-    portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    portrait.modulate=Color.WHITE if unlocked else Color(.65,.61,.52)
-    content.add_child(portrait)
-    var name_label=label(p.name,14)
-    name_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-    name_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-    name_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    content.add_child(name_label)
-    var cost=label("Capacity %d" % p.capacity if unlocked else "Petals: %d to discover" % p.price,11,Color("cbb98e"))
-    cost.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-    cost.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    content.add_child(cost)
-    cards.add_child(b)
-   var plant = catalogue[selected]
-   detail_label.text = "%s\n%s layer · %d capacity · %d growing days\nLikes %s · welcomes %s%s" % [plant.name,["Ground","Flower","Shrub","Canopy"][plant.layer],plant.capacity,plant.days,plant.condition,plant.animal,"\nClimbs nearby arbors & pergolas." if plant.climber else ""]
-   detail_label.text+="\nGrows: "+Catalogue.growing_seasons(plant.id)
+   GardenSeedCollection.build(self)
   "Shop":
    basket_summary()
    list_box.add_child(button("View orders",func(): open_sidebar("Orders")))
@@ -640,7 +656,7 @@ func refresh_sidebar() -> void:
     var k: String = kind
     var owned = automation.has(str(current_plot)+k)
     list_box.add_child(button(("Owned " if owned else "Petals: 45  ")+ ("Soaker system" if k=="water" else "Gentle auto-pruner"),func(): buy_automation(k)))
-   list_box.add_child(button("Petals: 65  Expand bed capacity +80",expand_bed))
+   list_box.add_child(button("Expand bed +80 · 65 petals",expand_bed))
    add_note("TOOLS  ·  first upgrades day 3, master day 18",14)
    add_note("Hoe included: 9 to equip, R to raise/lower. Pruner upgrades grow the square by 10% each; [ / ] adjust its size.")
    for kind in ["can","shears","trowel","rake","gather"]:
@@ -649,16 +665,43 @@ func refresh_sidebar() -> void:
     var names = {"can":"Watering can", "shears":"Pruning shears", "trowel":"Planting trowel", "rake":"Garden rake", "gather":"Gather reach"}
     list_box.add_child(button(names[k]+(" · complete" if level>=2 else " +"+str(level+1)+"   Petals: "+str(45+level*45)),func(): buy_tool(k)))
    add_note("ORNAMENTS & STRUCTURES",14)
+   var ornaments=GridContainer.new()
+   ornaments.name="OrnamentCards"
+   ornaments.columns=2
+   ornaments.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+   ornaments.add_theme_constant_override("h_separation",8)
+   ornaments.add_theme_constant_override("v_separation",8)
+   list_box.add_child(ornaments)
    for i in range(furniture.size()):
-    var idx = i
-    var b = button(furniture[i].name+"   Petals: "+str(furniture[i].price),func(): choose_furnishing(idx))
-    b.tooltip_text = furniture[i].hint
-    list_box.add_child(b)
+    var idx=i
+    var item=furniture[i]
+    var card=button("",func(): choose_furnishing(idx),Vector2(120,200 if touch_active() else 170))
+    card.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+    card.tooltip_text=item.name+" · "+item.hint
+    var content=VBoxContainer.new()
+    content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    content.offset_left=6;content.offset_right=-6;content.offset_top=6;content.offset_bottom=-6
+    content.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    var portrait=TextureRect.new()
+    portrait.texture=load("res://assets/ui/shop/"+item.kind+".png")
+    portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+    portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    portrait.custom_minimum_size=Vector2(108,82)
+    portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    content.add_child(portrait)
+    for text in [item.name,"%d petals"%item.price]:
+     var caption=label(text,13)
+     caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+     caption.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+     caption.mouse_filter=Control.MOUSE_FILTER_IGNORE
+     content.add_child(caption)
+    card.add_child(content)
+    ornaments.add_child(card)
    for i in range(objects.size()):
     if objects[i].kind=="sign":
      var sign_index=i
      list_box.add_child(button("Edit sign: "+str(objects[i].get("text","My garden")).left(22),func(): open_sign_editor(sign_index)))
-   list_box.add_child(button("Petals: 20  Stock nearest pond with fish",stock_fish))
+   list_box.add_child(button("Stock pond with fish · 20 petals",stock_fish))
    add_note("A LITTLE MORE ROOM",14)
    if unlocked_plots<plots.size(): list_box.add_child(button("Open "+plots[unlocked_plots].name+"   Petals: "+str(plots[unlocked_plots].cost),buy_plot))
    else: add_note("Every path is open. Keep making it yours.")
@@ -672,6 +715,7 @@ func refresh_sidebar() -> void:
    for i in range(orders.size()):
     var idx = i
     var order = orders[i]
+    if order.get("welcome",false) and order.get("pending",false):continue
     if order.get("pending",false):
      add_note(order.person+" sends thanks. Next note on day %d." % order.ready_day)
      continue
@@ -688,6 +732,8 @@ func refresh_sidebar() -> void:
   "Settings":
    GardenExperience.settings_page(self)
   "Guide":
+   list_box.add_child(button("Enjoy the view · H",func():GardenClearView.enter(self)))
+   add_note("Hide the interface and held tool to enjoy the garden. Press any key, or click/tap, to return. Mouse look still works.")
    GardenExperience.journey(self)
    side_title.text = "A field companion"
    add_note("GROWING IN LAYERS",15)
@@ -696,7 +742,7 @@ func refresh_sidebar() -> void:
    add_note("A day lasts 10 minutes; Next morning in the Garden menu (G on keyboard) plays a twelve-second sunset, starry night and sunrise. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
    add_note("PRUNING & PATHS",15)
    add_note("Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. Border clearing and raked paths are saved. Rake open ground to remove grass and leave visible grooves; move or prune plants first. Upgrades widen existing patches. New patches can reveal up to four petals per day.")
-   add_note("Manual watering gives the ground +20% growth for one game day. Rewatering refreshes the timer; rain and soakers do not apply this bonus. The hoe reshapes unlocked dry ground; R switches raise/lower. [ / ] resize the pruning square within purchased limits.")
+   add_note("Hold left click and sweep to water an area. Manual watering gives the ground +20% growth for one game day. Rewatering refreshes the timer; rain and soakers do not apply this bonus. The hoe reshapes unlocked dry ground; R switches raise/lower. [ / ] resize the pruning square within purchased limits.")
    add_note("GATHERING",15)
    add_note("Hold Gather (5 / left click) and sweep across plants. Every ready plant in the highlighted square is collected, on every layer; unready plants are left growing. Gather reach upgrades in the Shop widen the square from 1.3 m to 2.1 m, then 2.9 m. Border plants still yield once per day.")
    add_note("WELCOMING WILDLIFE",15)
@@ -713,7 +759,10 @@ func refresh_sidebar() -> void:
     input.max_length = 24
     input.text_changed.connect(func(value): companion_names[idx]=value)
     list_box.add_child(input)
-   add_note("Walk near a companion and tap Greet (E on keyboard) for a little affection. No feeding, chores or worries.")
+   add_note("E rests at nearby benches, pergolas or ponds. F pets a nearby companion; C calls both over. While resting, invite them to settle beside you. No feeding, chores or worries.")
+   for i in range(2):
+    var pet_index=i
+    list_box.add_child(button("Call "+companion_names[i],func(): GardenLeisure.call_pet(self,pet_index)))
    list_box.add_child(button("Save garden",func(): save_game(); toast("Your garden is saved.")))
    list_box.add_child(button("Comfort & sound settings",func(): open_sidebar("Settings")))
    detail_label.text = "Left thumb to walk · Drag to look\nTools selects an action · Garden opens menus\nLayer chooses plant height · Photo mode has Rise / Lower and Take photo buttons" if touch_active() else "WASD move · Shift stroll faster\nMouse look · Tab menus · Wheel field of view\nL switches target layer · Esc settings"
@@ -727,20 +776,20 @@ func refresh_ui() -> void:
 
 func update_hud() -> void:
  if is_instance_valid(orders_button): orders_button.text="Orders •" if request_unread else "Orders"
- var menus=Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and not photo_mode and not day_transition
+ var menus=Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and rest_kind.is_empty() and not photo_mode and not day_transition
  hud_top.visible=menus
  hud_title.visible=menus
  rotation_panel.visible=not photo_mode and not day_transition and (mode=="build" or (mode=="move" and moved_object>=0))
  hud_tools.visible=menus
- hud_foot.visible=menus
+ hud_foot.hide()
+ view_button.visible=not touch_active() and not menus and not photo_mode and not day_transition
  compact_hud.visible=not menus and not photo_mode and not day_transition
  hud_capacity.visible=not photo_mode and not day_transition and ((hover_valid and mode!="walk") or (menus and active_tab=="Shop"))
  tip_label.visible=not photo_mode and not day_transition
- tip_label.position=Vector2(356,753) if menus else Vector2(28,850)
  compact_hud.text="ZEND GARDEN   /   "+plots[current_plot].name+"\nDay %02d   ·   %02d:%02d   ·   %d petals   ·   %s" % [day,int(clock_time*24),int(fmod(clock_time*1440,60)),coins,mode.capitalize()]
  compact_hud.text+="\n"+GardenClimate.season(day)+" · "+climate.description()
  var hour = int(clock_time*24)
- top_label.text = "DAY %02d · %02d:%02d  |  Petals: %d petals" % [day,hour,int(fmod(clock_time*1440,60)),coins]
+ top_label.text = "Day %02d · %02d:%02d · %d petals" % [day,hour,int(fmod(clock_time*1440,60)),coins]
  hud_top.reset_size()
  var used = capacity_used(current_plot)
  var cap = plot_capacity(current_plot)
@@ -750,24 +799,20 @@ func update_hud() -> void:
  capacity_bar.value = used+pending
  capacity_bar.modulate=Color("d68d78") if used+pending>cap else Color.WHITE
  status_label.text = "%s · %s%s" % [plots[current_plot].condition.capitalize(),["ground","flowers","shrubs","canopy"][selected_layer]," · auto-care" if automation.has(str(current_plot)+"water") else ""]
- if hover_valid:
-  var target = plant_at(hover_cell,selected_layer)
-  if target>=0:
-   var p = planted[target]
-   status_label.text += "\n"+catalogue[p.id].name+" · "+("ready" if p.age>=catalogue[p.id].days else str(int(100*p.age/catalogue[p.id].days))+"% grown")+" · "+("thirsty" if p.water<=0 else "watered")
- if hover_valid:
-  var index=plant_at(hover_cell,selected_layer)
-  if index>=0 and growth_conditions(planted[index])==0: status_label.text+="\nResting until "+Catalogue.growing_seasons(planted[index].id)
+ if hover_valid and hover_target>=0 and hover_target<planted.size():
+  var p=planted[hover_target]
+  status_label.text+="\n"+catalogue[p.id].name+" · "+("ready" if p.age>=catalogue[p.id].days else str(int(100*p.age/catalogue[p.id].days))+"% grown")
  for key in mode_buttons:
-  mode_buttons[key].add_theme_stylebox_override("normal",GardenTheme.frame("button",Color("efcd8c") if key==mode else Color.WHITE,8))
- var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E greet companion  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Water ground: +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+  GardenTheme.choose(mode_buttons[key],key==mode)
+ var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab garden menus  ·  E sit / rest / greet  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil & click to plant  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Hold click and sweep to water · +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or ornament, then click its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  tip_label.text = tips.get(mode,"")
+ if not rest_kind.is_empty():tip_label.text="Right-drag to look · Choose a companion to invite · F pet · WASD or E stand · Tab menus"
  if mode=="build" or (mode=="move" and moved_object>=0): tip_label.text+="  ·  Q/E rotate 15°"
  if hover_valid and not preview_error.is_empty() and mode=="plant": status_label.text=preview_error
+ GardenInterface.layout(self)
 
 func show_welcome() -> void:
- if touch_active(): touch.welcome_page()
- else: GardenExperience.welcome(self)
+ GardenExperience.welcome(self)
 
 func apply_settings() -> void:
  if is_instance_valid(touch): touch.configure()
@@ -807,6 +852,7 @@ A little kindness, whenever you’re ready.",15))
 func replenish_orders() -> void:
  var arrived=false
  for i in range(orders.size()):
+  if orders[i].get("welcome",false):continue
   if int(orders[i].get("ready_day",0))>day or not orders[i].get("pending",false): continue
   var pool=[]
   for id in unlocked_plants:
@@ -819,18 +865,22 @@ func replenish_orders() -> void:
 func _process(delta: float) -> void:
  if not is_instance_valid(camera): return
  if is_instance_valid(welcome):
+  if updates_open: GardenUpdates.layout(self)
+  elif not touch_active(): GardenInterface.fit_popup(self,welcome)
   return
  if is_instance_valid(request_popup):
-  var show_note=request_popup_time>0 and settings.request_notifications and not photo_mode and not day_transition
+  var show_note=request_popup_time>0 and not tutorial_state.get("active",false) and settings.request_notifications and not photo_mode and not day_transition and not clear_view
   if show_note and not request_popup.visible: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
   request_popup.visible=show_note
+  if show_note and not touch_active(): GardenInterface.fit_popup(self,request_popup,false)
  var input_focus = get_viewport().gui_get_focus_owner() is LineEdit
  var move = Vector3.ZERO
- if not day_transition and not input_focus and not is_instance_valid(welcome) and (gameplay_active() or (photo_mode and not touch_active())):
+ if not clear_view and not day_transition and not input_focus and not is_instance_valid(welcome) and (gameplay_active() or (photo_mode and not touch_active())):
   var arrows=navigation_input()
   move=Vector3(arrows.x,0,arrows.y)
   if touch_active(): move=Vector3(touch.stick.x,0,touch.stick.y)
   move = move.limit_length(1.0).rotated(Vector3.UP,yaw)
+ if not rest_kind.is_empty() and move.length()>.1:GardenLeisure.leave(self)
  if photo_mode:
   camera_target += move*delta*8
   camera_target.y += (float(Input.is_physical_key_pressed(KEY_E))-float(Input.is_physical_key_pressed(KEY_Q)))*delta*4
@@ -841,8 +891,10 @@ func _process(delta: float) -> void:
   player.velocity.z = move.z*speed if accessible(next) else 0.0
   if not player.is_on_floor(): player.velocity.y -= 18.0*delta
   else: player.velocity.y = 0
+  if clear_view:player.velocity=Vector3.ZERO
   walk_motion(Vector3(player.velocity.x,0,player.velocity.z)*delta)
-  player.move_and_slide()
+  if rest_kind.is_empty() and not clear_view:player.move_and_slide()
+  else:player.velocity=Vector3.ZERO
   var stride=sin(Time.get_ticks_msec()*0.012)*0.45*minf(1,move.length())
   player.get_node("LegLeft").rotation.x=stride
   player.get_node("LegRight").rotation.x=-stride
@@ -862,6 +914,9 @@ func _process(delta: float) -> void:
  climate.apply(self)
  action_cooldown = maxf(0,action_cooldown-delta)
  update_hover()
+ GardenPlantInspector.update(self)
+ GardenTutorial.update(self)
+ GardenLeisure.update(self)
  GardenTools.repeat_mouse(self)
  animate_garden(delta)
  toast_time -= delta
@@ -881,15 +936,15 @@ func update_camera(_delta: float) -> void:
  if photo_mode:
   camera.position=camera_target
  else:
-  camera.position=player.position+Vector3(0,1.62,0)
+  camera.position=player.position+Vector3(0,.72 if rest_kind=="bench" else (1.0 if rest_kind=="pond" else 1.62),0)
  camera.rotation=Vector3(-pitch,yaw,0)
  if day_transition and not settings.reduced_motion:
   camera.rotation.x=lerpf(-pitch,.40,sin(transition_elapsed/TRANSITION_SECONDS*PI)*.85)
- if is_instance_valid(reticle): reticle.visible=not photo_mode and not day_transition and gameplay_active()
+ if is_instance_valid(reticle): reticle.visible=not clear_view and not photo_mode and not day_transition and gameplay_active()
  if is_instance_valid(held_tool):
   var tools_by_mode={"water":"can","prune":"shears","harvest":"shears","plant":"trowel","remove":"trowel","rake":"rake","hoe":"hoe"}
   var active=tools_by_mode.get(mode,"")
-  for key in tool_models: tool_models[key].visible=key==active and not photo_mode and not day_transition and gameplay_active()
+  for key in tool_models: tool_models[key].visible=key==active and not photo_mode and not day_transition and gameplay_active() and rest_kind.is_empty()
 
 
 func walk_motion(motion: Vector3) -> void:
@@ -1003,7 +1058,18 @@ func apply_mouse_look(movement: Vector2) -> void:
  yaw -= movement.x*sensitivity*(-1 if settings.invert_x else 1)
  pitch = clampf(pitch+movement.y*sensitivity*(-1 if settings.invert_y else 1),-1.45,1.45)
 
+func _input(event: InputEvent) -> void:
+ GardenClearView.input(self,event)
+
 func _unhandled_input(event: InputEvent) -> void:
+ if clear_view:
+  if event is InputEventMouseMotion:apply_mouse_look(event.relative)
+  return
+ if updates_open:
+  if event is InputEventKey and event.pressed and event.physical_keycode==KEY_ESCAPE:
+   GardenUpdates.dismiss(self)
+   get_viewport().set_input_as_handled()
+  return
  if touch_active() and (event is InputEventMouse or event is InputEventScreenTouch or event is InputEventScreenDrag): return
  if is_instance_valid(welcome): return
  if day_transition: return
@@ -1020,6 +1086,9 @@ func _unhandled_input(event: InputEvent) -> void:
  if event is InputEventKey and event.pressed and not event.echo:
   if get_viewport().gui_get_focus_owner() is LineEdit: return
   match event.physical_keycode:
+   KEY_ENTER: if tutorial_state.get("active",false):GardenTutorial.action(self)
+   KEY_C: if mode=="walk":GardenLeisure.call_pet(self,0);GardenLeisure.call_pet(self,1)
+   KEY_F: if mode=="walk":greet_pet()
    KEY_F8: open_test_entry()
    KEY_1: set_mode("walk")
    KEY_2: set_mode("plant")
@@ -1035,8 +1104,12 @@ func _unhandled_input(event: InputEvent) -> void:
    KEY_R: GardenTools.toggle_hoe(self)
    KEY_G: if not photo_mode: next_day()
    KEY_P: toggle_photo()
+   KEY_H: GardenClearView.enter(self)
    KEY_TAB:
-    if Input.mouse_mode==Input.MOUSE_MODE_CAPTURED:
+    if not rest_kind.is_empty():
+     side_panel.visible=not side_panel.visible
+     Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+    elif Input.mouse_mode==Input.MOUSE_MODE_CAPTURED:
      Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
      side_panel.show()
     else:
@@ -1045,21 +1118,28 @@ func _unhandled_input(event: InputEvent) -> void:
    KEY_L:
     selected_layer=(selected_layer+1)%4
     toast("Target layer: "+["groundcover","flowers","shrubs","canopy"][selected_layer])
+    GardenTutorial.hint(self,"layers","One spot can hold groundcover, flowers, shrubs and a tree. Switch layers to choose the plant you mean.")
    KEY_Q: if not photo_mode: rotate_structure(-1)
    KEY_E:
     if not photo_mode:
      if mode=="build" or (mode=="move" and moved_object>=0): rotate_structure(1)
-     else: greet_pet()
+     else: GardenLeisure.interact(self)
    KEY_F12: capture_photo()
    KEY_ESCAPE:
     if photo_mode: toggle_photo()
+    elif tutorial_state.get("active",false):GardenTutorial.finish(self,false)
+    elif not rest_kind.is_empty():GardenLeisure.leave(self)
     elif is_instance_valid(welcome): welcome.queue_free(); welcome=null
     else:
      set_mode("walk")
      open_sidebar("Settings")
 
 func set_mode(value: String) -> void:
+ if value!="walk":GardenLeisure.leave(self)
+ GardenStructureTarget.clear(self)
+ hover_object=null
  mode=value
+ if value=="hoe":GardenTutorial.hint(self,"terrain","The hoe shapes the ground. Switch raise/lower with R, or the touch tool option. Terrain changes are saved.")
  if value=="build": structure_rotation=0.0
  side_panel.visible=value=="plant"
  if value=="plant": Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
@@ -1087,6 +1167,8 @@ func choose_plant(id: int) -> void:
   unlocked_plants.append(id)
   toast(catalogue[id].name+" added to your seed collection, forever.")
  selected=id
+ if not catalogue[id].seasons.is_empty() and GardenClimate.season(day) not in catalogue[id].seasons:
+  GardenTutorial.hint(self,"dormancy","Resting plants wait safely for their growing season. You can plant anytime; greenhouses allow year-round growth.")
  selected_layer=catalogue[id].layer
  set_mode("plant")
  side_panel.hide()
@@ -1094,18 +1176,29 @@ func choose_plant(id: int) -> void:
  refresh_ui()
 
 func update_hover() -> void:
+ hover_target=-1
+ hover_object=null
  grid_cursor.hide()
  area_cursor.hide()
  grid_root.hide()
  if is_instance_valid(preview): preview.hide()
  hover_valid=false
- if day_transition or photo_mode or mode=="walk": return
+ if clear_view or day_transition or photo_mode or is_instance_valid(welcome): return
  if touch_active() and not gameplay_active(): return
  if not touch_active() and Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and get_viewport().gui_get_hovered_control()!=null: return
  var mouse = get_viewport().get_visible_rect().size*0.5 if gameplay_active() else get_viewport().get_mouse_position()
  var origin = camera.project_ray_origin(mouse)
  var dir = camera.project_ray_normal(mouse)
  var hit = GardenTerrain.ray(origin,dir)
+ if mode=="remove":
+  var structure=GardenStructureTarget.ray(self,origin,dir,hit)
+  if not structure.is_empty():
+   hover_object=structure.node
+   hover_cell=hover_object.global_position
+   hover_plot=nearest_plot(hover_cell)
+   current_plot=hover_plot
+   hover_valid=true
+   return
  if not hit.is_finite(): return
  hover_plot=bed_at(hit)
  hover_plot=nearest_plot(hit) if hover_plot<0 else hover_plot
@@ -1125,6 +1218,8 @@ func update_hover() -> void:
  if player.position.distance_to(hover_cell)>7: return
  if not accessible(hover_cell) and bed_at(hover_cell)<0: return
  hover_valid=true
+ hover_target=target_plant(hit)
+ if mode=="walk": return
  current_plot=hover_plot
  if mode in ["rake","hoe"]: hover_cell=GardenTerrain.point(Vector3(round(hover_cell.x),0,round(hover_cell.z)))
  grid_cursor.position=hover_cell
@@ -1171,6 +1266,9 @@ func update_placement_preview(pid: String) -> void:
   preview.scale=source.scale
   preview.rotation=source.rotation
   preview.get_node("Bloom").visible=source.get_node("Bloom").visible
+  var original=planted[moved_index]
+  if original.has("age"):
+   GardenPlantGrowth.apply(preview,catalogue[original.id],clampf(original.age/float(catalogue[original.id].days),0,1),int(original.get("shape_seed",0)),source.scale)
  if pid.begins_with("f") or pid.begins_with("o"): preview.rotation.y=structure_rotation
  preview.show()
  var error=can_plant(selected,hover_cell,hover_plot) if mode=="plant" else ""
@@ -1192,10 +1290,19 @@ func ghost_material(node: Node, tint: Color = Color(0.82,0.95,0.66,0.4)) -> void
   var originals: Array=node.get_meta("preview_materials")
   for surface in range(originals.size()):
    var original=originals[surface]
+   var key=str(original.get_instance_id())+":"+tint.to_html() if original else "empty:"+tint.to_html()
+   if Art.preview_materials.has(key):
+    node.set_surface_override_material(surface,Art.preview_materials[key])
+    continue
    var material: Material
    if original is ShaderMaterial and original.shader.resource_path.ends_with("leaf_wind.gdshader"):
-    material=original.duplicate()
+    material=ShaderMaterial.new()
     material.shader=load("res://shaders/leaf_preview.gdshader")
+    for parameter in ["leaf_texture","leaf_color","leaf_normal","leaf_roughness","has_color_map","has_normal_map","has_roughness_map","wind_strength","surface_backlight","surface_roughness"]:
+     material.set_shader_parameter(parameter,original.get_shader_parameter(parameter))
+    if RenderingServer.get_current_rendering_method()=="gl_compatibility":
+     material.set_shader_parameter("plant_shape",original.get_shader_parameter("plant_shape"))
+     material.set_shader_parameter("plant_height",original.get_shader_parameter("plant_height"))
     material.set_shader_parameter("preview_tint",tint)
    elif original is StandardMaterial3D:
     material=original.duplicate()
@@ -1203,6 +1310,8 @@ func ghost_material(node: Node, tint: Color = Color(0.82,0.95,0.66,0.4)) -> void
     material.albedo_color.a=original.albedo_color.a*tint.a
     material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
    else: material=Art.mat(tint)
+   # Keep preview materials alive while the renderer removes an old preview.
+   Art.preview_materials[key]=material
    node.set_surface_override_material(surface,material)
  for child in node.get_children(): ghost_material(child,tint)
 
@@ -1246,8 +1355,26 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
    if i!=excluding and int(catalogue[int(planted[i].id)].layer)==3 and Vector2(planted[i].pos.x-pos.x,planted[i].pos.z-pos.z).length()<TREE_SPACING-0.001: return "Give this tree’s roots a little more room (1.15 m between trees)."
  return ""
 
+func aimed_plant() -> int:
+ if mode=="remove" and aimed_object()>=0:return -1
+ # Use the inspector's target when it is still at the aimed spot.
+ if hover_target>=0 and hover_target<planted.size() and Vector2(planted[hover_target].pos.x-hover_cell.x,planted[hover_target].pos.z-hover_cell.z).length()<GRID*.35:
+  return hover_target
+ var index=plant_at(hover_cell,selected_layer)
+ if index<0:
+  for layer in range(4):
+   index=plant_at(hover_cell,layer)
+   if index>=0: break
+ return index
+
+func aimed_object() -> int:
+ if not hover_valid or not is_instance_valid(hover_object) or hover_object.is_queued_for_deletion():return -1
+ for i in range(objects.size()):
+  if objects[i].node==hover_object:return i
+ return -1
+
 func perform_action(repeating: bool=false) -> void:
- if day_transition or photo_mode: return
+ if clear_view or day_transition or photo_mode: return
  if mode=="walk": return
  if not hover_valid:
   toast("Walk a little closer to an open garden area.")
@@ -1257,11 +1384,7 @@ func perform_action(repeating: bool=false) -> void:
   GardenTools.gather(self,repeating)
   return
  animate_tool_action()
- var idx = plant_at(hover_cell,selected_layer)
- if idx<0:
-  for layer in range(4):
-   idx=plant_at(hover_cell,layer)
-   if idx>=0: break
+ var idx = aimed_plant()
  match mode:
   "plant":
    var error = can_plant(selected,hover_cell,hover_plot)
@@ -1270,6 +1393,8 @@ func perform_action(repeating: bool=false) -> void:
    add_plant(selected,hover_cell,hover_plot,0.0,0.0,orientation)
    preview_id="" # Give the next seed its own orientation.
    planted_total+=1
+   GardenSeedCollection.record_planting(self,selected)
+   GardenTutorial.event(self,"plant",planted.back())
    action_cooldown=0.55/(1.0+int(upgrades.trowel))
    toast(catalogue[selected].name+" planted."+(" Resting until "+Catalogue.growing_seasons(selected)+"; a greenhouse allows year-round growth." if growth_conditions(planted.back())==0 else " A little beginning."))
   "hoe":
@@ -1312,12 +1437,17 @@ func perform_action(repeating: bool=false) -> void:
     planted.remove_at(idx)
     toast("Lifted gently. There are always more seeds.")
    else:
-    var obj = object_at(hover_cell)
+    var obj = aimed_object()
     if obj>=0:
+     GardenStructureTarget.clear(self)
      coins+=int(objects[obj].price)
      objects[obj].node.queue_free()
      objects.remove_at(obj)
      toast("Packed away. Full ornament cost returned.")
+   hover_object=null
+   hover_target=-1
+   hover_valid=false
+   GardenPlantInspector.update(self)
   "move":
    if moved_index<0 and moved_object<0:
     if idx>=0: moved_index=idx; toast("Now choose a new square for "+catalogue[planted[idx].id].name+".")
@@ -1355,10 +1485,11 @@ func perform_action(repeating: bool=false) -> void:
    toast(f.name+" placed. "+f.hint)
   "rake":
    GardenCare.rake(self)
+ if mode=="water":GardenTutorial.event(self,"water")
  refresh_ui()
  refresh_wildlife()
 
-func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0, orientation: float = NAN) -> Dictionary:
+func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0, orientation: float = NAN, shape_seed: int = -1) -> Dictionary:
  pos=GardenTerrain.point(pos)
  var n = Art.plant(catalogue[id])
  plant_root.add_child(n)
@@ -1373,7 +1504,7 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  Art.box(marker,Vector3(.13,.15,.09),Vector3(.028,.30,.025),Color("b69869"))
  Art.box(marker,Vector3(.13,.29,.09),Vector3(.13,.10,.022),catalogue[id].color)
  var mature_height=clampf(height_factor,0.8,1.2) if height_factor>0.0 else rng.randf_range(0.8,1.2)
- var p = {"prune_cuts":0,"height_factor":mature_height,"marker":marker,"id":id,"pos":pos,"plot":plot,"age":age,"water":2.0,"stress":0.0,"pruned":0.0,"node":n}
+ var p = {"shape_seed":rng.randi_range(0,2147483646) if shape_seed<0 else shape_seed,"orientation":n.rotation.y,"prune_cuts":0,"height_factor":mature_height,"marker":marker,"id":id,"pos":pos,"plot":plot,"age":age,"water":2.0,"stress":0.0,"pruned":0.0,"node":n}
  n.scale=plant_scale(p)
  planted.append(p)
  refresh_plant(p)
@@ -1385,6 +1516,7 @@ func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orie
  object_root.add_child(n)
  n.position=pos
  n.rotation.y=orientation
+ GardenStructureTarget.setup(n)
  if kind=="bath":
   var life=GardenBathLife.new()
   n.add_child(life)
@@ -1411,6 +1543,12 @@ func legacy_height_factor(p: Dictionary) -> float:
  var key="%d:%.6f:%.6f" % [int(p.id),float(p.pos[0]),float(p.pos[1])]
  return 0.8+float(key.hash()%1000001)/1000000.0*0.4
 
+func legacy_shape_seed(p: Dictionary) -> int:
+ return absi(("%d:%.6f:%.6f" % [int(p.id),float(p.pos[0]),float(p.pos[1])]).hash())%2147483647
+
+func legacy_orientation(p: Dictionary) -> float:
+ return float(legacy_shape_seed(p)%100000)/100000.0*TAU
+
 func refresh_plant(p: Dictionary) -> void:
  var fraction = clampf(p.age/float(catalogue[p.id].days),0,1)
  p.marker.visible=fraction<.52
@@ -1418,7 +1556,10 @@ func refresh_plant(p: Dictionary) -> void:
  var tween = create_tween()
  p.shape_tween=tween
  tween.tween_property(p.node,"scale",plant_scale(p),0.9).set_trans(Tween.TRANS_SINE)
- p.node.get_node("Bloom").visible=fraction>=0.52
+ var highlighted=is_instance_valid(highlighted_plant) and highlighted_plant==p.node
+ if highlighted: GardenPlantInspector.highlight(p.node,false)
+ GardenPlantGrowth.apply(p.node,catalogue[p.id],fraction,int(p.shape_seed),plant_scale(p))
+ if highlighted: GardenPlantInspector.highlight(p.node,true)
 
 func starter_garden() -> void:
  for entry in [[28,-2,-2,5],[0,-2,0,2],[0,-1,0,1.5],[2,0,0,2],[1,1,-1,3],[12,-2,-2,2],[14,0,1,2],[37,2,0,2],[48,1,2,0.7],[50,2,2,1.3],[3,2,-2,3],[20,-2,1,4],[1,-1,1,3],[0,0,-2,2],[12,-1,0,2]]:
@@ -1428,17 +1569,11 @@ func starter_garden() -> void:
  refresh_wildlife()
 
 func growth_conditions(p: Dictionary) -> float:
- for obj in objects:
-  if obj.kind=="greenhouse" and obj.pos.distance_to(p.pos)<=4: return 1.0
- if not catalogue[p.id].seasons.is_empty() and GardenClimate.season(day) not in catalogue[p.id].seasons: return 0.0
- var wanted: String = catalogue[p.id].condition
- var actual: String = plots[p.plot].condition
- for other in planted:
-  if int(catalogue[other.id].layer)==3 and other.pos.distance_to(p.pos)<2.3 and other.age/float(catalogue[other.id].days)>=.52 and int(catalogue[p.id].layer)<3: actual="shade"
- return 1.0 if wanted=="any" or wanted==actual else 0.6
+ return float(GardenPlantInspector.growth_context(self,p).rate)
 
 func next_day() -> void:
  if day_transition or photo_mode: return
+ GardenLeisure.leave(self)
  if settings.reduced_motion:
   advance_growth()
   clock_time=.30
@@ -1483,6 +1618,7 @@ func advance_growth() -> void:
   p.stress=minf(1,p.stress+0.13)
   refresh_plant(p)
  day+=1
+ GardenTutorial.event(self,"morning")
  GardenTools.expire_water(self)
  if day>=GardenExpansion.opening_day(unlocked_plots): unlock_plot()
  # Seed gifts unfold across seasons; mornings no longer mint currency.
@@ -1585,6 +1721,7 @@ func collect_plant(p: Dictionary) -> bool:
  inventory[key]=int(inventory.get(key,0))+1
  p.age=maxf(0.5,p.age-1.5)
  refresh_plant(p)
+ GardenTutorial.event(self,"gather",p)
  return true
 
 func make_orders() -> void:
@@ -1605,6 +1742,7 @@ func fulfill_order(idx: int) -> void:
  if fulfilled in [3,8,15]: discover_seeds(3)
  toast("A grateful note, and petals for your next idea.")
  refresh_ui()
+ if order.get("welcome",false):GardenTutorial.event(self,"deliver")
 
 func sell_harvest() -> void:
  var value=0
@@ -1768,21 +1906,23 @@ func update_lighting() -> void:
  environment.environment.ambient_light_energy=.16+daylight*.38
  if is_instance_valid(ambient):
   ambient.daylight=daylight
-  ambient.bed=nearest_plot(player.position)%4
+  ambient.update_location(player.position,plots)
 
 func greet_pet() -> void:
  var nearest=0
  if player.position.distance_to(pets[1].position)<player.position.distance_to(pets[0].position): nearest=1
  if player.position.distance_to(pets[nearest].position)<4:
   toast(companion_names[nearest]+(" leans in with a happy purr." if nearest==0 else " wags a very enthusiastic hello."))
+  pets[nearest].pet()
   care_effect(pets[nearest].position,Color("e9b6b6"))
- else: toast("Your companions will wander over in their own time.")
+ else: toast("Press C to call your companions, or choose Call in the Garden menu.")
 
 func toast(message: String) -> void:
  toast_label.text=message
  toast_time=4.5
 
 func toggle_photo() -> void:
+ GardenLeisure.leave(self)
  photo_mode=not photo_mode
  if photo_mode: camera_target=camera.position
  for child in ui.get_children(): child.visible=not photo_mode
@@ -1820,18 +1960,60 @@ func capture_photo() -> void:
   photo_panel.get_child(0).get_child(0).text="Photo downloaded" if OS.has_feature("web") else "Saved to user data / photos"
 
 func save_game() -> void:
+ if save_load_blocked: return
  var ps: Array=[]
- for p in planted: ps.append({"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
+ for p in planted: ps.append({"orientation":p.node.rotation.y,"shape_seed":p.get("shape_seed",0),"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
  var os: Array=[]
  for obj in objects: os.append({"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
- var data={"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x,player.position.z]}
+ var data={"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
  var file=FileAccess.open(SAVE_PATH+".tmp",FileAccess.WRITE)
  if file:
   file.store_string(JSON.stringify(data))
   file.close()
   DirAccess.rename_absolute(SAVE_PATH+".tmp",SAVE_PATH)
 
+func browser_save_result(safe: bool) -> void:
+ # Direct object calls work under the site's CSP, which prohibits JS eval.
+ var guard=JavaScriptBridge.get_interface("ZendSaveGuard")
+ if guard==null: return
+ if safe: guard.ready()
+ else: guard.fail()
+
+func browser_save_check() -> bool:
+ # The web loader supplies the fingerprint read before Godot mounts IndexedDB.
+ # A missing or damaged mounted save must halt before world creation/autosave.
+ if not OS.has_feature("web"): return true
+ var expected=""
+ for argument in OS.get_cmdline_user_args():
+  if argument.begins_with("--browser-save-check="): expected=argument.trim_prefix("--browser-save-check=")
+ if expected.is_empty(): return true
+ if expected=="empty": return not FileAccess.file_exists(SAVE_PATH)
+ if not FileAccess.file_exists(SAVE_PATH) or FileAccess.get_sha256(SAVE_PATH)!=expected: return false
+ var data=JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
+ if not data is Dictionary or int(data.get("version",0)) not in [1,2] or not data.get("plants") is Array: return false
+ var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
+ if plot_count%2: plot_count+=1
+ for p in data.plants:
+  if not p is Dictionary or int(p.get("id",-1))<0 or int(p.get("id",-1))>=catalogue.size() or int(p.get("plot",-1))<0 or int(p.get("plot",-1))>=plot_count: return false
+ for id in data.get("unlocked_plants",[]):
+  if int(id)<0 or int(id)>=catalogue.size(): return false
+ for key in data.get("automation",{}):
+  var index=int(str(key).trim_suffix("water").trim_suffix("prune"))
+  if index<0 or index>=plot_count: return false
+ for order in data.get("orders",[]):
+  if not order is Dictionary or int(order.get("plant",-1))<0 or int(order.get("plant",-1))>=catalogue.size(): return false
+ return true
+
 var loaded_data: Dictionary={}
+func valid_plant_ids(values) -> Array:
+ var valid: Array=[]
+ if values is Array:
+  for value in values:
+   if value is float or value is int:
+    var id=int(value)
+    if id>=0 and id<catalogue.size() and id not in valid: valid.append(id)
+ return valid
+
 func load_game() -> void:
  if smoke or not FileAccess.file_exists(SAVE_PATH): return
  var parsed=JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
@@ -1842,6 +2024,8 @@ func load_game() -> void:
    backup.store_string(JSON.stringify(parsed))
    backup.close()
  loaded_data=parsed
+ favourite_plants=valid_plant_ids(parsed.get("favourite_plants",[]))
+ recent_plants=valid_plant_ids(parsed.get("recent_plants",[])).slice(0,20)
  wild_collection=parsed.get("wild_collection",{})
  wild_pruning=parsed.get("wild_pruning",{})
  settings.merge(parsed.get("settings",{}),true)
@@ -1867,13 +2051,15 @@ func load_game() -> void:
  clean_paths=parsed.get("clean_paths",[])
  path_widths=parsed.get("path_widths",{})
  companion_names=parsed.get("names",companion_names)
+ var saved_tutorial=parsed.get("tutorial",{})
+ tutorial_state=saved_tutorial if saved_tutorial is Dictionary else {}
 
 func restore_garden() -> void:
  GardenTools.restore_water(self,loaded_data.get("watered_ground",{}))
  GardenCare.restore_wild(self)
  for p in loaded_data.get("plants",[]):
   var age=Catalogue.saved_age(int(p.id),float(p.age),int(loaded_data.get("version",1)))
-  var plant=add_plant(int(p.id),Vector3(p.pos[0],0,p.pos[1]),int(p.plot),age,float(p.get("height_factor",legacy_height_factor(p))))
+  var plant=add_plant(int(p.id),Vector3(p.pos[0],0,p.pos[1]),int(p.plot),age,float(p.get("height_factor",legacy_height_factor(p))),float(p.get("orientation",legacy_orientation(p))),int(p.get("shape_seed",legacy_shape_seed(p))))
   plant.water=float(p.water)
   plant.stress=float(p.stress)
   plant.pruned=float(p.get("pruned",0.0))
@@ -2134,4 +2320,38 @@ func run_tools_test() -> void:
 func run_gather_test() -> void:
  var failures=[]
  await preload("res://tests/gathering.gd").run(self,failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_improvements_test() -> void:
+ var failures: Array=[]
+ await preload("res://tests/improvements_in_game.gd").run(self,failures)
+ print("IMPROVEMENTS_IN_GAME_RESULT: ",JSON.stringify(failures))
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_structure_test() -> void:
+ get_tree().create_timer(90).timeout.connect(func():push_error("Structure removal test timed out");get_tree().quit(1))
+ var failures: Array=[]
+ await preload("res://tests/structure_removal.gd").run(self,failures)
+ print("STRUCTURE_REMOVAL_RESULT: ",JSON.stringify(failures))
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_tutorial_test() -> void:
+ await get_tree().create_timer(2).timeout
+ var failures=[]
+ await preload("res://tests/tutorial.gd").run(self,failures)
+ print("TUTORIAL_RESULT: ",failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_inhabit_test() -> void:
+ await get_tree().create_timer(2).timeout
+ var failures=[]
+ await preload("res://tests/leisure.gd").run(self,failures)
+ print("LEISURE_RESULT: ",failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_view_water_test() -> void:
+ get_tree().create_timer(45).timeout.connect(func():push_error("View/water test timed out");get_tree().quit(1))
+ var failures=[]
+ await preload("res://tests/view_and_watering.gd").run(self,failures)
+ print("VIEW_WATER_RESULT: ",JSON.stringify(failures))
  get_tree().quit(0 if failures.is_empty() else 1)

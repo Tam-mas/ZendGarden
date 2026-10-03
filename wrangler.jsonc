@@ -1,5 +1,17 @@
 {
   "name": "zendgarden",
   "pages_build_output_dir": "./build/web",
-  "compatibility_date": "2026-09-18"
+  "compatibility_date": "2026-09-18",
+  // Set false and redeploy to restore the old entry page without touching saves.
+  "vars": { "ZEND_MIGRATION_ENABLED": "true" },
+  "r2_buckets": [
+    { "binding": "GARDEN_TRANSFERS", "bucket_name": "zend-garden-transfers" }
+  ],
+  // Preview builds must not use the production relay.
+  "env": {
+    "preview": {
+      "vars": { "ZEND_MIGRATION_ENABLED": "false" },
+      "r2_buckets": []
+    }
+  }
 }
