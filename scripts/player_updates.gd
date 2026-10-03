@@ -4,6 +4,14 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":14,"date":"3 October 2026","title":"Stay a while, together","note":"Sit on a bench, rest beneath a pergola or watch the pond. Call your cat and dog over, pet them, and invite them to settle beside you. Look out for a sunny cat stretch and a curious dog sniff."},
+ {"version":13,"date":"3 October 2026","title":"Grow your first bloom together","note":"A short welcome walk now teaches planting, watering, a new morning, gathering and sharing a flower in your own garden. Skip whenever you like, resume after a break, or replay it from Settings."},
+ {"version":12,"date":"3 October 2026","title":"Familiar frames, more garden","note":"The warm brown menus and decorative borders are back, with a slimmer sidebar that leaves more of your garden in view. Search, filters and favourites stay close, and shortcut instructions float as plain text."},
+ {"version":11,"date":"3 October 2026","title":"Pack away garden structures","note":"Aim the Remove tool at a structure to turn it warm red and see what you will pack away. Removing it returns its full petal cost, and touch controls offer Undo."},
+ {"version":10,"date":"3 October 2026","title":"A clearer view of your garden","note":"Larger, clearer text and quieter menu backgrounds make gardening easier to read. Plant portraits have lighter backdrops, desktop menus fit your window, and short screens can tuck away category buttons."},
+ {"version":9,"date":"3 October 2026","title":"Know what your plants need","note":"Point at a plant to see its growth, watering and growing conditions. A gentle outline shows your target, and you can switch between plants sharing a spot."},
+ {"version":8,"date":"3 October 2026","title":"Find your next favourite plant","note":"Search your seeds, filter by season, light, height, colour or visiting wildlife, and keep favourites and recently planted choices close. Shop previews help you choose garden decorations."},
+ {"version":7,"date":"3 October 2026","title":"Watch your garden take shape","note":"Plants now grow through seedlings, young leaves and buds before flowering or ripening. Small differences in their shape make each planting feel a little more natural."},
  {"version":6,"date":"1 October 2026","title":"A new cozy home","note":"Zend Garden is moving to zend.garden. Visiting the old address can gently carry your garden across, keeping its original copy safe."},
  {"version":5,"date":"1 October 2026","title":"A little window into the garden’s growth","note":"You can now read what’s new, close it whenever you like, and find it again in Settings."},
  {"version":4,"date":"1 October 2026","title":"A clearer greenhouse roof","note":"The roof glass now follows the frame, making a tidier shelter for your plants."},
@@ -33,16 +41,6 @@ static func quiet_frame(color: Color, margin: int=0) -> StyleBoxFlat:
  style.set_content_margin_all(margin)
  return style
 
-static func quiet_button(button: Button, color: Color) -> void:
- for state in ["normal","hover","pressed"]:
-  var tint=color.lightened(.10) if state=="hover" else color
-  button.add_theme_stylebox_override(state,quiet_frame(tint,8))
- var focus=quiet_frame(Color.TRANSPARENT)
- focus.draw_center=false
- focus.set_border_width_all(1)
- focus.border_color=Color("a7bea0")
- button.add_theme_stylebox_override("focus",focus)
-
 static func layout(g) -> void:
  if not g.updates_open or not is_instance_valid(g.welcome): return
  var viewport=g.get_viewport().get_visible_rect().size
@@ -66,7 +64,7 @@ static func show(g, only_unseen: bool=false) -> void:
  var size=Vector2(minf(520,viewport.x-32),minf(500,viewport.y-32))
  g.welcome=g.panel_at((viewport-size)*.5,size)
  g.welcome.z_index=30
- g.welcome.add_theme_stylebox_override("panel",quiet_frame(Color("24382e"),20))
+ g.welcome.add_theme_stylebox_override("panel",GardenTheme.frame("wood",Color.WHITE,20))
  var column=VBoxContainer.new()
  column.name="UpdateContent"
  column.add_theme_constant_override("separation",12)
@@ -79,18 +77,17 @@ static func show(g, only_unseen: bool=false) -> void:
  var close=g.button("×",func(): dismiss(g),Vector2(44,44))
  close.focus_mode=Control.FOCUS_ALL
  close.tooltip_text="Close what’s new"
- quiet_button(close,Color.TRANSPARENT)
  heading.add_child(close)
- column.add_child(g.label("Zend Garden · Update %d" % CURRENT_VERSION,14,Color("b6c9b5")))
+ column.add_child(g.label("Zend Garden · Update %d" % CURRENT_VERSION,14,GardenTheme.MUTED))
  var scroll=ScrollContainer.new()
  scroll.name="UpdateHistory"
  scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
  scroll.custom_minimum_size.y=48
  scroll.get_v_scroll_bar().custom_minimum_size.x=6
- scroll.get_v_scroll_bar().add_theme_stylebox_override("scroll",quiet_frame(Color("203129")))
+ scroll.get_v_scroll_bar().add_theme_stylebox_override("scroll",quiet_frame(Color("2d2119")))
  for state in ["grabber","grabber_highlight","grabber_pressed"]:
-  scroll.get_v_scroll_bar().add_theme_stylebox_override(state,quiet_frame(Color("74836a")))
+  scroll.get_v_scroll_bar().add_theme_stylebox_override(state,quiet_frame(Color("a17d49")))
  column.add_child(scroll)
  var entries=VBoxContainer.new()
  entries.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -100,7 +97,7 @@ static func show(g, only_unseen: bool=false) -> void:
   var group=VBoxContainer.new()
   group.add_theme_constant_override("separation",6)
   entries.add_child(group)
-  var date=g.label("Update %d · %s" % [entry.version,entry.date],12,Color("b6c9b5"))
+  var date=g.label("Update %d · %s" % [entry.version,entry.date],12,GardenTheme.MUTED)
   date.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
   group.add_child(date)
   for pair in [[entry.title,18],[entry.note,16]]:
@@ -110,7 +107,6 @@ static func show(g, only_unseen: bool=false) -> void:
  var done=g.button("Back to the garden" if g.updates_return_to_game else "Done",func(): dismiss(g),Vector2(0,44))
  done.name="DismissUpdates"
  done.focus_mode=Control.FOCUS_ALL
- quiet_button(done,Color("38513f"))
  column.add_child(done)
  layout(g)
  done.grab_focus()

@@ -28,6 +28,9 @@ func inspect(before: Node, after: Node) -> void:
     if not ghost.shader.resource_path.ends_with("leaf_preview.gdshader"): failures.append("Preview lost wind shader")
     for parameter in ["leaf_texture","leaf_color","leaf_normal","leaf_roughness","has_normal_map","has_roughness_map"]:
      if ghost.get_shader_parameter(parameter)!=original.get_shader_parameter(parameter): failures.append("Preview lost foliage parameter: "+parameter)
+    if RenderingServer.get_current_rendering_method()=="gl_compatibility":
+     for parameter in ["plant_shape","plant_height"]:
+      if ghost.get_shader_parameter(parameter)!=original.get_shader_parameter(parameter): failures.append("Preview lost individual plant shape: "+parameter)
  if before.get_child_count()!=after.get_child_count(): failures.append("Preview hierarchy differs"); return
  for i in range(before.get_child_count()): inspect(before.get_child(i),after.get_child(i))
 

@@ -41,3 +41,51 @@ Compressed embedded-image import settings must be retained for new GLBs.
 Budget: original 60 remain below 2.6M triangles, the new collection below 3.6M,
 and each model below 200k before Godot's generated LODs. The expansion has a
 higher proportion of trees and woody plants than the original collection.
+
+## Growth stages and individual shape (all 106 plants)
+
+`build_plant_growth.py` reads the two mature botanical libraries without changing
+or saving them. It builds separate Seedling, Juvenile and Buds meshes in
+`plant_growth.blend`, exports `assets/plants/growth/growth_00.glb` through
+`growth_105.glb`, and records species families, bounds and geometry budgets in
+`plant_growth_manifest.json`. The generated `scripts/plant_profiles.gd` contains
+mature model heights for catalogue filters; it is included in web exports where
+source JSON is excluded. Bud positions follow the mature bloom geometry, with
+growing tips for plants without a harvest mesh. All supplementary models embed
+packed colour, normal and roughness textures. Retain compressed embedded-image
+imports (`gltf/embedded_image_handling=2`) instead of extracted PNG copies.
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender --background --python art_source/build_plant_growth.py
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import
+python3 tests/check_plant_growth.py
+/Applications/Godot.app/Contents/MacOS/Godot --always-on-top --path . --script tests/plant_improvements.gd -- --review
+/Applications/Godot.app/Contents/MacOS/Godot --always-on-top --path . -- --improvements-test
+```
+
+When run by Codex, Blender and Godot use approved normal OS access, as described
+in AGENTS.md. A separate process preserves the interactive Blender scene. The
+read-only `tests/check_blender_sources.py` now includes the growth library.
+
+The supplementary meshes total 572,200 triangles, below the 650,000 budget.
+Runtime stages change at 20%, 52% and 78% growth, with full blooms/fruit at 100%.
+The mature model and original height/pruning scale remain authoritative.
+Supplementary scenes load only when an early stage is needed; hidden stages do
+not render. Shape bending and twist stay coherent across mature foliage,
+flowers, growth stages, placement previews and target outlines. Forward+ uses
+per-instance shader values. Compatibility/WebGL uses private material values
+for planted specimens, while decorative plants keep shared zero-shape materials;
+this avoids the hardware-limited global instance-uniform buffer. Preview and
+outline materials preserve these values as well as the source PBR maps.
+Orientation and shape seeds persist in existing version-2 saves; older saves
+receive repeatable values derived from plant ID and position.
+
+The focused test covers stage visibility for every species, search/filter
+results, favourites, recency, care explanations, targeting and saved appearance.
+The in-game fixture uses the normal menus/action dispatcher and captures desktop
+and phone views under `captures/plant-improvements/` without using the personal
+save. The full smoke suite also checks a 142-plant layered bed. Physical mobile
+hardware performance remains unmeasured.
+
+Shop thumbnails are rendered from the existing ornament GLBs with
+`tools/render_ornament_cards.gd` and saved under `assets/ui/shop/`.

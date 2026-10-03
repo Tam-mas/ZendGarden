@@ -75,7 +75,7 @@ func setup(game) -> void:
  add_button("right","Turn right",func():
   if g.mode=="prune":GardenTools.resize_pruners(g,1)
   else:g.rotate_structure(1))
- add_button("greet","Greet",g.greet_pet)
+ add_button("greet","Interact",func(): GardenLeisure.interact(g))
  add_button("undo","Undo lift",undo_remove)
  add_button("up","Rise",func(): g.camera_target.y+=.5)
  add_button("down","Lower",func(): g.camera_target.y-=.5)
@@ -128,23 +128,16 @@ func configure() -> void:
   var factor=maxf(1.0,minf(dimensions.x/1100.0,dimensions.y/760.0))
   get_window().content_scale_size=Vector2i(dimensions/factor)
  elif previous:
-  reset_gestures()
-  get_window().content_scale_size=Vector2i(1440,900)
-  g.side_panel.position=Vector2(24,112)
-  g.side_panel.size=Vector2(300,664)
-  g.side_panel.get_child(0).get_child(2).custom_minimum_size=Vector2(264,448)
-  g.detail_label.show()
-  g.side_panel.get_child(0).add_theme_constant_override("separation",12)
-  g.reticle.position=Vector2(712,432)
-  g.compact_hud.position=Vector2(28,24)
-  g.compact_hud.size=Vector2.ZERO
-  g.compact_hud.autowrap_mode=TextServer.AUTOWRAP_OFF
-  g.toast_label.position=Vector2(430,125)
-  g.toast_label.size.x=560
-  g.transition_label.position=Vector2(430,92)
-  g.transition_label.size.x=580
   if not g.side_panel.visible: g.resume_controls()
   if is_instance_valid(drawer): drawer.queue_free(); drawer=null
+ if not enabled:
+  var dimensions=Vector2(get_window().size)
+  if OS.has_feature("web"):
+   var canvas=JavaScriptBridge.get_interface("document").getElementById("canvas")
+   dimensions=Vector2(float(canvas.clientWidth),float(canvas.clientHeight))
+  var factor=maxf(1.0,minf(dimensions.x/1600.0,dimensions.y/1000.0))
+  get_window().content_scale_size=Vector2i(dimensions/factor)
+  GardenInterface.layout(g,true)
  apply_graphics()
  last_size=Vector2.ZERO
  # Establish coordinates before the next touch, not on the following frame.
@@ -189,6 +182,7 @@ func close_menu() -> void:
 func cycle_layer() -> void:
  g.selected_layer=(g.selected_layer+1)%4
  g.toast("Target layer: "+["groundcover","flowers","shrubs","canopy"][g.selected_layer])
+ GardenTutorial.hint(g,"layers","One spot can hold groundcover, flowers, shrubs and a tree. Switch layers to choose the plant you mean.")
 
 func show_drawer(kind: String) -> void:
  reset_gestures()
@@ -223,6 +217,14 @@ func show_drawer(kind: String) -> void:
   col.add_child(choice)
  if kind=="garden":
   col.add_child(g.button("Next morning",func(): close_menu(); g.next_day(),Vector2(0,48)))
+  col.add_child(g.button("Call "+g.companion_names[0],func(): close_menu(); GardenLeisure.call_pet(g,0),Vector2(0,48)))
+  col.add_child(g.button("Call "+g.companion_names[1],func(): close_menu(); GardenLeisure.call_pet(g,1),Vector2(0,48)))
+  if not g.rest_kind.is_empty():
+   col.add_child(g.button("Invite "+g.companion_names[0]+" to settle",func(): close_menu(); GardenLeisure.call_pet(g,0,true),Vector2(0,48)))
+   col.add_child(g.button("Invite "+g.companion_names[1]+" to settle",func(): close_menu(); GardenLeisure.call_pet(g,1,true),Vector2(0,48)))
+   col.add_child(g.button("Stand up",func(): close_menu(); GardenLeisure.leave(g),Vector2(0,48)))
+  if g.pets.any(func(p):return p.position.distance_to(g.player.position)<4):
+   col.add_child(g.button("Pet companion",func():close_menu();g.greet_pet(),Vector2(0,48)))
   col.add_child(g.button("Photo mode",func(): close_menu(); g.toggle_photo(),Vector2(0,48)))
  fit_drawer()
 
@@ -284,7 +286,7 @@ func layout() -> void:
  col.add_theme_constant_override("separation",5)
  for tab in col.get_child(0).get_children():
   tab.custom_minimum_size.y=48
-  tab.add_theme_font_size_override("font_size",16)
+  tab.add_theme_font_size_override("font_size",14 if size.x<380 else 16)
  col.get_child(4).custom_minimum_size.y=48
  close_button.custom_minimum_size.y=48
  col.get_child(2).custom_minimum_size=Vector2(264,0)
@@ -320,15 +322,15 @@ func fit_popup(popup: Control) -> void:
  popup.position=(area+Vector2(24,24)-popup.size*factor)/2
 
 func _process(delta: float) -> void:
- if not enabled: return
  if get_window().size!=window_size: configure()
+ if not enabled: return
  if get_viewport().get_visible_rect().size!=last_size: layout()
  if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  if blocked(): reset_gestures()
  for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel]: panel.hide()
  g.compact_hud.hide()
  status_panel.visible=not blocked()
- context_panel.visible=not blocked()
+ context_panel.visible=not blocked() and not g.tutorial_state.get("active",false)
  walk_label.visible=not blocked()
  status_text.text="Day %d · %d petals\n%s" % [g.day,g.coins,GardenClimate.season(g.day)]
  if last_size.x<380: status_text.text="Day %d\n%d petals"%[g.day,g.coins]
@@ -350,11 +352,14 @@ func _process(delta: float) -> void:
  if g.mode=="build": context_title.text="Place · "+g.furniture[g.selected_furniture].name
  context_hint.text="Drag the view to look. Choose Tools to start gardening." if g.mode=="walk" else g.status_label.text.replace("\n"," · ")
  if g.mode in ["water","rake","hoe","harvest"]: context_hint.text="Aim at the ground. Hold "+buttons.action.text+" while looking around."
+ if not g.inspector_lines.is_empty():
+  context_title.text=g.inspector_lines[0]
+  context_hint.text=" · ".join(g.inspector_lines.slice(1,4))
  if g.mode=="plant" and not g.preview_error.is_empty(): context_hint.text=g.preview_error
  if g.photo_mode:
   context_title.text="Photo mode"
   context_hint.text="Walk and drag to frame your picture."
- buttons.layer.visible=g.mode in ["prune","move","remove","hoe"] and not g.photo_mode
+ buttons.layer.visible=(g.mode in ["prune","move","remove","hoe"] or (g.hover_target>=0 and g.mode in ["walk","water","harvest"])) and not g.photo_mode
  buttons.layer.text=["Ground","Flowers","Shrubs","Trees"][g.selected_layer]+" ↻"
  if g.mode=="hoe":buttons.layer.text="Switch to "+("lower" if g.hoe_raise else "raise")
  buttons.cancel.visible=g.mode!="walk" and not g.photo_mode
@@ -363,7 +368,12 @@ func _process(delta: float) -> void:
  buttons.left.text="Smaller" if g.mode=="prune" else "Turn left"
  buttons.right.visible=(rotating or g.mode=="prune") and not g.photo_mode
  buttons.right.text="Larger" if g.mode=="prune" else "Turn right"
- buttons.greet.visible=g.mode=="walk" and not g.photo_mode and g.pets.any(func(p): return p.position.distance_to(g.player.position)<4)
+ var rest_target=GardenLeisure.target(g)
+ buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (not g.rest_kind.is_empty() or not rest_target.is_empty() or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
+ buttons.greet.text="Stand up" if not g.rest_kind.is_empty() else GardenLeisure.VERBS.get(rest_target.get("kind",""),"Pet companion")
+ if not g.rest_kind.is_empty():
+  context_title.text={"bench":"Sitting in your garden","pergola":"Resting in the shade","pond":"Watching the pond"}.get(g.rest_kind,"Resting")
+  context_hint.text="Drag to look. Garden lets you invite a companion. Walk or tap Stand up to leave."
  for key in ["up","down","photo","done"]: buttons[key].visible=g.photo_mode
  buttons.seeds.visible=not g.photo_mode
  buttons.garden.visible=not g.photo_mode
@@ -400,6 +410,14 @@ func _input(event: InputEvent) -> void:
   if owned: get_viewport().set_input_as_handled()
   return
  if blocked(): return
+ if event is InputEventScreenTouch and event.pressed and is_instance_valid(g.tutorial_panel) and g.tutorial_panel.visible and g.tutorial_panel.get_global_rect().has_point(event.position):
+  finger_positions[event.index]=event.position
+  for control in g.tutorial_panel.find_children("*","Button",true,false):
+   if control.is_visible_in_tree() and not control.disabled and control.get_global_rect().has_point(event.position):
+    control.pressed.emit()
+    break
+  get_viewport().set_input_as_handled()
+  return
  # Godot synthesizes mouse events for touchscreen UI. Gameplay has its own
  # multitouch dispatch; consuming these prevents double actions and stolen focus.
  if event is InputEventMouse and event.device==-1:
@@ -454,17 +472,13 @@ func act(repeating: bool=false) -> void:
  if blocked() or not g.hover_valid: return
  removed.clear()
  if g.mode=="remove":
-  var index=g.plant_at(g.hover_cell,g.selected_layer)
-  if index<0:
-   for layer_index in range(4):
-    index=g.plant_at(g.hover_cell,layer_index)
-    if index>=0: break
+  var index=g.aimed_plant()
   if index>=0:
    removed=g.planted[index].duplicate()
    removed.erase("node"); removed.erase("marker")
    removed["plant"]=true
   else:
-   index=g.object_at(g.hover_cell)
+   index=g.aimed_object()
    if index>=0:
     removed=g.objects[index].duplicate()
     removed.erase("node")
@@ -479,7 +493,7 @@ func undo_remove() -> void:
  var old=removed
  if old.plant:
   if not g.can_plant(old.id,old.pos,old.plot).is_empty(): g.toast("Make room in that spot before undoing."); return
-  var p=g.add_plant(old.id,old.pos,old.plot,old.age,old.height_factor)
+  var p=g.add_plant(old.id,old.pos,old.plot,old.age,old.height_factor,float(old.get("orientation",0)),int(old.get("shape_seed",0)))
   for key in ["water","stress","pruned"]: p[key]=old[key]
   g.refresh_plant(p)
  else:
@@ -519,15 +533,4 @@ func settings_page() -> void:
   g.list_box.add_child(slider)
 
 func welcome_page() -> void:
- g.welcome=g.panel_at(Vector2.ZERO,Vector2(360,330))
- g.welcome.z_index=30
- var col=VBoxContainer.new()
- col.add_theme_constant_override("separation",12)
- g.welcome.add_child(col)
- col.add_child(g.label("Welcome to your garden",24))
- var note=g.label("Hold the WALK stick and drag the view with your other thumb to look around.\n\nTools chooses your action. Aim with the centre dot, then tap or hold the large action button.\n\nSeeds and Garden stay at the top. Extra tool options appear above the bottom controls.",18)
- note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
- note.custom_minimum_size.x=300
- col.add_child(note)
- col.add_child(g.button("Explore the garden",func(): GardenExperience.finish(g),Vector2(0,52)))
- fit_popup(g.welcome)
+ GardenExperience.welcome(g)

@@ -72,6 +72,7 @@ static func run(g, failures: Array) -> void:
  if stone.node.get_child_count()==0: failures.append("Stone model missing")
  g.mode="remove"
  g.hover_cell=stone.pos
+ g.hover_object=stone.node
  g.hover_valid=true
  g.action_cooldown=0
  g.perform_action()

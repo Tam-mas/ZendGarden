@@ -126,6 +126,7 @@ static func plants() -> Array:
  for i in range(ROWS.size()):
   var r = ROWS[i]
   result.append({"id": i, "name": r[0], "category": r[1], "color": Color(r[2]), "layer": r[3], "days": GROWTH_DAYS[i], "seasons": SEASONAL.get(i,[]), "condition": r[5], "animal": r[6], "capacity": [1, 2, 4, 7][r[3]], "price": 8 + r[3] * 12 + (i % 4) * 3, "value": 7 + r[3] * 5, "climber": r[0] in ["Sweet pea", "Clematis", "Pea", "Cucumber", "Common jasmine", "Pink jasmine"]})
+  result.back()["height"]=GardenPlantProfiles.HEIGHTS[i]
  return result
 
 static func furnishings() -> Array:

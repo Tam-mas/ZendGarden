@@ -4,7 +4,16 @@
 
 ### Your first planting
 
+Choose **Start the welcome walk** for a short lesson in your garden: plant a flower, water it, welcome the morning, gather its bloom and deliver it to Jun. Only this welcome flower gets a one-time bloom after its first watered morning. The lesson saves your progress; skip at any time or replay it in **Settings**. On desktop, **Enter** selects the next lesson tool and **Escape** skips the lesson. Touch the lesson button on phones.
+
 Press **Tab** to open the menus and choose a plant from the seed selection. Aim down at a garden plot and click to plant where the preview appears. Switch to the watering tool to tend it, then keep exploring or press **G** to move on to the next morning. The in-game guide explains the tools and garden systems in more detail.
+
+Search all plants in **Seeds**, or use **Filters** to choose a season, light,
+height, colour or visiting wildlife. The star on each card saves a favourite;
+the collection menu also shows recently planted choices. On short screens,
+**Category** opens the category buttons. Scroll the collection to see more
+cards. Point at a planted specimen for its care information and growth stage;
+use **L**, or the touch **Layer** button, to inspect plants sharing a spot.
 
 ## Controls
 
@@ -20,7 +29,9 @@ Press **Tab** to open the menus and choose a plant from the seed selection. Aim 
 | **R** with the hoe | Switch between raising and lowering ground |
 | **L** | Change the target plant layer where plants overlap |
 | **G** | Advance to the next morning |
-| **E** | Greet a nearby companion |
+| **E** | Sit / rest at nearby furniture, stand up, or greet a nearby companion |
+| **F** | Pet a nearby cat or dog |
+| **C** | Call both companions over |
 | **Q / E** while placing a structure | Rotate it |
 | **Mouse wheel** | Adjust the field of view |
 | **P** | Enter or leave photo mode |
@@ -36,6 +47,11 @@ A normal in-game day lasts about **10 minutes**, and each season lasts **12 days
 You can advance to the next morning whenever you want. The garden does not progress while the game is closed, so you can return without having missed anything.
 
 Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
+
+To pack away a placed structure, choose **Remove (7)** and aim at it. The
+structure turns warm red, and its name and petal refund appear. Click, or tap
+**Remove** on touch, to pack away that structure and return its full cost.
+Nearby plants stay in place. Touch controls offer **Undo** for a short time.
 
 Move **Music volume** all the way down to silence the music completely; **Nature volume** controls birds, water, rain and other surroundings separately. **Settings → What’s new** shows short notes about meaningful improvements and the current update number. Returning players see new notes once, and can close them with the ×, the bottom button or Escape. Your garden remembers the dismissal.
 
@@ -126,3 +142,9 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 First tool upgrades unlock on day 3; second upgrades unlock on day 18. Seed varieties are bought in **Seeds**, where each variety’s unlock price is shown. Unlocking a variety lets you plant it repeatedly without paying for each plant.
 
 Pressing **G** advances to the next morning with a 12-second transition. The reduced-motion setting retains its quick transition option.
+
+### A moment with your companions
+
+In **Wander**, face a nearby bench, pergola or pond and press **E**. Benches offer a seated view, pergolas a shaded pause, and ponds a view over the water and stocked fish. While resting on desktop, use the mouse to choose **Invite Miso/Clover to settle**, and hold the right mouse button to look around. **F** pets the nearest companion within reach. Press **E** or start walking to stand; choosing a tool also returns you to safe ground.
+
+On touch, the large **Interact** button changes to **Sit on bench**, **Rest under pergola**, **Watch the pond**, **Pet companion** or **Stand up** when available. **Garden** offers individual Call buttons, and invitations to settle while resting. You can also call a companion from **Guide**. Companions walk over on their own, settle for a while and resume wandering. Cats sometimes stretch in daylight; dogs pause to sniff. There are no care chores.

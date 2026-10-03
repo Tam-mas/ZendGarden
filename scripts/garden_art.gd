@@ -5,6 +5,7 @@ static var detail_scenes: Dictionary = {}
 static var materials: Dictionary = {}
 static var botanical_scenes: Dictionary = {}
 static var leaf_materials: Dictionary = {}
+static var preview_materials: Dictionary = {}
 
 static func mat(color: Color, roughness: float = 0.9) -> StandardMaterial3D:
  var key = color.to_html() + str(roughness)
@@ -60,6 +61,7 @@ static func plant(data: Dictionary, decorative: bool = false) -> Node3D:
   var root=Node3D.new()
   root.set_meta("terrain_anchor",true)
   var imported=botanical_scenes[path].instantiate()
+  imported.name="MatureFoliage"
   root.add_child(imported)
   add_leaf_wind(imported)
   var bloom=Node3D.new()
@@ -74,12 +76,17 @@ static func add_leaf_wind(node: Node) -> void:
  if node is MeshInstance3D:
   for surface in range(node.mesh.get_surface_count()):
    var original=node.mesh.surface_get_material(surface)
-   if original is StandardMaterial3D and str(original.resource_name).begins_with("Leaf"):
-    var key=original.resource_name
+   if original is StandardMaterial3D:
+    var key=str(original.get_instance_id())
     if not leaf_materials.has(key):
      var material=ShaderMaterial.new()
      material.shader=load("res://shaders/leaf_wind.gdshader")
      material.set_shader_parameter("leaf_texture",original.albedo_texture)
+     var leafy=str(original.resource_name).begins_with("Leaf")
+     material.set_shader_parameter("has_color_map",original.albedo_texture!=null)
+     material.set_shader_parameter("wind_strength",1.0 if leafy else 0.0)
+     material.set_shader_parameter("surface_backlight",.10 if leafy else 0.0)
+     material.set_shader_parameter("surface_roughness",original.roughness)
      material.set_shader_parameter("leaf_color",original.albedo_color)
      material.set_shader_parameter("leaf_normal",original.normal_texture)
      material.set_shader_parameter("leaf_roughness",original.roughness_texture)
