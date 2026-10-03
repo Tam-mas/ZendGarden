@@ -11,6 +11,13 @@ static func welcome(g, _page: int = 0) -> void:
   g.welcome_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
   g.welcome_backdrop.z_index=29
   g.ui.add_child(g.welcome_backdrop)
+  var backdrop=TextureRect.new()
+  backdrop.texture=load("res://assets/ui/start-garden.webp")
+  backdrop.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+  backdrop.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_COVERED
+  backdrop.modulate=Color(.75,.75,.75,1)
+  backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+  g.welcome_backdrop.add_child(backdrop)
  var width=minf(400,g.get_viewport().get_visible_rect().size.x-32)
  g.welcome=g.panel_at(Vector2.ZERO,Vector2(width,0))
  g.welcome.z_index=30

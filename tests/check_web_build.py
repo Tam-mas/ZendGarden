@@ -31,6 +31,8 @@ for path in root.rglob('*'):
 html = (root / 'index.html').read_text()
 assert '$GODOT_' not in html, 'Unexpanded Godot template'
 assert 'loader.js' in html
+assert 'garden-woodland.webp' in html and (root/'art/garden-woodland.webp').is_file(), 'New start background missing'
+assert 'garden-woodland.jpg' not in html
 routes = json.loads((root / '_routes.json').read_text())
 assert '/api/garden-transfer/*' in routes['include']
 assert '/pack/*' not in routes['include'], 'Game downloads must bypass functions'

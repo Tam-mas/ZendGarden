@@ -34,7 +34,7 @@ func render_cards() -> void:
   camera.look_at(center)
   for i in range(4):await process_frame
   await RenderingServer.frame_post_draw
-  get_root().get_texture().get_image().save_png("res://assets/ui/shop/"+item.kind+".png")
+  GardenArt.save_card(get_root().get_texture().get_image(),"res://assets/ui/shop/"+item.kind)
   model.free()
  stage.free()
  print("ORNAMENT_CARDS: PASS")

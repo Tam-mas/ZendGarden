@@ -8,6 +8,21 @@ static var leaf_materials: Dictionary = {}
 static var preview_materials: Dictionary = {}
 static var fur_materials: Dictionary = {}
 
+static func card_path(stem: String) -> String:
+ return stem+".webp" if ResourceLoader.exists(stem+".webp") else stem+".png"
+
+static func save_card(image: Image, stem: String) -> void:
+ # Keep the smaller exact-pixel encoding, including transparent edges. This
+ # also makes later Blender portrait rebuilds update the format actually used.
+ var png=image.save_png_to_buffer()
+ var webp=image.save_webp_to_buffer()
+ var extension=".webp" if webp.size()<png.size() else ".png"
+ var file=FileAccess.open(stem+extension,FileAccess.WRITE)
+ file.store_buffer(webp if extension==".webp" else png)
+ file.close()
+ var obsolete=stem+(".png" if extension==".webp" else ".webp")
+ if FileAccess.file_exists(obsolete):DirAccess.remove_absolute(obsolete)
+
 static func mat(color: Color, roughness: float = 0.9) -> StandardMaterial3D:
  var key = color.to_html() + str(roughness)
  if materials.has(key): return materials[key]

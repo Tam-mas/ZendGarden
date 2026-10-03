@@ -5,8 +5,8 @@ static func material(soil: bool) -> ShaderMaterial:
  var mat=ShaderMaterial.new()
  mat.shader=load("res://shaders/ground_detail.gdshader")
  var texture_name="Garden_loam" if soil else "Meadow_earth"
- mat.set_shader_parameter("earth",load("res://assets/textures/"+texture_name+".png"))
- mat.set_shader_parameter("relief",load("res://assets/textures/"+texture_name+"_normal.png"))
+ mat.set_shader_parameter("earth",load("res://assets/textures/"+texture_name+".webp"))
+ mat.set_shader_parameter("relief",load("res://assets/textures/"+texture_name+"_normal.webp"))
  return mat
 
 static func path(g, center: Vector3, width: float = 1.0) -> MeshInstance3D:

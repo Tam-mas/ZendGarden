@@ -3,7 +3,7 @@ import json, struct, math
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 report=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())
-assert [p['id'] for p in report]==list(range(136))
+assert [p['id'] for p in report]==list(range(148))
 triangles=0
 for entry in report:
     path=ROOT/'assets/plants/growth'/f"growth_{entry['id']:02d}.glb"

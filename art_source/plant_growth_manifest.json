@@ -950,5 +950,89 @@
     "family": "succulent",
     "height": 0.0429,
     "triangles": 2368
+  },
+  {
+    "id": 136,
+    "name": "Dwarf mondo grass",
+    "family": "low_grass",
+    "height": 0.1051,
+    "triangles": 5470
+  },
+  {
+    "id": 137,
+    "name": "Black mondo grass",
+    "family": "low_grass",
+    "height": 0.2105,
+    "triangles": 5470
+  },
+  {
+    "id": 138,
+    "name": "Velvet zoysia",
+    "family": "low_grass",
+    "height": 0.1121,
+    "triangles": 5598
+  },
+  {
+    "id": 139,
+    "name": "Buffalo grass",
+    "family": "low_grass",
+    "height": 0.1566,
+    "triangles": 5598
+  },
+  {
+    "id": 140,
+    "name": "Creeping bentgrass",
+    "family": "low_grass",
+    "height": 0.1342,
+    "triangles": 5598
+  },
+  {
+    "id": 141,
+    "name": "Creeping red fescue",
+    "family": "low_grass",
+    "height": 0.2012,
+    "triangles": 5598
+  },
+  {
+    "id": 142,
+    "name": "Sheep's fescue",
+    "family": "low_grass",
+    "height": 0.2801,
+    "triangles": 5470
+  },
+  {
+    "id": 143,
+    "name": "Bearskin fescue",
+    "family": "low_grass",
+    "height": 0.2229,
+    "triangles": 5470
+  },
+  {
+    "id": 144,
+    "name": "Blue moor grass",
+    "family": "low_grass",
+    "height": 0.3156,
+    "triangles": 5470
+  },
+  {
+    "id": 145,
+    "name": "Evergold sedge",
+    "family": "low_grass",
+    "height": 0.3136,
+    "triangles": 8550
+  },
+  {
+    "id": 146,
+    "name": "Snowline sedge",
+    "family": "low_grass",
+    "height": 0.1579,
+    "triangles": 8550
+  },
+  {
+    "id": 147,
+    "name": "Dwarf golden sweet flag",
+    "family": "low_grass",
+    "height": 0.1263,
+    "triangles": 5470
   }
 ]

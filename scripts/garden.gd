@@ -43,6 +43,10 @@ var inventory: Dictionary = {}
 var upgrades = {"can":0,"shears":0,"trowel":0,"rake":0,"gather":0}
 var automation: Dictionary = {}
 var expansions: Dictionary = {}
+var bed_surfaces: Dictionary={}
+var owned_surfaces: Array=["soil"]
+var bed_surface_nodes: Dictionary={}
+var surface_shop_plot=0
 var orders: Array = []
 var fulfilled = 0
 var planted_total = 0
@@ -550,6 +554,7 @@ func make_ui() -> void:
  GardenInterface.layout(self,true)
 
 func open_sidebar(page: String) -> void:
+ if page=="Shop":surface_shop_plot=current_plot
  list_box.get_parent().set_deferred("scroll_vertical",0)
  if touch_active(): touch.reset_gestures()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
@@ -649,6 +654,7 @@ func refresh_sidebar() -> void:
    basket_summary()
    list_box.add_child(button("View orders",func(): open_sidebar("Orders")))
    side_title.text = "The garden shed"
+   GardenBedSurfaces.shop(self)
    add_note("BED CARE  ·  available day 7",14)
    for kind in ["water","prune"]:
     var k: String = kind
@@ -681,7 +687,7 @@ func refresh_sidebar() -> void:
     content.offset_left=6;content.offset_right=-6;content.offset_top=6;content.offset_bottom=-6
     content.mouse_filter=Control.MOUSE_FILTER_IGNORE
     var portrait=TextureRect.new()
-    portrait.texture=load("res://assets/ui/shop/"+item.kind+".png")
+    portrait.texture=load(Art.card_path("res://assets/ui/shop/"+item.kind))
     portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
     portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
     portrait.custom_minimum_size=Vector2(108,82)
@@ -1849,7 +1855,8 @@ func refresh_wildlife() -> void:
     for j in range(3):
      var leg=n.find_child("Leg"+side+str(j)+"*",true,false)
      if leg:legs.append(leg)
-  wildlife.append({"legs":legs,"hive":i>=natural_count,"node":n,"kind":kind,"target":target,"phase":float(i)*1.73,"height":height})
+  var bird_slot=wildlife.filter(func(entry):return entry.kind==kind).size()
+  wildlife.append({"bird_slot":bird_slot,"bird_count":species.count(kind),"legs":legs,"hive":i>=natural_count,"node":n,"kind":kind,"target":target,"phase":float(i)*1.73,"height":height})
 
 func animate_garden(delta: float, sample_time: float = -1.0) -> void:
  if sample_time<0:garden_animation_time+=maxf(0,delta)
@@ -1987,7 +1994,7 @@ func save_game() -> void:
  for p in planted: ps.append({"orientation":p.node.rotation.y,"shape_seed":p.get("shape_seed",0),"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
  var os: Array=[]
  for obj in objects: os.append({"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
- var data={"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
+ var data={"bed_surfaces":bed_surfaces,"owned_surfaces":owned_surfaces,"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
  var file=FileAccess.open(SAVE_PATH+".tmp",FileAccess.WRITE)
  if file:
   file.store_string(JSON.stringify(data))
@@ -2058,6 +2065,7 @@ func load_game() -> void:
  clock_time=float(parsed.get("clock",0.26))
  unlocked_plants=parsed.get("unlocked_plants",STARTERS.duplicate())
  unlocked_plots=int(parsed.get("unlocked_plots",1))
+ GardenBedSurfaces.restore(self,parsed)
  inventory={}
  for raw_key in parsed.get("inventory",{}):
   var key=str(int(float(raw_key)))
@@ -2077,6 +2085,7 @@ func load_game() -> void:
  tutorial_state=saved_tutorial if saved_tutorial is Dictionary else {}
 
 func restore_garden() -> void:
+ GardenBedSurfaces.rebuild(self)
  GardenTools.restore_water(self,loaded_data.get("watered_ground",{}))
  GardenCare.restore_wild(self)
  for p in loaded_data.get("plants",[]):
@@ -2274,6 +2283,8 @@ func run_smoke_test() -> void:
  await preload("res://tests/experience.gd").run(self,failures)
  await preload("res://tests/walking.gd").run(self,failures)
  await preload("res://tests/ground_finish.gd").run(self,failures)
+ await preload("res://tests/bed_surfaces.gd").run(self,failures)
+ await preload("res://tests/bird_pairs.gd").run(self,failures)
  await preload("res://tests/pruning.gd").run(self,failures)
  await preload("res://tests/touch_controls.gd").run(self,failures)
  await preload("res://tests/garden_additions.gd").run(self,failures)
@@ -2312,6 +2323,8 @@ func run_ground_test() -> void:
  await get_tree().create_timer(2).timeout
  var failures=[]
  await preload("res://tests/ground_finish.gd").run(self,failures)
+ await preload("res://tests/bed_surfaces.gd").run(self,failures)
+ await preload("res://tests/bird_pairs.gd").run(self,failures)
  print("GROUND_RESULT: ",failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 

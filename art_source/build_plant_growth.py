@@ -16,7 +16,7 @@ scene=bpy.data.scenes.new('ZendGarden_PlantGrowth')
 bpy.context.window.scene=scene
 # Read existing authored organs and pigments without opening or saving their files.
 sources={}
-for filename in ['botanical_library.blend','botanical_expansion.blend','botanical_additions.blend']:
+for filename in ['botanical_library.blend','botanical_expansion.blend','botanical_additions.blend','low_grasses.blend']:
     with bpy.data.libraries.load(str(ROOT/'art_source'/filename),link=False) as (src,dst):
         dst.objects=[n for n in src.objects if n.startswith('Plant_') or n.startswith('Foliage') or n.startswith('Bloom')]
     for obj in dst.objects:
@@ -107,6 +107,10 @@ def centers(mesh,height):
 
 for idx,row in enumerate(specs):
     name,category,color,layer,*_=row;random.seed(idx*7919+181)
+    if idx>=136:
+        previous=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())
+        report.append(previous[idx])
+        continue
     src=sources[idx]
     foliage=next(o for o in src.children if o.name.startswith('Foliage'))
     flowers=next(o for o in src.children if o.name.startswith('Bloom'))

@@ -4,7 +4,7 @@ root=pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(root/'art_source/overhaul'))
 from selection_policy import selected_old,retained_record
 files=list((root/'assets/plants').glob('plant_*.glb'))
-assert len(files)==136, f'Expected 136 species, got {len(files)}'
+assert len(files)==148, f'Expected 148 species, got {len(files)}'
 tools=[root/'assets/tools'/f'{kind}.glb' for kind in ['can','shears','trowel','rake','hoe']]
 companions=[root/'assets/companions'/f'{kind}.glb' for kind in ['cat','dog']]
 shop=[root/'assets/shop'/f'{kind}.glb' for kind in ['stone','pot','bench','lantern','arbor','pergola','greenhouse','pond','bath','hive','sign','potting_bench','compost_bays','rain_barrel','raised_bed','trellis_screen','gazebo','arched_bridge','fountain','garden_swing','insect_hotel']]
@@ -74,4 +74,4 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
  if path.name.startswith('plant_'):
 
   assert any('Foliage' in n.get('name','') for n in doc['nodes']),(path,'missing foliage')
-print('BLENDER_ASSET_CHECK: PASS — 136 species, environment, 5 tools, 21 shop structures, 24 wildlife models, 3 scenery models and 2 articulated companions, with no default-scene objects')
+print('BLENDER_ASSET_CHECK: PASS — 148 species, environment, 5 tools, 21 shop structures, 24 wildlife models, 3 scenery models and 2 articulated companions, with no default-scene objects')

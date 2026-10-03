@@ -7,6 +7,7 @@ python3 tests/check_mountains.py
 python3 tests/check_plants.py
 python3 tests/check_plant_growth.py
 python3 tests/check_botanical_additions.py
+python3 tests/check_low_grasses.py
 python3 tests/check_audio.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"

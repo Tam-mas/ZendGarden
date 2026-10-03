@@ -1,0 +1,44 @@
+[
+  {
+    "source": "assets/textures/Meadow_earth_normal.png",
+    "runtime": "assets/textures/Meadow_earth_normal.webp",
+    "before": 460961,
+    "after": 349768,
+    "lossless": true
+  },
+  {
+    "source": "assets/textures/Mountain_strata.png",
+    "runtime": "assets/textures/Mountain_strata.webp",
+    "before": 323523,
+    "after": 176378,
+    "lossless": true
+  },
+  {
+    "source": "assets/textures/Garden_loam_normal.png",
+    "runtime": "assets/textures/Garden_loam_normal.webp",
+    "before": 460598,
+    "after": 349040,
+    "lossless": true
+  },
+  {
+    "source": "assets/textures/Garden_loam.png",
+    "runtime": "assets/textures/Garden_loam.webp",
+    "before": 279961,
+    "after": 165654,
+    "lossless": true
+  },
+  {
+    "source": "assets/textures/Mountain_strata_normal.png",
+    "runtime": "assets/textures/Mountain_strata_normal.webp",
+    "before": 460925,
+    "after": 349448,
+    "lossless": true
+  },
+  {
+    "source": "assets/textures/Meadow_earth.png",
+    "runtime": "assets/textures/Meadow_earth.webp",
+    "before": 296482,
+    "after": 175294,
+    "lossless": true
+  }
+]

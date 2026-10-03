@@ -54,7 +54,7 @@ static func run(g, failures: Array) -> void:
  var cards=g.list_box.get_node("PlantCards")
  if cards.columns!=2 or cards.get_child_count()!=21: failures.append("Tree catalogue is not a two-column grid")
  for id in range(GardenCatalogue.ROWS.size()):
-  if not ResourceLoader.exists("res://assets/ui/plants/%02d.png" % id): failures.append("Missing plant thumbnail "+str(id))
+  if not ResourceLoader.exists(GardenArt.card_path("res://assets/ui/plants/%02d" % id)): failures.append("Missing plant thumbnail "+str(id))
  for button in all_buttons(g.hud_top):
   if button.text in ["Seeds","Shop","Orders","Guide","Next morning  G","Photo  P"]: failures.append("Duplicate header button remains")
  await g.get_tree().create_timer(.4).timeout

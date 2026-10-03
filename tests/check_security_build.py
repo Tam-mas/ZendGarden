@@ -3,11 +3,13 @@
 from pathlib import Path
 import json
 import re
+import sys
 root = Path(__file__).resolve().parents[1]
-html = (root / 'build/web/index.html').read_text()
+site = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else root / 'build/web'
+html = (site / 'index.html').read_text()
 assert not re.search(r'<script(?![^>]*\bsrc=)[^>]*>', html), 'Inline executable script bypasses strict CSP'
-assert (root / 'build/web/godot-config.js').is_file()
-headers = (root / 'build/web/_headers').read_text()
+assert (site / 'godot-config.js').is_file()
+headers = (site / '_headers').read_text()
 for directive in ("script-src 'self' 'wasm-unsafe-eval'", "connect-src 'self'", "frame-ancestors 'none'", "object-src 'none'", 'X-Frame-Options: DENY', 'Strict-Transport-Security:'):
     assert directive in headers, f'Missing policy: {directive}'
 script_policy = headers.split('script-src ', 1)[1].split(';', 1)[0]

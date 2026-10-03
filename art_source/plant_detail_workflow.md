@@ -95,3 +95,21 @@ Shop thumbnails are rendered from the existing ornament GLBs with
 The catalogue now has 136 entries. See `botanical_additions_references.md` for the ten grasses and twenty cacti/succulents and the revised Sweet pea/Clematis flowers. `botanical_additions.blend` is an isolated 32-plant source library. Rebuild it after the two older libraries and before growth stages. Growth sources load the additions last so IDs 9 and 10 use revised flowers. Both additions and growth builders accept `-- --ids 9,10,106,...` to limit GLB writes. The growth library contains all 136 species. The thirty new mature meshes have a separate 900,000 triangle budget; the full mature library budget is 7,100,000. Growth stage geometry has a 900,000 triangle budget. The original 0–105 IDs, legacy growth-day conversions and schema 2 saves stay stable.
 
 To render only additions/revisions use `art_source/render_plant_cards.gd -- --ids=9,10,106,...`, adding `--review` for large portraits or `--compat-review` with Compatibility rendering. `tools/compose_additions_reviews.py` labels the real game renders. Run `tests/check_botanical_additions.py` after generating portraits.
+
+## Low grass collection (IDs 136–147)
+
+The catalogue now has 148 plants. `low_grasses_data.py` and
+`build_low_grasses.py` build twelve low plants with creeping runners, compact
+curved blades, longitudinal sedge variegation and small flowers/seed spikes.
+`low_grasses.blend` contains both mature plants and their own growth stages;
+`build_plant_growth.py` preserves these entries while rebuilding earlier species.
+See `low_grasses_references.md` for morphology and sources. The mature additions
+use a separate 250,000 triangle budget; the full collection stays below 7,350,000.
+The growth collection remains below 900,000 triangles. Catalogue IDs and saved
+schema 2 gardens remain compatible. Renderers save portraits in whichever of PNG
+or lossless WebP is smaller, and the game loads the selected format.
+
+Through MCP, import `build_low_grasses` and call `build()`. It preserves the
+active Blender scene and writes only its new library. Alternatively, use an
+approved Blender background process with `--python art_source/build_low_grasses.py`.
+Source pigment folders are ignored by Godot, since models already embed the maps.
