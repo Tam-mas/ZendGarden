@@ -8,7 +8,8 @@ const OLD='https://zend.tammas.com',HOME='https://zend.garden';
 const SAVE='/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
 const fixture=JSON.stringify({version:2,day:17,coins:240,clock:.3,
  plants:[{id:1,plot:0,pos:[1,-2],age:.7,water:2,stress:0}],objects:[],names:['Miso','Clover'],
- settings:{intro_seen:true,graphics:'mobile',music_volume:0},inventory:{'1':4}});
+ settings:{intro_seen:true,graphics:'mobile',music_volume:0},inventory:{'1':4},
+ watered_ground:{'2:-4':{x:1,z:-2,radius:.65,until:18.3}}});
 const deadline=setTimeout(()=>{console.error('Live check exceeded its six-minute deadline');process.exit(1);},360000);
 deadline.unref();
 
@@ -84,6 +85,10 @@ deadline.unref();
    const m=await import('/migration-storage.js');const copy=await m.completedMove();return copy;
   });
   assert(original,'Completion receipt exists');
+  await page.getByRole('button',{name:'Enter the garden',exact:true}).click();
+  await page.locator('#welcome').waitFor({state:'hidden',timeout:240000});
+  assert.deepEqual(errors,[]);
+  console.log('MIGRATION_LIVE_RESULT watered reload: PASS — migrated watered garden reopens in the actual production game');
   await page.goto(OLD+'/?stay=1');
   assert(await page.getByRole('button',{name:'Enter the garden',exact:true}).isVisible());
   assert.equal(await page.evaluate(async()=>new TextDecoder().decode(await (await import('/migration-storage.js')).readOriginal())),fixture);
