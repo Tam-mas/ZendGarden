@@ -5,6 +5,7 @@ const Catalogue = preload("res://scripts/catalogue.gd")
 const Soundscape = preload("res://scripts/soundscape.gd")
 var SAVE_PATH = "user://garden_v1.json"
 var save_load_blocked=false
+var save_files: GardenSaveFiles
 const GRID = 0.4
 const CAPACITY_MULTIPLIER = 4
 const TREE_SPACING = 1.15
@@ -185,6 +186,7 @@ func _ready() -> void:
   return
  load_game()
  if OS.has_feature("web"):
+  GardenSaveFiles.browser_mount_verified=true
   browser_save_result(true)
  GardenExpansion.prepare(self)
  make_world()
@@ -197,6 +199,9 @@ func _ready() -> void:
  add_child(climate)
  climate.restore(loaded_data.get("climate",{}))
  make_ui()
+ save_files=GardenSaveFiles.new()
+ add_child(save_files)
+ save_files.setup(self)
  touch=GardenTouch.new()
  add_child(touch)
  touch.setup(self)
@@ -224,16 +229,26 @@ func _ready() -> void:
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
  elif tutorial_state.get("active",false):
-  set_mode("walk")
+  set_mode("walk",GardenSaveFiles.arrival_notice.is_empty())
   GardenTutorial.build(self)
- elif not is_instance_valid(welcome) and not GardenUpdates.maybe_show(self): resume_controls()
+ elif GardenSaveFiles.arrival_notice.is_empty() and not is_instance_valid(welcome) and not GardenUpdates.maybe_show(self): resume_controls()
+ if not GardenSaveFiles.arrival_notice.is_empty():
+  if not is_instance_valid(welcome):open_sidebar("Settings")
+  toast(GardenSaveFiles.arrival_notice)
+  GardenSaveFiles.arrival_notice=""
 
 func touch_active() -> bool:
  return is_instance_valid(touch) and touch.enabled
 
 func resume_controls() -> void:
  if not side_panel.visible:get_viewport().gui_release_focus()
- Input.mouse_mode=Input.MOUSE_MODE_VISIBLE if touch_active() or not rest_kind.is_empty() else Input.MOUSE_MODE_CAPTURED
+ var capture=not touch_active() and rest_kind.is_empty()
+ if capture and OS.has_feature("web"):
+  # A scene rebuild/download may outlast the browser's input gesture. Leave
+  # the cursor free until the player clicks, rather than reject pointer lock.
+  var activation=JavaScriptBridge.get_interface("window").navigator.userActivation
+  if activation!=null and not activation.isActive:capture=false
+ Input.mouse_mode=Input.MOUSE_MODE_CAPTURED if capture else Input.MOUSE_MODE_VISIBLE
 
 func gameplay_active() -> bool:
  if clear_view:return true
@@ -1135,10 +1150,10 @@ func _unhandled_input(event: InputEvent) -> void:
     elif not rest_kind.is_empty():GardenLeisure.leave(self)
     elif is_instance_valid(welcome): welcome.queue_free(); welcome=null
     else:
-     set_mode("walk")
+     set_mode("walk",false)
      open_sidebar("Settings")
 
-func set_mode(value: String) -> void:
+func set_mode(value: String, capture_controls: bool=true) -> void:
  if value!="walk":GardenLeisure.leave(self)
  GardenStructureTarget.clear(self)
  hover_object=null
@@ -1147,7 +1162,7 @@ func set_mode(value: String) -> void:
  if value=="build": structure_rotation=0.0
  side_panel.visible=value=="plant"
  if value=="plant": Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
- else: resume_controls()
+ elif capture_controls: resume_controls()
  if value=="plant": active_tab="Seeds"; refresh_sidebar()
  moved_index=-1
  moved_object=-1
@@ -1988,22 +2003,18 @@ func capture_photo() -> void:
  if photo_mode:
   photo_panel.get_child(0).get_child(0).text="Photo downloaded" if OS.has_feature("web") else "Saved to user data / photos"
 
-func save_game() -> void:
- if save_load_blocked: return
+func save_game() -> bool:
+ if save_load_blocked: return false
  var ps: Array=[]
  for p in planted: ps.append({"orientation":p.node.rotation.y,"shape_seed":p.get("shape_seed",0),"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0)})
  var os: Array=[]
  for obj in objects: os.append({"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
  var data={"bed_surfaces":bed_surfaces,"owned_surfaces":owned_surfaces,"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
- var file=FileAccess.open(SAVE_PATH+".tmp",FileAccess.WRITE)
- if file:
-  file.store_string(JSON.stringify(data))
-  file.close()
-  DirAccess.rename_absolute(SAVE_PATH+".tmp",SAVE_PATH)
+ return GardenSaveFiles.write_atomic(SAVE_PATH,JSON.stringify(data).to_utf8_buffer())
 
 func browser_save_result(safe: bool) -> void:
  # Direct object calls work under the site's CSP, which prohibits JS eval.
- var guard=JavaScriptBridge.get_interface("ZendSaveGuard")
+ var guard=JavaScriptBridge.get_interface("window").ZendSaveGuard
  if guard==null: return
  if safe: guard.ready()
  else: guard.fail()
@@ -2012,6 +2023,7 @@ func browser_save_check() -> bool:
  # The web loader supplies the fingerprint read before Godot mounts IndexedDB.
  # A missing or damaged mounted save must halt before world creation/autosave.
  if not OS.has_feature("web"): return true
+ if GardenSaveFiles.browser_mount_verified:return true
  var expected=""
  for argument in OS.get_cmdline_user_args():
   if argument.begins_with("--browser-save-check="): expected=argument.trim_prefix("--browser-save-check=")
@@ -2281,6 +2293,7 @@ func run_smoke_test() -> void:
  await preload("res://tests/ui_update.gd").run(self,failures)
  await preload("res://tests/shoreline.gd").run(self,failures)
  await preload("res://tests/experience.gd").run(self,failures)
+ await preload("res://tests/save_files_in_game.gd").run(self,failures)
  await preload("res://tests/walking.gd").run(self,failures)
  await preload("res://tests/ground_finish.gd").run(self,failures)
  await preload("res://tests/bed_surfaces.gd").run(self,failures)
@@ -2316,6 +2329,7 @@ func run_experience_test() -> void:
  await get_tree().create_timer(2).timeout
  var failures=[]
  await preload("res://tests/experience.gd").run(self,failures)
+ await preload("res://tests/save_files_in_game.gd").run(self,failures)
  print("EXPERIENCE_RESULT: ",failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 

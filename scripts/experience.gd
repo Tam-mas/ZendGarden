@@ -48,10 +48,16 @@ static func finish(g) -> void:
  if not GardenUpdates.maybe_show(g): g.resume_controls()
 
 static func settings_page(g) -> void:
- if is_instance_valid(g.touch): g.touch.settings_page()
  g.side_title.text="Make yourself at home"
  g.add_note("ZEND GARDEN · UPDATE %d" % GardenUpdates.CURRENT_VERSION,13)
  g.list_box.add_child(g.button("What’s new",func(): GardenUpdates.show(g)))
+ g.add_note("GARDEN SAVE FILES",15)
+ g.list_box.add_child(g.button("Download save file",func(): g.save_files.download()))
+ g.list_box.add_child(g.button("Upload save file…",func(): g.save_files.upload()))
+ if FileAccess.file_exists(g.save_files.backup_path()):
+  g.list_box.add_child(g.button("Download previous garden",func(): g.save_files.download(true)))
+ g.add_note("Keep a copy or move your garden to another device. Upload asks before replacing your garden.",14)
+ if is_instance_valid(g.touch): g.touch.settings_page()
  g.add_note("MOUSE LOOK",15)
  for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
   if entry[0]=="request_notifications": g.add_note("COMFORT & QUIET",15)
@@ -73,7 +79,7 @@ static func settings_page(g) -> void:
   slider.drag_ended.connect(func(_changed): g.save_game())
   g.list_box.add_child(slider)
  g.list_box.add_child(g.button("Replay the welcome walk",func(): g.show_welcome()))
- g.list_box.add_child(g.button("Save garden",func(): g.save_game(); g.toast("Your garden is saved.")))
+ g.list_box.add_child(g.button("Save garden",func(): g.toast("Your garden is saved." if g.save_game() else "Could not save your garden. Please try again.")))
  g.list_box.add_child(g.button("Start a new garden…",func(): confirm_restart(g)))
  g.detail_label.text="Settings are saved with your garden.\nReduced motion skips the time-lapse and menu fades."
 

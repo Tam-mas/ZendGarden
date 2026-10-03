@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":33,"date":"4 October 2026","title":"Take your garden with you","note":"Download a garden save from Settings to keep a copy or move it to another device. Upload a saved copy, preview its day and plant count, and choose whether to open it. Your previous garden is backed up and can be downloaded from Settings."},
  {"version":32,"date":"3 October 2026","title":"Make every bed your own","note":"Choose sand, pale Japanese gravel, bark mulch, slate, warm pebbles or dark compost in the garden shed. Buy each finish once, use it on any open bed, and switch back to garden soil freely. Your plants and shaped ground stay in place."},
  {"version":31,"date":"3 October 2026","title":"Little grasses, softer edges","note":"Twelve new low-growing plants bring creeping lawn grasses, compact fescues, dwarf mondo grass, striped sedges and golden sweet flag. Find them in Grasses, with their own young leaves and mature shapes."},
  {"version":30,"date":"3 October 2026","title":"A little space between visitors","note":"Visiting bird pairs now take separate approaches, arrive a moment apart and beat their wings at different times, with room to rest beside one another."},

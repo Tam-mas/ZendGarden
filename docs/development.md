@@ -149,3 +149,5 @@ For this pass, the matched baseline lives locally in `captures/woodland/`.
 Run `tools/preview_mountains.gd` with `-- --woodland --compare --benchmark`
 to render all four directions and compare frame rates. The source counts and
 triangle totals are recorded in `art_source/landscape_validation.json`.
+
+Garden save download/upload checks: `Godot --headless --path . --script tests/save_files.gd` covers validation and backup/write failures. `--experience-test` checks Settings and responsive confirmation. With a packaged browser build, use `PLAYWRIGHT_MODULE=/path/to/playwright node tests/save_files_browser.cjs` for Chrome/WebKit file selection, and `node tests/save_files_game.cjs` with the same module path for actual Settings export/import, backup download and reload persistence. These browser tests use isolated storage and local assets.

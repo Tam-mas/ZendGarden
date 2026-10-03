@@ -17,6 +17,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+save_log="$(mktemp -t zend-garden-save-files)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/save_files.gd > "$save_log" 2>&1 || { cat "$save_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$save_log" || ! rg -Fq 'SAVE_FILES_RESULT: []' "$save_log"; then
+  cat "$save_log"
+  exit 1
+fi
 audio_log="$(mktemp -t zend-garden-audio)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/soundscape.gd > "$audio_log" 2>&1 || { cat "$audio_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$audio_log" || ! rg -Fq 'SOUNDSCAPE_RESULT: []' "$audio_log"; then

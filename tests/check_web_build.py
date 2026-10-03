@@ -8,7 +8,7 @@ from pathlib import Path
 
 root = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else Path(__file__).resolve().parents[1] / 'build/web'
 for name in ('index.html', 'index.js', 'index.wasm', 'loader.js', 'pack.json', '_headers', '404.html',
-             '_routes.json', 'moving.html', 'migration.css', 'migration.js', 'migration-storage.js', 'save-format.js'):
+             '_routes.json', 'moving.html', 'migration.css', 'migration.js', 'migration-storage.js', 'save-format.js', 'save-files.js'):
     assert (root / name).is_file(), f'Missing {name}'
 assert not (root / 'index.pck').exists(), 'Oversized unsplit pack remains'
 assert gzip.decompress((root / 'index.wasm').read_bytes()).startswith(b'\x00asm'), 'Invalid WASM'
@@ -31,6 +31,7 @@ for path in root.rglob('*'):
 html = (root / 'index.html').read_text()
 assert '$GODOT_' not in html, 'Unexpanded Godot template'
 assert 'loader.js' in html
+assert '<script src="save-files.js"></script>' in html
 assert 'garden-woodland.webp' in html and (root/'art/garden-woodland.webp').is_file(), 'New start background missing'
 assert 'garden-woodland.jpg' not in html
 routes = json.loads((root / '_routes.json').read_text())
