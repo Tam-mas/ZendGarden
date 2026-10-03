@@ -20,7 +20,11 @@ static func run(g, failures: Array) -> void:
  g.notify_requests()
  if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: failures.append("Request notification did not release the mouse")
  if not is_instance_valid(g.request_popup): failures.append("Request notification missing")
- g.open_sidebar("Settings")
+ var escape_settings=InputEventKey.new()
+ escape_settings.pressed=true
+ escape_settings.physical_keycode=KEY_ESCAPE
+ g._unhandled_input(escape_settings)
+ if g.active_tab!="Settings" or Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:failures.append("Escape did not release cursor for Settings")
  var controls=g.list_box.get_children()
  var music_slider: HSlider
  for i in range(controls.size()-1):

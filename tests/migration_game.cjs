@@ -7,7 +7,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
 (async()=>{
  const browser=await chromium.launch({headless:true,channel:'chrome'});
  try {
-  const cases=process.env.ZEND_WELCOME_ONLY?[[2,false,true]]:[[1,false],[2,false],[2,true],[2,false,true]];
+  const cases=process.env.ZEND_MOUNT_ONLY?[[2,true]]:process.env.ZEND_WELCOME_ONLY?[[2,false,true]]:[[1,false],[2,false],[2,true],[2,false,true]];
   for(const [version,brokenMount,activeTutorial] of cases) {
    const context=await browser.newContext({viewport:{width:800,height:600}});
    const errors=[];

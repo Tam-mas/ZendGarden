@@ -47,7 +47,7 @@ The game also has touch controls, with options for control size and a left-hande
 
 ## Come back when you feel like it
 
-Your garden saves as you play. In the browser, it stays with the same browser, device and site address; it does not sync between devices. Use **Save** before closing the tab, and remember that clearing site data removes the garden saved there.
+Your garden saves as you play. In the browser, it stays with the same browser, device and site address; it does not sync between devices. Use **Save garden** before closing the tab, and remember that clearing site data removes the garden saved there. In **Settings**, choose **Download save file** to keep a JSON copy or move your garden to another browser or device. Choose **Upload save file…** on the destination, check the day and plant count, then confirm. The garden it replaces is kept as a backup; **Download previous garden** lets you retrieve that copy.
 
 Zend Garden is still growing. It is free to play, with source available for noncommercial use, and feedback helps shape what comes next. If something feels confusing, breaks, or sparks an idea, [tell us on GitHub](https://github.com/Tam-mas/ZendGarden/issues). A screenshot and a description of what happened are always helpful.
 

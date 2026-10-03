@@ -1,3 +1,13 @@
+### [2026-10-04 10:12] Added
+
+**Tech:** `GardenSaveFiles`, `GardenSaveFormat`, `GardenExperience.settings_page`, `web/save-files.js` — portable garden JSON download and upload
+
+**Dev:** Add Settings controls for current-save export, confirmed import and recovery-copy export on desktop and web. Validate v1/v2 file shapes, catalogue references and size before touching the active save; preserve raw bytes and unknown fields. Save current progress, atomically write a previous-garden backup, then atomically install the selected copy and rebuild the scene. Check writes and report failures. The browser uses an external file-picker bridge under the existing CSP; verify the IndexedDB mount once per engine session so legitimate scene reloads retain imported progress. Avoid briefly requesting pointer capture while Escape opens Settings, which can lock the cursor over the menu in the browser. Return to Settings after importing; only request browser pointer capture during an active player gesture. Add save/recovery, responsive confirmation and browser file-flow checks.
+
+**Plain:** Keep a downloadable garden copy and upload it to continue on another device, with a backup of the garden you replace.
+
+**Why:** Players can protect their progress and move their garden between devices or browsers.
+
 ### [2026-10-03 21:46] Performance
 
 **Tech:** `export_presets.cfg`, `GardenArt.save_card`, `tools/prepare_bed_textures.py` — compact runtime image encodings and source-map export exclusions
