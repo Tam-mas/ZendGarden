@@ -2,11 +2,11 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/lantern.glb" id="1_qdyxu"]
 
-[node name="Lantern" type="Node3D" unique_id=1904676682]
+[node name="Lantern" type="Node3D" unique_id=1328761983]
 
-[node name="Model" type="Node3D" parent="." unique_id=663694741 instance=ExtResource("1_qdyxu")]
+[node name="Model" type="Node3D" parent="." unique_id=2047343482 instance=ExtResource("1_qdyxu")]
 
-[node name="_OmniLight3D_2" type="OmniLight3D" parent="." unique_id=386088043]
+[node name="_OmniLight3D_2" type="OmniLight3D" parent="." unique_id=1592308914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 light_color = Color(1, 0.8627451, 0.61960787, 1)
 light_energy = 0.8

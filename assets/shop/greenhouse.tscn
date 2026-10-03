@@ -2,6 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/greenhouse.glb" id="1_vbti4"]
 
-[node name="Greenhouse" type="Node3D" unique_id=1006103980]
+[node name="Greenhouse" type="Node3D" unique_id=714738765]
 
-[node name="Model" type="Node3D" parent="." unique_id=766346634 instance=ExtResource("1_vbti4")]
+[node name="Model" type="Node3D" parent="." unique_id=339676599 instance=ExtResource("1_vbti4")]

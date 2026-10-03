@@ -2,6 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/arbor.glb" id="1_mabrw"]
 
-[node name="Arbor" type="Node3D" unique_id=275961774]
+[node name="Arbor" type="Node3D" unique_id=1320467065]
 
-[node name="Model" type="Node3D" parent="." unique_id=1994163292 instance=ExtResource("1_mabrw")]
+[node name="Model" type="Node3D" parent="." unique_id=1795561264 instance=ExtResource("1_mabrw")]

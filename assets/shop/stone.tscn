@@ -2,6 +2,6 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/stone.glb" id="1_wthsc"]
 
-[node name="Stone" type="Node3D" unique_id=1142953461]
+[node name="Stone" type="Node3D" unique_id=1462258723]
 
-[node name="Model" type="Node3D" parent="." unique_id=317314967 instance=ExtResource("1_wthsc")]
+[node name="Model" type="Node3D" parent="." unique_id=306390845 instance=ExtResource("1_wthsc")]

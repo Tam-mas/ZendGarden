@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/gazebo.glb" id="1_n38om"]
+
+[node name="Gazebo" type="Node3D" unique_id=742104189]
+
+[node name="Model" type="Node3D" parent="." unique_id=1414363997 instance=ExtResource("1_n38om")]

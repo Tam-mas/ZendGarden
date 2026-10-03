@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/compost_bays.glb" id="1_rqoe7"]
+
+[node name="Compost Bays" type="Node3D" unique_id=2106044403]
+
+[node name="Model" type="Node3D" parent="." unique_id=1655023156 instance=ExtResource("1_rqoe7")]

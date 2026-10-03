@@ -9,7 +9,10 @@ static func surface_point(node: Node) -> Dictionary:
    var c=node.global_transform*faces[i+2]
    var normal=(b-a).cross(c-a).normalized()
    var point=(a+b+c)/3
-   if normal.length_squared()>.5 and normal.y>-.1 and point.y>GardenTerrain.point(point).y+.02:return {"point":point,"normal":normal,"mesh":node,"material":node.get_active_material(0)}
+   var origin=point+normal*1.8
+   # New fittings can be the first imported mesh. Aim from above the terrain,
+   # so this tests structure picking rather than intentional ground occlusion.
+   if normal.length_squared()>.5 and normal.y>-.1 and point.y>GardenTerrain.point(point).y+.02 and origin.y>GardenTerrain.point(origin).y+.08:return {"point":point,"normal":normal,"mesh":node,"material":node.get_active_material(0)}
  for child in node.get_children():
   var found=surface_point(child)
   if not found.is_empty():return found
@@ -35,7 +38,7 @@ static func run(g, failures: Array) -> void:
  g.settings.controls="keyboard";g.touch.configure()
  g.side_panel.hide()
  g.coins=300
- var spot=GardenTerrain.point(Vector3(-3,0,4))
+ var spot=GardenTerrain.point(Vector3(-8,0,3))
  for item in g.furniture:
   var count=g.objects.size()
   g.add_object(item.kind,spot,item.price,false,.72,"Rose corner",Color("b4d6ff"))

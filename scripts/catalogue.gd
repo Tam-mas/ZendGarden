@@ -173,5 +173,15 @@ static func furnishings() -> Array:
   {"name":"Bird bath", "price":40, "kind":"bath", "hint":"Draws visiting birds."},
   {"name":"Beehive", "price":65, "kind":"hive", "hint":"A timber hive with its own bees visiting during daylight."},
   {"name":"Path stone", "price":3, "kind":"stone", "hint":"One decorative limestone stone for a path or border."},
-  {"name":"Custom garden sign", "price":15, "kind":"sign", "hint":"Your words and colours. Q/E to rotate; edit in the garden shed."}
+  {"name":"Custom garden sign", "price":15, "kind":"sign", "hint":"Your words and colours. Q/E to rotate; edit in the garden shed."},
+  {"name":"Potting bench", "price":75, "kind":"potting_bench", "hint":"A zinc-topped workbench with drawers and terracotta pots."},
+  {"name":"Compost bays", "price":55, "kind":"compost_bays", "hint":"Three timber bays for a working garden corner."},
+  {"name":"Rain barrel", "price":60, "kind":"rain_barrel", "hint":"A staved oak barrel with brass tap and screened lid."},
+  {"name":"Raised garden bed", "price":35, "kind":"raised_bed", "hint":"A low timber bed filled with rich, textured soil."},
+  {"name":"Trellis screen", "price":45, "kind":"trellis_screen", "hint":"Three lattice panels for nearby climbing plants."},
+  {"name":"Hexagonal gazebo", "price":180, "kind":"gazebo", "hint":"A shingled shelter with built-in seats. Rest underneath."},
+  {"name":"Arched garden bridge", "price":95, "kind":"arched_bridge", "hint":"A decorative low arch with shaped timber rails."},
+  {"name":"Tiered fountain", "price":120, "kind":"fountain", "hint":"Two carved limestone bowls with slender water streams."},
+  {"name":"Garden swing", "price":110, "kind":"garden_swing", "hint":"A suspended oak seat with a gentle sway."},
+  {"name":"Insect hotel", "price":45, "kind":"insect_hotel", "hint":"Reeds, bored wood and twigs draw small garden visitors."}
  ]

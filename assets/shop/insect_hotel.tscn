@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/insect_hotel.glb" id="1_onw53"]
+
+[node name="Insect Hotel" type="Node3D" unique_id=1798143043]
+
+[node name="Model" type="Node3D" parent="." unique_id=776973542 instance=ExtResource("1_onw53")]

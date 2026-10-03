@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/trellis_screen.glb" id="1_5r3q1"]
+
+[node name="Trellis Screen" type="Node3D" unique_id=678590463]
+
+[node name="Model" type="Node3D" parent="." unique_id=389731699 instance=ExtResource("1_5r3q1")]

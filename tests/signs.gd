@@ -1,7 +1,12 @@
 extends RefCounted
 
 static func run(g, failures: Array) -> void:
- var sign_index=g.furniture.size()-1
+ var sign_index=-1
+ for i in range(g.furniture.size()):
+  if g.furniture[i].kind=="sign":sign_index=i
+ if sign_index<0:
+  failures.append("Custom sign missing from shop")
+  return
  g.choose_furnishing(sign_index)
  if g.active_tab!="Sign" or not g.side_panel.visible or Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
   failures.append("Sign editor did not open with a usable cursor")

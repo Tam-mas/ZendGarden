@@ -1,0 +1,912 @@
+{
+  "companions/cat": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 5458600,
+    "clips": [],
+    "folder": "companions",
+    "kind": "cat",
+    "meshes": 22,
+    "sha256": "11550433a53a7ccfa58d3fb44317251ed981116d857d99dcdf90789632c5b54e",
+    "source": "art_source/overhaul/retained_models/companions/cat.glb",
+    "triangles": 34462,
+    "variant": "old"
+  },
+  "companions/dog": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 4811568,
+    "clips": [],
+    "folder": "companions",
+    "kind": "dog",
+    "meshes": 22,
+    "sha256": "e02ae7f6059f47a9bde39905fdb37707380ee451285616a660ad067e9e4521d6",
+    "source": "art_source/overhaul/retained_models/companions/dog.glb",
+    "triangles": 35734,
+    "variant": "old"
+  },
+  "scenery/footbridge": {
+    "bytes": 862408,
+    "clips": [],
+    "dimensions": [
+      4.5,
+      1.0699999537318945,
+      1.9082998633384705
+    ],
+    "folder": "scenery",
+    "kind": "footbridge",
+    "meshes": 3,
+    "sha256": "e783fc5b940138451f80e1dd398c89c3f82779cab08f3b89273981a5cd011d60",
+    "triangles": 8320,
+    "variant": "new"
+  },
+  "scenery/garden_shed": {
+    "bytes": 1958220,
+    "clips": [],
+    "dimensions": [
+      3.799999952316284,
+      4.937500476837158,
+      4.425000071525574
+    ],
+    "folder": "scenery",
+    "kind": "garden_shed",
+    "meshes": 8,
+    "sha256": "de177438a5dd45bfeb1b53c24489aee9ad18cc49ae6129aaf914dee9ced00b44",
+    "triangles": 12688,
+    "variant": "new"
+  },
+  "scenery/lakeside_cottage": {
+    "bytes": 2807564,
+    "clips": [],
+    "dimensions": [
+      3.8062063455581665,
+      4.517556667327881,
+      4.159999847412109
+    ],
+    "folder": "scenery",
+    "kind": "lakeside_cottage",
+    "meshes": 5,
+    "sha256": "cf4c78597fe7127e4db41f8861ded4664e43eec5af2a6650807fc11e6a729918",
+    "triangles": 30086,
+    "variant": "new"
+  },
+  "shop/arbor": {
+    "bytes": 1724400,
+    "clips": [],
+    "dimensions": [
+      2.9000000953674316,
+      2.7350003719329834,
+      1.25
+    ],
+    "folder": "shop",
+    "kind": "arbor",
+    "meshes": 5,
+    "sha256": "747aee484054ef56ab26defb384fa711e2223808805524ae1cf053765137de8e",
+    "triangles": 14236,
+    "variant": "new"
+  },
+  "shop/arched_bridge": {
+    "bytes": 1184996,
+    "clips": [],
+    "dimensions": [
+      4.050000190734863,
+      1.3949998822063208,
+      1.6200000047683716
+    ],
+    "folder": "shop",
+    "kind": "arched_bridge",
+    "meshes": 3,
+    "sha256": "086eb12ef17b180a2ebaaf95685e7cf3fb404da97caf6c600035208b92e9d560",
+    "triangles": 10168,
+    "variant": "new"
+  },
+  "shop/bath": {
+    "bytes": 727476,
+    "clips": [],
+    "dimensions": [
+      1.2106282711029053,
+      1.0738249307032675,
+      1.209375262260437
+    ],
+    "folder": "shop",
+    "kind": "bath",
+    "meshes": 3,
+    "sha256": "fe7d3476338ba106c4a50cf5572c4d8350bfe296d2d1f33bdad1983fed2085b4",
+    "triangles": 6464,
+    "variant": "new"
+  },
+  "shop/bench": {
+    "bytes": 754208,
+    "clips": [],
+    "dimensions": [
+      1.75,
+      1.1064353585243225,
+      0.7354343235492706
+    ],
+    "folder": "shop",
+    "kind": "bench",
+    "meshes": 3,
+    "sha256": "3e8567e190f8554c1afc3ad8ad4e4fb56baa5fe8c233e37b8fc7c8f5abb1c1b2",
+    "triangles": 7012,
+    "variant": "new"
+  },
+  "shop/compost_bays": {
+    "bytes": 1122088,
+    "clips": [],
+    "dimensions": [
+      3.3999998569488525,
+      1.1000000312924385,
+      1.199999988079071
+    ],
+    "folder": "shop",
+    "kind": "compost_bays",
+    "meshes": 3,
+    "sha256": "000747e612b5b61868f786b37532dde218b7c5748fb91ec11fc75c63b98d4fb7",
+    "triangles": 14564,
+    "variant": "new"
+  },
+  "shop/fountain": {
+    "bytes": 649880,
+    "clips": [],
+    "dimensions": [
+      1.840000033378601,
+      1.0399999618530273,
+      1.840000033378601
+    ],
+    "folder": "shop",
+    "kind": "fountain",
+    "meshes": 3,
+    "sha256": "8370cefa08827f49d5165f9d6a92abb67c9f8edf16ae23fdff882c2ef51104a5",
+    "triangles": 4736,
+    "variant": "new"
+  },
+  "shop/garden_swing": {
+    "bytes": 1578952,
+    "clips": [
+      "sway"
+    ],
+    "dimensions": [
+      2.649999976158142,
+      2.360000018030405,
+      1.6700000762939453
+    ],
+    "folder": "shop",
+    "kind": "garden_swing",
+    "meshes": 5,
+    "sha256": "03a77d539ccc77791a2a71421c42558fdb2e33e17d625a25704846e5e190c063",
+    "triangles": 11732,
+    "variant": "new"
+  },
+  "shop/gazebo": {
+    "bytes": 1365944,
+    "clips": [],
+    "dimensions": [
+      3.9200000762939453,
+      3.6050000190734863,
+      3.394819498062134
+    ],
+    "folder": "shop",
+    "kind": "gazebo",
+    "meshes": 4,
+    "sha256": "9ae93bd6d86a5a103252abde0b4c69921d0d255c5c1fee07143b0fa2cbb420e5",
+    "triangles": 9402,
+    "variant": "new"
+  },
+  "shop/greenhouse": {
+    "bytes": 1810076,
+    "clips": [],
+    "dimensions": [
+      3.3600001335144043,
+      3.0974998511373997,
+      3.279999852180481
+    ],
+    "folder": "shop",
+    "kind": "greenhouse",
+    "meshes": 5,
+    "sha256": "61896a887aa4887a3e488c051b111719df9dd9567a615cfe1a1af4a8ad7b26c4",
+    "triangles": 16230,
+    "variant": "new"
+  },
+  "shop/hive": {
+    "bytes": 946820,
+    "clips": [],
+    "dimensions": [
+      0.7799999713897705,
+      0.9775000214576721,
+      0.8364999890327454
+    ],
+    "folder": "shop",
+    "kind": "hive",
+    "meshes": 4,
+    "sha256": "11da2d4ec37ba00dd5a952ad8ed54271f8f516befd33ddd8cf4d4e31cb5dcb2b",
+    "triangles": 6352,
+    "variant": "new"
+  },
+  "shop/insect_hotel": {
+    "bytes": 1241544,
+    "clips": [],
+    "dimensions": [
+      1.1598069667816162,
+      1.8794323205947876,
+      0.550000011920929
+    ],
+    "folder": "shop",
+    "kind": "insect_hotel",
+    "meshes": 4,
+    "sha256": "25ec1730ab3e2cd5a9c55f86c7cff51d7c5522eda0171313b8a1ff3a946a2ad9",
+    "triangles": 13576,
+    "variant": "new"
+  },
+  "shop/lantern": {
+    "bytes": 981272,
+    "clips": [],
+    "dimensions": [
+      0.7990511655807495,
+      1.3915684819221497,
+      0.8003360629081726
+    ],
+    "folder": "shop",
+    "kind": "lantern",
+    "meshes": 3,
+    "sha256": "d523259085fa264d3dd2cd44cf9a8b987bedfbfdfa08d7edcb454b620cf771d1",
+    "triangles": 4700,
+    "variant": "new"
+  },
+  "shop/pergola": {
+    "bytes": 1727976,
+    "clips": [],
+    "dimensions": [
+      2.9000000953674316,
+      2.7350001335144043,
+      2.9500001668930054
+    ],
+    "folder": "shop",
+    "kind": "pergola",
+    "meshes": 5,
+    "sha256": "beab65092c69921684d00f4e94256a885baabcd168a65ca921c275b761391377",
+    "triangles": 14236,
+    "variant": "new"
+  },
+  "shop/pond": {
+    "bytes": 1918092,
+    "clips": [],
+    "dimensions": [
+      3.865190029144287,
+      0.3953453004360199,
+      3.8270528316497803
+    ],
+    "folder": "shop",
+    "kind": "pond",
+    "meshes": 6,
+    "sha256": "08c5c3e0b9ebebdd9eba636bceaf53c0c5677a29c8a348b089de391e78eb575a",
+    "triangles": 12735,
+    "variant": "new"
+  },
+  "shop/pot": {
+    "bytes": 395892,
+    "clips": [],
+    "dimensions": [
+      0.8259999752044678,
+      0.6449999809265137,
+      0.8259999752044678
+    ],
+    "folder": "shop",
+    "kind": "pot",
+    "meshes": 2,
+    "sha256": "e4aae57944abf66bd8b3134b6058fb03c0178bf1d3a06da7be9a290f544109cd",
+    "triangles": 4104,
+    "variant": "new"
+  },
+  "shop/potting_bench": {
+    "bytes": 1128652,
+    "clips": [],
+    "dimensions": [
+      1.6799999475479126,
+      1.8900001049041748,
+      0.7019999921321869
+    ],
+    "folder": "shop",
+    "kind": "potting_bench",
+    "meshes": 7,
+    "sha256": "f28208521a3b6198442b3bc3b7b765131c49f04bc871997cfc27f6db7aa0af7b",
+    "triangles": 5376,
+    "variant": "new"
+  },
+  "shop/rain_barrel": {
+    "bytes": 942232,
+    "clips": [],
+    "dimensions": [
+      0.8340000212192535,
+      1.0774999856948853,
+      0.9194807708263397
+    ],
+    "folder": "shop",
+    "kind": "rain_barrel",
+    "meshes": 5,
+    "sha256": "20485d212ca5d3cb81f9d3d91b0686f0cd6dbc48c6e1789f1ba0581ad189ca2f",
+    "triangles": 5344,
+    "variant": "new"
+  },
+  "shop/raised_bed": {
+    "bytes": 749080,
+    "clips": [],
+    "dimensions": [
+      2.0,
+      0.3050000071525574,
+      1.35447496175766
+    ],
+    "folder": "shop",
+    "kind": "raised_bed",
+    "meshes": 4,
+    "sha256": "0258290f0259bcdd8d0420ec8a51a3e37f449a3d60576806a70dc85565bf6b02",
+    "triangles": 3116,
+    "variant": "new"
+  },
+  "shop/sign": {
+    "bytes": 650008,
+    "clips": [],
+    "dimensions": [
+      1.7999999523162842,
+      0.8799999952316284,
+      0.12520002573728561
+    ],
+    "folder": "shop",
+    "kind": "sign",
+    "meshes": 3,
+    "sha256": "2f845f1bf89379aa6dfc97a9ab313637f531c35a3f689cd11aa018c92568b7c2",
+    "triangles": 2740,
+    "variant": "new"
+  },
+  "shop/stone": {
+    "bytes": 411520,
+    "clips": [],
+    "dimensions": [
+      0.64360111951828,
+      0.23320040106773376,
+      0.4659692645072937
+    ],
+    "folder": "shop",
+    "kind": "stone",
+    "meshes": 1,
+    "sha256": "2e4b6c66e2c99bc7c8a1b97488c5083708738aa5beb889ef032d21c4cf83b12d",
+    "triangles": 1216,
+    "variant": "new"
+  },
+  "shop/trellis_screen": {
+    "bytes": 1939408,
+    "clips": [],
+    "dimensions": [
+      2.5299999713897705,
+      1.9500000476837158,
+      0.30000001192092896
+    ],
+    "folder": "shop",
+    "kind": "trellis_screen",
+    "meshes": 4,
+    "sha256": "107c6277c739c5495ce04769b7ddd9611c53788869e8ab16ad362fa2c564e132",
+    "triangles": 19056,
+    "variant": "new"
+  },
+  "tools/can": {
+    "bytes": 182388,
+    "clips": [],
+    "dimensions": [
+      0.4453812539577484,
+      0.24051664769649506,
+      0.514624685049057
+    ],
+    "folder": "tools",
+    "kind": "can",
+    "meshes": 4,
+    "sha256": "688849db580b09b742de7360fbad65ca894dedd2d09431c574629a22bf465d33",
+    "triangles": 4084,
+    "variant": "new"
+  },
+  "tools/hoe": {
+    "bytes": 311040,
+    "clips": [],
+    "dimensions": [
+      0.2199999988079071,
+      0.1439243983477354,
+      0.75914266705513
+    ],
+    "folder": "tools",
+    "kind": "hoe",
+    "meshes": 3,
+    "sha256": "bbf6b4cd68be80bf022a11f2137a29d289645627bd5293fab5ad3773ab32bb09",
+    "triangles": 976,
+    "variant": "new"
+  },
+  "tools/rake": {
+    "bytes": 299156,
+    "clips": [],
+    "dimensions": [
+      0.25999999046325684,
+      0.10181596130132675,
+      0.7261220216751099
+    ],
+    "folder": "tools",
+    "kind": "rake",
+    "meshes": 2,
+    "sha256": "541f0abedeaef098daf53aa43712675be9fda753d5e22de600e142f8ad398616",
+    "triangles": 1012,
+    "variant": "new"
+  },
+  "tools/shears": {
+    "bytes": 329252,
+    "clips": [],
+    "dimensions": [
+      0.19200000166893005,
+      0.03150000050663948,
+      0.36496181786060333
+    ],
+    "folder": "tools",
+    "kind": "shears",
+    "meshes": 3,
+    "sha256": "fdedd76ae1bddce6c3fb9fe90807593b29eabf12d406bcdf8af03484f4b8a614",
+    "triangles": 1676,
+    "variant": "new"
+  },
+  "tools/trowel": {
+    "bytes": 266912,
+    "clips": [],
+    "dimensions": [
+      0.13177630305290222,
+      0.057885972782969475,
+      0.4706871509552002
+    ],
+    "folder": "tools",
+    "kind": "trowel",
+    "meshes": 2,
+    "sha256": "04e131dc45dc33d12630a7dd185398c4580390c3c34723220ad44559e46fe840",
+    "triangles": 204,
+    "variant": "new"
+  },
+  "wildlife/bee": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 1020564,
+    "clips": [],
+    "folder": "wildlife",
+    "kind": "bee",
+    "meshes": 6,
+    "sha256": "27cb9f13b680c9c4ef03c7e0e06ecd5b632b3c8408f113b4ae6720f380006048",
+    "source": "art_source/overhaul/retained_models/wildlife/bee.glb",
+    "triangles": 3712,
+    "variant": "old"
+  },
+  "wildlife/blue_banded_bee": {
+    "bytes": 842280,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.06429905816912651,
+      0.10323916003108025
+    ],
+    "folder": "wildlife",
+    "kind": "blue_banded_bee",
+    "meshes": 15,
+    "sha256": "416e57c1e66653056b1adfa6e32c7bb6d33266771bcb8601ef8616603a7eaaa6",
+    "triangles": 9278,
+    "variant": "new"
+  },
+  "wildlife/butterfly": {
+    "bytes": 1040080,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.17566505074501038,
+      0.06429905816912651,
+      0.10403460264205933
+    ],
+    "folder": "wildlife",
+    "kind": "butterfly",
+    "meshes": 17,
+    "sha256": "6fc71c737b3196ade4a20c7405a2070530d1a87303f68b49183c8b4ec9564854",
+    "triangles": 13904,
+    "variant": "new"
+  },
+  "wildlife/dragonfly": {
+    "bytes": 312164,
+    "clips": [
+      "flight",
+      "perch"
+    ],
+    "dimensions": [
+      0.21799999475479126,
+      0.04869838338345289,
+      0.16873285174369812
+    ],
+    "folder": "wildlife",
+    "kind": "dragonfly",
+    "meshes": 14,
+    "sha256": "6bf47263312d4fefc6305283eb3d0fbcd3b978f23976f2c95675f2efb7ccf82c",
+    "triangles": 7372,
+    "variant": "new"
+  },
+  "wildlife/echidna": {
+    "bytes": 3271024,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet"
+    ],
+    "dimensions": [
+      0.4573173522949219,
+      0.4267914416268468,
+      0.6058979630470276
+    ],
+    "folder": "wildlife",
+    "kind": "echidna",
+    "meshes": 26,
+    "sha256": "0e703f243eda6373457cfa2811f10c60323fc80ce5161babbc10c5f1e0cbf678",
+    "triangles": 51218,
+    "variant": "new"
+  },
+  "wildlife/emperor_gum_moth": {
+    "bytes": 942660,
+    "clips": [
+      "flight",
+      "perch"
+    ],
+    "dimensions": [
+      0.22696459293365479,
+      0.06243286840617657,
+      0.1375168114900589
+    ],
+    "folder": "wildlife",
+    "kind": "emperor_gum_moth",
+    "meshes": 20,
+    "sha256": "4b73915d814a346fd86d6a30da92c58186c4d483c02aa19ccea17eb4bbbe4bca",
+    "triangles": 15100,
+    "variant": "new"
+  },
+  "wildlife/fairy_wren": {
+    "bytes": 2378528,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.2034555822610855,
+      0.16778990998864174,
+      0.33699191361665726
+    ],
+    "folder": "wildlife",
+    "kind": "fairy_wren",
+    "meshes": 18,
+    "sha256": "95e0d128a32f4c2767bb53a00e92a82a30cde447b5176280cadbc06b61690676",
+    "triangles": 20820,
+    "variant": "new"
+  },
+  "wildlife/firefly": {
+    "bytes": 271652,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.06429905816912651,
+      0.10173853859305382
+    ],
+    "folder": "wildlife",
+    "kind": "firefly",
+    "meshes": 14,
+    "sha256": "c29ed7d6eff5724aa8adc80153ceff8d36f59c892113bdea6619919d2088c933",
+    "triangles": 5888,
+    "variant": "new"
+  },
+  "wildlife/fish": {
+    "bytes": 1226896,
+    "clips": [
+      "swim"
+    ],
+    "dimensions": [
+      0.550159364938736,
+      0.19200913608074188,
+      0.2605491280555725
+    ],
+    "folder": "wildlife",
+    "kind": "fish",
+    "meshes": 7,
+    "sha256": "eac373ef800902e8fdb47e3017625d0ddd82e04b2d4ca11493c6945647b8c863",
+    "triangles": 6450,
+    "variant": "new"
+  },
+  "wildlife/fox": {
+    "bytes": 3885852,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet"
+    ],
+    "dimensions": [
+      0.3320491909980774,
+      0.8302543610334396,
+      1.4198428392410278
+    ],
+    "folder": "wildlife",
+    "kind": "fox",
+    "meshes": 30,
+    "sha256": "23a8d4dfe2e156ae13b6c04b846f8b9a49d6aced5ddc213f55ec5fd086329cf7",
+    "triangles": 52490,
+    "variant": "new"
+  },
+  "wildlife/frog": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 3441720,
+    "clips": [],
+    "folder": "wildlife",
+    "kind": "frog",
+    "meshes": 5,
+    "sha256": "4dd576695c8b5ad8208bc020f1fca04ee0badf00d69d74ee9588a33979ae3781",
+    "source": "art_source/overhaul/retained_models/wildlife/frog.glb",
+    "triangles": 9672,
+    "variant": "old"
+  },
+  "wildlife/hoverfly": {
+    "bytes": 327176,
+    "clips": [
+      "flight",
+      "perch",
+      "pollinate"
+    ],
+    "dimensions": [
+      0.11777262389659882,
+      0.049198382534086704,
+      0.09488854184746742
+    ],
+    "folder": "wildlife",
+    "kind": "hoverfly",
+    "meshes": 14,
+    "sha256": "eced26b5f94a7c1e2dd5f742ba9070403bc7326d858132ec23dd32116949be8b",
+    "triangles": 6800,
+    "variant": "new"
+  },
+  "wildlife/kangaroo": {
+    "bytes": 3589056,
+    "clips": [
+      "idle",
+      "hop",
+      "graze"
+    ],
+    "dimensions": [
+      0.6605575978755951,
+      1.7819309830665588,
+      1.779104471206665
+    ],
+    "folder": "wildlife",
+    "kind": "kangaroo",
+    "meshes": 28,
+    "sha256": "a0411e26db1a1f882a6f85102bd3183fa986688193f610509d058571a65bc3ca",
+    "triangles": 59474,
+    "variant": "new"
+  },
+  "wildlife/kangaroo_joey": {
+    "bytes": 3650216,
+    "clips": [
+      "idle",
+      "hop",
+      "graze"
+    ],
+    "dimensions": [
+      0.6607955098152161,
+      1.7817865014076233,
+      1.779104471206665
+    ],
+    "folder": "wildlife",
+    "kind": "kangaroo_joey",
+    "meshes": 44,
+    "sha256": "4b0ab024f7933b2efd3ead9cd7d551b1beb51c41587e174b982ae80f4dc1494c",
+    "triangles": 62530,
+    "variant": "new"
+  },
+  "wildlife/kookaburra": {
+    "bytes": 3520696,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.439825102686882,
+      0.3735036179423332,
+      0.6443460583686829
+    ],
+    "folder": "wildlife",
+    "kind": "kookaburra",
+    "meshes": 21,
+    "sha256": "39bfe0019eb5cc30fa350662cfa392c7357d4c816ca01e0166b4968ff997d2fc",
+    "triangles": 49000,
+    "variant": "new"
+  },
+  "wildlife/lady_beetle": {
+    "bytes": 755060,
+    "clips": [
+      "crawl",
+      "idle"
+    ],
+    "dimensions": [
+      0.08522966504096985,
+      0.04561496712267399,
+      0.11949999630451202
+    ],
+    "folder": "wildlife",
+    "kind": "lady_beetle",
+    "meshes": 9,
+    "sha256": "f7259314dc4441311060b3a33b244024cb4514ef2816e16d8584352bcf2c6d92",
+    "triangles": 7616,
+    "variant": "new"
+  },
+  "wildlife/leaf_insect": {
+    "bytes": 152872,
+    "clips": [
+      "idle",
+      "crawl"
+    ],
+    "dimensions": [
+      0.10257507115602493,
+      0.08504509553313255,
+      0.16065075993537903
+    ],
+    "folder": "wildlife",
+    "kind": "leaf_insect",
+    "meshes": 9,
+    "sha256": "70dbecd6c16593429d847b458ae31e2a7ecff35c8301cdede823a9920233f3c3",
+    "triangles": 2800,
+    "variant": "new"
+  },
+  "wildlife/lorikeet": {
+    "bytes": 3230096,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.3594326376914978,
+      0.24927803874015808,
+      0.49405424296855927
+    ],
+    "folder": "wildlife",
+    "kind": "lorikeet",
+    "meshes": 18,
+    "sha256": "c27e05d95d2177f9f62bb393b2a89855257b97aaff5accb6a09b90c829a82d82",
+    "triangles": 35186,
+    "variant": "new"
+  },
+  "wildlife/magpie": {
+    "bytes": 2802076,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.40670712292194366,
+      0.3020507022738457,
+      0.5563028454780579
+    ],
+    "folder": "wildlife",
+    "kind": "magpie",
+    "meshes": 18,
+    "sha256": "9f59433b8d3fb139dfa33a67ca29e018ab620f534fce7c8a2b9ece7afad22729",
+    "triangles": 45874,
+    "variant": "new"
+  },
+  "wildlife/mantis": {
+    "bytes": 321288,
+    "clips": [
+      "idle",
+      "crawl"
+    ],
+    "dimensions": [
+      0.09639755636453629,
+      0.07927483692765236,
+      0.20069217681884766
+    ],
+    "folder": "wildlife",
+    "kind": "mantis",
+    "meshes": 11,
+    "sha256": "d7051171fa4171c9921a7a764bd12d16df31a1765953b9b80b85a1c657f2317d",
+    "triangles": 3328,
+    "variant": "new"
+  },
+  "wildlife/native_bird": {
+    "bytes": 2402328,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.2967623323202133,
+      0.22287052497267723,
+      0.34918713569641113
+    ],
+    "folder": "wildlife",
+    "kind": "native_bird",
+    "meshes": 18,
+    "sha256": "e70337ce46b59978cd5e1a3b22ea1c51d7b5cffb942527971e0ab2ecc2d9ba2a",
+    "triangles": 27924,
+    "variant": "new"
+  },
+  "wildlife/rabbit": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 3094192,
+    "clips": [],
+    "folder": "wildlife",
+    "kind": "rabbit",
+    "meshes": 12,
+    "sha256": "6f225e55dacd1a9b22d135c1495545645cef157544cc16738df33ab61edfd6e2",
+    "source": "art_source/overhaul/retained_models/wildlife/rabbit.glb",
+    "triangles": 14016,
+    "variant": "old"
+  },
+  "wildlife/songbird": {
+    "bytes": 2344928,
+    "clips": [
+      "flight",
+      "perch",
+      "drink",
+      "bathe",
+      "forage"
+    ],
+    "dimensions": [
+      0.2760741859674454,
+      0.21993734687566757,
+      0.3115747421979904
+    ],
+    "folder": "wildlife",
+    "kind": "songbird",
+    "meshes": 18,
+    "sha256": "167847ccab482b03cb7cde1df8a793270dd4af8c7ad54b95d8d1064096fce8c3",
+    "triangles": 26510,
+    "variant": "new"
+  },
+  "wildlife/wombat": {
+    "bytes": 2948600,
+    "clips": [
+      "idle",
+      "walk",
+      "graze",
+      "settle",
+      "alert",
+      "pet"
+    ],
+    "dimensions": [
+      0.5574414134025574,
+      0.5492060352116823,
+      0.9604012072086334
+    ],
+    "folder": "wildlife",
+    "kind": "wombat",
+    "meshes": 31,
+    "sha256": "24225e88cff442e73d9c32079f126da0105b6a6cb9da9e3f3f321a60df4efe0d",
+    "triangles": 45460,
+    "variant": "new"
+  }
+}

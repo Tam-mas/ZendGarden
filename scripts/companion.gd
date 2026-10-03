@@ -25,7 +25,7 @@ static var navigation: AStarGrid2D
 static var open_plots=-1
 
 func _ready() -> void:
- model=load("res://assets/companions/%s.glb" % ("cat" if is_cat else "dog")).instantiate()
+ model=GardenArt.detailed_model("companions","cat" if is_cat else "dog")
  add_child(model)
  body=model.find_child("Body*",true,false)
  head=model.find_child("Head*",true,false)
@@ -87,7 +87,7 @@ func animate(g, delta: float, index: int) -> void:
   if direction.length()<.18: path.remove_at(0)
   else:
    direction=direction.normalized()
-   position+=direction*minf(delta*(1.2 if is_cat else 1.4),.14)
+   position+=direction*minf(delta*(.7 if is_cat else .9),.14)
    rotation.y=lerp_angle(rotation.y,atan2(-direction.x,-direction.z),minf(1,delta*6))
    moving=true
  position.y=GardenTerrain.point(position).y
@@ -100,6 +100,8 @@ func animate(g, delta: float, index: int) -> void:
  var stretching=is_cat and not moving and not settle and affection<=0 and fmod(routine_time,42.0)>36 and g.clock_time>.25 and g.clock_time<.7
  var sniffing=not is_cat and not moving and not settle and affection<=0 and fmod(routine_time+9,37.0)>31
  behaviour="pet" if affection>0 else ("stretch" if stretching else ("sniff" if sniffing else ("settle" if settle else ("walk" if moving else "idle"))))
+ if GardenAnimalMotion.advance(model,behaviour,delta,(1.98 if is_cat else 1.26) if moving else 1.0):
+  return
  var sit=1.0 if settle else smoothstep(4,6,idle)
  var stretch=sin((fmod(routine_time,42.0)-36)/6.0*PI) if stretching else 0.0
  body.position=body_rest+Vector3(0,sin(phase*2)*.012*gait-sit*.08+sin(phase*.24)*.007,0)

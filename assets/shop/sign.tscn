@@ -2,11 +2,11 @@
 
 [ext_resource type="PackedScene" path="res://assets/shop/sign.glb" id="1_m1vyg"]
 
-[node name="Sign" type="Node3D" unique_id=2113517281]
+[node name="Sign" type="Node3D" unique_id=689829564]
 
-[node name="Model" type="Node3D" parent="." unique_id=1092452066 instance=ExtResource("1_m1vyg")]
+[node name="Model" type="Node3D" parent="." unique_id=1054423597 instance=ExtResource("1_m1vyg")]
 
-[node name="FrontText" type="Label3D" parent="." unique_id=1288607725]
+[node name="FrontText" type="Label3D" parent="." unique_id=1501252088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0.056)
 pixel_size = 0.002
 double_sided = false
@@ -18,7 +18,7 @@ outline_size = 3
 autowrap_mode = 3
 width = 810.0
 
-[node name="BackText" type="Label3D" parent="." unique_id=993944455]
+[node name="BackText" type="Label3D" parent="." unique_id=1023474677]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.62, -0.056)
 pixel_size = 0.002
 double_sided = false

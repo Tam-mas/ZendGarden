@@ -1,5 +1,75 @@
 # Changelog
 
+### [2026-10-03 20:26] Changed
+
+**Tech:** `art_source/overhaul/model_choices.json`, `selection_policy.py`, `tools/model_comparison/apply.py` — apply the completed model review
+
+**Dev:** Install the exact main ca52914 cat, dog, bee, frog and rabbit GLBs, retain the other 50 frozen candidates, and archive the five selected originals with their hashes. Individual Blender exports preserve these runtime choices while keeping new source anatomy editable. Restore procedural bee wingbeats, grounded frog hops and travelling/resting rabbit motion alongside the existing companion fallback. Keep strict byte checks for selected originals and skin/clip checks for upgraded animals; add movement regression coverage and player update 28. While its garden process loop is paused, the UI check explicitly repeats the live game's HUD updates to settle deferred text wrapping before checking geometry.
+
+**Plain:** Keep the familiar cat, dog, bee, frog and rabbit while using the selected new versions of the other animals, structures and tools.
+
+**Why:** Make the garden reflect the completed comparison and preserve those preferences through future model rebuilds.
+
+### [2026-10-03 20:08] Added
+
+**Tech:** `tools/model_comparison/`, `Compare Models.command` — temporary native model review viewer
+
+**Dev:** Freeze 55 current GLBs and 33 counterparts from verified GitHub main ca52914, including extracted shed/cottage geometry and the original procedural footbridge. Show one pair with synchronized metre-scale cameras, lighting, authored clip playback and rest-pose restoration. Default to new, disable unavailable old variants, atomically save portable decisions and resume the review; snapshots remain ignored and outside web exports. Validate all variants/clips, rest transforms, navigation and persisted choices without replacing game assets or real review decisions.
+
+**Plain:** Compare the previous and upgraded models side by side, choose which ones to keep and return to your saved review later.
+
+**Why:** Let the final garden use the models you prefer before the overhaul is integrated.
+
+### [2026-10-03 19:38] Fixed
+
+**Tech:** `tests/soundscape.gd`, `tests/check_mountains.py` — verification cleanup and landscape resource-name checks
+
+**Dev:** Explicitly released each test playback stream and cleared the player table before freeing the soundscape, allowing the mixer to retire its resources before shutdown. Checked both node and mesh-resource names for forest chunks after repeated Blender library appends; the export canonicalizer restores both without changing vertices.
+
+**Plain:** Automatic checks now close their audio cleanly and catch renamed landscape resources earlier.
+
+**Why:** Keep verification reliable while rebuilding and reviewing the garden's model libraries.
+
+### [2026-10-03 18:29] Changed
+
+**Tech:** `art_source/overhaul/skin_rig.py`, `realism.py`, `common_hq.py`, `tools.py` — connected weighted skins and library-wide material rollout
+
+**Dev:** Added continuous remeshed skins and real armatures for eight mammals and six birds, baking existing NLA controls into bone clips without changing navigation ownership. Smoothed anatomical weights and attached fur cards to the same rig; used tapered sparse cutouts and underlying-surface normals to avoid flake-like tufts; retained rigid wings/wrists, gripping feet, facial details and existing clip names. Revised species proportions, coat lengths, short-haired feet, fine tabby scale and staggered wombat walking. Added bee/moth thorax fuzz and replaced wooden insect cuticle. Rolled generated cedar/limestone/plumage/coats across the library with physical-scale timber/mineral UVs, smaller micro-normal/roughness maps and an isolated five-tool material library preserving hand geometry. Preserved the glTF exporter’s matched bone rest/inverse-bind matrices, explicitly reset neutral poses and kept canonical landscape names on repeated exports. Tests require neutral bind agreement, skins, normalized weights, bone/control agreement, embedded alpha and existing budgets. Isolated each asset export from the gallery to avoid evaluating unrelated rigs. Editable galleries and actual exported/game-rendered previews document the resulting detailed stylised assets.
+
+**Plain:** Animals bend more smoothly and have more distinct coats and plumage, while garden structures and tools gain finer wood, stone and metal detail.
+
+**Why:** Improve close-up believability and movement throughout the non-plant model library.
+
+### [2026-10-03 17:24] Changed
+
+**Tech:** `art_source/overhaul/realism.py`, `GardenArt.soften_fur` — generated material assets and three realism prototypes
+
+**Dev:** Preserved six built-in image-generation albedo/opacity sources and exact prompts; added Blender tinting, coat UVs, curved outward-facing short-fur cards and separate contour/flight-feather materials. Exported revised cat, kookaburra and bench prototypes through MCP, retaining animation clips and dimensions. Refined jaw, hind limbs, tail, bird skull/neck/bill and feather UVs. Godot shares alpha-hashed fur materials, uses softer diffuse lighting and avoids tiny fur self-shadows. Reduced micro-normal/roughness map sizes while preserving 1K colour detail. Added checks for PNG hair alpha, runtime fur shading and existing grounded animation. Documented the remaining species anatomy, skin deformation, grooming, texture and performance work explicitly; this is not a finished realism pass for all models.
+
+**Plain:** The cat, kookaburra and bench have a first pass of finer coat, feather and wood details.
+
+**Why:** Establish and verify a material workflow for more believable close-up garden models.
+
+### [2026-10-03 16:29] Changed
+
+**Tech:** `art_source/overhaul`, `GardenArt.detailed_model`, `GardenAnimalMotion`, `GardenWildlifeMotion` — MCP-authored model libraries and articulated wildlife playback
+
+**Dev:** Rebuilt 21 placeable structures, 26 animals and three scenery assets in isolated Blender MCP scenes, retaining the landscape and saved furnishing identifiers. Added packed PBR maps, 103 animal clips, inverse-kinematics steps with ankle compensation, private animation-path normalization and manual playback without root-motion ownership. Appended ten shop furnishings, added twelve species with distinct visiting routines, integrated rest and insect-hotel interactions, and refreshed shop cards and inspection scenes. Source textures are excluded from game exports, and the environment shed is consolidated from 462 meshes to eight material batches. Expanded model, source, movement, direction and structure-removal validation; kept per-model triangle budgets below 65,000.
+
+**Plain:** The garden has richer structures, more detailed animals and new visitors that move and behave in different ways.
+
+**Why:** Make close-up gardening and quiet wildlife watching more visually pleasing while preserving existing gardens.
+
+### [2026-10-03 14:37] Added
+
+**Tech:** `art_source/concepts/wildlife-and-existing-structures-2026-10` — additional wildlife and faithful structure concept references.
+
+**Dev:** Add twelve animal proposals with distinct movement, visit timing and player reactions, including three mammals, four named bird species and five insects. Generate seven labeled reference sheets with the built-in image tool; use current model renders and source geometry to retain the shapes of all eleven shop furnishings and five permanent scenery groups. Refine hoverfly antennae, preserve selected PNGs and current shape references, and record exact prompts and primary wildlife sources. Keep runtime assets, gameplay, saves and player update numbers unchanged in this concept-only pass.
+
+**Plain:** Illustrated ideas add twelve possible animal visitors and show more detailed versions of the garden's existing structures.
+
+**Why:** Provides a complete visual and behavior brief to review before the next model-building pass.
+
 ### [2026-10-03 14:13] Fixed
 
 **Tech:** `tools/build_web.py/package_site`, `web/loader.js/loadChunk` — coherent browser downloads after updates.

@@ -27,6 +27,9 @@ def fingerprint(values):
 
 parser=argparse.ArgumentParser();parser.add_argument('--baseline',type=Path);args=parser.parse_args()
 path=ROOT/'assets/environment/lake_garden.glb';doc,accessor=glb(path)
+for node in doc['nodes']:
+    if node.get('name','').startswith('ForestChunk_'):
+        assert doc['meshes'][node['mesh']].get('name')==node['name'],('Stale imported forest resource name',node['name'])
 report={}
 for name,budget in [('AlpineLakeValley',500000),('OuterMountainRidges',50000)]:
     mesh=named_mesh(doc,name)
