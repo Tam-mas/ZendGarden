@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 14:37] Added
+
+**Tech:** `art_source/concepts/wildlife-and-existing-structures-2026-10` — additional wildlife and faithful structure concept references.
+
+**Dev:** Add twelve animal proposals with distinct movement, visit timing and player reactions, including three mammals, four named bird species and five insects. Generate seven labeled reference sheets with the built-in image tool; use current model renders and source geometry to retain the shapes of all eleven shop furnishings and five permanent scenery groups. Refine hoverfly antennae, preserve selected PNGs and current shape references, and record exact prompts and primary wildlife sources. Keep runtime assets, gameplay, saves and player update numbers unchanged in this concept-only pass.
+
+**Plain:** Illustrated ideas add twelve possible animal visitors and show more detailed versions of the garden's existing structures.
+
+**Why:** Provides a complete visual and behavior brief to review before the next model-building pass.
+
 ### [2026-10-03 14:13] Fixed
 
 **Tech:** `tools/build_web.py/package_site`, `web/loader.js/loadChunk` — coherent browser downloads after updates.
