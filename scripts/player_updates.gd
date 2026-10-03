@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":15,"date":"3 October 2026","title":"Your watered garden welcomes you back","note":"Gardens with freshly watered ground can open again after a refresh or a move to zend.garden, keeping your saved progress."},
  {"version":14,"date":"3 October 2026","title":"Stay a while, together","note":"Sit on a bench, rest beneath a pergola or watch the pond. Call your cat and dog over, pet them, and invite them to settle beside you. Look out for a sunny cat stretch and a curious dog sniff."},
  {"version":13,"date":"3 October 2026","title":"Grow your first bloom together","note":"A short welcome walk now teaches planting, watering, a new morning, gathering and sharing a flower in your own garden. Skip whenever you like, resume after a break, or replay it from Settings."},
  {"version":12,"date":"3 October 2026","title":"Familiar frames, more garden","note":"The warm brown menus and decorative borders are back, with a slimmer sidebar that leaves more of your garden in view. Search, filters and favourites stay close, and shortcut instructions float as plain text."},

@@ -7,7 +7,8 @@ const {chromium,webkit} = require(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const OLD='https://zend.tammas.com', HOME='https://zend.garden';
 const SAVE='/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
 const sample=(day=17)=>({version:2,day,coins:240,clock:.3,plants:[{id:1,plot:0,pos:[1,-2],age:.7,water:2,stress:0}],
-  objects:[],names:['Miso','Clover'],settings:{intro_seen:true,music_volume:0},inventory:{'1':4}});
+  objects:[],names:['Miso','Clover'],settings:{intro_seen:true,music_volume:0},inventory:{'1':4},
+  watered_ground:{'2:-4':{x:1,z:-2,radius:.65,until:day+1.3}}});
 const encode=data=>[...Buffer.from(JSON.stringify(data))];
 const stub=`window.gameStarts=0; class Engine {
  static getMissingFeatures(){return [];} async init(){} async preloadFile(){}
@@ -141,10 +142,24 @@ const stub=`window.gameStarts=0; class Engine {
    await f.page.waitForURL(HOME+'/**');await finish(f.page);
    assert.deepEqual(await current(f.page),original);assert.equal(f.state.bucket.size,0);
    await sourceUntouched(f,before);
+   // A watered garden must also reopen after migration and after later autosaves.
+   await f.page.reload();await f.page.getByRole('button',{name:'Enter the garden',exact:true}).click();
+   await f.page.waitForFunction(()=>document.getElementById('welcome').hidden);
+   assert.deepEqual(await current(f.page),original,'Reloading a migrated watered garden must preserve its exact bytes');
    const newer=encode(sample(31));await seed(f.page,HOME,newer);
+   await f.page.goto(HOME+'/');await f.page.getByRole('button',{name:'Enter the garden',exact:true}).click();
+   await f.page.waitForFunction(()=>document.getElementById('welcome').hidden);
+   assert.deepEqual(await current(f.page),newer,'A later watered save must remain playable');
    await move(f.page);await f.page.waitForFunction(()=>document.getElementById('status').textContent.includes('already home'));
    assert.deepEqual(await current(f.page),newer,'Revisiting old site must not replace new progress');
    assert.equal(new URL(f.page.url()).hash,'');assert.equal(f.state.bucket.size,0);assert.deepEqual(f.state.errors,[]);
+   // Malformed watering still blocks startup, with no write to the current save.
+   f=await fixture();const damaged=encode({...sample(),watered_ground:{'2:-4':{x:1,z:-2,radius:'wide',until:18.3}}});
+   await seed(f.page,HOME,damaged);const damagedBefore=await snapshot(f.page);
+   await f.page.goto(HOME+'/');await f.page.getByRole('button',{name:'Enter the garden',exact:true}).click();
+   await f.page.waitForFunction(()=>document.getElementById('play').dataset.retry==='true');
+   assert.equal(await f.page.evaluate(()=>window.gameStarts),0);
+   assert.deepEqual(await snapshot(f.page),damagedBefore,'Failed validation must leave the full database unchanged');
    // A different existing garden requires a choice; both copies survive.
    for(const keep of [true,false]) {
     f=await fixture();await seed(f.page,OLD,original);const oldBefore=await snapshot(f.page);

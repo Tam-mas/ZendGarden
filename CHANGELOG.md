@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 12:22] Fixed
+
+**Tech:** `web/save-format.js/validateSave` — accept saved watered-ground patch records.
+
+**Dev:** Match `GardenTools.water_ground` by validating each patch's finite `x`, `z`, `radius` and `until` fields instead of treating watered ground as scalar terrain offsets. Preserve save bytes and migration archives without conversion, including expired patches. The deployed validator reproduced the reported startup message with a valid watered save; validation fails before Godot starts or autosaves. Cover v1/v2 encrypted copies, migrated-save reloads, later progress, malformed-patch rejection and unchanged databases in Chrome and WebKit. Verify watered saves in the existing exported Godot runtime and retained bytes on mount failure; record player Update 15 and check update dismissal, the browser loader, package and security checks.
+
+**Plain:** Saved gardens with watered ground can open again after a refresh or a move to the new address.
+
+**Why:** Restores access to affected gardens while preserving their progress and recovery copies.
+
 ### [2026-10-03 11:07] Added
 
 **Tech:** `GardenLeisure`, `GardenCompanion`, `GardenTouch`, `garden.gd` — furniture viewpoints and companion invitations.

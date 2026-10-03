@@ -34,6 +34,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
    const original=JSON.stringify({version,day:17,coins:240,clock:.3,
     plants:[{id:1,plot:0,pos:[1,-2],age:.7,water:2,stress:0,shape_seed:41}],objects:[],names:['Miso','Clover'],
     settings:{intro_seen:true,graphics:'mobile',music_volume:0},inventory:{'1':4},
+    watered_ground:{'2:-4':{x:1,z:-2,radius:.65,until:18.3}},
     ...(activeTutorial?{tutorial:{active:true,step:2,pos:[1,-2],plant:1,seed:41,morning:17}}:{})});
    await page.evaluate(async({original,SAVE})=>{
     await new Promise((resolve,reject)=>{
