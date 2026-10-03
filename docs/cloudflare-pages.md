@@ -53,7 +53,7 @@ those resources are configured; ordinary game hosting remains available.
 - `tools/build_web.py` installs project-local build tools as needed, fetches runtime Git LFS assets, checks Godot release archive checksums, imports resources, and exports the game.
 - `web/` contains the welcome page, loader, and Pages HTTP headers.
 - The generated site goes into `build/web/`. Build tools and output are ignored by Git and do not need committing.
-- The asset pack is divided into compressed pieces. The browser checks and joins them before starting Godot. The engine's WASM file is also compressed. The browser explicitly decompresses these files; it does not depend on HTTP content-encoding headers. This keeps each deployed file below [Pages' 25 MiB asset limit](https://developers.cloudflare.com/pages/platform/limits/).
+- The asset pack is divided into compressed pieces whose filenames include their content checksums. Different versions never share a chunk URL, so a browser or custom-domain cache cannot substitute an older piece after an update. The browser revalidates the manifest, checks and joins every piece before starting Godot, and retries a failed piece once with a fresh request while retaining all integrity checks. The engine's WASM file is also compressed. The browser explicitly decompresses these files; it does not depend on HTTP content-encoding headers. This keeps each deployed file below [Pages' 25 MiB asset limit](https://developers.cloudflare.com/pages/platform/limits/).
 - `_headers` sets MIME types, cache behaviour, and security headers. Deploy the complete output folder, not selected files.
 - A top-level `404.html` prevents missing game assets from being treated as SPA routes.
 

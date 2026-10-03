@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-async function checkedFetch(url) {
-  const response = await fetch(url);
+async function checkedFetch(url, options) {
+  const response = await fetch(url, options);
   if (!response.ok) throw new Error(`Could not download ${url} (${response.status}).`);
   return response;
 }
@@ -59,17 +59,34 @@ async function initEngine(engine) {
   }
 }
 
+async function loadChunk(chunk) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      // Recover from an old browser/CDN copy or an interrupted transfer once.
+      const retryURL = new URL(chunk.url, location.href);
+      retryURL.searchParams.set('v', chunk.sha256);
+      const response = await checkedFetch(attempt ? retryURL.href : chunk.url,
+        attempt ? { cache: 'reload' } : undefined);
+      const bytes = new Uint8Array(await (await decodedResponse(response)).arrayBuffer());
+      const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)),
+        value => value.toString(16).padStart(2, '0')).join('');
+      if (bytes.byteLength !== chunk.size || hash !== chunk.sha256) {
+        throw new Error('A game download was incomplete. Please reload and try again.');
+      }
+      return bytes;
+    } catch (error) {
+      if (attempt) throw error;
+      console.warn('Retrying a game download that did not pass its checks.', chunk.url);
+    }
+  }
+}
+
 async function loadPack() {
-  const manifest = await (await checkedFetch('pack.json')).json();
+  const manifest = await (await checkedFetch('pack.json', { cache: 'no-cache' })).json();
   const pack = new Uint8Array(manifest.size);
   let offset = 0;
   for (const chunk of manifest.chunks) {
-    const bytes = new Uint8Array(await (await decodedResponse(await checkedFetch(chunk.url))).arrayBuffer());
-    const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)),
-      value => value.toString(16).padStart(2, '0')).join('');
-    if (bytes.byteLength !== chunk.size || hash !== chunk.sha256) {
-      throw new Error('A game download was incomplete. Please reload and try again.');
-    }
+    const bytes = await loadChunk(chunk);
     pack.set(bytes, offset);
     offset += bytes.byteLength;
     progress.value = offset / manifest.size;

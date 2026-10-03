@@ -103,10 +103,13 @@ def package_site():
     pieces.mkdir()
     with pack.open('rb') as source:
         for index, block in enumerate(iter(lambda: source.read(CHUNK), b'')):
-            filename = f'pack/{index:03d}.bin'
+            digest = hashlib.sha256(block).hexdigest()
+            # Never reuse a URL for different bytes: custom domains and browsers
+            # may retain a previous deployment's asset for hours.
+            filename = f'pack/{index:03d}-{digest}.bin'
             (OUT / filename).write_bytes(gzip.compress(block, compresslevel=9, mtime=0))
             manifest['chunks'].append({'url': filename, 'size': len(block),
-                                       'sha256': hashlib.sha256(block).hexdigest()})
+                                       'sha256': digest})
     (OUT / 'pack.json').write_text(json.dumps(manifest))
     pack.unlink()
     wasm = OUT / 'index.wasm'

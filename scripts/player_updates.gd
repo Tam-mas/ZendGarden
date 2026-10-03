@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":22,"date":"3 October 2026","title":"A smoother return to the garden","note":"Browser downloads now keep each update's game files together and automatically retry an incomplete piece, helping the garden open reliably after an update."},
  {"version":21,"date":"3 October 2026","title":"Enjoy an uninterrupted view","note":"Choose Enjoy the view, or press H, to tuck away the HUD, aiming guides and held tool. The garden keeps going around you. Press any key, or click or tap, to bring your usual view back."},
  {"version":20,"date":"3 October 2026","title":"Bamboo belongs with the grasses","note":"Find all six bamboo varieties alongside the ornamental grasses. Their size and place in your garden stay the same."},
  {"version":19,"date":"3 October 2026","title":"A comfortable watering-can handle","note":"The watering can has a smooth rounded rear handle with a dark grip, joined neatly to its body and easier to see while you hold it."},

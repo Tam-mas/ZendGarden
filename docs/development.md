@@ -55,6 +55,8 @@ For another Godot installation, provide the executable path:
 GODOT_BIN="/path/to/godot" zsh tests/run.sh
 ```
 
+Browser download recovery is covered by `node tests/web_loader.cjs`. To check actual HTTP caching in isolated Chrome and WebKit profiles, run `PLAYWRIGHT_MODULE=/path/to/playwright node tests/web_loader_browser.cjs`; an optional `ZEND_OLD_LOADER=/path/to/previous-loader.js` also reproduces the previous failure.
+
 The runner checks assets, imports the project, and runs wildlife and gameplay checks. The gameplay test opens a visible game window and uses a separate test save. Keep the window visible while it runs.
 
 ### Working on plant models
