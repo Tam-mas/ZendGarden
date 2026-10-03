@@ -69,7 +69,7 @@ def wing_membrane(name,parent,end,width,mat,veinmat):
 def flying_insect(kind):
     m=palette();r=pivot(kind);body=pivot('Body',(0,0,0),r)
     bee=kind in ['bee','blue_banded_bee'];hover=kind=='hoverfly';dragon=kind=='dragonfly';fire=kind=='firefly';butter=kind=='butterfly';moth=kind=='emperor_gum_moth'
-    coat=material('HQ insect tawny fuzz',(.51,.32,.10),'fur') if bee else material('HQ teal dragonfly chitin',(.035,.28,.25),'scale',.35,.18) if dragon else m['darkwood']
+    coat=material('HQ insect tawny fuzz',(.51,.32,.10),'fur',size=512) if bee else material('HQ moth thorax fuzz',(.37,.26,.15),'fur',size=512) if moth else material('HQ teal dragonfly chitin',(.035,.28,.25),'scale',.35,.18,size=512) if dragon else material('HQ brown insect cuticle',(.14,.08,.038),'scale',.60,size=512)
     black=material('HQ insect dark cuticle',(.016,.020,.018),'stone',.36,size=512)
     thorax=ell('Thorax',(0,0,-.016),(.034,.032,.039) if bee else (.026,.027,.037),coat,body,28,18)
     length=.11 if dragon else .061 if moth else .042 if bee else .034

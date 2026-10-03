@@ -23,11 +23,15 @@ static func perch(g, entry: Dictionary) -> Vector3:
 static func flight_pose(entry: Dictionary, pos: Vector3, direction: Vector3, delta: float, clip: String="flight") -> void:
  entry.node.position=pos
  if direction.length_squared()>.00001:entry.node.rotation.y=atan2(-direction.x,-direction.z)
- GardenAnimalMotion.advance(entry.node,clip,delta)
+ if not GardenAnimalMotion.advance(entry.node,clip,delta) and entry.kind=="bee":
+  for wing in entry.node.get_children():
+   if str(wing.name).begins_with("Wing"):
+    wing.rotation.z=sin(float(entry.get("motion_time",0))*35+entry.phase)*.8*float(wing.get_meta("side",1))
 
 static func animate(g, entry: Dictionary, delta: float, time: float) -> bool:
  var kind: String=entry.kind
  var phase=time+entry.phase
+ entry.motion_time=time
  var daylight=g.clock_time>.2 and g.clock_time<.8
  if kind in BIRDS:
   # Paired lorikeets share arrival times, with a small spatial separation.
@@ -63,6 +67,7 @@ static func animate(g, entry: Dictionary, delta: float, time: float) -> bool:
   var b=Vector3(cos((index+1)*.9),0,sin((index+1)*.9))*.8
   var p=entry.target+a.lerp(b,smoothstep(0,1,cycle))
   p.y=GardenTerrain.point(p).y
+  if cycle<1 and not GardenAnimalMotion.player(entry.node):p.y+=sin(cycle*PI)*.10
   flight_pose(entry,p,b-a,delta,"hop" if cycle<1 else "idle")
   return true
  if kind in POLLINATORS or kind in ["emperor gum moth","dragonfly","firefly"]:

@@ -2,13 +2,22 @@
 
 Created on `codex/blender-garden-model-overhaul` through the connected Blender MCP. All models are original project assets and use the repository licence. The dedicated garden scenes preserve unrelated scenes and selections in the interactive Blender session.
 
-This library supplies 21 placeable structures, 26 animal models, three permanent scenery models, and the upgraded environment. Existing furniture kind names, catalogue order and saved garden coordinates remain compatible. The ten new furnishing kinds are appended to the catalogue.
+This library supplies 21 placeable structures, 26 animal models, three permanent scenery models, five held tools, and the upgraded environment. Existing furniture kind names, catalogue order and saved garden coordinates remain compatible. The ten new furnishing kinds are appended to the catalogue.
 
-The first realism/material prototypes (cat, kookaburra and bench) are described in
-[`REALISM.md`](REALISM.md), alongside the anatomy, grooming, baking and performance
-work needed for a complete realism pass. Six generated source textures and their exact
-built-in image-generation prompts are preserved in `textures/generated/`. These prototypes
-do not imply that every animal has already received a finished anatomical sculpt.
+The completed comparison keeps the original cat, dog, bee, frog and rabbit from
+GitHub main `ca52914`, and the new versions of the other 50 models in the game.
+`model_choices.json` records those decisions. Original GLBs and their checksums
+live in `retained_models/`; each Blender export honors the saved preference.
+The editable galleries still contain the newly authored alternatives. The manifest
+identifies each runtime variant and its geometry, textures and movement clips.
+
+The connected skin, species-specific coats and generated material rollout are described
+in [`REALISM.md`](REALISM.md). All eight mammals and six birds now have deforming
+body skins in the source galleries; the retained original runtime models use their
+existing procedural movement. All furnishings, scenery and five held tools use the revised material
+pipeline. Seven generated source textures and exact prompts are preserved in
+`textures/generated/`. This remains a detailed stylised library, with further anatomy
+and hand-painted surface refinement possible.
 
 ![Structure review](previews/structures.jpg)
 
@@ -21,6 +30,7 @@ do not imply that every animal has already received a finished anatomical sculpt
 | `structures.blend` | Eleven existing structures and ten new structures, arranged in a gallery |
 | `animals.blend` | Cat, dog, rabbit, two kangaroo variants, echidna, wombat, fox, six birds, frog, fish and ten insects |
 | `scenery.blend` | Garden shed, straight footbridge and lakeside cottage |
+| `tools.blend` | Five held tools, preserving original grips and geometry |
 | `environment.blend` | Upgraded shed, limestone walls and distant cottages within the existing landscape |
 
 The existing structure silhouettes guide their replacements: shallow arbor, deeper pergola, pitched greenhouse, flat-topped hive, round stone-edged pond and turned birdbath. New models add a potting bench, compost bays, rain barrel, raised bed, trellis screen, hexagonal gazebo, arched bridge, tiered fountain, garden swing and insect hotel. The gazebo and swing support the existing rest interaction; the insect hotel attracts small visitors. Other new furnishings are decorative rather than new resource systems.
@@ -31,7 +41,7 @@ Wood, stone, plaster, clay, metal, coats, feathers, scales and insect cuticle ha
 
 The animals contain named NLA clips exported as glTF animations. `GardenArt.detailed_model` promotes the asset wrapper and rewrites private animation paths while preserving shared meshes and textures. It removes root-transform tracks, leaving navigation responsible for world position. `GardenAnimalMotion` advances clips explicitly and blends pose changes.
 
-Walking quadrupeds use alternating diagonal steps with knee flexion, a planted portion of each step, an arcing recovery and counter-rotating ankles. Their walk rates are matched to travel speed. Birds have folded rest poses, separate wrists, delayed wing recovery, gripping toes, drinking, bathing and foraging clips. Fish have tail and fin movement and are displayed as smaller pond fish. Rabbits and kangaroos use hop clips; companions retain invitations, petting, stretches, sniffing and settling.
+Walking quadrupeds use alternating diagonal steps (wombats use staggered four-foot steps) with knee flexion, a planted portion of each step, an arcing recovery and counter-rotating ankles. Their walk rates are matched to travel speed. Birds have folded rest poses, separate wrists, delayed wing recovery, gripping toes, drinking, bathing and foraging clips. Fish have tail and fin movement and are displayed as smaller pond fish. Rabbits and kangaroos use hop clips; companions retain invitations, petting, stretches, sniffing and settling.
 
 | Visitor | Game routine |
 | --- | --- |
@@ -63,4 +73,4 @@ Review GIFs in `previews/` come from the actual imported clips in Godot. Their p
 
 For an interactive MCP rebuild, add this directory to Blender's Python path and call `mcp_run.run(category, kinds)`. It restores the active scene, selection and active object after each sequential batch. Never open these libraries over another unsaved scene simply to rebuild them.
 
-Validation includes self-contained exports, UVs and triangle budgets (`tests/check_assets.py`), all 13 source libraries and packed images (`tests/check_blender_sources.py`, run in background Blender), animation targets, world-position ownership, ankle articulation, planted foot contact and visitor traits (`tests/overhaul_models.gd`), plus the normal game suite (`tests/run.sh`). `tools/review_overhaul_motion.gd` renders six representative clips in the game renderer.
+Validation includes self-contained exports, UVs and triangle budgets (`tests/check_assets.py`), all 14 source libraries and packed images (`tests/check_blender_sources.py`, run in background Blender), animation targets, world-position ownership, ankle articulation, planted foot contact and visitor traits (`tests/overhaul_models.gd`), plus the normal game suite (`tests/run.sh`). `tools/review_overhaul_motion.gd` renders fifteen representative clips in the game renderer.

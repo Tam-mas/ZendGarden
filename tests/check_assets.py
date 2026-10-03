@@ -1,6 +1,8 @@
 """Check self-contained model exports, articulation and triangle budgets."""
-import json,struct,pathlib
+import json,struct,pathlib,hashlib,sys
 root=pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'art_source/overhaul'))
+from selection_policy import selected_old,retained_record
 files=list((root/'assets/plants').glob('plant_*.glb'))
 assert len(files)==136, f'Expected 136 species, got {len(files)}'
 tools=[root/'assets/tools'/f'{kind}.glb' for kind in ['can','shears','trowel','rake','hoe']]
@@ -14,6 +16,11 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
  assert data[:4]==b'glTF', path
  length,kind=struct.unpack_from('<II',data,12)
  doc=json.loads(data[20:20+length])
+ key=path.parent.name+'/'+path.stem
+ retained=path in wildlife+companions and selected_old(key)
+ if retained:
+  original=retained_record(key)
+  assert hashlib.sha256(data).hexdigest()==original['sha256'],(path,'selected original differs from retained baseline')
  assert len(doc['scenes'])==1,(path,'unexpected extra scene')
  assert not any(n.get('name')=='Cube' for n in doc['nodes']),(path,'default cube exported')
  assert doc.get('meshes'),(path,'empty export')
@@ -31,9 +38,25 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
   if path.stem in ['songbird','native_bird','bee','butterfly','dragonfly','firefly']:
    for joint in ['WingL','WingR']:
     assert any(n.get('name','').startswith(joint) for n in doc['nodes']),(path,'missing wing pivot')
- if path in wildlife+companions:
+ if path in wildlife+companions and not retained:
   assert doc.get('animations'),(path,'missing authored movement clips')
   assert all(a.get('channels') for a in doc['animations']),(path,'empty movement clip')
+  if path.stem in ['cat','dog','rabbit','kangaroo','kangaroo_joey','echidna','wombat','fox','songbird','native_bird','fairy_wren','kookaburra','lorikeet','magpie']:
+   assert len(doc.get('skins',[]))==1,(path,'missing continuous anatomical skin')
+   names={doc['nodes'][i]['name'] for i in doc['skins'][0]['joints']}
+   assert {'Skin_Body','Skin_Head'}<=names,(path,'missing body/head skin joints')
+   for node in doc['nodes']:
+    if 'skin' not in node:continue
+    for primitive in doc['meshes'][node['mesh']]['primitives']:
+     assert {'JOINTS_0','WEIGHTS_0'}<=primitive['attributes'].keys(),(path,'unweighted skin or coat')
+     accessor=doc['accessors'][primitive['attributes']['WEIGHTS_0']]
+     assert accessor['componentType']==5126 and accessor['type']=='VEC4',(path,'unexpected skin weight format')
+     view=doc['bufferViews'][accessor['bufferView']]
+     offset=20+length+8+view.get('byteOffset',0)+accessor.get('byteOffset',0)
+     stride=view.get('byteStride',16)
+     for index in range(accessor['count']):
+      weight=struct.unpack_from('<4f',data,offset+index*stride)
+      assert all(v>=0 for v in weight) and abs(sum(weight)-1)<.002,(path,'invalid or unnormalized skin weights')
   for node in doc['nodes']:
    if 'hq_rest_location' in node.get('extras',{}):
     assert 'translation' in node,(path,'missing neutral joint transform',node['name'])

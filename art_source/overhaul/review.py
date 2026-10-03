@@ -1,11 +1,13 @@
 """Review the exported GLBs through MCP, with isolated studio scenes."""
 import bpy, math, json
-from mathutils import Vector
+from mathutils import Vector,Matrix
 from common_hq import ROOT
 
 def render(folder,kind,frame=1):
     previous=bpy.context.window.scene
     selected=list(bpy.context.selected_objects);active=bpy.context.view_layer.objects.active
+    banks=['meshes','armatures','actions','cameras','lights','curves','collections','worlds','materials','images']
+    before={name:set(getattr(bpy.data,name)) for name in banks}
     s=bpy.data.scenes.new('ZendGarden_Review_'+kind);bpy.context.window.scene=s
     try:
         bpy.ops.import_scene.gltf(filepath=str(ROOT/'assets'/folder/(kind+'.glb')))
@@ -13,11 +15,19 @@ def render(folder,kind,frame=1):
         # chooses its first clip (usually flight); that is reviewed separately.
         for o in list(s.objects):
             if o.animation_data:o.animation_data_clear()
+            if o.type=='ARMATURE':
+                for bone in o.pose.bones:bone.matrix_basis=Matrix.Identity(4)
             if 'hq_rest_location' in o:
                 o.rotation_mode='XYZ';o.location=o['hq_rest_location'];o.rotation_euler=o['hq_rest_rotation'];o.scale=o['hq_rest_scale']
         s.frame_set(0);bpy.context.view_layer.update()
         meshes=[o for o in s.objects if o.type=='MESH']
-        corners=[o.matrix_world@Vector(v) for o in meshes for v in o.bound_box]
+        depsgraph=bpy.context.evaluated_depsgraph_get()
+        corners=[]
+        for o in meshes:
+            evaluated=o.evaluated_get(depsgraph)
+            geometry=evaluated.to_mesh()
+            corners.extend(evaluated.matrix_world@v.co for v in geometry.vertices)
+            evaluated.to_mesh_clear()
         lo=Vector([min(v[k] for v in corners) for k in range(3)])
         hi=Vector([max(v[k] for v in corners) for k in range(3)])
         center=(lo+hi)*.5;span=max(hi-lo)
@@ -44,6 +54,10 @@ def render(folder,kind,frame=1):
         # Delete only transient review objects created by this call.
         for o in list(s.objects):bpy.data.objects.remove(o,do_unlink=True)
         bpy.context.window.scene=previous;bpy.data.scenes.remove(s)
+        for name in banks:
+            bank=getattr(bpy.data,name)
+            for datum in list(bank):
+                if datum not in before[name] and datum.users==0:bank.remove(datum)
         for ob in bpy.context.selected_objects:ob.select_set(False)
         for ob in selected:ob.select_set(True)
         bpy.context.view_layer.objects.active=active

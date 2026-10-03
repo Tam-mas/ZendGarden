@@ -85,8 +85,16 @@ func _process(delta: float) -> void:
     guest.wait=1.0
   guest.node.position=guest.pos
   var clip="hop" if moving and guest.kind in ["rabbit","kangaroo"] else "walk" if moving else "alert" if shy else "graze" if guest.age>5 else "idle"
-  GardenAnimalMotion.advance(guest.node,clip,delta,{"wombat":1.66,"echidna":1.9,"fox":1.33}.get(guest.kind,1.0) if moving else 1.0)
+  var authored=GardenAnimalMotion.advance(guest.node,clip,delta,{"wombat":1.66,"echidna":1.9,"fox":1.33}.get(guest.kind,1.0) if moving else 1.0)
+  if not authored and guest.kind=="rabbit":
+   # The reviewed original rabbit uses the garden's procedural hop and head nod.
+   var hop=absf(sin(guest.age*11+guest.phase))*.08 if moving else 0.0
+   guest.node.position=guest.pos+Vector3(0,hop,0)
+   var head=guest.node.get_node_or_null("Head") as Node3D
+   if head:head.rotation.x=.3*sin(guest.age*1.5) if not moving else 0.0
 
 static func model(kind: String, joey: bool = false) -> Node3D:
  var n=GardenArt.detailed_model("wildlife","kangaroo_joey" if kind=="kangaroo" and joey else kind)
+ var head=n.find_child("Head*",true,false) as Node3D
+ if head and head.name!="Head":head.name="Head"
  return n

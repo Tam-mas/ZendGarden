@@ -1,58 +1,60 @@
-# Realism direction and material prototypes
-
-The current garden library is an articulated first pass, not a finished realistic
-animal library. Rounded lofts and separate rigid body parts remain visible. Higher
-polygon counts and detailed albedo cannot by themselves replace anatomical sculpting.
+# Realism and game-ready material pass
 
 The next quality target is believable animals at the player's normal viewing distance
 and convincing close-ups of companions, birds and furniture. Judge it with actual
 Godot screenshots and movement, not only a Blender studio render. There is no numerical
 measure that establishes a "doubling" of artistic quality.
 
-## What is implemented in this material experiment
+## Implemented library pass
 
-Six first-party image-generation assets are saved in `textures/generated/`:
+The completed model comparison keeps the original cat, dog, bee, frog and rabbit
+from main `ca52914` in the game, and the new versions of the other 50 models.
+`model_choices.json` records the review. Their original GLBs and checksums are
+preserved in `retained_models/`; individual exports honor these preferences.
+The source libraries still contain all newly authored candidates described below.
+Runtime checks verify the retained original bytes and their procedural movement,
+while the remaining upgraded mammals/birds must pass the weighted-skin checks.
 
-| Image | Purpose |
-| --- | --- |
-| `cedar-albedo.png` | Timber grain, small knots and silver weathering |
-| `limestone-albedo.png` | Mineral colour and fine natural pore variation |
-| `short-fur-albedo.png` | Neutral fine mammal coat detail, tinted per species |
-| `contour-feathers-albedo.png` | Small overlapping body plumage |
-| `feather-vane-albedo.png` | A shaft and barbs mapped along an actual flight feather |
-| `fur-card.png` | Alpha-bearing tuft for small curved silhouette strips |
+Seven image-generation sources are saved in `textures/generated/`: cedar, limestone,
+short fur, contour plumage, flight-feather vanes and two alpha-bearing hair cutouts.
+`prompts.json` records the tool, date and exact prompts. These are generated colour
+and opacity assets; the procedural micro-normal and roughness maps are authored
+separately. They are not scans or physically calibrated displacement measurements.
+Source images are excluded from the game build, and each GLB embeds its own maps.
 
-`prompts.json` records the built-in image-generation tool, date and exact prompts.
-These are generated colour/opacity assets, not scanned measurements of displacement
-or physically calibrated normal/roughness maps. Seamless tiling was requested; inspect
-repetition on the actual UVs before making a material authoritative across the library.
-The original images retain their resolution and alpha. Blender creates smaller,
-species-tinted copies for export; source images stay out of the web build.
+All eight mammals now use a connected, weighted skin mesh and a real armature.
+The existing motion controls remain available to gameplay; their named clips are
+baked to the bones. Weighted hair cards follow the same skeleton. Coats range from
+short cat, wombat and echidna hair to longer dog and fox tufts. Feet have short hair
+on top and clear soles. The rabbit has fuller haunches, the wombat a broader barrel,
+and the dog and fox narrower skulls. Wombat walking uses staggered four-foot steps.
 
-The current exported prototypes are **cat, kookaburra and bench**. Their anatomy,
-feather UVs and material authoring now use the revised pipeline. The remaining
-exported models retain the tested first-pass library; rebuilding them explicitly
-with the new helpers is a separate rollout. The raw limestone image is available
-for the structure pass, but this three-model experiment does not replace the game's
-stone structures or environment.
+All six birds have a connected, weighted head/neck/body surface, contour-plumage
+maps, individually shaped wing/tail feathers and separate wrist controls. The
+kookaburra eye stripe is narrow and tapered rather than a heavy band. Birds retain
+flight, folded perch, drinking, bathing and foraging clips. Bees and the emperor gum
+moth get small thorax tufts; other insects keep cuticle and wing surfaces.
 
-The cat has a flatter jaw, shaped hind limbs, a fuller tail, recessed eyes and
-small laid fur strips attached to its existing joints. The kookaburra has a shaped
-skull, neck transition, separate lower bill, eyelids, rounded feather ends and
-separate surface textures for body and flight feathers. The bench preserves its
-dimensions and iron frame while using the generated wood grain.
+All 21 furnishings, three scenery models, the landscape's buildings/walls and five
+held tools receive the revised material pipeline. Timber UVs follow each part's long
+axis at a consistent physical grain scale. Limestone and plaster use a metre-scaled
+projection; tool handles use timber grain, with subtle brushed metal and rubber
+surfaces. Tool geometry, hand placement and the watering-can handle are preserved.
 
-Fur cards face outward and sit just above the skin. Pigment follows each sampled
-skin polygon, including the cream chest. Godot uses shared alpha-hashed, rough,
-softly wrapped materials. The skin supplies the animal's main shadow; hair strips
-avoid tiny self-shadows. This is a short-coat approximation, not a simulated groom.
-It still needs visual refinement before use as the final realism standard.
+Godot gives fur shared alpha-hashed, rough, softly wrapped materials. The body
+supplies the main shadow; hair strips avoid tiny dotted self-shadows. This is a
+short-coat approximation, not simulated strands. The skin comes from connected
+remeshed anatomical volumes with smoothed weights, rather than hand-retopologized
+sculpts. The result is a more detailed stylised library, not photorealistic wildlife.
 
-Before/after studio renders are preserved as `previews/*-before-realism.png` and
-`previews/*-after-realism.png`. `previews/cat-game-realism.png` and the cat/kookaburra
-GIFs show the actual compatibility renderer, including animation.
+The source gallery libraries remain editable. Studio review sheets import the actual
+exported GLBs. Motion previews come from Godot's imported clips. Asset tests require
+weighted skins for all mammals and birds, actual alpha in hair PNGs, resolved animation
+paths, agreement between neutral bones and inverse binds as well as animated skin bones and controls, grounded feet, and the existing
+65,000-triangle budget. Visitor behaviours and saved furnishing kind names remain
+compatible.
 
-## Recommended complete pass
+## Further art refinement
 
 1. **Species anatomy:** use consistent front, side and three-quarter references.
    Sculpt shoulders, hips, necks, jaws, eyelids and feet. Keep foxes lean, wombats low

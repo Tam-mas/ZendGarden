@@ -48,6 +48,10 @@ def quadruped(kind):
         (-length*.27,.015,width*.46,width*.51),(-length*.12,.008,width*.45,width*.46),
         (length*.08,.022,width*.38,width*.39),(length*.26,.002,width*.49,width*.52),
         (length*.40,-.006,width*.37,width*.42),(length*.48,0,width*.09,width*.16)]
+    if wombat:
+        profiles=[(z,y,width*.49 if abs(z)<length*.33 else w,h*1.12) for z,y,w,h in profiles]
+    if rabbit:
+        profiles=[(z,y+(0.035 if z>0 else 0),w*(1.18 if z>0 else .90),h*(1.20 if z>0 else .85)) for z,y,w,h in profiles]
     torso=loft('Continuous shaped torso',profiles,coat,body,40)
     if cat or fox:torso.scale.z=.83
     if wombat:
@@ -61,13 +65,13 @@ def quadruped(kind):
     torso=fuse_surface([torso,neck],.009 if kind in ['cat','rabbit','echidna'] else .012)
     from realism import coat_uv
     coat_uv(torso)
-    if dog or cat:
+    if dog or cat or fox:
         torso.data.materials.append(cream)
         for face in torso.data.polygons:
             c=face.center
-            if c.y>length*.23 and c.z<width*.17 and (dog or abs(c.x)<width*.20):face.material_index=len(torso.data.materials)-1
+            if c.y>length*.23 and c.z<width*.17 and (dog or fox or abs(c.x)<width*.20):face.material_index=len(torso.data.materials)-1
     head=joint('Head',(0,head_y,head_z),r)
-    hw=width*(.47 if wombat else .42 if rabbit else .36 if cat else .37 if fox else .36)
+    hw=width*(.28 if wombat else .28 if rabbit else .36 if cat else .27 if fox else .26)
     hl=.18 if cat else .28 if dog else .25 if fox else .24 if wombat else .16 if rabbit else .13
     hheight=hw*.80
     headprofiles=[(-hl*.72,-.035,hw*.15,hheight*.16),(-hl*.59,-.025,hw*.38,hheight*.28),
@@ -84,6 +88,10 @@ def quadruped(kind):
         sculpt.data.materials.append(cream)
         for face in sculpt.data.polygons:
             if abs(face.center.x)<hw*.17 and face.center.y>-hl*.16:face.material_index=len(sculpt.data.materials)-1
+    if fox:
+        sculpt.data.materials.append(cream)
+        for face in sculpt.data.polygons:
+            if face.center.z<-.012:face.material_index=len(sculpt.data.materials)-1
     boot=material('HQ fox soot boots',(.022,.019,.017),'fur') if fox else coat
     if echidna:
         curve('Tubular echidna snout',[(0,-.018,-.035),(0,-.025,-.09),(0,-.045,-.165),(0,-.053,-.205)],[.026,.024,.015,.009],coat,head,16)
@@ -95,10 +103,10 @@ def quadruped(kind):
         ell('Nose pad',(0,-.025,-hl*.70),nsize,nose,head,24,16)
         curve('Mouth line',[(-hw*.30,-.070,-hl*.48),(0,-.078,-hl*.65),(hw*.30,-.070,-hl*.48)],[.0018]*3,nose,head,6)
     for side in [-1,1]:
-        eye(head,side,(hw*.89,.018,-hl*.21),.013 if cat else .010 if echidna else .014,iris,cat,coat)
+        eye(head,side,(hw*.89,.018,-hl*.21),.013 if cat or rabbit else .010 if echidna or wombat else .012 if fox else .014,iris,cat,coat)
         if not echidna:
             ear_h=.115 if cat else .16 if dog else .155 if fox else .075 if wombat else .225
-            pinna('EarL' if side<0 else 'EarR',head,(side*hw*.68,hheight*.62,hl*.12),hw*.77,ear_h,coat,skin,dog,wombat or rabbit)
+            pinna('EarL' if side<0 else 'EarR',head,(side*hw*.68,hheight*.62,hl*.12),hw*(.45 if wombat else .77),ear_h,coat,skin,dog,wombat or rabbit)
         if kind in ['cat','dog','fox','rabbit']:
             for j in range(4):
                 curve('Fine facial whisker',[(side*hw*.25,-.035+j*.007,-hl*.61),(side*hw*.83,-.043+j*.016,-hl*.65),(side*hw*(1.55+j*.10),-.052+j*.020,-hl*.57)],[.0010,.0006,.00015],cream,head,5)
@@ -161,10 +169,11 @@ def quadruped(kind):
         drop=.022 if wombat else .030
         body.location.z=rest[body][0].z-drop+.003*math.cos(phase*2)
         head.location.z=rest[head][0].z-drop+.003*math.cos(phase*2)
-        body.rotation_euler.y=.010*math.sin(phase)
+        body.rotation_euler.y=(.028 if wombat else .010)*math.sin(phase)
         stride=hip*.31
         for j,(top,low) in enumerate(zip(legs,lowers)):
-            cycle=(t+(.5 if j in [1,2] else 0))%1
+            offset=[0,.5,.75,.25][j] if wombat else (.5 if j in [1,2] else 0)
+            cycle=(t+offset)%1
             # Half a cycle has a planted foot travelling backwards at a constant
             # rate. The recovery foot lifts along a smooth arc, with knee flexion.
             if cycle<.5:
@@ -297,7 +306,7 @@ def bird(kind):
         skull.data.materials.append(mask)
         for face in skull.data.polygons:
             c=skull.matrix_basis@face.center
-            if abs(c.x)>width*.42 and .002<c.z<.030:face.material_index=len(skull.data.materials)-1
+            if abs(c.x)>width*.42 and abs(c.z-width*.11)<width*.06 and -width*.55<c.y<width*.48:face.material_index=len(skull.data.materials)-1
     beakmat=material('HQ parrot orange beak',(.62,.15,.026),'stone',.37) if kind=='lorikeet' else material('HQ pale bird beak',(.34,.36,.30),'stone',.39) if kind=='magpie' else material('HQ dark keratin beak',(.055,.049,.042),'stone',.40,size=512)
     beaklength=width*1.05 if kind=='kookaburra' else width*.68 if kind=='magpie' else width*.48
     if kind=='lorikeet':
@@ -383,6 +392,33 @@ def bird(kind):
 MAMMALS=['cat','dog','rabbit','kangaroo','kangaroo_joey','echidna','wombat','fox']
 BIRDS=['songbird','native_bird','fairy_wren','kookaburra','lorikeet','magpie']
 
+def regroom(kind):
+    """Refine coats without rebuilding tested weights and bone actions."""
+    s=scene('animals');folder='companions' if kind in ['cat','dog'] else 'wildlife'
+    r=next(o for o in s.objects if o.get('export_path')==f'assets/{folder}/{kind}.glb')
+    position=r.location.copy();r.location=(0,0,0);r.hide_set(False)
+    try:
+        for o in list(r.children_recursive):
+            if o.type=='MESH' and o.data.materials[0].name.startswith('Fur cards '):bpy.data.objects.remove(o,do_unlink=True)
+        from realism import groom
+        groom(r,kind)
+        return export(r,folder,kind)
+    finally:
+        r.location=position;r.hide_set(False);save('animals')
+
+def reexport(kinds):
+    """Export tested gallery rigs after material/export changes; save once."""
+    s=scene('animals');records=[]
+    try:
+        for kind in kinds:
+            folder='companions' if kind in ['cat','dog'] else 'wildlife'
+            r=next(o for o in s.objects if o.get('export_path')==f'assets/{folder}/{kind}.glb')
+            position=r.location.copy();r.location=(0,0,0);r.hide_set(False)
+            try:records.append(export(r,folder,kind))
+            finally:r.location=position;r.hide_set(False)
+    finally:save('animals')
+    return records
+
 def build(kind):
     scene('animals')
     folder='companions' if kind in ['cat','dog'] else 'wildlife'
@@ -393,6 +429,9 @@ def build(kind):
     else:
         from small_animals import make
         r=make(kind)
+    if kind in MAMMALS+BIRDS:
+        from skin_rig import connect
+        connect(r,kind)
     from realism import groom
     groom(r,kind)
     record=export(r,folder,kind)

@@ -104,12 +104,19 @@ def upgrade_environment():
             o.data.materials[1]=material('HQ warm clay shingles',(.33,.16,.079),'clay',.82)
         if not o.data.uv_layers:
             bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.uv.smart_project(island_margin=.002);bpy.ops.object.mode_set(mode='OBJECT')
+        uv_mineral(o)
+    for o in list(r.children_recursive):
+        if o.type=='MESH' and o.data.materials:
+            if any('wood' in m.name.lower() or 'cedar' in m.name.lower() or 'oak' in m.name.lower() for m in o.data.materials):uv_grain(o)
+            uv_mineral(o)
     bpy.ops.object.select_all(action='DESELECT')
     for o in env.objects:o.select_set(True)
     path=ROOT/'assets/environment/lake_garden.glb'
     # Preserve semantic terrain/chunk names and all original landscape geometry.
     bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,
         export_apply=True,export_animations=False,export_image_format='JPEG',export_image_quality=92)
+    from glb_io import canonical_environment_names
+    canonical_environment_names(path)
     save('environment')
     bpy.context.window.scene=previous
     return {'kind':'lake_garden','folder':'environment','bytes':path.stat().st_size,'source':'art_source/overhaul/environment.blend','terrain':'unchanged'}

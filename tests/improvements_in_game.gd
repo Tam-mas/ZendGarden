@@ -100,7 +100,12 @@ static func verify_readable_layouts(g, failures: Array) -> void:
    g.active_tab=page;g.category="All";g.collection_filters_open=false
    g.side_panel.show();Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
    g.refresh_ui()
-   for frame in range(4):await g.get_tree().process_frame
+   # This test pauses the garden's process loop. Match the live game's repeated
+   # HUD layout updates while deferred text wrapping and containers settle.
+   for frame in range(6):
+    g.update_hud()
+    if g.touch_active():g.touch.layout()
+    await g.get_tree().process_frame
    g.update_hud()
    if g.touch_active():g.touch.layout()
    var bounds=g.get_viewport().get_visible_rect()

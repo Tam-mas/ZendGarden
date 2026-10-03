@@ -4,6 +4,8 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":28,"date":"3 October 2026","title":"Familiar friends, a richer garden","note":"The original cat, dog, bee, frog and rabbit return with their familiar movement. The other animals, structures and held tools keep their new shapes and finer details."},
+ {"version":27,"date":"3 October 2026","title":"Softer coats and smoother movement","note":"Mammals and birds now bend smoothly through their bodies and necks, with distinct coats, finer plumage and a heavier wombat walk. Timber, stone, buildings and held tools have richer surface detail while keeping their familiar shapes."},
  {"version":26,"date":"3 October 2026","title":"Finer details up close","note":"Look closer at your cat's coat, the kookaburra's plumage and the grain of the garden bench. These first detail improvements bring softer hair, more distinct feather surfaces and naturally weathered timber."},
  {"version":25,"date":"3 October 2026","title":"Visitors with their own habits","note":"Watch for slow wombats, cautious echidnas and a rare fox beyond the garden. Four new birds arrive to perch or forage, while blue-banded bees, hoverflies, mantises, leaf insects and evening moths bring their own little routines."},
  {"version":24,"date":"3 October 2026","title":"A more lifelike garden","note":"Your companions and garden wildlife have new shapes, detailed coats, feathers, wings and eyes. Legs bend as animals step, birds fold their wings to rest, and fish sway their tails as they swim."},

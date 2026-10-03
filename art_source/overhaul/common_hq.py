@@ -88,6 +88,7 @@ def material(name, color, style='stone', rough=.75, metal=0, alpha=1, size=1024)
             field += .06*np.cos(x*145 + (np.floor(y*45)%2)*math.pi)*np.cos(y*145)+noise*.018
         elif style == 'fabric': field += .05*np.sin(x*700)*np.sin(y*700)+noise*.02
         elif style == 'clay': field += .015*np.sin(y*560)+noise*.065
+        elif style == 'metal': field += .008*np.sin(x*950)+noise*.008
         else: field += noise*.05
         rgba=np.ones((size,size,4));rgba[:,:,:3]=np.clip(field[:,:,None]*np.array(color),0,1)
         from realism import albedo
@@ -97,7 +98,7 @@ def material(name, color, style='stone', rough=.75, metal=0, alpha=1, size=1024)
         m.node_tree.links.new(tex.outputs['Color'],bs.inputs['Base Color'])
         dy,dx=np.gradient(field)
         normal=np.ones((size,size,4))
-        strength=5.0 if style in ['stone','clay'] else .65 if style in ['fur','tabby'] else 3.0
+        strength=5.0 if style in ['stone','clay'] else .65 if style in ['fur','tabby'] else .35 if style=='metal' else 3.0
         normal[:,:,:3]=np.stack((-dx*strength,-dy*strength,np.ones_like(dx)),axis=-1)
         normal[:,:,:3]/=np.linalg.norm(normal[:,:,:3],axis=-1)[:,:,None]
         normal[:,:,:3]=normal[:,:,:3]*.5+.5
@@ -197,11 +198,30 @@ def uv_grain(o):
     others=[k for k in range(3) if k!=long]
     lo=[min(v.co[k] for v in me.vertices) for k in range(3)]
     extent=[max(v.co[k] for v in me.vertices)-lo[k] for k in range(3)]
+    # Grain keeps a physical scale across thin posts and broad boards. Stable
+    # placement offsets avoid repeating the identical knot on every slat.
+    center=o.matrix_basis.translation
+    seed=hashlib.sha256(str(tuple(round(v,4) for v in center)).encode()).digest()
+    offset=(int.from_bytes(seed[:4],'little')/2**32,int.from_bytes(seed[4:8],'little')/2**32)
     for poly in me.polygons:
         across=min(others,key=lambda k:abs(poly.normal[k]))
         for li in poly.loop_indices:
             p=me.vertices[me.loops[li].vertex_index].co
-            me.uv_layers.active.data[li].uv=((p[across]-lo[across])/max(.001,extent[across]),(p[long]-lo[long])/max(.001,extent[long]))
+            me.uv_layers.active.data[li].uv=((p[across]-lo[across])/.50+offset[0],(p[long]-lo[long])/1.5+offset[1])
+
+def uv_mineral(o):
+    if o.type!='MESH' or not o.data.uv_layers:return
+    transform=o.matrix_basis
+    normal_matrix=transform.to_3x3().inverted().transposed()
+    for poly in o.data.polygons:
+        material=o.data.materials[poly.material_index]
+        if not any(w in material.name.lower() for w in ['limestone','plaster']):continue
+        n=normal_matrix@poly.normal
+        major=max(range(3),key=lambda k:abs(n[k]))
+        axes=[k for k in range(3) if k!=major]
+        for li in poly.loop_indices:
+            point=transform@o.data.vertices[o.data.loops[li].vertex_index].co
+            o.data.uv_layers.active.data[li].uv=(point[axes[0]]/.7,point[axes[1]]/.7)
 
 def animate(root, clips):
     """One named NLA track per clip across articulated pivots, exported as one clip."""
@@ -251,7 +271,24 @@ def retain_rest_transforms(path, transforms):
     total=12+8+len(blob)+len(tail)
     path.write_bytes(struct.pack('<4sII',b'glTF',2,total)+struct.pack('<I4s',len(blob),b'JSON')+blob+tail)
 
-def export(root, folder, kind):
+def export(root,folder,kind):
+    """Evaluate only this asset while baking/exporting the gallery's clips."""
+    previous=bpy.context.window.scene
+    for o in list(root.children_recursive):
+        if o.type=='MESH' and o.data.materials and any('wood' in m.name.lower() or 'cedar' in m.name.lower() or 'oak' in m.name.lower() for m in o.data.materials):uv_grain(o)
+        if o.type=='MESH' and o.data.materials:uv_mineral(o)
+    # Join before linking into a second scene: Blender's join operator unlinks
+    # the consumed objects from its active scene, not every owning scene.
+    base.merge_meshes(root)
+    temporary=bpy.data.scenes.new('ZendGarden_AssetExport');temporary.render.fps=30
+    for o in [root]+list(root.children_recursive):temporary.collection.objects.link(o)
+    bpy.context.window.scene=temporary
+    try:return _export(root,folder,kind)
+    finally:
+        bpy.context.window.scene=previous
+        bpy.data.scenes.remove(temporary)
+
+def _export(root, folder, kind):
     bpy.context.scene.frame_set(0)
     change=Matrix.Rotation(-math.pi/2,4,'X')
     transforms={}
@@ -264,9 +301,10 @@ def export(root, folder, kind):
                 o.location=l;o.rotation_euler=rot;o.scale=sc
             loc,quat,scale=(change@basis@change.inverted()).decompose()
             transforms[o.name]={'translation':list(loc),'rotation':[quat.x,quat.y,quat.z,quat.w],'scale':list(scale)}
-    for o in list(root.children_recursive):
-        if o.type=='MESH' and o.data.materials and any('wood' in m.name.lower() or 'cedar' in m.name.lower() or 'oak' in m.name.lower() for m in o.data.materials):uv_grain(o)
-    base.merge_meshes(root)
+        elif o.type=='ARMATURE':
+            # Bone rest transforms and inverse binds are a matched pair owned
+            # by the glTF exporter. Conjugating its bone nodes breaks that pair.
+            for pose in o.pose.bones:pose.matrix_basis=Matrix.Identity(4)
     # Joined groups inherit the active part's rotation. Bake that rotation into
     # mesh vertices so framing/LOD bounds describe the actual asset silhouette.
     bpy.ops.object.select_all(action='DESELECT')
@@ -292,6 +330,8 @@ def export(root, folder, kind):
         for track in o.animation_data.nla_tracks:track.mute=True
         if 'hq_rest_location' in o:
             o.location=o['hq_rest_location'];o.rotation_euler=o['hq_rest_rotation'];o.scale=o['hq_rest_scale']
+        if o.type=='ARMATURE':
+            for pose in o.pose.bones:pose.matrix_basis=Matrix.Identity(4)
     root['export_path']=str(path.relative_to(ROOT))
     bpy.context.view_layer.update()
     meshes=[o for o in root.children_recursive if o.type=='MESH']
@@ -299,6 +339,8 @@ def export(root, folder, kind):
     triangles=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in meshes)
     record={'kind':kind,'folder':folder,'triangles':triangles,'meshes':len(meshes),'bytes':path.stat().st_size,
             'dimensions':[max(p[k] for p in corners)-min(p[k] for p in corners) for k in (0,2,1)],'clips':list(root.get('hq_clips',[]))}
+    from selection_policy import preserve_selection
+    record=preserve_selection(path,record)
     mf=SOURCE/'manifest.json';data=json.loads(mf.read_text()) if mf.exists() else {}
     data[folder+'/'+kind]=record;mf.write_text(json.dumps(data,indent=2,sort_keys=True)+'\n')
     root.hide_set(True)

@@ -71,10 +71,13 @@ func run() -> void:
  sound._process(60)
  for kind in ["day","night","rain","waterside","woodland"]:
   if sound.players[kind].volume_db>-79: failures.append("Nature volume zero is still audible")
- for voice in sound.players.values(): voice.stop()
+ for voice in sound.players.values():
+  voice.stop()
+  voice.stream=null
+ sound.players.clear()
  sound.queue_free()
  await process_frame
  # Playback resources are released on the audio thread, after its next mix.
- await create_timer(.25).timeout
+ await create_timer(.5).timeout
  print("SOUNDSCAPE_RESULT: ",failures)
  quit(0 if failures.is_empty() else 1)

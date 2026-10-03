@@ -29,18 +29,21 @@ func render_motion() -> void:
  material.albedo_color=Color(.24,.225,.195)
  material.roughness=1
  floor.material_override=material
- floor.position.y=-.015
+ floor.position.y=0
  stage.add_child(floor)
  var camera=Camera3D.new()
  camera.projection=Camera3D.PROJECTION_ORTHOGONAL
  camera.current=true
  stage.add_child(camera)
  DirAccess.make_dir_recursive_absolute("res://captures/overhaul/motion")
- for pair in [["cat","walk"],["wombat","walk"],["kangaroo","hop"],["kookaburra","flight"],["fairy_wren","perch"],["fish","swim"]]:
-  var model=GardenArt.detailed_model("companions" if pair[0]=="cat" else "wildlife",pair[0])
+ for pair in [["cat","walk"],["dog","walk"],["fox","walk"],["rabbit","hop"],["wombat","walk"],["echidna","walk"],["kangaroo","hop"],["kangaroo_joey","hop"],["kookaburra","flight"],["fairy_wren","perch"],["lorikeet","forage"],["magpie","forage"],["bee","flight"],["emperor_gum_moth","flight"],["fish","swim"]]:
+  var model=GardenArt.detailed_model("companions" if pair[0] in ["cat","dog"] else "wildlife",pair[0])
   stage.add_child(model)
-  var size=.8 if pair[0] in ["kookaburra","fairy_wren","fish"] else 1.7 if pair[0]=="kangaroo" else 1.3
-  var center=Vector3(0,size*.28,0)
+  floor.visible=pair[0]!="fish" and pair[1]!="flight"
+  var bird_width=float({"fairy_wren":.052,"lorikeet":.085,"magpie":.103}.get(pair[0],0))
+  if bird_width>0:model.position.y=bird_width*.83
+  var size=float({"dog":2.1,"fox":1.8,"rabbit":.9,"echidna":.8,"kangaroo":2.5,"kangaroo_joey":2.5,"kookaburra":.8,"fairy_wren":.5,"lorikeet":.7,"magpie":.75,"bee":.23,"emperor_gum_moth":.34,"fish":.8}.get(pair[0],1.3))
+  var center=Vector3(0,size*(.36 if pair[0].begins_with("kangaroo") else .28),0)
   camera.size=size*.90
   camera.position=center+Vector3(1.4,.8,-1.8)*size
   camera.look_at(center)

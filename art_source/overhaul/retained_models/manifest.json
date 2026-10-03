@@ -1,0 +1,62 @@
+{
+  "companions/cat": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 5458600,
+    "clips": [],
+    "folder": "companions",
+    "kind": "cat",
+    "meshes": 22,
+    "sha256": "11550433a53a7ccfa58d3fb44317251ed981116d857d99dcdf90789632c5b54e",
+    "source": "art_source/overhaul/retained_models/companions/cat.glb",
+    "triangles": 34462,
+    "variant": "old"
+  },
+  "companions/dog": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 4811568,
+    "clips": [],
+    "folder": "companions",
+    "kind": "dog",
+    "meshes": 22,
+    "sha256": "e02ae7f6059f47a9bde39905fdb37707380ee451285616a660ad067e9e4521d6",
+    "source": "art_source/overhaul/retained_models/companions/dog.glb",
+    "triangles": 35734,
+    "variant": "old"
+  },
+  "wildlife/bee": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 1020564,
+    "clips": [],
+    "folder": "wildlife",
+    "kind": "bee",
+    "meshes": 6,
+    "sha256": "27cb9f13b680c9c4ef03c7e0e06ecd5b632b3c8408f113b4ae6720f380006048",
+    "source": "art_source/overhaul/retained_models/wildlife/bee.glb",
+    "triangles": 3712,
+    "variant": "old"
+  },
+  "wildlife/frog": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 3441720,
+    "clips": [],
+    "folder": "wildlife",
+    "kind": "frog",
+    "meshes": 5,
+    "sha256": "4dd576695c8b5ad8208bc020f1fca04ee0badf00d69d74ee9588a33979ae3781",
+    "source": "art_source/overhaul/retained_models/wildlife/frog.glb",
+    "triangles": 9672,
+    "variant": "old"
+  },
+  "wildlife/rabbit": {
+    "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
+    "bytes": 3094192,
+    "clips": [],
+    "folder": "wildlife",
+    "kind": "rabbit",
+    "meshes": 12,
+    "sha256": "6f225e55dacd1a9b22d135c1495545645cef157544cc16738df33ab61edfd6e2",
+    "source": "art_source/overhaul/retained_models/wildlife/rabbit.glb",
+    "triangles": 14016,
+    "variant": "old"
+  }
+}
