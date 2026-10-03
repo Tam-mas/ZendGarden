@@ -1,5 +1,15 @@
 # Changelog
 
+### [2026-10-03 13:58] Added
+
+**Tech:** `art_source/concepts/garden-expansion-2026-10` — structure and animal design references.
+
+**Dev:** Create a new branch from published main and add six labeled concept sheets generated with the built-in image tool: a ten-structure overview, two detailed structure sheets, and three animal sheets covering all twelve wildlife models and both companions. Preserve text prompts and document proposed structure uses, current animal behaviour and the mother-with-joey variant. Explore new naturalistic designs from text briefs without replacing runtime assets. No player update number is added because this concept pass does not change gameplay.
+
+**Plain:** New illustrated ideas show ten possible garden structures and fresh designs for all existing animals.
+
+**Why:** Gives the next art pass a complete visual direction to review before building game models.
+
 ### [2026-10-03 13:33] Changed
 
 **Tech:** `LICENSE`, `LICENSING.md`, `README.md` — custom free-play and source-sharing licence.
