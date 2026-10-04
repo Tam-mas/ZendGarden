@@ -53,6 +53,7 @@ for name in ('garden_music','water_music','woodland_music','terrace_music','day'
         assert tone_power(samples,builder.frequency(50),rate) > 20 * tone_power(samples,builder.frequency(48),rate), f'{name}: wrong drone key'
     settings = path.with_suffix('.wav.import').read_text()
     assert 'edit/loop_mode=2' in settings, f'{name}: browser loop missing at import'
-    assert 'compress/mode=0' in settings, f'{name}: keep source PCM fidelity'
+    expected_mode=2 if name in builder.MUSIC_NAMES or name=='rain' else 0
+    assert f'compress/mode={expected_mode}' in settings, f'{name}: quality-preserving runtime compression policy changed'
 assert max(music_rms)-min(music_rms)<3, 'Music changes noticeably in level between areas'
 print('AUDIO_CHECK: PASS — ten exact-length loops, compatible concert pitches, balanced music, smooth seams, no sharp impulses')

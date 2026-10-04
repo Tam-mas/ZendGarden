@@ -356,10 +356,11 @@ for j in range(480):
     for f in [(0,1,2),(3,5,4),(0,2,5,3),(2,1,4,5)]: houses.face(tuple(st+i for i in f),1)
 houses.object('DistantLakesideHamlets',[plaster,terracotta])
 
-bpy.ops.object.select_all(action='DESELECT')
-for obj in scene.objects: obj.select_set(True)
-bpy.ops.export_scene.gltf(filepath=ROOT+'/assets/environment/lake_garden.glb',export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,export_apply=True)
+# Keep editable relief masks and UVs in the master, then omit channels ignored
+# by the game's world-space terrain/lake shaders from the runtime export.
 bpy.ops.wm.save_as_mainfile(filepath=ROOT+'/art_source/lake_garden.blend')
+from export_environment import export_environment
+export_environment(ROOT+'/assets/environment/lake_garden.glb')
 # Export geometry-level acceptance information alongside the editable source.
 import json
 boundary=[]

@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":37,"date":"4 October 2026","title":"A lighter first visit","note":"The garden has a smaller first download, with shared artwork and lighter background files. Your detailed plants, animals and structures keep their familiar appearance, with the same garden sounds and saves."},
  {"version":36,"date":"4 October 2026","title":"Room for a fuller garden","note":"Fuller gardens are quicker to explore and tend, with Auto graphics keeping finer detail closest to you. Your plants keep their individual shapes, growing stages and familiar care tools. Choose Standard graphics for full plant shadows, or set your preferred 3D resolution in Settings."},
  {"version":35,"date":"4 October 2026","title":"Climbers that follow their supports","note":"Sweet peas and Clematis now climb nearby posts with leafy stems and small, naturally shaped flowers. The oversized rows of pink ovals are gone, and climbing growth follows structures when you rearrange them."},
  {"version":34,"date":"4 October 2026","title":"Detailed companions and quiet visitors","note":"Your cat and dog have richer coats, more detailed faces and gentler movement, with familiar petting, resting and stretching routines. Look for a russet fox, a spiny echidna and little rabbits whose hops carry them through the garden."},

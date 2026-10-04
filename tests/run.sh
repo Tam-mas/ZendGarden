@@ -29,6 +29,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$audio_log" || ! rg -Fq 'SOUNDSCAPE_RESULT: []' 
   cat "$audio_log"
   exit 1
 fi
+compression_log="$(mktemp -t zend-garden-compression)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/audio_compression.gd > "$compression_log" 2>&1 || { cat "$compression_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$compression_log" || ! rg -Fq 'AUDIO_COMPRESSION_RESULT: []' "$compression_log"; then
+  cat "$compression_log"
+  exit 1
+fi
 mouse_log="$(mktemp -t zend-garden-mouse)"
 updates_log="$(mktemp -t zend-garden-updates)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/player_updates.gd > "$updates_log" 2>&1 || { cat "$updates_log"; exit 1; }

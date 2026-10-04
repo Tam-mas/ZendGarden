@@ -59,6 +59,16 @@ Browser download recovery is covered by `node tests/web_loader.cjs`. To check ac
 
 The runner checks assets, imports the project, and runs wildlife and gameplay checks. The gameplay test opens a visible game window and uses a separate test save. Keep the window visible while it runs.
 
+### Smaller browser exports
+
+Build the browser version with `python3 tools/build_web.py` (set `GODOT_BIN` on macOS). After importing, it runs `tools/prepare_export.gd` to replace repeated model textures with shared native Godot resources in the generated, Git-ignored `assets/shared_textures/` directory. Existing compressed pixels, mipmaps, normal maps and transparency are copied without resizing or re-encoding. GLBs and editable Blender sources remain self-contained. The preparation pass edits only disposable imported scenes and retains their meshes, LODs, skeletons and animation resources. Use the build script rather than exporting the Web preset directly: its texture preparation is required by the export exclusions.
+
+The export omits obsolete extracted maps and model JPG copies after their materials reference shared textures. It verifies all models from the actual PCK before compressing and splitting the download; `build/texture-sharing.json` and `build/exported-models.log` record the result. This works from a clean checkout and does not require Blender. Do not commit generated shared resources or import caches.
+
+Music and rain use QOA runtime compression; quiet birdsong and ambience keep lossless PCM. Source WAV masters remain unchanged. `tests/audio_compression.gd` compares the engine's decoded output against those masters, including seeking and loop boundaries, and runs in the full test suite and browser-build CI.
+
+`art_source/export_environment.py` omits terrain/lake UV and colour channels ignored by their world-space shaders, then joins only vertices with byte-identical positions and normals. Triangle order, geometry, normal shading, shoreline and all 28,869 trees remain unchanged. Both environment generators apply this cleanup; Blender masters retain their authoring data.
+
 ### Working on plant models
 
 The game uses exported `.glb` models. Editing or regenerating the source art requires Blender; the existing workflow has been tested with Blender 5.2.1. To rebuild the generated assets:

@@ -7,7 +7,7 @@ func browser_save_check() -> bool:
 
 func _ready() -> void:
  SAVE_PATH="user://dense-garden-benchmark.json"
- var fixture=JavaScriptBridge.eval("window.gardenBenchmarkSave",true)
+ var fixture=JavaScriptBridge.get_interface("window").gardenBenchmarkSave
  var copy=FileAccess.open(SAVE_PATH,FileAccess.WRITE)
  copy.store_string(fixture)
  copy.close()
@@ -18,5 +18,5 @@ func benchmark() -> void:
  var report=await preload("res://tests/dense_garden_benchmark.gd").sample(self)
  var output=JSON.stringify(report)
  print("GARDEN_BROWSER_BENCHMARK ",output)
- JavaScriptBridge.eval("document.getElementById('benchmark-report').textContent="+JSON.stringify(output))
+ JavaScriptBridge.get_interface("document").getElementById("benchmark-report").textContent=output
  set_process(false)

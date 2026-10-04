@@ -1,3 +1,13 @@
+### [2026-10-04 19:09] Performance
+
+**Tech:** `prepare_export.gd`, `build_web.py`, `export_environment.py`, Web preset and audio imports — smaller browser download with unchanged model detail
+
+**Dev:** Share byte-identical Basis textures and native image payloads across all 358 imported models, retaining mipmaps, dimensions and transparency. Modify disposable SceneState resources rather than repacking nodes, preserving meshes, LODs, rigs and authored animation; leave self-contained GLBs and Blender masters intact. Generate 489 shared textures outside Git, exclude obsolete extracted maps and redundant model JPGs, and load every model from the actual PCK before packaging. Strip UV/colour channels ignored by world-space landscape shaders and join only exact position/normal duplicates; verify every ordered triangle and normal against main, retaining the shoreline, playable garden and all 28,869 trees. Compress four music loops and rain with QOA, retaining quiet ambience as PCM after codec comparisons; verify 40.5–50 dB decoded SNR, original phrase lengths and smooth seams. Fix the private browser benchmark to use the CSP-compatible JavaScript interface. Clean-cache build passes all 358 models/8,417 texture references, pack/WASM integrity and browser security checks; day-77 garden renders in Chrome. Full gameplay and renderer checks pass, with an isolated smoke rerun clearing a transient Metal fence timeout. Live compressed game data falls from 674,899,309 to 420,964,892 bytes (34 to 21 pieces); complete local site is 432,087,751 bytes, approximately 37% smaller overall. Add player release 37; save format and dismissal preferences remain compatible. Keep private fixtures and generated resources out of source control and the final site.
+
+**Plain:** The garden's first download is about 254 MB smaller while keeping its detailed plants, animals, structures and familiar sounds.
+
+**Why:** Players reach the garden sooner and use less bandwidth without sacrificing the artwork they chose.
+
 ### [2026-10-04 16:58] Performance
 
 **Tech:** `GardenPlantBatches`, `GardenPlantIndex`, `GardenPlantGrowth`, `GardenTouch` — dense-garden rendering and care
