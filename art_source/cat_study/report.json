@@ -1,0 +1,21 @@
+{
+  "source_file": "cat.stl",
+  "source_sha256": "6feef10196afc7ef187d469596e39e4a9caec1d1d395f06376b462c46429c11e",
+  "source_triangles": 2000000,
+  "mesh_triangles": 47954,
+  "bones": 24,
+  "silhouette_hair_cards": 661,
+  "clips": {
+    "idle": 8.0,
+    "look": 5.0,
+    "walk": 1.2
+  },
+  "target_height_metres": 0.52,
+  "walk_stride_metres": 0.13,
+  "walk_stance_fraction": 0.65,
+  "nominal_walk_speed_metres_second": 0.16666666666666666,
+  "prototype_only": true,
+  "blender_version": "5.2.1 LTS",
+  "exported_triangles_total": 57078,
+  "exported_bytes": 4873468
+}

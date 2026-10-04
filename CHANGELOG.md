@@ -1,3 +1,13 @@
+### [2026-10-04 11:26] Added
+
+**Tech:** `art_source/cat_study` — isolated supplied-STL cat texture, skinning and motion experiment
+
+**Dev:** Preserve the supplied two-million-triangle sculpt as a hidden Blender reference and create a 57k-triangle GLB with baked anatomical tabby pigment/normal maps, inset eyes and blinking lids, weighted short fur and fine whiskers. Bake a 24-bone rig's planted-contact IK into idle/look/walk clips; classify asymmetrical paw weights using measured centres. Add a standalone Godot comparison with the retained production cat and its existing rigid motions, plus packed-map, weight, loop and contact validation. Keep production assets, model choices, saves and player release history unchanged; the prototype still needs sculpt/retopology cleanup and companion interaction clips before integration.
+
+**Plain:** A separate animated, textured cat prototype lets us compare the supplied model with the cat currently in the garden.
+
+**Why:** A better anatomical starting point can produce more convincing animals while keeping the existing garden safe to review against.
+
 ### [2026-10-04 10:12] Added
 
 **Tech:** `GardenSaveFiles`, `GardenSaveFormat`, `GardenExperience.settings_page`, `web/save-files.js` — portable garden JSON download and upload

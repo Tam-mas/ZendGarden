@@ -1,0 +1,8 @@
+# Inspection caches are reproducible; keep the final authored source instead.
+/imported.blend
+/inspection.blend
+/previews/raw_front.png
+/previews/raw_side.png
+/previews/raw_reverse.png
+/previews/godot/
+/preview/.godot/
