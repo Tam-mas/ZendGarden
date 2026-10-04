@@ -1,3 +1,33 @@
+### [2026-10-04 13:56] Changed
+
+**Tech:** `GardenArt`, `GardenAnimalMotion`, `GardenCompanion`, `GardenVisitors`, `animal_studies/promote.py` — approved supplied-sculpt production animals
+
+**Dev:** Replace cat, dog, fox, echidna and rabbit production GLBs with the approved STL-based models. Preserve rig facing wrappers, per-instance animation resources and navigation roots; map visitor alert/forage states, match walk speed to stance timing and integrate rabbit travel during flight. Add grounded companion pet/settle actions and a cat stretch without changing approved anatomy or coats. Embed all five models' maps as WebP, preserving lossless normals and alpha; retain packed editable game sources, canonical exports and frozen main review baselines. Record the new selections and protect them during older library rebuilds. Add production rig/clip/contact checks and extend source verification. Add player release 34; existing saves and dismissal state stay compatible.
+
+**Plain:** The approved detailed cat, dog, fox, echidna and rabbit now appear in the garden with their coats, natural movement and familiar interactions.
+
+**Why:** Better animal shapes and species-specific detail make companions and quiet visitors more enjoyable to watch.
+
+### [2026-10-04 12:31] Added
+
+**Tech:** `art_source/animal_studies` — supplied fox, dog, echidna and rabbit sculpt texture/animation prototypes
+
+**Dev:** Import each roughly two-million-triangle STL through Blender MCP without changing the active authoring scene, preserve dense references in packed sources, and export 56–67k-triangle weighted prototypes. Fit asymmetric eye sockets, add species coats, short laid fur and distinct baked walk/hop/forage/look actions. Use a padded echidna spine atlas to avoid UV/ray-bake seams. Convert every new map and embedded GLB image to WebP, saving 63.2% versus the corresponding PNGs with lossless normal/alpha checks. Extend the isolated cat comparison to five species, measure posed heights and retain fixed baseline joint tracks so runtime GLTF loading does not distort the old fox. Verify packed maps, weights, finite/looped motions, sampled floor contact and actual Godot rendered motion. Keep production models, saved selections, player history and live exports unchanged; further retopology, download optimisation and interaction/navigation integration remain production work.
+
+**Plain:** Four supplied animal models now have distinct coats and movement, with a separate viewer to compare them with the garden animals.
+
+**Why:** Better anatomical starting shapes and species-specific detail make the next animal design choices easier to review.
+
+### [2026-10-04 11:26] Added
+
+**Tech:** `art_source/cat_study` — isolated supplied-STL cat texture, skinning and motion experiment
+
+**Dev:** Preserve the supplied two-million-triangle sculpt as a hidden Blender reference and create a 57k-triangle GLB with baked anatomical tabby pigment/normal maps, inset eyes and blinking lids, weighted short fur and fine whiskers. Bake a 24-bone rig's planted-contact IK into idle/look/walk clips; classify asymmetrical paw weights using measured centres. Add a standalone Godot comparison with the retained production cat and its existing rigid motions, plus packed-map, weight, loop and contact validation. Keep production assets, model choices, saves and player release history unchanged; the prototype still needs sculpt/retopology cleanup and companion interaction clips before integration.
+
+**Plain:** A separate animated, textured cat prototype lets us compare the supplied model with the cat currently in the garden.
+
+**Why:** A better anatomical starting point can produce more convincing animals while keeping the existing garden safe to review against.
+
 ### [2026-10-04 10:12] Added
 
 **Tech:** `GardenSaveFiles`, `GardenSaveFormat`, `GardenExperience.settings_page`, `web/save-files.js` — portable garden JSON download and upload

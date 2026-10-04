@@ -30,7 +30,7 @@ func _ready() -> void:
  body=model.find_child("Body*",true,false)
  head=model.find_child("Head*",true,false)
  tail=model.find_child("Tail*",true,false)
- body_rest=body.position
+ if body:body_rest=body.position
  for name in ["FrontL","FrontR","BackL","BackR"]: legs.append(model.find_child(name+"*",true,false))
 
 static func prepare_navigation(g) -> void:
@@ -81,13 +81,17 @@ func animate(g, delta: float, index: int) -> void:
    if navigation.is_in_boundsv(start) and navigation.is_in_boundsv(end) and not navigation.is_point_solid(start) and not navigation.is_point_solid(end):
     for p in navigation.get_point_path(start,end): path.append(Vector3(p.x,0,p.y))
  var moving=false
+ var speed=GardenAnimalMotion.travel_speed(model,.7 if is_cat else .9)
+ var movement_speed=speed
  if affection<=0 and path.size()>0 and distance>(1.8 if visiting else .3):
   var direction=path[0]-position
   direction.y=0
   if direction.length()<.18: path.remove_at(0)
   else:
    direction=direction.normalized()
-   position+=direction*minf(delta*(.7 if is_cat else .9),.14)
+   var step=minf(delta*speed,.14)
+   position+=direction*step
+   movement_speed=step/maxf(delta,.00001)
    rotation.y=lerp_angle(rotation.y,atan2(-direction.x,-direction.z),minf(1,delta*6))
    moving=true
  position.y=GardenTerrain.point(position).y
@@ -100,7 +104,8 @@ func animate(g, delta: float, index: int) -> void:
  var stretching=is_cat and not moving and not settle and affection<=0 and fmod(routine_time,42.0)>36 and g.clock_time>.25 and g.clock_time<.7
  var sniffing=not is_cat and not moving and not settle and affection<=0 and fmod(routine_time+9,37.0)>31
  behaviour="pet" if affection>0 else ("stretch" if stretching else ("sniff" if sniffing else ("settle" if settle else ("walk" if moving else "idle"))))
- if GardenAnimalMotion.advance(model,behaviour,delta,(1.98 if is_cat else 1.26) if moving else 1.0):
+ var motion_speed=GardenAnimalMotion.gait_rate(model,movement_speed,1.98 if is_cat else 1.26) if moving else 1.0
+ if GardenAnimalMotion.advance(model,behaviour,delta,motion_speed):
   return
  var sit=1.0 if settle else smoothstep(4,6,idle)
  var stretch=sin((fmod(routine_time,42.0)-36)/6.0*PI) if stretching else 0.0

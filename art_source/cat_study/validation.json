@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "clips": {
+    "idle": {
+      "duration_seconds": 8.0,
+      "loop_seam_max_error": 0.0,
+      "front_paw_motion_metres": 0.0003125689505488029
+    },
+    "look": {
+      "duration_seconds": 5.0,
+      "loop_seam_max_error": 0.0,
+      "front_paw_motion_metres": 0.00031255259018092026
+    },
+    "walk": {
+      "duration_seconds": 1.2,
+      "loop_seam_max_error": 2.694223001241114e-18,
+      "front_paw_motion_metres": 0.07897196054066075
+    }
+  },
+  "walk_floor_check": {
+    "minimum_skin_height": 0.0016230414621531963,
+    "maximum_lowest_skin_height": 0.0023804029915481806,
+    "lowest_rest_vertex": [
+      -0.022335344925522804,
+      -0.13674572110176086,
+      0.001719965715892613
+    ],
+    "lowest_vertex_weights": {
+      "FrontL_Paw": 1.0
+    },
+    "paw_head_positions": {
+      "FrontL_Paw": [
+        -0.025094302371144295,
+        -0.1395074874162674,
+        0.039996419101953506
+      ],
+      "FrontR_Paw": [
+        0.07266011834144592,
+        -0.07811591029167175,
+        0.05771024152636528
+      ],
+      "BackL_Paw": [
+        -0.08124180138111115,
+        0.12046615779399872,
+        0.03999998793005943
+      ],
+      "BackR_Paw": [
+        0.04859647527337074,
+        0.17127534747123718,
+        0.03999987244606018
+      ]
+    }
+  },
+  "packed_textures": true,
+  "skin_weight_sums_valid": true
+}

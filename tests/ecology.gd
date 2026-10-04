@@ -93,6 +93,17 @@ static func run(g, failures: Array) -> void:
  for p in route:
   if not g.accessible(Vector3(p.x,0,p.y)): failures.append("Companion route crosses water")
  for pet in g.pets:
+  if pet.model.has_meta("supplied_animal"):
+   var skeleton=pet.model.find_child("Skeleton3D*",true,false) as Skeleton3D
+   if not skeleton or not GardenAnimalMotion.player(pet.model):failures.append("Companion anatomical rig missing");continue
+   for name in ["FrontL","FrontR","BackL","BackR"]:
+    for suffix in ["_Upper","_Lower","_Paw"]:
+     if skeleton.find_bone(name+suffix)<0:failures.append("Companion leg chain missing")
+   var tail=skeleton.find_bone("Tail1")
+   var tail_pose_before=skeleton.get_bone_pose_rotation(tail)
+   pet.animate(g,.15,0)
+   if absf(tail_pose_before.dot(skeleton.get_bone_pose_rotation(tail)))>.9999999:failures.append("Companion tail is not animated")
+   continue
   if not is_instance_valid(pet.body) or pet.legs.size()!=4: failures.append("Articulated companion joints missing")
   var tail_before=pet.tail.rotation.y
   pet.animate(g,.15,0)

@@ -1,0 +1,16 @@
+{
+  "animal": "rabbit",
+  "source": "art_source/animal_studies/rabbit/rabbit_review.blend",
+  "production_asset": "assets/wildlife/rabbit.glb",
+  "game_source": "art_source/animal_studies/rabbit/rabbit_game.blend",
+  "sha256": "37e75b84c8d11d1355793301ff79e3849edb02f473f0348b6205d2551b1fdf60",
+  "bytes": 5743524,
+  "clips": [
+    "idle",
+    "hop",
+    "forage",
+    "look"
+  ],
+  "texture_conversions": [],
+  "canonical_export": "art_source/animal_studies/rabbit/export/rabbit_game.glb"
+}

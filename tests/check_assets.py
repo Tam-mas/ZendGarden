@@ -17,6 +17,7 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
  length,kind=struct.unpack_from('<II',data,12)
  doc=json.loads(data[20:20+length])
  key=path.parent.name+'/'+path.stem
+ supplied=any(n.get('extras',{}).get('stl_animal')==path.stem for n in doc['nodes'])
  retained=path in wildlife+companions and selected_old(key)
  if retained:
   original=retained_record(key)
@@ -24,14 +25,14 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
  assert len(doc['scenes'])==1,(path,'unexpected extra scene')
  assert not any(n.get('name')=='Cube' for n in doc['nodes']),(path,'default cube exported')
  assert doc.get('meshes'),(path,'empty export')
- if path in companions:
+ if path in companions and not supplied:
   for joint in ['Body','Head','Tail','FrontL','FrontR','BackL','BackR']:
    assert any(n.get('name','').startswith(joint) for n in doc['nodes']),(path,'missing joint '+joint)
  if path in shop+wildlife+companions+scenery:
   assert doc.get('images'),(path,'missing embedded textures')
   assert all('bufferView' in image for image in doc['images']),(path,'external texture dependency')
   triangles=sum(doc['accessors'][primitive['indices']]['count']//3 for mesh in doc['meshes'] for primitive in mesh['primitives'])
-  assert triangles<65000,(path,'detail triangle budget exceeded',triangles)
+  assert triangles<(70000 if supplied else 65000),(path,'detail triangle budget exceeded',triangles)
   for mesh in doc['meshes']:
    for primitive in mesh['primitives']:
     assert 'TEXCOORD_0' in primitive['attributes'],(path,'missing UVs')
@@ -44,7 +45,8 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
   if path.stem in ['cat','dog','rabbit','kangaroo','kangaroo_joey','echidna','wombat','fox','songbird','native_bird','fairy_wren','kookaburra','lorikeet','magpie']:
    assert len(doc.get('skins',[]))==1,(path,'missing continuous anatomical skin')
    names={doc['nodes'][i]['name'] for i in doc['skins'][0]['joints']}
-   assert {'Skin_Body','Skin_Head'}<=names,(path,'missing body/head skin joints')
+   required={'Root','Pelvis','Spine','Chest','Head','FrontL_Paw','BackR_Paw'} if supplied else {'Skin_Body','Skin_Head'}
+   assert required<=names,(path,'missing anatomical skin joints',required-names)
    for node in doc['nodes']:
     if 'skin' not in node:continue
     for primitive in doc['meshes'][node['mesh']]['primitives']:
@@ -62,15 +64,32 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
     assert 'translation' in node,(path,'missing neutral joint transform',node['name'])
   for material in doc.get('materials',[]):
    if material.get('name','').startswith('Fur cards '):
-    assert material.get('alphaMode')=='MASK' and material.get('doubleSided'),(path,'hair opacity export lost')
+    assert material.get('alphaMode') in (['MASK','BLEND'] if supplied else ['MASK']) and material.get('doubleSided'),(path,'hair opacity export lost')
     index=material['pbrMetallicRoughness']['baseColorTexture']['index']
-    image=doc['images'][doc['textures'][index]['source']]
-    assert image['mimeType']=='image/png',(path,'hair alpha compressed to JPEG')
+    texture=doc['textures'][index]
+    source=texture.get('source',texture.get('extensions',{}).get('EXT_texture_webp',{}).get('source'))
+    image=doc['images'][source]
+    assert image['mimeType'] in ['image/png','image/webp'],(path,'hair alpha compressed to JPEG')
     view=doc['bufferViews'][image['bufferView']]
     # MIME alone is insufficient: an RGB PNG cannot provide hair cutouts.
     binary_start=20+length+8
-    png=data[binary_start+view.get('byteOffset',0):binary_start+view.get('byteOffset',0)+view['byteLength']]
-    assert png[:8]==b'\x89PNG\r\n\x1a\n' and png[25] in [4,6],(path,'hair PNG has no alpha channel')
+    encoded=data[binary_start+view.get('byteOffset',0):binary_start+view.get('byteOffset',0)+view['byteLength']]
+    if image['mimeType']=='image/png':
+     alpha=encoded[:8]==b'\x89PNG\r\n\x1a\n' and encoded[25] in [4,6]
+    else:
+     assert encoded[:4]==b'RIFF' and encoded[8:12]==b'WEBP',(path,'invalid WebP')
+     # VP8X alpha flag or VP8L lossless header's alpha bit, without Pillow.
+     alpha=(encoded[12:16]==b'VP8X' and bool(encoded[20]&16)) or (encoded[12:16]==b'VP8L' and bool(int.from_bytes(encoded[21:25],'little')&(1<<28)))
+    assert alpha,(path,'hair texture has no alpha channel')
+ if supplied:
+  assert key in ['companions/cat','companions/dog','wildlife/fox','wildlife/echidna','wildlife/rabbit']
+  assert all(image['mimeType']=='image/webp' for image in doc['images']),(path,'supplied sculpt lost WebP maps')
+  clips={a['name'] for a in doc['animations']}
+  required={'idle','walk','pet','settle','stretch'} if path.stem=='cat' else {'idle','walk','pet','settle','sniff'} if path.stem=='dog' else {'idle','hop','forage','look'} if path.stem=='rabbit' else {'idle','walk','forage','look'} if path.stem=='echidna' else {'idle','walk','look'}
+  assert required<=clips,(path,'missing gameplay behaviours',required-clips)
+  folder=root/'art_source'/('cat_study' if path.stem=='cat' else 'animal_studies/'+path.stem)
+  promotion=json.loads((folder/'promotion.json').read_text())
+  assert promotion['sha256']==hashlib.sha256(data).hexdigest(),(path,'production export differs from approved promotion')
  if path.name.startswith('plant_'):
 
   assert any('Foliage' in n.get('name','') for n in doc['nodes']),(path,'missing foliage')

@@ -1,0 +1,103 @@
+{
+  "animal": "rabbit",
+  "source_sha256": "5253d3f1ddbb87885b3127f1cbc67d889ad36ce6472f6434d31c8c01d6b3354c",
+  "source_triangles": 2000188,
+  "exported_triangles": 56348,
+  "glb_bytes": 5743492,
+  "bones": 22,
+  "clips": {
+    "idle": 8,
+    "hop": 1.2,
+    "forage": 6,
+    "look": 5
+  },
+  "fur_cards": 2045,
+  "texture_conversions": [
+    {
+      "png_bytes": 4715187,
+      "webp_bytes": 1172188,
+      "lossless": false,
+      "file": "rabbit_albedo.webp"
+    },
+    {
+      "png_bytes": 2626070,
+      "webp_bytes": 1439070,
+      "lossless": true,
+      "file": "rabbit_normal.webp"
+    },
+    {
+      "png_bytes": 19987,
+      "webp_bytes": 9920,
+      "lossless": true,
+      "file": "rabbit_fur_0.webp"
+    },
+    {
+      "png_bytes": 19841,
+      "webp_bytes": 9940,
+      "lossless": true,
+      "file": "rabbit_fur_1.webp"
+    },
+    {
+      "png_bytes": 19962,
+      "webp_bytes": 9890,
+      "lossless": true,
+      "file": "rabbit_fur_2.webp"
+    },
+    {
+      "png_bytes": 19951,
+      "webp_bytes": 9788,
+      "lossless": true,
+      "file": "rabbit_fur_3.webp"
+    }
+  ],
+  "paw_centres": {
+    "FrontL": [
+      -0.04728242754936218,
+      -0.11260908842086792,
+      0.01600000075995922
+    ],
+    "FrontR": [
+      0.058522503823041916,
+      -0.10025403648614883,
+      0.01600000075995922
+    ],
+    "BackL": [
+      -0.07550600171089172,
+      0.07998881489038467,
+      0.01600000075995922
+    ],
+    "BackR": [
+      0.07160387933254242,
+      0.05588902533054352,
+      0.01600000075995922
+    ]
+  },
+  "eye_surfaces": [
+    {
+      "surface": [
+        -0.06129789352416992,
+        -0.1550000011920929,
+        0.23399999737739563
+      ],
+      "normal": [
+        -0.9769740700721741,
+        0.06224841624498367,
+        -0.20407544076442719
+      ]
+    },
+    {
+      "surface": [
+        0.027201414108276367,
+        -0.1679999977350235,
+        0.23800000548362732
+      ],
+      "normal": [
+        0.9555534720420837,
+        -0.2735747992992401,
+        0.1098831370472908
+      ]
+    }
+  ],
+  "prototype_only": true,
+  "review_refinement": "Retracted open lids leave no flattened flap; echidna eyes are dark."
+}

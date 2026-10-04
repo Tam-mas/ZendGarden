@@ -37,7 +37,8 @@ func spawn_kind(kind: String) -> void:
   if kind!="fox" and not safe(pos):pos=start
   pos=GardenTerrain.point(pos)
   n.position=pos
-  guests.append({"node":n,"pos":pos,"home":pos,"target":pos,"age":0.0,"wait":float(i),"phase":float(i)*1.5,"kangaroo":kind=="kangaroo","kind":kind,"speed":{"rabbit":.85,"kangaroo":1.4,"wombat":.28,"echidna":.22,"fox":.8}.get(kind,.6)})
+  var speed=GardenAnimalMotion.travel_speed(n,{"rabbit":.85,"kangaroo":1.4,"wombat":.28,"echidna":.22,"fox":.8}.get(kind,.6))
+  guests.append({"node":n,"pos":pos,"home":pos,"target":pos,"age":0.0,"wait":float(i),"phase":float(i)*1.5,"kangaroo":kind=="kangaroo","kind":kind,"speed":speed})
 
 func safe(pos: Vector3) -> bool:
  return g.plantable_ground(pos) and g.bed_at(pos)<0 and g.nearest_plot(pos)<g.unlocked_plots
@@ -75,9 +76,13 @@ func _process(delta: float) -> void:
    guest.wait=random.randf_range(2,5)
   var moving=guest.wait<=0 and guest.pos.distance_to(guest.target)>.1
   if moving:
-   var next=guest.pos.move_toward(guest.target,delta*guest.speed)
+   var travel_clip="hop" if guest.kind=="rabbit" else "walk"
+   var step=GardenAnimalMotion.travel_distance(guest.node,travel_clip,delta,guest.speed)
+   var next=guest.pos.move_toward(guest.target,step)
    if guest.kind=="fox" or safe(next):
-    var direction=next-guest.pos
+    # Keep facing the destination during the grounded pause between hops.
+    var direction=guest.target-guest.pos
+    direction.y=0
     guest.node.rotation.y=lerp_angle(guest.node.rotation.y,atan2(-direction.x,-direction.z),minf(1,delta*4))
     guest.pos=GardenTerrain.point(next)
    else:
@@ -85,7 +90,8 @@ func _process(delta: float) -> void:
     guest.wait=1.0
   guest.node.position=guest.pos
   var clip="hop" if moving and guest.kind in ["rabbit","kangaroo"] else "walk" if moving else "alert" if shy else "graze" if guest.age>5 else "idle"
-  var authored=GardenAnimalMotion.advance(guest.node,clip,delta,{"wombat":1.66,"echidna":1.9,"fox":1.33}.get(guest.kind,1.0) if moving else 1.0)
+  var motion_speed=GardenAnimalMotion.gait_rate(guest.node,guest.speed,{"wombat":1.66,"echidna":1.9,"fox":1.33}.get(guest.kind,1.0)) if moving else 1.0
+  var authored=GardenAnimalMotion.advance(guest.node,clip,delta,motion_speed)
   if not authored and guest.kind=="rabbit":
    # The reviewed original rabbit uses the garden's procedural hop and head nod.
    var hop=absf(sin(guest.age*11+guest.phase))*.08 if moving else 0.0

@@ -1,0 +1,8 @@
+/*/intake.blend
+/*/prepared.blend
+/*/previews/godot/
+/preview/.godot/
+/*/textures/*.png
+
+*.blend1
+__pycache__/

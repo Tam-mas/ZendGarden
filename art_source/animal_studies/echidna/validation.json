@@ -1,0 +1,44 @@
+{
+  "animal": "echidna",
+  "clips": {
+    "idle": {
+      "seconds": 8.0,
+      "loop_seam": 0.0,
+      "paw_motion": 1.2505564271593518e-06,
+      "min_floor": null,
+      "max_floor": null
+    },
+    "walk": {
+      "seconds": 2.4,
+      "loop_seam": 6.1232346765161455e-18,
+      "paw_motion": 0.023682579548350156,
+      "min_floor": -0.00013298657722771168,
+      "max_floor": 0.00037912430707365274,
+      "lowest_rest_vertex": [
+        0.07920557260513306,
+        0.16323237121105194,
+        -0.00013291467621456832
+      ],
+      "lowest_weights": {
+        "BackR_Paw": 1.0
+      }
+    },
+    "forage": {
+      "seconds": 7.0,
+      "loop_seam": 0.0,
+      "paw_motion": 1.235471620639623e-06,
+      "min_floor": null,
+      "max_floor": null
+    },
+    "look": {
+      "seconds": 6.0,
+      "loop_seam": 0.0,
+      "paw_motion": 1.2505564271593518e-06,
+      "min_floor": null,
+      "max_floor": null
+    }
+  },
+  "maps_packed_webp": true,
+  "skin_weights_valid": true,
+  "export_images_webp": 2
+}

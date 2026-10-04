@@ -1,0 +1,15 @@
+{
+  "animal": "fox",
+  "source": "art_source/animal_studies/fox/fox_review.blend",
+  "production_asset": "assets/wildlife/fox.glb",
+  "game_source": "art_source/animal_studies/fox/fox_game.blend",
+  "sha256": "1030fd26d5f2428fd8ac3572168b08a94595bead921889668c68d5693803085b",
+  "bytes": 7230620,
+  "clips": [
+    "idle",
+    "walk",
+    "look"
+  ],
+  "texture_conversions": [],
+  "canonical_export": "art_source/animal_studies/fox/export/fox_game.glb"
+}

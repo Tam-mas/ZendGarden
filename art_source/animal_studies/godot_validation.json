@@ -1,0 +1,91 @@
+{
+  "dog": [
+    {
+      "animations": [],
+      "height": 1.03749990463257,
+      "model": "current",
+      "textured_surfaces": 19
+    },
+    {
+      "animations": [
+        "idle",
+        "look",
+        "sniff",
+        "walk"
+      ],
+      "height": 0.578056395053864,
+      "model": "prototype",
+      "textured_surfaces": 4
+    }
+  ],
+  "echidna": [
+    {
+      "animations": [
+        "alert",
+        "graze",
+        "idle",
+        "pet",
+        "settle",
+        "walk"
+      ],
+      "height": 0.426791429519653,
+      "model": "current",
+      "textured_surfaces": 22
+    },
+    {
+      "animations": [
+        "forage",
+        "idle",
+        "look",
+        "walk"
+      ],
+      "height": 0.28020703792572,
+      "model": "prototype",
+      "textured_surfaces": 1
+    }
+  ],
+  "fox": [
+    {
+      "animations": [
+        "alert",
+        "graze",
+        "idle",
+        "pet",
+        "settle",
+        "walk"
+      ],
+      "height": 0.830254435539246,
+      "model": "current",
+      "textured_surfaces": 27
+    },
+    {
+      "animations": [
+        "idle",
+        "look",
+        "walk"
+      ],
+      "height": 0.517477810382843,
+      "model": "prototype",
+      "textured_surfaces": 5
+    }
+  ],
+  "rabbit": [
+    {
+      "animations": [],
+      "height": 1.07283127307892,
+      "model": "current",
+      "textured_surfaces": 9
+    },
+    {
+      "animations": [
+        "forage",
+        "hop",
+        "idle",
+        "look"
+      ],
+      "height": 0.349992007017136,
+      "model": "prototype",
+      "textured_surfaces": 5
+    }
+  ]
+}

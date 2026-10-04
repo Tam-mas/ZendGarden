@@ -1,0 +1,79 @@
+{
+  "animal": "echidna",
+  "source_sha256": "e422764607dd1413f727d5bf40738d7f1e780adf08609f8a49f4b6c3dafc88f9",
+  "source_triangles": 1970905,
+  "exported_triangles": 63158,
+  "glb_bytes": 13398072,
+  "bones": 19,
+  "clips": {
+    "idle": 8,
+    "walk": 2.4,
+    "forage": 7,
+    "look": 6
+  },
+  "fur_cards": 0,
+  "texture_conversions": [
+    {
+      "png_bytes": 5315997,
+      "webp_bytes": 910458,
+      "lossless": false,
+      "file": "echidna_albedo.webp"
+    },
+    {
+      "png_bytes": 412,
+      "webp_bytes": 44,
+      "lossless": true,
+      "file": "echidna_normal.webp"
+    }
+  ],
+  "paw_centres": {
+    "FrontL": [
+      -0.04019177705049515,
+      -0.09449078887701035,
+      0.014000000432133675
+    ],
+    "FrontR": [
+      0.04384703189134598,
+      -0.09107516705989838,
+      0.014000000432133675
+    ],
+    "BackL": [
+      -0.055955495685338974,
+      0.08664578944444656,
+      0.014000000432133675
+    ],
+    "BackR": [
+      0.044266462326049805,
+      0.16590385138988495,
+      0.014000000432133675
+    ]
+  },
+  "eye_surfaces": [
+    {
+      "surface": [
+        -0.019121527671813965,
+        -0.1770000010728836,
+        0.12399999797344208
+      ],
+      "normal": [
+        -0.3012145757675171,
+        -0.6914432048797607,
+        -0.6566399931907654
+      ]
+    },
+    {
+      "surface": [
+        0.02369391918182373,
+        -0.1770000010728836,
+        0.13099999725818634
+      ],
+      "normal": [
+        0.5705005526542664,
+        -0.5747036933898926,
+        0.5867236852645874
+      ]
+    }
+  ],
+  "prototype_only": true,
+  "review_refinement": "Retracted open lids leave no flattened flap; echidna eyes are dark."
+}

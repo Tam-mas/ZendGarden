@@ -1,0 +1,12 @@
+{
+  "mode": "built-in image_gen tool",
+  "source_image": "/Users/tam/.codex/generated_images/01a0fe9f-b4be-7e43-bcc5-6acb59bec0d5/exec-7a4f00f8-8639-4bec-bbc8-1bf45182e268.png",
+  "texture": "textures/neutral-short-fur.webp",
+  "original_bytes": 3118714,
+  "webp_bytes": 732998,
+  "webp_quality": 95,
+  "prompt": "Use case: photorealistic-natural. Asset type: seamless PBR base-colour detail texture for realistic 3D rabbit, dog and fox coats. Generate a square, edge-to-edge, tileable macro photograph of densely laid short mammal fur, a neutral grey-taupe undercoat with very fine individual guard hairs. All hair flows mostly from top to bottom with gentle natural variation, no thick clumps, curls, waves, stripes or woven crosshatch. Uniform diffuse illumination; no cast shadows, highlights, vignette, perspective, body parts, skin gaps, text, labels, borders or watermark. This will be retinted with anatomically placed species markings, so keep colour neutral and contrast restrained. Dense fine fibres should read as soft fur when tiled at small physical scale. Seamless on all four edges. Save at high detail.",
+  "use": "Fine coat colour variation combined with anatomy-placed markings; not a measured height map.",
+  "silhouette_alpha_source": "../overhaul/textures/generated/fine-fur-card.png",
+  "normal_source": "Tangent-space baking from the supplied high-resolution STL sculpt, not AI-generated normals."
+}
