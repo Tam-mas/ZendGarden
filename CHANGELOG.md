@@ -1,3 +1,13 @@
+### [2026-10-04 14:52] Added
+
+**Tech:** `art_source/animal_studies/wombat`, `build_animals.py`, `preview/preview.gd` — supplied wombat sculpt coat, rig and motion study
+
+**Dev:** Import the supplied roughly two-million-triangle STL through Blender MCP, preserving the original and a dense hidden source reference. Close thin printed-fur folds with a continuous voxel surface, retain paws/claws during relaxation, fit small eyes and export a 62,356-triangle study with packed WebP maps and a 21-bone rig. Generate coarse fur colour detail and convert all new maps to WebP, saving 47.1% versus their PNG equivalents with lossless normal/alpha checks. Bake idle, slow four-beat walk, forage, look and standing rest; correct uneven sole contacts and keep ear weights off the tall back. Extend the isolated comparison with a frozen main wombat baseline, per-animal capture reports and actual rendered GIFs. Verify all clip loops, weights, anatomical ear bounds and supporting paws approximately 1 mm above the floor; render all actions in Godot Compatibility and Forward+. Refresh the MCP review scene while preserving the existing interactive project and selection. Keep the production wombat, model selections, saves and player release history unchanged.
+
+**Plain:** The supplied wombat now has a detailed coat and gentle movement, with a viewer to compare it beside the garden's current wombat.
+
+**Why:** A stronger sculpt and restrained, grounded movements make the next animal model easier to judge before adding it to the garden.
+
 ### [2026-10-04 13:56] Changed
 
 **Tech:** `GardenArt`, `GardenAnimalMotion`, `GardenCompanion`, `GardenVisitors`, `animal_studies/promote.py` — approved supplied-sculpt production animals

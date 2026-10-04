@@ -23,5 +23,10 @@
     "commit": "e85c209",
     "asset": "assets/wildlife/rabbit.glb",
     "sha256": "6f225e55dacd1a9b22d135c1495545645cef157544cc16738df33ab61edfd6e2"
+  },
+  "wombat": {
+    "commit": "4fe13f986ea74e9ed2f6260fd866bfd432073bed",
+    "asset": "assets/wildlife/wombat.glb",
+    "sha256": "24225e88cff442e73d9c32079f126da0105b6a6cb9da9e3f3f321a60df4efe0d"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "tool": "image_gen",
+  "source": "/Users/tam/.codex/generated_images/01a0fe9f-b4be-7e43-bcc5-6acb59bec0d5/exec-d3462b1a-0f78-40e7-bf03-7a6e693b9b28.png",
+  "output": "coarse-fur-source.webp",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "source_bytes": 4027246,
+  "webp_bytes": 997626,
+  "conversion": {
+    "format": "WebP",
+    "quality": 95,
+    "method": 6
+  },
+  "prompt": "Use case: photorealistic-natural. Asset type: tileable neutral fur microdetail image for a Blender wombat albedo material. Generate a square, seamless close-up texture swatch of dense short coarse mammal fur like the coat of a bare-nosed wombat: compact straight and slightly irregular bristly guard hairs lying in roughly one direction, with fine dense underfur and small natural variation. Neutral mid grey-beige values, very low large-scale contrast so colour can be tinted separately. Orthographic flat top-down macro material scan, even diffuse illumination, no shadows or highlights baked into the image. Fill the entire frame with consistent fur density, uniform fibre scale, matching opposite edges. No animal face or body, no bare skin, no eyes, no objects, no panels, no labels, no border, no watermark. Texture detail must read as hairs rather than grass, wood grain or a knitted fabric."
+}

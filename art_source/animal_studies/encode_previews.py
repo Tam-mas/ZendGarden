@@ -1,9 +1,10 @@
 """Package actual rendered Godot sequences and Blender portraits for review."""
 from pathlib import Path
-import json,shutil
+import json,shutil,sys
 from PIL import Image,ImageChops,ImageDraw,ImageFont
 ROOT=Path(__file__).resolve().parent
-for kind in ['fox','dog','echidna','rabbit']:
+animals=sys.argv[1:] or ['fox','dog','echidna','rabbit']
+for kind in animals:
  folder=ROOT/kind/'previews'
  shutil.copyfile(folder/'godot/idle_00.png',folder/'comparison.png')
  report=json.loads((ROOT/kind/'report.json').read_text())
@@ -20,6 +21,7 @@ for kind in ['fox','dog','echidna','rabbit']:
    diff=ImageChops.difference(images[0].crop((480,170,960,600)),images[count//3].crop((480,170,960,600)))
    assert diff.getbbox(),('static prototype',kind,clip)
   print('RENDERED_ANIMATION',kind,clip,count)
+if sys.argv[1:]:sys.exit(0)
 canvas=Image.new('RGB',(1200,1290),'#eadfce');draw=ImageDraw.Draw(canvas)
 try:font=ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf',24)
 except OSError:font=ImageFont.load_default()
