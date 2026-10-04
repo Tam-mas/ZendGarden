@@ -38,12 +38,22 @@ func run() -> void:
  for kind in ["rabbit","kangaroo"]:
   for joey in [false,true]:
    var model=GardenVisitors.model(kind,joey)
+   if model.has_meta("supplied_animal"):
+    var skeleton=model.find_child("Skeleton3D*",true,false) as Skeleton3D
+    if not skeleton or skeleton.find_bone("Head")<0 or not GardenAnimalMotion.player(model):failures.append(kind+" anatomical head animation missing")
+    model.free()
+    continue
    if not model.has_node("Head") or mesh_count(model.get_node("Head"))==0: failures.append(kind+" head animation contract broken")
    if model.get_node("Head").position.y<.3: failures.append(kind+" head transform lost")
    model.free()
  for is_cat in [true,false]:
   var model=GardenArt.companion(is_cat)
   root.add_child(model)
+  if model.model.has_meta("supplied_animal"):
+   var animation=GardenAnimalMotion.player(model.model)
+   if not animation or not animation.has_animation("pet") or not animation.has_animation("settle"):failures.append("Companion interaction clips missing")
+   model.free()
+   continue
   if not model.body or not model.head or not model.tail or model.legs.size()!=4: failures.append("Companion joints missing")
   for leg in model.legs:
    if not is_instance_valid(leg) or mesh_count(leg)==0: failures.append("Companion leg missing geometry")

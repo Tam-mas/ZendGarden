@@ -1,8 +1,8 @@
 {
  "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
  "choices": {
-  "companions/cat": "old",
-  "companions/dog": "old",
+  "companions/cat": "new",
+  "companions/dog": "new",
   "scenery/footbridge": "new",
   "scenery/garden_shed": "new",
   "scenery/lakeside_cottage": "new",
@@ -53,7 +53,7 @@
   "wildlife/magpie": "new",
   "wildlife/mantis": "new",
   "wildlife/native_bird": "new",
-  "wildlife/rabbit": "old",
+  "wildlife/rabbit": "new",
   "wildlife/songbird": "new",
   "wildlife/wombat": "new"
  },
@@ -64,13 +64,17 @@
    "asset": "assets/companions/cat.glb",
    "has_old": true,
    "id": "companions/cat",
-   "new_sha256": "4d57a16b16a40c3e6eda9ddbadaaa8ee1b88cc5c51db863296cd7f87e70eaaed"
+   "new_sha256": "757c6076c2c337a89e89407c1e484f92254fcbcb0d31f646a3f2f2689c0a0c93",
+   "source": "art_source/cat_study/cat_game.blend",
+   "variant": "supplied-stl"
   },
   {
    "asset": "assets/companions/dog.glb",
    "has_old": true,
    "id": "companions/dog",
-   "new_sha256": "1ffe42b4e9c52a36acdac1485dc5f49aa5c6050fe12e693058922bc2ef0dcb07"
+   "new_sha256": "df40dccec77743ddcc10c7e39e706659cb63d42e80cf3396f86ea78c3c2d68a7",
+   "source": "art_source/animal_studies/dog/dog_game.blend",
+   "variant": "supplied-stl"
   },
   {
    "asset": "assets/wildlife/bee.glb",
@@ -100,7 +104,9 @@
    "asset": "assets/wildlife/echidna.glb",
    "has_old": false,
    "id": "wildlife/echidna",
-   "new_sha256": "0e703f243eda6373457cfa2811f10c60323fc80ce5161babbc10c5f1e0cbf678"
+   "new_sha256": "442bb80fed05ffbea04b2ef9b2724cbdb0ae3c5dac0611c8f6c5ca00dd914472",
+   "source": "art_source/animal_studies/echidna/echidna_game.blend",
+   "variant": "supplied-stl"
   },
   {
    "asset": "assets/wildlife/emperor_gum_moth.glb",
@@ -130,7 +136,9 @@
    "asset": "assets/wildlife/fox.glb",
    "has_old": false,
    "id": "wildlife/fox",
-   "new_sha256": "23a8d4dfe2e156ae13b6c04b846f8b9a49d6aced5ddc213f55ec5fd086329cf7"
+   "new_sha256": "1030fd26d5f2428fd8ac3572168b08a94595bead921889668c68d5693803085b",
+   "source": "art_source/animal_studies/fox/fox_game.blend",
+   "variant": "supplied-stl"
   },
   {
    "asset": "assets/wildlife/frog.glb",
@@ -202,7 +210,9 @@
    "asset": "assets/wildlife/rabbit.glb",
    "has_old": true,
    "id": "wildlife/rabbit",
-   "new_sha256": "1d0bb1fa093fcfc105990ad4bf316e936c36173aa15a83516dfe9bce4d8d7927"
+   "new_sha256": "37e75b84c8d11d1355793301ff79e3849edb02f473f0348b6205d2551b1fdf60",
+   "source": "art_source/animal_studies/rabbit/rabbit_game.blend",
+   "variant": "supplied-stl"
   },
   {
    "asset": "assets/wildlife/songbird.glb",
@@ -448,5 +458,121 @@
   "wildlife/songbird": true,
   "wildlife/wombat": true
  },
- "schema": 1
+ "schema": 1,
+ "supplied_models": {
+  "cat": {
+   "animal": "cat",
+   "source": "art_source/cat_study/cat_study.blend",
+   "production_asset": "assets/companions/cat.glb",
+   "game_source": "art_source/cat_study/cat_game.blend",
+   "sha256": "757c6076c2c337a89e89407c1e484f92254fcbcb0d31f646a3f2f2689c0a0c93",
+   "bytes": 7342532,
+   "clips": [
+    "idle",
+    "look",
+    "walk",
+    "pet",
+    "settle",
+    "stretch"
+   ],
+   "texture_conversions": [
+    {
+     "file": "cat_sculpt_normal.webp",
+     "png_bytes": 3922821,
+     "webp_bytes": 2686354,
+     "lossless": true
+    },
+    {
+     "file": "cat_short_fur_0.webp",
+     "png_bytes": 20095,
+     "webp_bytes": 10014,
+     "lossless": true
+    },
+    {
+     "file": "cat_short_fur_1.webp",
+     "png_bytes": 19926,
+     "webp_bytes": 9898,
+     "lossless": true
+    },
+    {
+     "file": "cat_short_fur_2.webp",
+     "png_bytes": 20063,
+     "webp_bytes": 10130,
+     "lossless": true
+    },
+    {
+     "file": "cat_tabby_albedo.webp",
+     "png_bytes": 2618079,
+     "webp_bytes": 1422484,
+     "lossless": true
+    }
+   ],
+   "canonical_export": "art_source/cat_study/export/cat_game.glb"
+  },
+  "dog": {
+   "animal": "dog",
+   "source": "art_source/animal_studies/dog/dog_review.blend",
+   "production_asset": "assets/companions/dog.glb",
+   "game_source": "art_source/animal_studies/dog/dog_game.blend",
+   "sha256": "df40dccec77743ddcc10c7e39e706659cb63d42e80cf3396f86ea78c3c2d68a7",
+   "bytes": 7780340,
+   "clips": [
+    "idle",
+    "walk",
+    "sniff",
+    "look",
+    "pet",
+    "settle"
+   ],
+   "texture_conversions": [],
+   "canonical_export": "art_source/animal_studies/dog/export/dog_game.glb"
+  },
+  "fox": {
+   "animal": "fox",
+   "source": "art_source/animal_studies/fox/fox_review.blend",
+   "production_asset": "assets/wildlife/fox.glb",
+   "game_source": "art_source/animal_studies/fox/fox_game.blend",
+   "sha256": "1030fd26d5f2428fd8ac3572168b08a94595bead921889668c68d5693803085b",
+   "bytes": 7230620,
+   "clips": [
+    "idle",
+    "walk",
+    "look"
+   ],
+   "texture_conversions": [],
+   "canonical_export": "art_source/animal_studies/fox/export/fox_game.glb"
+  },
+  "echidna": {
+   "animal": "echidna",
+   "source": "art_source/animal_studies/echidna/echidna_review.blend",
+   "production_asset": "assets/wildlife/echidna.glb",
+   "game_source": "art_source/animal_studies/echidna/echidna_game.blend",
+   "sha256": "442bb80fed05ffbea04b2ef9b2724cbdb0ae3c5dac0611c8f6c5ca00dd914472",
+   "bytes": 13398108,
+   "clips": [
+    "idle",
+    "walk",
+    "forage",
+    "look"
+   ],
+   "texture_conversions": [],
+   "canonical_export": "art_source/animal_studies/echidna/export/echidna_game.glb"
+  },
+  "rabbit": {
+   "animal": "rabbit",
+   "source": "art_source/animal_studies/rabbit/rabbit_review.blend",
+   "production_asset": "assets/wildlife/rabbit.glb",
+   "game_source": "art_source/animal_studies/rabbit/rabbit_game.blend",
+   "sha256": "37e75b84c8d11d1355793301ff79e3849edb02f473f0348b6205d2551b1fdf60",
+   "bytes": 5743524,
+   "clips": [
+    "idle",
+    "hop",
+    "forage",
+    "look"
+   ],
+   "texture_conversions": [],
+   "canonical_export": "art_source/animal_studies/rabbit/export/rabbit_game.glb"
+  }
+ }
 }

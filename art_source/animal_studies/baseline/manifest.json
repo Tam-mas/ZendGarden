@@ -1,0 +1,27 @@
+{
+  "cat": {
+    "commit": "e85c209",
+    "asset": "assets/companions/cat.glb",
+    "sha256": "11550433a53a7ccfa58d3fb44317251ed981116d857d99dcdf90789632c5b54e"
+  },
+  "dog": {
+    "commit": "e85c209",
+    "asset": "assets/companions/dog.glb",
+    "sha256": "e02ae7f6059f47a9bde39905fdb37707380ee451285616a660ad067e9e4521d6"
+  },
+  "fox": {
+    "commit": "e85c209",
+    "asset": "assets/wildlife/fox.glb",
+    "sha256": "23a8d4dfe2e156ae13b6c04b846f8b9a49d6aced5ddc213f55ec5fd086329cf7"
+  },
+  "echidna": {
+    "commit": "e85c209",
+    "asset": "assets/wildlife/echidna.glb",
+    "sha256": "0e703f243eda6373457cfa2811f10c60323fc80ce5161babbc10c5f1e0cbf678"
+  },
+  "rabbit": {
+    "commit": "e85c209",
+    "asset": "assets/wildlife/rabbit.glb",
+    "sha256": "6f225e55dacd1a9b22d135c1495545645cef157544cc16738df33ab61edfd6e2"
+  }
+}

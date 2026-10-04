@@ -54,6 +54,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$overhaul_log" || ! rg -Fq 'OVERHAUL_MODELS_RESU
   exit 1
 fi
 plant_log="$(mktemp -t zend-garden-plants)"
+supplied_log="$(mktemp -t zend-garden-supplied)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/supplied_animals.gd > "$supplied_log" 2>&1 || { cat "$supplied_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$supplied_log" || ! rg -Fq 'SUPPLIED_ANIMALS_RESULT: []' "$supplied_log"; then
+  cat "$supplied_log"
+  exit 1
+fi
 "$GODOT_BIN" --headless --path "$PWD" --script tests/plant_models.gd > "$plant_log" 2>&1 || { cat "$plant_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$plant_log" || ! rg -Fq 'PLANT_MODELS_RESULT: []' "$plant_log"; then
   cat "$plant_log"

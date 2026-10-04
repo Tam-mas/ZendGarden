@@ -1,3 +1,13 @@
+### [2026-10-04 13:56] Changed
+
+**Tech:** `GardenArt`, `GardenAnimalMotion`, `GardenCompanion`, `GardenVisitors`, `animal_studies/promote.py` — approved supplied-sculpt production animals
+
+**Dev:** Replace cat, dog, fox, echidna and rabbit production GLBs with the approved STL-based models. Preserve rig facing wrappers, per-instance animation resources and navigation roots; map visitor alert/forage states, match walk speed to stance timing and integrate rabbit travel during flight. Add grounded companion pet/settle actions and a cat stretch without changing approved anatomy or coats. Embed all five models' maps as WebP, preserving lossless normals and alpha; retain packed editable game sources, canonical exports and frozen main review baselines. Record the new selections and protect them during older library rebuilds. Add production rig/clip/contact checks and extend source verification. Add player release 34; existing saves and dismissal state stay compatible.
+
+**Plain:** The approved detailed cat, dog, fox, echidna and rabbit now appear in the garden with their coats, natural movement and familiar interactions.
+
+**Why:** Better animal shapes and species-specific detail make companions and quiet visitors more enjoyable to watch.
+
 ### [2026-10-04 12:31] Added
 
 **Tech:** `art_source/animal_studies` — supplied fox, dog, echidna and rabbit sculpt texture/animation prototypes

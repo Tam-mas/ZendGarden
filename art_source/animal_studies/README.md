@@ -1,6 +1,6 @@
 # Supplied animal sculpt studies
 
-Four editable, textured and animated prototypes made from Tam's supplied STL files through Blender MCP intake and sequential Blender authoring/export. This extends the separate cat experiment. Production garden assets and the existing model selections are unchanged.
+Four editable, textured and animated prototypes made from Tam's supplied STL files through Blender MCP intake and sequential Blender authoring/export. This extends the separate cat experiment. The approved dog, fox, echidna and rabbit now replace their production garden assets, alongside the earlier supplied cat. Other model selections are preserved.
 
 The source STLs each contain about two million triangles. Each full `.blend` preserves the dense sculpt in a hidden reference collection, alongside the lighter UV-mapped, weighted game mesh, materials and baked actions. The `_review.blend` files contain the complete editable prototype and studio without the dense reference. Their scenes have also been appended through MCP to the running Blender session; the pre-existing scene, selection, file and preferences were preserved.
 
@@ -21,11 +21,11 @@ Run the standalone viewer from the project root:
 /Applications/Godot.app/Contents/MacOS/Godot --path art_source/animal_studies/preview
 ```
 
-Select Dog, Fox, Echidna, Rabbit or Cat, then choose a motion. Drag to orbit, scroll to zoom and press Space to pause. The current game asset is on the left; the supplied-sculpt prototype is on the right. Posed vertices determine their displayed heights, with the same lighting and fur shading. Embedded old animations are played where available; the retained dog/rabbit/cat use their familiar procedural motion. Display transforms belong to separate parent nodes so imported animation cannot override the review positions.
+Select Dog, Fox, Echidna, Rabbit or Cat, then choose a motion. Drag to orbit, scroll to zoom and press Space to pause. The previous game asset from GitHub main at `e85c209` is on the left; the supplied-sculpt prototype is on the right. Posed vertices determine their displayed heights, with the same lighting and fur shading. Embedded old animations are played where available; the retained dog/rabbit/cat use their familiar procedural motion. Display transforms belong to separate parent nodes so imported animation cannot override the review positions.
 
 In the running Blender session, choose a `Zend STL — animal` scene: Idle is enabled for playback. In the NLA editor, mute Idle and unmute the desired action track to review a different motion. The saved source files keep their tracks muted for a clean rest-pose view; unmute one track to play it, and set the timeline range to its strip.
 
-The runtime GLTF loader retains immutable tracks, since dropping fixed joint transforms produces a misleading, disjointed baseline fox. It uses named skin bindings and keeps the complete animation tracks; see the primary [Godot GLTFDocument documentation](https://docs.godotengine.org/en/stable/classes/class_gltfdocument.html). This viewer correction does not change the garden's asset import or controller.
+The runtime GLTF loader retains immutable tracks, since dropping fixed joint transforms produces a misleading, disjointed baseline fox. It uses named skin bindings and keeps the complete animation tracks; see the primary [Godot GLTFDocument documentation](https://docs.godotengine.org/en/stable/classes/class_gltfdocument.html). The game also retains the complete supplied rig wrapper and its facing transform beneath an independent navigation root.
 
 Actual Godot-rendered comparison PNGs and animated GIFs are saved under each animal's `previews/`. `portraits.webp` is a contact sheet of the Blender studio renders, not an image-generated illustration. The individual studio portraits and temporary raw/close-up views are also available there.
 
@@ -72,4 +72,10 @@ Repeat for `dog`, `echidna` and `rabbit`. `species.py` stores measured asymmetri
 
 These supplied sculpts are a stronger anatomical starting point, especially the fox and echidna. They still contain print-style carved fur, fused details and some stylised proportions. Decimation and mild smoothing preserve those limitations. Deliberate retopology/sculpt cleanup would improve joint deformation and reduce download/vertex costs further.
 
-The actions are in-place review clips. Game integration must align navigation speeds with foot-contact timing and add the appropriate sitting, sleeping, greeting/petting and transition actions. The rabbit's original rounded head and body proportions remain stylised. These prototypes have not been substituted into the live garden or published.
+The original study clips remain available for comparison. Compact `<animal>_game.blend` sources and `export/<animal>_game.glb` exports are the production versions. The dog adds petting and relaxed, grounded settling clips; the cat also adds a stretch. Navigation speed follows the measured stance timing, and rabbit travel follows its airborne hop phase. Alert and grazing states dispatch to look or forage as appropriate. The rabbit retains the supplied sculpt's rounded proportions. Sources and reports preserve that provenance.
+
+## Production rebuild and checks
+
+Run `promote.py -- <animal>` inside an isolated Blender process, sequentially for cat, dog, fox, echidna and rabbit. It retains approved geometry and coats, adds companion interaction actions, embeds WebP maps and writes both canonical and game exports. `promotion.json` records each hash; `model_choices.json` records the approved replacements, and the selection policy protects them from older library rebuilds.
+
+Run `tests/check_supplied_sources.py` inside Blender for packed maps, finite poses, loop seams and sampled coat ground contact. `tests/supplied_animals.gd` checks real Godot loading, orientation, clip dispatch, navigation independence, articulated knees and planted ankle heights. The full game suite covers calling, settling, petting, sunny stretching, sniffing and both renderers. Review baselines are frozen in `baseline/`, with their hashes and commit in its manifest. Garden save data and dismissal history remain compatible.

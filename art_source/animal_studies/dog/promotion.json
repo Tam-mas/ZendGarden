@@ -1,0 +1,18 @@
+{
+  "animal": "dog",
+  "source": "art_source/animal_studies/dog/dog_review.blend",
+  "production_asset": "assets/companions/dog.glb",
+  "game_source": "art_source/animal_studies/dog/dog_game.blend",
+  "sha256": "df40dccec77743ddcc10c7e39e706659cb63d42e80cf3396f86ea78c3c2d68a7",
+  "bytes": 7780340,
+  "clips": [
+    "idle",
+    "walk",
+    "sniff",
+    "look",
+    "pet",
+    "settle"
+  ],
+  "texture_conversions": [],
+  "canonical_export": "art_source/animal_studies/dog/export/dog_game.glb"
+}

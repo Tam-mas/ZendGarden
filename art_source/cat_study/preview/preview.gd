@@ -41,7 +41,7 @@ func _ready() -> void:
  add_child(floor)
  camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=1.5
  camera.current=true;add_child(camera);update_camera()
- var paths=["../../../assets/companions/cat.glb","../export/cat_study.glb"]
+ var paths=["../../animal_studies/baseline/cat.glb","../export/cat_study.glb"]
  for i in range(2):
   var document=GLTFDocument.new();var state=GLTFState.new()
   var file=ProjectSettings.globalize_path("res://"+paths[i]).simplify_path()
@@ -64,7 +64,7 @@ func _ready() -> void:
    old_body=old_model.find_child("Body*",true,false)
    if old_body:old_rest=old_body.position
   var label=Label3D.new()
-  label.text="Current game cat" if i==0 else "Your STL · textured and rigged"
+  label.text="Previous game cat" if i==0 else "Your STL · textured and rigged"
   label.font_size=36;label.pixel_size=.0007
   label.position=Vector3(model.position.x,.65,0)
   label.billboard=BaseMaterial3D.BILLBOARD_ENABLED

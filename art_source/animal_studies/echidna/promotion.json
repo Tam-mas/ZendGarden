@@ -1,0 +1,16 @@
+{
+  "animal": "echidna",
+  "source": "art_source/animal_studies/echidna/echidna_review.blend",
+  "production_asset": "assets/wildlife/echidna.glb",
+  "game_source": "art_source/animal_studies/echidna/echidna_game.blend",
+  "sha256": "442bb80fed05ffbea04b2ef9b2724cbdb0ae3c5dac0611c8f6c5ca00dd914472",
+  "bytes": 13398108,
+  "clips": [
+    "idle",
+    "walk",
+    "forage",
+    "look"
+  ],
+  "texture_conversions": [],
+  "canonical_export": "art_source/animal_studies/echidna/export/echidna_game.glb"
+}

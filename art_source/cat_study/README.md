@@ -1,8 +1,6 @@
 # Imported cat experiment
 
-This is a separate modelling experiment. The garden's selected cat, asset paths,
-behaviours and model-choice file are unchanged. The folder is excluded from Godot
-resource imports and production exports.
+This folder preserves the original supplied-cat experiment and the approved production version. `cat_game.blend` and `export/cat_game.glb` now supply the garden cat, with WebP maps and grounded petting, resting and stretching clips. The original study is unchanged. Source folders are excluded from Godot resource imports and production exports; the game loads `assets/companions/cat.glb`.
 
 ## Review
 
@@ -12,7 +10,7 @@ Open `cat_study.blend` in Blender, or run the standalone Godot viewer:
 /Applications/Godot.app/Contents/MacOS/Godot --path art_source/cat_study/preview
 ```
 
-The current game cat is on the left and the textured STL prototype on the right.
+The previous game cat from main at `e85c209` is on the left and the textured STL prototype on the right.
 Both have the same overall height and share lighting. The original cat's rigid
 walk, breathing, ear and tail motions reproduce its companion controller; look
 mode supplies a head-turn target for comparison. The prototype plays its exported
@@ -44,8 +42,7 @@ and GIFs are captures of the exported models rendered in Godot, not Blender shot
 
 The GLB embeds its maps and is about 4.65 MiB. Smooth depth-prepass alpha and
 disabled card shadows are used in this comparison viewer to avoid a stippled coat
-at its viewing distance. A production integration should carry that rendering
-treatment over rather than blindly using the existing alpha-hash fur policy.
+at its viewing distance. The production model uses the same rendering treatment.
 
 ## Limits and next production step
 
@@ -58,11 +55,7 @@ scapula and digitigrade hock rig.
 
 For a final cat, manually clean the cheek/whisker junctions, reduce the carved fur
 into a subtler normal map, retopologise shoulders and hips, groom directional hair,
-and refine eye/lid fit under the actual garden lighting. Add sit/settle, stretch
-and pet interactions before replacing the companion. The prototype walk is a
-slow 0.167 m/s at its authored scale; calibrate navigation speed and animation rate
-together rather than using the current companion's 0.7 m/s and 1.98 multiplier.
-This experiment has not changed the production model or been merged to main.
+and refine eye/lid fit under the actual garden lighting. The production version adds a relaxed grounded settling stance, a stretch and pet interactions. The authored walk is 0.167 m/s at its original timing; game movement now uses 0.30 m/s with matched animation rate. `../animal_studies/promote.py -- cat` reproduces the production variant, and `promotion.json` records its export and texture conversions.
 
 ## Source and rebuild
 

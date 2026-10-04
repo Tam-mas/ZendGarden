@@ -24,7 +24,8 @@ func run() -> void:
   model.position=Vector3(13,2,-7)
   var folder="companions" if kind in ["cat","dog"] else "wildlife"
   var retained=preferences is Dictionary and preferences.get("choices",{}).get(folder+"/"+kind,"new")=="old"
-  if not retained and kind in ["cat","dog","rabbit","kangaroo","kangaroo_joey","echidna","wombat","fox","songbird","native_bird","fairy_wren","kookaburra","lorikeet","magpie"]:
+  var supplied=model.has_meta("supplied_animal")
+  if not retained and not supplied and kind in ["cat","dog","rabbit","kangaroo","kangaroo_joey","echidna","wombat","fox","songbird","native_bird","fairy_wren","kookaburra","lorikeet","magpie"]:
    var skin=model.find_child("Skeleton3D*",true,false) as Skeleton3D
    if not skin or skin.find_bone("Skin_Head")<0 or skin.find_bone("Skin_Body")<0:failures.append(kind+" continuous skin skeleton missing")
    elif model.find_child("Head",true,false):
@@ -49,7 +50,8 @@ func run() -> void:
      if material is StandardMaterial3D and str(material.resource_name).begins_with("Fur cards "):
       hair_count+=1
       var runtime_material=instance.get_surface_override_material(surface) as StandardMaterial3D
-      if not runtime_material or runtime_material.transparency!=BaseMaterial3D.TRANSPARENCY_ALPHA_HASH or not runtime_material.albedo_texture:
+      var policy=BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS if supplied else BaseMaterial3D.TRANSPARENCY_ALPHA_HASH
+      if not runtime_material or runtime_material.transparency!=policy or not runtime_material.albedo_texture:
        failures.append(kind+" fur lost its opacity texture or soft game shading")
       if instance.cast_shadow!=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:failures.append(kind+" fur casts dotted self-shadows")
    if hair_count==0:failures.append(kind+" coat strips missing")
@@ -67,11 +69,11 @@ func run() -> void:
    if not model.position.is_equal_approx(Vector3(13,2,-7)):failures.append(kind+" animation changed navigation position")
    var skeleton=model.find_child("Skeleton3D*",true,false) as Skeleton3D
    var head=model.find_child("Head",true,false) as Node3D
-   if skeleton and head:
+   if skeleton and head and not supplied:
     var bone=skeleton.find_bone("Skin_Head")
     var origin=skeleton.global_transform*skeleton.get_bone_global_pose(bone).origin
     if origin.distance_to(head.global_position)>.015:failures.append(kind+" head skin and control disagree in "+clip)
-  if kind in ["cat","dog","wombat","fox","echidna"]:
+  if kind in ["cat","dog","wombat","fox","echidna"] and not supplied:
    var knee=model.find_child("LowerFrontL*",true,false) as Node3D
    player.stop()
    GardenAnimalMotion.advance(model,"walk",0)

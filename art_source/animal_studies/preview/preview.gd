@@ -48,7 +48,7 @@ func load_species(value: String) -> void:
  for node in models:remove_child(node);node.queue_free()
  for label in labels:remove_child(label);label.queue_free()
  models.clear();players.clear();labels.clear();old_body=null;kind=value;elapsed=0
- var old_path="../../../assets/"+("companions/" if kind in ["cat","dog"] else "wildlife/")+kind+".glb"
+ var old_path="../baseline/"+kind+".glb"
  var new_path="../../cat_study/export/cat_study.glb" if kind=="cat" else "../%s/export/%s.glb"%[kind,kind]
  var heights={"dog":.52,"fox":.52,"cat":.52,"rabbit":.43,"echidna":.33}
  var report=[]
@@ -67,10 +67,10 @@ func load_species(value: String) -> void:
   if bounds.size.y>.001:model.scale=Vector3.ONE*(heights[kind]/bounds.size.y)
   model.position=Vector3(.42 if i==0 else -.42,-bounds.position.y*model.scale.y,0)
   if i==0:old_body=model.find_child("Body*",true,false);old_rest=old_body.position if old_body else Vector3.ZERO
-  var label=Label3D.new();label.text="Current game "+kind if i==0 else "Your STL · textured and rigged"
+  var label=Label3D.new();label.text="Previous game "+kind if i==0 else "Your STL · textured and rigged"
   label.font_size=32;label.pixel_size=.0007;label.position=Vector3(model.position.x,.65,0)
   label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.modulate=Color("33251b");label.outline_modulate=Color("eee6d8");add_child(label);labels.append(label)
-  report.append({"model":"current" if i==0 else "prototype","animations":Array(player.get_animation_list()) if player else [],"height":bounds.size.y,"textured_surfaces":count_textured(model)})
+  report.append({"model":"previous" if i==0 else "prototype","animations":Array(player.get_animation_list()) if player else [],"height":bounds.size.y,"textured_surfaces":count_textured(model)})
   if i==1:
    assert(player and player.has_animation("idle"),"Prototype animation missing")
    assert(count_textured(model)>0,"Prototype WebP textures missing")

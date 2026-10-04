@@ -1,0 +1,49 @@
+{
+  "animal": "cat",
+  "source": "art_source/cat_study/cat_study.blend",
+  "production_asset": "assets/companions/cat.glb",
+  "game_source": "art_source/cat_study/cat_game.blend",
+  "sha256": "757c6076c2c337a89e89407c1e484f92254fcbcb0d31f646a3f2f2689c0a0c93",
+  "bytes": 7342532,
+  "clips": [
+    "idle",
+    "look",
+    "walk",
+    "pet",
+    "settle",
+    "stretch"
+  ],
+  "texture_conversions": [
+    {
+      "file": "cat_sculpt_normal.webp",
+      "png_bytes": 3922821,
+      "webp_bytes": 2686354,
+      "lossless": true
+    },
+    {
+      "file": "cat_short_fur_0.webp",
+      "png_bytes": 20095,
+      "webp_bytes": 10014,
+      "lossless": true
+    },
+    {
+      "file": "cat_short_fur_1.webp",
+      "png_bytes": 19926,
+      "webp_bytes": 9898,
+      "lossless": true
+    },
+    {
+      "file": "cat_short_fur_2.webp",
+      "png_bytes": 20063,
+      "webp_bytes": 10130,
+      "lossless": true
+    },
+    {
+      "file": "cat_tabby_albedo.webp",
+      "png_bytes": 2618079,
+      "webp_bytes": 1422484,
+      "lossless": true
+    }
+  ],
+  "canonical_export": "art_source/cat_study/export/cat_game.glb"
+}
