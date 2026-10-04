@@ -1,0 +1,31 @@
+{
+  "wombat": [
+    {
+      "animations": [
+        "alert",
+        "graze",
+        "idle",
+        "pet",
+        "settle",
+        "walk"
+      ],
+      "height": 0.549206018447876,
+      "model": "previous",
+      "renderer": "forward_plus",
+      "textured_surfaces": 27
+    },
+    {
+      "animations": [
+        "forage",
+        "idle",
+        "look",
+        "rest",
+        "walk"
+      ],
+      "height": 0.438716202974319,
+      "model": "prototype",
+      "renderer": "forward_plus",
+      "textured_surfaces": 4
+    }
+  ]
+}

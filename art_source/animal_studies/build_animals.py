@@ -40,7 +40,7 @@ def webp(im,lossless=False):
  converted.name=im.name+'_WebP';converted.colorspace_settings.name=im.colorspace_settings.name;converted.pack()
  png.unlink();return converted
 
-fur=bpy.data.images.load(str(ROOT/'textures/neutral-short-fur.webp'),check_existing=False)
+fur=bpy.data.images.load(str(ROOT/('wombat/textures/coarse-fur-source.webp' if KIND=='wombat' else 'textures/neutral-short-fur.webp')),check_existing=False)
 fur.scale(512,512)
 fur_data=np.empty(512*512*4,np.float32);fur.pixels.foreach_get(fur_data);fur_data=fur_data.reshape((512,512,4))
 micro=fur_data[:,:,:3].mean(axis=2);micro/=max(1e-6,float(micro.mean()))
@@ -80,6 +80,18 @@ def pigment(points,normals=None):
   inside=sm(.254,.29,z)*sm(.022,.010,np.abs(np.abs(x)-.036))
   if normals is not None:inside*=sm(.1,-.4,normals[:,1])
   rgb=rgb*(1-inside[:,None])+np.array([.32,.18,.16])*inside[:,None]
+ elif KIND=='wombat':
+  # A quiet warm-grey coarse coat, with softer flanks and darker digging feet.
+  dorsal=sm(.22,.40,z)*sm(-.24,-.10,y)
+  rgb*=1-.16*dorsal[:,None]
+  flank=sm(.10,.15,np.abs(x))*(1-sm(.32,.41,z))*.17
+  rgb=rgb*(1-flank[:,None])+np.array(C['coat'])*1.15*flank[:,None]*variation[:,None]
+  feet=sm(.09,.035,z)
+  rgb=rgb*(1-feet[:,None])+np.array([.048,.039,.030])*feet[:,None]
+  claws=sm(.015,.004,z)*np.maximum(sm(-.20,-.235,y),sm(.21,.29,y))
+  rgb=rgb*(1-claws[:,None])+np.array([.15,.14,.12])*claws[:,None]
+  muzzle=sm(-.30,-.37,y)*sm(.315,.255,z)*.16
+  rgb=rgb*(1-muzzle[:,None])+np.array(C['coat'])*1.25*muzzle[:,None]
  else:
   # Radial bands vary along the actual spine geometry; face/legs remain dark.
   radius=np.sqrt((x/.100)**2+((y-.030)/.155)**2+((z-.107)/.107)**2)
@@ -106,14 +118,23 @@ high=dst.objects[0];high.name='SOURCE — '+KIND+' original sculpt'
 reference=bpy.data.collections.new('REFERENCE — preserved source sculpt');scene.collection.children.link(reference);reference.objects.link(high)
 high.data.transform(flip@transform)
 for p in high.data.polygons:p.use_smooth=True
-select(skin);dec=skin.modifiers.new('Export triangle budget','DECIMATE');dec.ratio=C['triangles']/len(skin.data.polygons)
+select(skin)
+if KIND=='wombat':
+ # Close thin printed-fur folds before reduction, instead of leaving dark slits.
+ remesh=skin.modifiers.new('Continuous coat surface','REMESH');remesh.mode='VOXEL';remesh.voxel_size=.0016;remesh.use_smooth_shade=True
+ bpy.ops.object.modifier_apply(modifier=remesh.name)
+triangles=sum(len(p.vertices)-2 for p in skin.data.polygons)
+dec=skin.modifiers.new('Export triangle budget','DECIMATE');dec.ratio=min(1,C['triangles']/triangles)
 bpy.ops.object.modifier_apply(modifier=dec.name)
 skin.data.validate(verbose=False,clean_customdata=True);skin.data.update()
-if KIND in ['dog','fox']:
+if KIND in ['dog','fox','wombat']:
  group=skin.vertex_groups.new(name='Soften printed fur')
  for v in skin.data.vertices:
-  if v.co.y>C['head_y'][0] or v.co.z<C['head_z'][0]:group.add([v.index],1,'REPLACE')
- mod=skin.modifiers.new('Subtle ridge relaxation','SMOOTH');mod.factor=.50;mod.iterations=22;mod.vertex_group=group.name
+  if v.co.y>C['head_y'][0] or v.co.z<C['head_z'][0]:
+   # Leave digging claws and soles intact; relaxing these lifts them off the floor.
+   weight=scalar(.04,.075,v.co.z) if KIND=='wombat' else 1
+   if weight>0:group.add([v.index],weight,'REPLACE')
+ mod=skin.modifiers.new('Subtle ridge relaxation','SMOOTH');mod.factor=.50;mod.iterations=30 if KIND=='wombat' else 22;mod.vertex_group=group.name
  bpy.ops.object.modifier_apply(modifier=mod.name);skin.vertex_groups.remove(skin.vertex_groups['Soften printed fur'])
 if KIND!='echidna':
  select(skin);bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT')
@@ -165,7 +186,7 @@ else:
  # A flat map avoids rays striking neighbouring spines and making black facets.
  normal.scale(64,64);flat=np.tile(np.array([.5,.5,1,1],np.float32),(64*64,1));normal.pixels.foreach_set(flat.ravel())
 normal_node.image=webp(normal,True)
-nm=nodes.new('ShaderNodeNormalMap');nm.inputs['Strength'].default_value=.18 if KIND!='rabbit' else .40
+nm=nodes.new('ShaderNodeNormalMap');nm.inputs['Strength'].default_value=.12 if KIND=='wombat' else .18 if KIND!='rabbit' else .40
 links.new(normal_node.outputs['Color'],nm.inputs['Color']);links.new(nm.outputs[0],bs.inputs['Normal'])
 high.hide_set(True);high.hide_render=True;reference.hide_render=True
 bpy.data.images.remove(albedo);bpy.data.images.remove(normal);bpy.data.images.remove(fur)
@@ -222,6 +243,7 @@ for v in skin.data.vertices:
  w={k:a*(1-head) for k,a in w.items()};w['Head']=head
  for i,(a,b) in enumerate(zip(C['ears'],C['ear_tips'])):
   e=scalar(a[2]-.01,a[2]+.035,z)*math.exp(-((x-a[0])/.035)**4)
+  if KIND=='wombat':e*=math.exp(-((y-a[1])/.035)**4)
   if KIND=='dog':e=math.exp(-((x-a[0])/.035)**4)*scalar(-.19,-.23,y)*scalar(.39,.45,z)*.90
   w={k:q*(1-e) for k,q in w.items()};w['Ear'+('L' if i==0 else 'R')]=e
  tail=0
@@ -237,9 +259,9 @@ for v in skin.data.vertices:
    tw={n:1/(.012+distance(p,*defs[n]))**4 for n in names};s=sum(tw.values())
    w={k:q*(1-tail) for k,q in w.items()}
    for n,q in tw.items():w[n]=tail*q/s
- if z<C['height']*.58 and (y<C['front_cut'] or y>C['back_cut'] or KIND=='echidna'):
+ if z<C['height']*.58 and (y<C['front_cut'] or y>C['back_cut'] or KIND=='echidna' or (KIND=='wombat' and z<.06)):
   family='Front' if y<C['front_cut'] else 'Back'
-  if KIND=='echidna':family=min(legs,key=lambda n:distance(p,*defs[legs[n]['bones'][2]]))[:-1]
+  if KIND=='echidna' or (KIND=='wombat' and z<.06):family=min(legs,key=lambda n:distance(p,*defs[legs[n]['bones'][2]]))[:-1]
   mid=(legs[family+'L']['paw'].x+legs[family+'R']['paw'].x)/2
   name=family+('L' if x<mid else 'R');ns=legs[name]['bones']
   nearest=min(distance(p,*defs[n]) for n in ns)
@@ -267,6 +289,11 @@ if KIND!='echidna':
  for index,tint in enumerate(tones):
   mat=material('Fur cards '+KIND+' '+str(index),tint,.94);mat.surface_render_method='DITHERED';mat.use_backface_culling=False
   values=rgba.copy();values[:,:,:3]=variation[:,:,None]*np.array(tint)
+  if KIND=='wombat':
+   # Generated image pixel writes are sRGB; baked coat pigments are linear.
+   # Encode the linear tint so the cards match the baked coat under both engines.
+   rgb=values[:,:,:3]
+   values[:,:,:3]=np.where(rgb<=.0031308,rgb*12.92,1.055*np.maximum(rgb,0)**(1/2.4)-.055)
   im=bpy.data.images.new(KIND+'_fur_'+str(index),256,256,alpha=True);im.pixels.foreach_set(values.astype(np.float32).ravel())
   node=mat.node_tree.nodes.new('ShaderNodeTexImage');node.image=webp(im,True);bpy.data.images.remove(im)
   bs_hair=mat.node_tree.nodes['Principled BSDF'];bs_hair.inputs['Specular IOR Level'].default_value=.12
@@ -279,7 +306,7 @@ if KIND!='echidna':
   flow=Vector((0,1,-.30)) if p.y>C['neck'][1] else Vector((0,.35,-1))
   tangent=flow-n*flow.dot(n)
   if tangent.length<1e-4:continue
-  tangent.normalize();across=tangent.cross(n).normalized();length=rng.uniform(.002,.004)*(1 if KIND!='rabbit' else .7)
+  tangent.normalize();across=tangent.cross(n).normalized();length=rng.uniform(.004,.007) if KIND=='wombat' else rng.uniform(.002,.004)*(1 if KIND!='rabbit' else .7)
   p+=n*.00020;start=len(vs);influence={}
   for vi in poly.vertices:
    for g in skin.data.vertices[vi].groups:
@@ -313,7 +340,7 @@ def sphere(name,p,size,mat,parent='Head',normal=None):
  ob.data.materials.append(mat);world=ob.matrix_world.copy();ob.parent=rig;ob.parent_type='BONE';ob.parent_bone=parent
  bpy.context.view_layer.update();ob.matrix_world=world;return ob
 
-eye=material(KIND+' glossy iris',(.006,.004,.002) if KIND=='echidna' else (.028,.016,.008) if KIND=='rabbit' else (.12,.073,.022),.19)
+eye=material(KIND+' glossy iris',(.010,.008,.006) if KIND=='wombat' else (.006,.004,.002) if KIND=='echidna' else (.028,.016,.008) if KIND=='rabbit' else (.12,.073,.022),.19)
 black=material(KIND+' round pupil',(.002,.002,.002),.14)
 actual_eyes=[]
 for i,(pos,normal) in enumerate(eye_sites):
@@ -327,7 +354,13 @@ for i,(pos,normal) in enumerate(eye_sites):
 # IK targets bake into ordinary FK animation; game runtimes need no constraints.
 targets={};constraints=[]
 for name,leg in legs.items():
- target=bpy.data.objects.new(name+' ground contact',None);scene.collection.objects.link(target);target.location=leg['paw']
+ contact=leg['paw'].copy()
+ if KIND=='wombat':
+  group=skin.vertex_groups[leg['bones'][2]].index
+  sole=min(v.co.z for v in skin.data.vertices if v.co.z<.04 and any(g.group==group and g.weight>.999 for g in v.groups))
+  contact.z-=sole-.001
+ leg['contact']=contact
+ target=bpy.data.objects.new(name+' ground contact',None);scene.collection.objects.link(target);target.location=contact
  target.rotation_mode='QUATERNION';target.rotation_quaternion=rig.data.bones[leg['bones'][2]].matrix_local.to_quaternion();targets[name]=target
  pb=rig.pose.bones[leg['bones'][1]];ik=pb.constraints.new('IK');ik.target=target;ik.chain_count=2;ik.use_stretch=False;constraints.append((pb,ik))
  pb=rig.pose.bones[leg['bones'][2]];flat=pb.constraints.new('COPY_ROTATION');flat.target=target;flat.owner_space='WORLD';flat.target_space='WORLD';constraints.append((pb,flat))
@@ -337,7 +370,8 @@ order=sorted(defs,key=lambda n:len(list(rig.data.bones[n].parent_recursive)))
 offsets={'BackL':0,'FrontL':.25,'BackR':.5,'FrontR':.75}
 def pose(clip,t,duration):
  for pb in rig.pose.bones:pb.matrix_basis=Matrix.Identity(4)
- for name,ob in targets.items():ob.location=legs[name]['paw']
+ for name,ob in targets.items():ob.location=legs[name]['contact']
+ if KIND=='wombat':rig.pose.bones['Root'].location.y=-.010
  p=t/duration;wave=math.sin(p*math.tau);breath=math.sin(p*math.tau*(2 if clip=='idle' else 1))
  rig.pose.bones['Spine'].scale.x=1+(.003 if KIND=='echidna' else .007)*breath
  yaw=.025*wave;pitch=0
@@ -346,6 +380,11 @@ def pose(clip,t,duration):
   yaw=(.24 if KIND=='fox' else .16 if KIND=='dog' else .10 if KIND=='rabbit' else .065)*wave*envelope
   if clip in ['sniff','forage']:pitch=(.18 if KIND=='dog' else .085 if KIND=='rabbit' else .095)*envelope
   else:pitch=-.035*envelope
+  if KIND=='wombat':
+   yaw=.075*wave*envelope
+   pitch=.10*envelope if clip=='forage' else -.018*envelope
+   if clip=='forage':
+    rig.pose.bones['Chest'].rotation_euler.x=.009*math.sin(p*math.tau*2)*envelope
  for i in range(len(C['tail'])-1):
   amplitude=(.22 if KIND=='dog' else .025 if KIND=='fox' else .015)*(1+i*.45)
   pb=rig.pose.bones['Tail'+str(i+1)];pb.rotation_mode='QUATERNION'
@@ -354,8 +393,8 @@ def pose(clip,t,duration):
   pb.rotation_quaternion=Quaternion(axes@Vector((1,0,0)),lift)@Quaternion(axes@Vector((0,0,1)),amplitude*math.sin(p*math.tau*(3 if KIND=='dog' else 1)+i*.6))
  for i in range(len(C['ears'])):
   pb=rig.pose.bones['Ear'+('L' if i==0 else 'R')]
-  flick=math.exp(-((t-duration*(.26 if i==0 else .63))/.11)**2) if clip not in ['walk','hop'] else 0
-  pb.rotation_euler.x=(.045*math.sin(p*math.tau*2+i) if KIND=='dog' else .16*flick)
+  flick=math.exp(-((t-duration*(.26 if i==0 else .63))/(.20 if KIND=='wombat' else .11))**2) if clip not in ['walk','hop'] else 0
+  pb.rotation_euler.x=(.045*math.sin(p*math.tau*2+i) if KIND=='dog' else (.085 if KIND=='wombat' else .16)*flick)
  blink=max([math.exp(-((t-at)/.07)**4) for at in [duration*.34,duration*.77]]) if clip not in ['walk','hop'] else 0
  for name in ['LidL','LidR']:rig.pose.bones[name].scale=Vector((1,1,1))*(.005+.995*blink)
  if clip=='walk':
@@ -363,11 +402,21 @@ def pose(clip,t,duration):
    phase=(p+offsets[name])%1;stance=C['stance'];stride=C['stride']
    if phase<stance:y=-stride/2+stride*phase/stance;lift=0
    else:
-    u=(phase-stance)/(1-stance);y=stride/2-stride*(u*u*(3-2*u));lift=(.008 if KIND=='echidna' else .023)*math.sin(math.pi*u)**1.4
-   target.location=legs[name]['paw']+Vector((0,y,lift))
+    u=(phase-stance)/(1-stance);y=stride/2-stride*(u*u*(3-2*u));lift=(.008 if KIND=='echidna' else .014 if KIND=='wombat' else .023)*math.sin(math.pi*u)**1.4
+   target.location=legs[name]['contact']+Vector((0,y,lift))
   rig.pose.bones['Root'].location.y=-C['drop']+.0015*math.sin(p*math.tau*2)
   if KIND=='echidna':rig.pose.bones['Root'].rotation_euler.z=.025*wave
   if KIND=='fox':pitch=.02
+  if KIND=='wombat':
+   # Transfer a little weight side to side while IK keeps support paws planted.
+   rig.pose.bones['Root'].location.x=.002*wave
+   rig.pose.bones['Root'].rotation_euler.z=.018*wave
+   pitch=.012*math.sin(p*math.tau+math.pi*.35)
+ if clip=='rest' and KIND=='wombat':
+  rig.pose.bones['Root'].location.y=-.034
+  pitch=.045+.006*wave
+  yaw=.007*wave
+  for name in ['LidL','LidR']:rig.pose.bones[name].scale=Vector((.005+.995*blink,)*3)
  if clip=='hop':
   air=.18<p<.64
   lift=.055*math.sin(math.pi*(p-.18)/.46) if air else 0

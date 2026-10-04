@@ -1,0 +1,19 @@
+{
+  "animal": "wombat",
+  "input": "/Users/tam/Downloads/wombat.stl",
+  "sha256": "9bcb045bd1bed3595c77792f480bfb4b82caaf827ab2d8e4de6c4c8814d0e3c4",
+  "vertices": 994714,
+  "triangles": 1999972,
+  "bounds": [
+    [
+      106.79810333251953,
+      76.80001831054688,
+      0.0
+    ],
+    [
+      149.2018585205078,
+      179.2000274658203,
+      54.35044860839844
+    ]
+  ]
+}

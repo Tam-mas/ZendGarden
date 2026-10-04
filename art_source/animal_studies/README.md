@@ -1,6 +1,6 @@
 # Supplied animal sculpt studies
 
-Four editable, textured and animated prototypes made from Tam's supplied STL files through Blender MCP intake and sequential Blender authoring/export. This extends the separate cat experiment. The approved dog, fox, echidna and rabbit now replace their production garden assets, alongside the earlier supplied cat. Other model selections are preserved.
+Editable, textured and animated studies made from Tam's supplied STL files through Blender MCP intake and sequential Blender authoring/export. These extend the separate cat experiment. The approved dog, fox, echidna and rabbit now replace their production garden assets, alongside the earlier supplied cat. The new wombat is a separate review study; its live garden model and selection are unchanged.
 
 The source STLs each contain about two million triangles. Each full `.blend` preserves the dense sculpt in a hidden reference collection, alongside the lighter UV-mapped, weighted game mesh, materials and baked actions. The `_review.blend` files contain the complete editable prototype and studio without the dense reference. Their scenes have also been appended through MCP to the running Blender session; the pre-existing scene, selection, file and preferences were preserved.
 
@@ -10,8 +10,11 @@ The source STLs each contain about two million triangles. Each full `.blend` pre
 | Dog | Golden retriever coloration matching the supplied floppy-eared shape, cream feathering, black nose, coloured mouth, short fur | Idle, four-beat walk, sniff, look, with tail wag and ear sway | 66,806 |
 | Echidna | Dark face/legs and cream/golden spine bands; preserve actual spine geometry and claws | Idle, short-stride amble, snout foraging, look | 63,158 |
 | Rabbit | Grey-brown agouti variation, pale underside, pink ear interiors, dark glossy eyes and short laid fur | Idle, coordinated hop with crouch/flight/landing, forage, look, independent ear flicks | 56,348 |
+| Wombat | Warm grey-brown coarse coat, darker digging feet and broad bare nose, small socket-fitted eyes and short laid fur; continuous surface closes print-style slits | Idle, slow four-beat walk with a weight shift, forage, look, low standing rest, blinks and restrained ear flicks | 62,356 |
 
 General colour references: [red fox, Animal Diversity Web](https://animaldiversity.org/accounts/Vulpes_vulpes/), [European rabbit, Animal Diversity Web](https://animaldiversity.org/accounts/Oryctolagus_cuniculus/), and [short-beaked echidna, Perth Zoo](https://perthzoo.wa.gov.au/animal/short-beaked-echidna). The supplied dog resembles a retriever, so its coat follows that anatomy rather than retaining the current game's collie markings.
+
+The wombat's coarse coat, broad bare nose, small eyes and quiet waddle follow the [Australian Museum's bare-nosed wombat description](https://australian.museum/learn/animals/mammals/bare-nosed-wombat/) and [Tasmania's wildlife reference](https://nre.tas.gov.au/wildlife-management/fauna-of-tasmania/mammals/possums-kangaroos-and-wombats/wombat). Its source sculpt retains some stylised proportions and raised cheek fur. See [the wombat study notes](wombat/README.md) for its source, movements and validation.
 
 ## Review
 
@@ -21,7 +24,7 @@ Run the standalone viewer from the project root:
 /Applications/Godot.app/Contents/MacOS/Godot --path art_source/animal_studies/preview
 ```
 
-Select Dog, Fox, Echidna, Rabbit or Cat, then choose a motion. Drag to orbit, scroll to zoom and press Space to pause. The previous game asset from GitHub main at `e85c209` is on the left; the supplied-sculpt prototype is on the right. Posed vertices determine their displayed heights, with the same lighting and fur shading. Embedded old animations are played where available; the retained dog/rabbit/cat use their familiar procedural motion. Display transforms belong to separate parent nodes so imported animation cannot override the review positions.
+Select Dog, Fox, Echidna, Rabbit, Cat or Wombat, then choose a motion. Drag to orbit, scroll to zoom and press Space to pause. The previous game asset is on the left; the supplied-sculpt study is on the right. The five earlier baselines are frozen from main at `e85c209`; the wombat baseline is from `4fe13f9`, before its study began. Posed vertices determine their displayed heights, with the same lighting and fur shading. Embedded old animations are played where available; the retained dog/rabbit/cat use their familiar procedural motion. Display transforms belong to separate parent nodes so imported animation cannot override the review positions.
 
 In the running Blender session, choose a `Zend STL — animal` scene: Idle is enabled for playback. In the NLA editor, mute Idle and unmute the desired action track to review a different motion. The saved source files keep their tracks muted for a clean rest-pose view; unmute one track to play it, and set the timeline range to its strip.
 
@@ -32,6 +35,8 @@ Actual Godot-rendered comparison PNGs and animated GIFs are saved under each ani
 ## Texture storage
 
 All new model maps are WebP, packed in the Blender sources and embedded in the GLBs via `EXT_texture_webp`. No duplicate PNG fallback is embedded. Godot 4.7.2 Compatibility loaded and rendered all four exports successfully.
+
+The new wombat's model maps total 5,411,580 bytes, 47.1% smaller than their corresponding PNGs. Its separate generated coarse-fur source is 75.2% smaller in WebP. The final wombat was loaded and animated in both Godot 4.7.2 Compatibility and Forward+.
 
 - Colour maps use quality 95 WebP.
 - Normal maps and transparent fur cards use lossless WebP, with exact decoded-pixel checks against PNG before conversion.
@@ -66,7 +71,7 @@ Then run one animal at a time:
 /Applications/Blender.app/Contents/MacOS/Blender --background art_source/animal_studies/fox/fox_review.blend --python art_source/animal_studies/validate_animals.py -- fox
 ```
 
-Repeat for `dog`, `echidna` and `rabbit`. `species.py` stores measured asymmetric face sites and anatomical rig landmarks. `convert_map.py` uses the configured bundled Python/Pillow runtime. `refine_export.py` documents the one-time review correction to the earlier eyelid actions; the main builder now generates the corrected lids directly. Do not apply that migration repeatedly to already refined files.
+Repeat for `dog`, `echidna` and `rabbit`. To rebuild the wombat, pass `wombat` to intake/inspection, then load `wombat/prepared.blend` with `build_animals.py -- wombat`. `species.py` stores measured asymmetric face sites and anatomical rig landmarks. `convert_map.py` uses the configured bundled Python/Pillow runtime. `refine_export.py` documents the one-time review correction to the earlier eyelid actions; the main builder now generates the corrected lids directly. Do not apply that migration to the new wombat or repeatedly to already refined files.
 
 ## Remaining production work
 

@@ -1,7 +1,7 @@
 extends Node3D
 
-const SPECIES=["dog","fox","echidna","rabbit","cat"]
-const CLIPS={"dog":["idle","walk","sniff","look"],"fox":["idle","walk","look"],"echidna":["idle","walk","forage","look"],"rabbit":["idle","hop","forage","look"],"cat":["idle","walk","look"]}
+const SPECIES=["dog","fox","echidna","rabbit","cat","wombat"]
+const CLIPS={"dog":["idle","walk","sniff","look"],"fox":["idle","walk","look"],"echidna":["idle","walk","forage","look"],"rabbit":["idle","hop","forage","look"],"cat":["idle","walk","look"],"wombat":["idle","walk","forage","look","rest"]}
 var kind="dog"
 var models: Array[Node3D]=[]
 var players: Array[AnimationPlayer]=[]
@@ -50,7 +50,7 @@ func load_species(value: String) -> void:
  models.clear();players.clear();labels.clear();old_body=null;kind=value;elapsed=0
  var old_path="../baseline/"+kind+".glb"
  var new_path="../../cat_study/export/cat_study.glb" if kind=="cat" else "../%s/export/%s.glb"%[kind,kind]
- var heights={"dog":.52,"fox":.52,"cat":.52,"rabbit":.43,"echidna":.33}
+ var heights={"dog":.52,"fox":.52,"cat":.52,"rabbit":.43,"echidna":.33,"wombat":.45}
  var report=[]
  for i in range(2):
   var file=ProjectSettings.globalize_path("res://"+([old_path,new_path][i])).simplify_path()
@@ -70,9 +70,10 @@ func load_species(value: String) -> void:
   var label=Label3D.new();label.text="Previous game "+kind if i==0 else "Your STL · textured and rigged"
   label.font_size=32;label.pixel_size=.0007;label.position=Vector3(model.position.x,.65,0)
   label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.modulate=Color("33251b");label.outline_modulate=Color("eee6d8");add_child(label);labels.append(label)
-  report.append({"model":"previous" if i==0 else "prototype","animations":Array(player.get_animation_list()) if player else [],"height":bounds.size.y,"textured_surfaces":count_textured(model)})
+  report.append({"model":"previous" if i==0 else "prototype","animations":Array(player.get_animation_list()) if player else [],"height":bounds.size.y,"textured_surfaces":count_textured(model),"renderer":RenderingServer.get_current_rendering_method()})
   if i==1:
    assert(player and player.has_animation("idle"),"Prototype animation missing")
+   for required in CLIPS[kind]:assert(player.has_animation(required),"Prototype clip missing: "+required)
    assert(count_textured(model)>0,"Prototype WebP textures missing")
  load_report[kind]=report
  title.text=kind.capitalize()+" · STL modelling experiment"
@@ -162,7 +163,7 @@ func play_clip(value: String) -> void:
   var player=players[i]
   if not player:continue
   var requested=clip
-  if i==0:requested={"look":"alert","forage":"graze","sniff":"graze","hop":"walk"}.get(clip,clip)
+  if i==0:requested={"look":"alert","forage":"graze","sniff":"graze","hop":"walk","rest":"idle"}.get(clip,clip)
   var available=""
   for name in player.get_animation_list():
    if String(name).to_lower()==requested or String(name).to_lower().ends_with("/"+requested):available=name;break
@@ -222,5 +223,6 @@ func capture() -> void:
     for tick in range(3):await get_tree().process_frame
     RenderingServer.force_draw(false);get_viewport().get_texture().get_image().save_png(folder+"/%s_%02d.png"%[value,frame])
   print("ANIMAL_STUDIES_GODOT: rendered "+species)
- var file=FileAccess.open("res://../godot_validation.json",FileAccess.WRITE);file.store_string(JSON.stringify(load_report,"  "))
+ var validation_path="res://../%s/godot_validation.json"%kind if "--single" in OS.get_cmdline_user_args() else "res://../godot_validation.json"
+ var file=FileAccess.open(validation_path,FileAccess.WRITE);file.store_string(JSON.stringify(load_report,"  "))
  print("ANIMAL_STUDIES_GODOT: PASS — selected prototypes, WebP surfaces and motions rendered");get_tree().quit()

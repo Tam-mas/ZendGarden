@@ -1,0 +1,18 @@
+{
+  "scene": "Zend STL \u2014 wombat",
+  "source": "/Users/tam/Documents/Zend Garden/art_source/animal_studies/wombat/wombat_review.blend",
+  "clips": [
+    "idle",
+    "walk",
+    "forage",
+    "look",
+    "rest"
+  ],
+  "idle_enabled": true,
+  "refreshed_owned_scenes": [
+    "Zend STL \u2014 wombat"
+  ],
+  "original_scene": "Cyborgs Muted Slate Materials",
+  "original_file_preserved": true,
+  "original_selection_preserved": true
+}

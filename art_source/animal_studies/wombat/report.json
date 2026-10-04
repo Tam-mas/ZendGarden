@@ -1,0 +1,103 @@
+{
+  "animal": "wombat",
+  "source_sha256": "9bcb045bd1bed3595c77792f480bfb4b82caaf827ab2d8e4de6c4c8814d0e3c4",
+  "source_triangles": 1999972,
+  "exported_triangles": 62356,
+  "glb_bytes": 9234396,
+  "bones": 21,
+  "clips": {
+    "idle": 9,
+    "walk": 2.6,
+    "forage": 8,
+    "look": 7,
+    "rest": 10
+  },
+  "fur_cards": 3318,
+  "texture_conversions": [
+    {
+      "png_bytes": 4764122,
+      "webp_bytes": 1286846,
+      "lossless": false,
+      "file": "wombat_albedo.webp"
+    },
+    {
+      "png_bytes": 5387172,
+      "webp_bytes": 4085006,
+      "lossless": true,
+      "file": "wombat_normal.webp"
+    },
+    {
+      "png_bytes": 19998,
+      "webp_bytes": 9880,
+      "lossless": true,
+      "file": "wombat_fur_0.webp"
+    },
+    {
+      "png_bytes": 19991,
+      "webp_bytes": 9928,
+      "lossless": true,
+      "file": "wombat_fur_1.webp"
+    },
+    {
+      "png_bytes": 20014,
+      "webp_bytes": 9988,
+      "lossless": true,
+      "file": "wombat_fur_2.webp"
+    },
+    {
+      "png_bytes": 20002,
+      "webp_bytes": 9932,
+      "lossless": true,
+      "file": "wombat_fur_3.webp"
+    }
+  ],
+  "paw_centres": {
+    "FrontL": [
+      -0.08034117519855499,
+      -0.18030649423599243,
+      0.03200000151991844
+    ],
+    "FrontR": [
+      0.08084277808666229,
+      -0.19991187751293182,
+      0.03200000151991844
+    ],
+    "BackL": [
+      -0.0728442594408989,
+      0.19425863027572632,
+      0.03200000151991844
+    ],
+    "BackR": [
+      0.07123811542987823,
+      0.20742404460906982,
+      0.03200000151991844
+    ]
+  },
+  "eye_surfaces": [
+    {
+      "surface": [
+        -0.06114017963409424,
+        -0.3630000054836273,
+        0.3009999990463257
+      ],
+      "normal": [
+        -0.9257529377937317,
+        -0.33173516392707825,
+        0.18147540092468262
+      ]
+    },
+    {
+      "surface": [
+        0.05588030815124512,
+        -0.3630000054836273,
+        0.3009999990463257
+      ],
+      "normal": [
+        0.8965346217155457,
+        -0.4429645240306854,
+        -0.002827639691531658
+      ]
+    }
+  ],
+  "prototype_only": true
+}

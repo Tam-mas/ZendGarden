@@ -4,7 +4,7 @@ from pathlib import Path
 from mathutils import Vector, Matrix
 
 ROOT=Path(__file__).resolve().parent
-HEIGHTS={'dog':.58,'fox':.52,'rabbit':.35,'echidna':.28}
+HEIGHTS={'dog':.58,'fox':.52,'rabbit':.35,'echidna':.28,'wombat':.45}
 animals=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else ['fox','dog','echidna','rabbit']
 for kind in animals:
     folder=ROOT/kind
@@ -14,7 +14,7 @@ for kind in animals:
     corners=[Vector(c) for c in ob.bound_box]
     lo=Vector([min(c[k] for c in corners) for k in range(3)]);hi=Vector([max(c[k] for c in corners) for k in range(3)])
     center=Vector(((lo.x+hi.x)/2,(lo.y+hi.y)/2,lo.z));scale=HEIGHTS[kind]/(hi.z-lo.z)
-    rot=Matrix.Rotation(math.pi/2 if kind!='echidna' else 0,4,'Z')
+    rot=Matrix.Rotation(0 if kind in ['echidna','wombat'] else math.pi/2,4,'Z')
     transform=rot@Matrix.Scale(scale,4)@Matrix.Translation(-center)
     ob.data.transform(transform)
     ob['intake_transform']=[list(row) for row in transform]
