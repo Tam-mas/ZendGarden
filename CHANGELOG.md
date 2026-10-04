@@ -1,3 +1,13 @@
+### [2026-10-04 12:31] Added
+
+**Tech:** `art_source/animal_studies` — supplied fox, dog, echidna and rabbit sculpt texture/animation prototypes
+
+**Dev:** Import each roughly two-million-triangle STL through Blender MCP without changing the active authoring scene, preserve dense references in packed sources, and export 56–67k-triangle weighted prototypes. Fit asymmetric eye sockets, add species coats, short laid fur and distinct baked walk/hop/forage/look actions. Use a padded echidna spine atlas to avoid UV/ray-bake seams. Convert every new map and embedded GLB image to WebP, saving 63.2% versus the corresponding PNGs with lossless normal/alpha checks. Extend the isolated cat comparison to five species, measure posed heights and retain fixed baseline joint tracks so runtime GLTF loading does not distort the old fox. Verify packed maps, weights, finite/looped motions, sampled floor contact and actual Godot rendered motion. Keep production models, saved selections, player history and live exports unchanged; further retopology, download optimisation and interaction/navigation integration remain production work.
+
+**Plain:** Four supplied animal models now have distinct coats and movement, with a separate viewer to compare them with the garden animals.
+
+**Why:** Better anatomical starting shapes and species-specific detail make the next animal design choices easier to review.
+
 ### [2026-10-04 11:26] Added
 
 **Tech:** `art_source/cat_study` — isolated supplied-STL cat texture, skinning and motion experiment

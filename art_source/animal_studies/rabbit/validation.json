@@ -1,0 +1,44 @@
+{
+  "animal": "rabbit",
+  "clips": {
+    "idle": {
+      "seconds": 8.0,
+      "loop_seam": 0.0,
+      "paw_motion": 3.5493616056745967e-06,
+      "min_floor": null,
+      "max_floor": null
+    },
+    "hop": {
+      "seconds": 1.2,
+      "loop_seam": 0.0,
+      "paw_motion": 0.06895474054193312,
+      "min_floor": -5.555583811656106e-06,
+      "max_floor": 0.0689229667186737,
+      "lowest_rest_vertex": [
+        -0.07150540500879288,
+        0.11360734701156616,
+        -5.556702035391936e-06
+      ],
+      "lowest_weights": {
+        "BackL_Paw": 1.0
+      }
+    },
+    "forage": {
+      "seconds": 6.0,
+      "loop_seam": 0.0,
+      "paw_motion": 3.5297061687665807e-06,
+      "min_floor": null,
+      "max_floor": null
+    },
+    "look": {
+      "seconds": 5.0,
+      "loop_seam": 0.0,
+      "paw_motion": 3.545138313798191e-06,
+      "min_floor": null,
+      "max_floor": null
+    }
+  },
+  "maps_packed_webp": true,
+  "skin_weights_valid": true,
+  "export_images_webp": 6
+}

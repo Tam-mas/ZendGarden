@@ -1,0 +1,44 @@
+{
+  "animal": "dog",
+  "clips": {
+    "idle": {
+      "seconds": 8.0,
+      "loop_seam": 0.0,
+      "paw_motion": 7.1159100477673674e-06,
+      "min_floor": null,
+      "max_floor": null
+    },
+    "walk": {
+      "seconds": 1.2,
+      "loop_seam": 0.0,
+      "paw_motion": 0.09133626787457579,
+      "min_floor": 0.0026953862980008125,
+      "max_floor": 0.010161049664020538,
+      "lowest_rest_vertex": [
+        -0.10774519294500351,
+        0.22195380926132202,
+        0.002709857188165188
+      ],
+      "lowest_weights": {
+        "BackL_Paw": 1.0
+      }
+    },
+    "sniff": {
+      "seconds": 6.0,
+      "loop_seam": 0.0,
+      "paw_motion": 7.119520015855627e-06,
+      "min_floor": null,
+      "max_floor": null
+    },
+    "look": {
+      "seconds": 5.0,
+      "loop_seam": 0.0,
+      "paw_motion": 7.1581945038713525e-06,
+      "min_floor": null,
+      "max_floor": null
+    }
+  },
+  "maps_packed_webp": true,
+  "skin_weights_valid": true,
+  "export_images_webp": 5
+}
