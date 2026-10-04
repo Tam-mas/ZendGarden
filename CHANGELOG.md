@@ -1,3 +1,23 @@
+### [2026-10-04 16:58] Performance
+
+**Tech:** `GardenPlantBatches`, `GardenPlantIndex`, `GardenPlantGrowth`, `GardenTouch` — dense-garden rendering and care
+
+**Dev:** Profile a disposable copy of the supplied day-77 save containing 1,739 plants and 55 structures. Batch visible organs and border planting in 6 m cells, send saved shape variation through MultiMesh custom data, and retain individually outlined selections without duplicate renders. Update only affected transforms for trims within a growth stage; rebuild on stage or placement changes. Index nearby targeting, layered overlap and canopy shade; calculate growth conditions once per morning, reuse seed-marker meshes only when needed, and restore saved scales without startup tweens. Auto graphics uses 85% resolution when no explicit resolution is selected, lighter antialiasing (FXAA where supported), earlier distant LOD and shorter small-plant shadow ranges; Standard restores full detail, while Mobile keeps its existing settings. Direct Chrome comparison against main shows median frame times of 56.6 → 35.6 ms near the pergola and 158.6 → 49.0 ms across the dense terrace, with draw calls reduced by approximately 70–83%. Add reusable isolated benchmarks, real-renderer interaction/settings checks and player release 36; preserve save schema and dismissal state.
+
+**Plain:** Fuller gardens are smoother to explore and tend, with automatic graphics keeping detail closest to the player.
+
+**Why:** Repeated plants should not make a large, well-loved garden unnecessarily slow to enjoy.
+
+### [2026-10-04 16:57] Fixed
+
+**Tech:** `GardenClimbingSupport`, `build_climbing_details.py` — realistic support growth in place of oversized climber ovals
+
+**Dev:** Identify the screenshot's lilac rows as generic climbing-support spheres, including Clematis around the saved pergola. Replace them with small curved Sweet pea/Clematis blossoms, appropriate pea/cucumber/jasmine flowers, compound leaves and a continuous thin stem following the authored post coordinates for rotated arbors, pergolas, trellises and gazebos. Keep support growth in world coordinates so specimen rotation and height variation cannot skew it; update on care, rearrangement and terrain events, respecting growth/bloom stages. Group support organs and share existing botanical surface maps rather than embed duplicated textures. Preserve the open Blender project by building six small organ GLBs in an approved background process. Add player release 35 and botanical/profile documentation.
+
+**Plain:** Climbing flowers now follow their supports naturally instead of growing oversized rows of pink ovals.
+
+**Why:** Recognisable flowers and grounded stems make the planting easier to enjoy up close.
+
 ### [2026-10-04 14:52] Added
 
 **Tech:** `art_source/animal_studies/wombat`, `build_animals.py`, `preview/preview.gd` — supplied wombat sculpt coat, rig and motion study

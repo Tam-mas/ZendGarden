@@ -57,9 +57,14 @@ static func variation(node: Node, seed_value: int, height: float, amount: float=
  shape.x*=amount;shape.y*=amount;shape.z*=amount
  set_shape(node,shape,maxf(.1,height))
 
-static func set_shape(node: Node, shape: Vector4, height: float) -> void:
+static func set_shape(node: Node, shape: Vector4, height: float, batched: bool=false) -> void:
+ batched=batched or node.get_meta("batch_shape",false)
+ node.set_meta("plant_shape",shape)
+ node.set_meta("plant_height",height)
  if node is MeshInstance3D:
-  if RenderingServer.get_current_rendering_method()=="gl_compatibility":
+  if batched:
+   pass # MultiMesh custom data preserves each specimen without private materials.
+  elif RenderingServer.get_current_rendering_method()=="gl_compatibility":
    # WebGL's small uniform buffer cannot reserve an instance block per mesh.
    # Only planted specimens need private shape values; border plants share zero.
    var owned: Dictionary=node.get_meta("shape_materials",{})
@@ -67,7 +72,8 @@ static func set_shape(node: Node, shape: Vector4, height: float) -> void:
     var material=node.get_active_material(surface)
     if material is ShaderMaterial:
      if material.get_shader_parameter("plant_shape")==shape and material.get_shader_parameter("plant_height")==height:continue
-     var individual=material if owned.get(surface)==material else material.duplicate()
+     var individual=owned.get(surface)
+     if not individual is ShaderMaterial or individual.shader!=material.shader:individual=material.duplicate()
      individual.set_shader_parameter("plant_shape",shape)
      individual.set_shader_parameter("plant_height",height)
      node.set_surface_override_material(surface,individual)
@@ -76,4 +82,4 @@ static func set_shape(node: Node, shape: Vector4, height: float) -> void:
   else:
    node.set_instance_shader_parameter("plant_shape",shape)
    node.set_instance_shader_parameter("plant_height",height)
- for child in node.get_children(): set_shape(child,shape,height)
+ for child in node.get_children(): set_shape(child,shape,height,batched)

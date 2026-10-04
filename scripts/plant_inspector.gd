@@ -12,7 +12,8 @@ static func growth_context(g, p: Dictionary) -> Dictionary:
   return {"rate":0.0,"reason":"Resting until "+GardenCatalogue.growing_seasons(p.id)}
  var actual: String=g.plots[p.plot].condition
  var shaded_by=""
- for other in g.planted:
+ for index in g.plant_index.nearby(g.planted,p.pos,2.3):
+  var other: Dictionary=g.planted[index]
   if int(g.catalogue[other.id].layer)==3 and other.pos.distance_to(p.pos)<2.3 and other.age/float(g.catalogue[other.id].days)>=.52 and int(data.layer)<3:
    actual="shade"
    shaded_by=g.catalogue[other.id].name
@@ -34,7 +35,8 @@ static func lines(g, p: Dictionary) -> Array:
  if GardenTools.growth_multiplier(g,p.pos,GardenTools.now(g))>1: text.append("Watering boost · +20% growth")
  if float(p.get("stress",0))>.2: text.append("Pruning would ease its stress")
  var overlap=0
- for other in g.planted:
+ for index in g.plant_index.nearby(g.planted,p.pos,g.GRID*.75):
+  var other: Dictionary=g.planted[index]
   if Vector2(other.pos.x-p.pos.x,other.pos.z-p.pos.z).length()<g.GRID*.75: overlap+=1
  if overlap>1: text.append("%d layers here · %s to switch"%[overlap,"Layer" if g.touch_active() else "L"])
  var actions={"move":"Click to pick up this plant","remove":"Click to remove this plant","prune":"Prune this square","water":"Water this area","harvest":"Gather ready plants in this square"}
@@ -77,6 +79,7 @@ static func update(g) -> void:
  if allowed: target=g.planted[g.hover_target].node
  if g.highlighted_plant!=target:
   if is_instance_valid(g.highlighted_plant): highlight(g.highlighted_plant,false)
+  if is_instance_valid(g.plant_batches):g.plant_batches.select(target)
   g.highlighted_plant=target
   if is_instance_valid(target): highlight(target,true)
  if not is_instance_valid(g.inspector_panel): return

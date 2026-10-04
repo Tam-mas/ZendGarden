@@ -1,0 +1,38 @@
+[
+  {
+    "id": 9,
+    "name": "Sweet pea",
+    "path": "assets/plants/climbing/climber_09.glb",
+    "triangles": 884
+  },
+  {
+    "id": 10,
+    "name": "Clematis",
+    "path": "assets/plants/climbing/climber_10.glb",
+    "triangles": 2604
+  },
+  {
+    "id": 52,
+    "name": "Pea",
+    "path": "assets/plants/climbing/climber_52.glb",
+    "triangles": 884
+  },
+  {
+    "id": 56,
+    "name": "Cucumber",
+    "path": "assets/plants/climbing/climber_56.glb",
+    "triangles": 932
+  },
+  {
+    "id": 60,
+    "name": "Common jasmine",
+    "path": "assets/plants/climbing/climber_60.glb",
+    "triangles": 932
+  },
+  {
+    "id": 61,
+    "name": "Pink jasmine",
+    "path": "assets/plants/climbing/climber_61.glb",
+    "triangles": 932
+  }
+]

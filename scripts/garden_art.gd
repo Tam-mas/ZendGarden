@@ -7,6 +7,19 @@ static var botanical_scenes: Dictionary = {}
 static var leaf_materials: Dictionary = {}
 static var preview_materials: Dictionary = {}
 static var fur_materials: Dictionary = {}
+static var seed_meshes: Array=[]
+
+static func seed_marker(parent: Node3D, color: Color) -> void:
+ if seed_meshes.is_empty():
+  var soil=SphereMesh.new()
+  soil.radial_segments=10;soil.rings=5;soil.radius=.5;soil.height=1
+  var stake=BoxMesh.new();stake.size=Vector3(.028,.30,.025)
+  var label=BoxMesh.new();label.size=Vector3(.13,.10,.022)
+  seed_meshes=[soil,stake,label]
+ var soil=mesh(parent,seed_meshes[0],Vector3(0,.025,0),Color("483726"))
+ soil.scale=Vector3(.30,.06,.30)
+ mesh(parent,seed_meshes[1],Vector3(.13,.15,.09),Color("b69869"))
+ mesh(parent,seed_meshes[2],Vector3(.13,.29,.09),color)
 
 static func card_path(stem: String) -> String:
  return stem+".webp" if ResourceLoader.exists(stem+".webp") else stem+".png"

@@ -101,6 +101,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$compat_log" || ! rg -Fq 'IMPROVEMENTS_IN_GAME_R
   exit 1
 fi
 for renderer in forward_plus gl_compatibility; do
+  dense_log="$(mktemp -t zend-garden-dense)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" --script tests/dense_garden.gd > "$dense_log" 2>&1 || { cat "$dense_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$dense_log" || ! rg -Fq 'DENSE_GARDEN_RESULT: []' "$dense_log"; then
+    cat "$dense_log"
+    exit 1
+  fi
   view_log="$(mktemp -t zend-garden-view-water)"
   "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --view-water-test > "$view_log" 2>&1 || { cat "$view_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$view_log" || ! rg -Fq 'VIEW_WATER_RESULT: []' "$view_log"; then

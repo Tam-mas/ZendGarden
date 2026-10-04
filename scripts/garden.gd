@@ -34,6 +34,9 @@ var wild_collection: Dictionary={}
 var raked_nodes: Dictionary={}
 var visitors: GardenVisitors
 var planted: Array = []
+var plant_index=GardenPlantIndex.new()
+var plant_batches: GardenPlantBatches
+var climbing_dirty=true
 var objects: Array = []
 var unlocked_plants: Array = STARTERS.duplicate()
 var unlocked_plots = 1
@@ -205,7 +208,12 @@ func _ready() -> void:
  touch=GardenTouch.new()
  add_child(touch)
  touch.setup(self)
+ plant_batches=GardenPlantBatches.new()
+ add_child(plant_batches)
+ plant_batches.setup(self)
  restore_garden()
+ GardenClimbingSupport.refresh(self)
+ if plant_batches.active: plant_batches.rebuild()
  visitors=GardenVisitors.new()
  add_child(visitors)
  visitors.setup(self)
@@ -937,6 +945,7 @@ func _process(delta: float) -> void:
  GardenTutorial.update(self)
  GardenLeisure.update(self)
  GardenTools.repeat_mouse(self)
+ if climbing_dirty:GardenClimbingSupport.refresh(self)
  animate_garden(delta)
  toast_time -= delta
  toast_label.visible = toast_time>0 and not photo_mode and not day_transition
@@ -1030,12 +1039,13 @@ func target_plant(pos: Vector3) -> int:
  # Pick from the actual ground aim, so old and offset positions both remain reachable.
  var chosen = -1
  var nearest = GRID*.75
- for i in range(planted.size()):
+ var nearby=plant_index.nearby(planted,pos,nearest)
+ for i in nearby:
   if int(catalogue[int(planted[i].id)].layer)!=selected_layer: continue
   var distance = Vector2(planted[i].pos.x-pos.x,planted[i].pos.z-pos.z).length()
   if distance<nearest: chosen=i; nearest=distance
  if chosen>=0: return chosen
- for i in range(planted.size()):
+ for i in nearby:
   var distance = Vector2(planted[i].pos.x-pos.x,planted[i].pos.z-pos.z).length()
   if distance<nearest: chosen=i; nearest=distance
  return chosen
@@ -1344,7 +1354,7 @@ func plot_capacity(plot: int) -> int:
  return (int(plots[plot].cap)+int(expansions.get(str(plot),0))*20)*CAPACITY_MULTIPLIER
 
 func plant_at(pos: Vector3, layer: int, excluding: int = -1) -> int:
- for i in range(planted.size()):
+ for i in plant_index.nearby(planted,pos,GRID*.35):
   if i!=excluding and Vector2(planted[i].pos.x-pos.x,planted[i].pos.z-pos.z).length()<GRID*.35 and int(catalogue[int(planted[i].id)].layer)==layer: return i
  return -1
 
@@ -1483,6 +1493,8 @@ func perform_action(repeating: bool=false) -> void:
     p.plot=hover_plot
     p.node.position=hover_cell
     p.marker.position=hover_cell
+    plant_index.invalidate()
+    if is_instance_valid(plant_batches):plant_batches.invalidate()
     var vines=p.node.get_node_or_null("Vines")
     if vines: p.node.remove_child(vines); vines.queue_free()
     set_mode("move")
@@ -1507,21 +1519,24 @@ func perform_action(repeating: bool=false) -> void:
  if mode=="water":GardenTutorial.event(self,"water")
  refresh_ui()
  refresh_wildlife()
+ if mode in ["plant","prune","move","remove","build","hoe"]:GardenClimbingSupport.refresh(self)
 
 func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0, orientation: float = NAN, shape_seed: int = -1) -> Dictionary:
  pos=GardenTerrain.point(pos)
  var n = Art.plant(catalogue[id])
+ n.set_meta("batch_groundcover",int(catalogue[id].layer)==0)
+ n.set_meta("batch_low_plant",int(catalogue[id].layer)<2)
+ if is_instance_valid(plant_batches) and plant_batches.active:n.set_meta("batch_shape",true)
  plant_root.add_child(n)
  if is_instance_valid(touch) and (settings.graphics=="mobile" or (settings.graphics=="auto" and touch_active())): touch.apply_detail(n,65.0)
  n.position=pos
  n.rotation.y=orientation if is_finite(orientation) else rng.randf()*TAU
  var marker=Node3D.new()
  marker.name="PlantedSeedMarker"
+ marker.set_meta("batch_groundcover",true)
+ marker.set_meta("batch_low_plant",true)
  marker.position=pos
  plant_root.add_child(marker)
- Art.ball(marker,Vector3(0,.025,0),Vector3(.30,.06,.30),Color("483726"))
- Art.box(marker,Vector3(.13,.15,.09),Vector3(.028,.30,.025),Color("b69869"))
- Art.box(marker,Vector3(.13,.29,.09),Vector3(.13,.10,.022),catalogue[id].color)
  var mature_height=clampf(height_factor,0.8,1.2) if height_factor>0.0 else rng.randf_range(0.8,1.2)
  var p = {"shape_seed":rng.randi_range(0,2147483646) if shape_seed<0 else shape_seed,"orientation":n.rotation.y,"prune_cuts":0,"height_factor":mature_height,"marker":marker,"id":id,"pos":pos,"plot":plot,"age":age,"water":2.0,"stress":0.0,"pruned":0.0,"node":n}
  n.scale=plant_scale(p)
@@ -1541,6 +1556,7 @@ func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orie
   n.add_child(life)
   life.setup(self)
  objects.append({"rotation":orientation,"kind":kind,"pos":pos,"price":price,"fish":fish,"node":n})
+ if kind in GardenClimbingSupport.SUPPORTS:climbing_dirty=true
  if kind=="sign":
   objects[-1]["text"]=Art.clean_sign_text(text)
   objects[-1]["text_color"]=color.to_html(false)
@@ -1568,13 +1584,18 @@ func legacy_shape_seed(p: Dictionary) -> int:
 func legacy_orientation(p: Dictionary) -> float:
  return float(legacy_shape_seed(p)%100000)/100000.0*TAU
 
-func refresh_plant(p: Dictionary) -> void:
+func refresh_plant(p: Dictionary, animate: bool=true) -> void:
+ if catalogue[p.id].climber:climbing_dirty=true
+ if is_instance_valid(plant_batches):plant_batches.changing(p)
  var fraction = clampf(p.age/float(catalogue[p.id].days),0,1)
+ if fraction<.52 and p.marker.get_child_count()==0:Art.seed_marker(p.marker,catalogue[p.id].color)
  p.marker.visible=fraction<.52
  if p.has("shape_tween") and is_instance_valid(p.shape_tween): p.shape_tween.kill()
- var tween = create_tween()
- p.shape_tween=tween
- tween.tween_property(p.node,"scale",plant_scale(p),0.9).set_trans(Tween.TRANS_SINE)
+ if animate and not p.node.scale.is_equal_approx(plant_scale(p)):
+  var tween = create_tween()
+  p.shape_tween=tween
+  tween.tween_property(p.node,"scale",plant_scale(p),0.9).set_trans(Tween.TRANS_SINE)
+ else:p.node.scale=plant_scale(p)
  var highlighted=is_instance_valid(highlighted_plant) and highlighted_plant==p.node
  if highlighted: GardenPlantInspector.highlight(p.node,false)
  GardenPlantGrowth.apply(p.node,catalogue[p.id],fraction,int(p.shape_seed),plant_scale(p))
@@ -1629,16 +1650,18 @@ func advance_growth() -> void:
   var plot = str(p.plot)
   if automation.has(plot+"water"): p.water=4.0
   if automation.has(plot+"prune"): p.stress=0.0
-  p.pruned=maxf(0,float(p.get("pruned",0.0))-.25*growth_conditions(p))
+  var growth_rate=growth_conditions(p)
+  p.pruned=maxf(0,float(p.get("pruned",0.0))-.25*growth_rate)
   p["prune_cuts"]=maxi(0,int(p.get("prune_cuts",0))-1)
   var health = (1.0 if p.water>0 else 0.4)*(1.0-p.stress*0.35)
-  p.age=minf(float(catalogue[p.id].days),p.age+health*growth_conditions(p)*GardenTools.growth_multiplier(self,p.pos,float(day+1)-.000001))
+  p.age=minf(float(catalogue[p.id].days),p.age+health*growth_rate*GardenTools.growth_multiplier(self,p.pos,float(day+1)-.000001))
   p.water=maxf(0,p.water-1.0)
   p.stress=minf(1,p.stress+0.13)
   refresh_plant(p)
  day+=1
  GardenTutorial.event(self,"morning")
  GardenTools.expire_water(self)
+ GardenClimbingSupport.refresh(self)
  if day>=GardenExpansion.opening_day(unlocked_plots): unlock_plot()
  # Seed gifts unfold across seasons; mornings no longer mint currency.
  if day%3==0:
@@ -1876,19 +1899,8 @@ func refresh_wildlife() -> void:
 func animate_garden(delta: float, sample_time: float = -1.0) -> void:
  if sample_time<0:garden_animation_time+=maxf(0,delta)
  var t=garden_animation_time if sample_time<0 else sample_time
- for p in planted:
-  p.node.rotation.z=sin(t*1.25+p.pos.x)*0.018
-  # Vines extend visibly up nearby support frames as they mature.
-  if catalogue[p.id].climber and p.age>=2 and not p.node.has_node("Vines"):
-   for obj in objects:
-    if obj.kind in ["arbor","pergola","trellis_screen","gazebo"] and obj.pos.distance_to(p.pos)<3:
-     var vine=Node3D.new()
-     vine.name="Vines"
-     p.node.add_child(vine)
-     var end: Vector3=(obj.pos-p.pos)+Vector3(0,1.9 if obj.kind=="trellis_screen" else 2.6,0)
-     Art.branch(vine,Vector3(0,0.2,0),end,0.03,Color("7b9662"))
-     for j in range(8): Art.ball(vine,end+Vector3(-1+j*0.27,0,0),Vector3(0.32,0.15,0.27),catalogue[p.id].color)
-     break
+ if not is_instance_valid(plant_batches) or not plant_batches.active:
+  for p in planted:p.node.rotation.z=sin(t*1.25+p.pos.x)*0.018
  for entry in wildlife:
   if GardenWildlifeMotion.animate(self,entry,delta,t):continue
   if entry.kind=="lady beetle":
@@ -2107,7 +2119,7 @@ func restore_garden() -> void:
   plant.stress=float(p.stress)
   plant.pruned=float(p.get("pruned",0.0))
   plant["prune_cuts"]=int(p.get("prune_cuts",0))
-  refresh_plant(plant)
+  refresh_plant(plant,false)
  for obj in loaded_data.get("objects",[]): add_object(obj.kind,Vector3(obj.pos[0],0,obj.pos[1]),int(obj.price),bool(obj.fish),float(obj.get("rotation",0.0)),str(obj.get("text","My garden")),Color.from_string(str(obj.get("text_color","f1e5c7")),Color("f1e5c7")))
  if loaded_data.has("player"): player.position=GardenTerrain.point(Vector3(loaded_data.player[0],0,loaded_data.player[1]))+Vector3(0,.1,0)
  for i in range(plot_signs.size()): Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else ""))

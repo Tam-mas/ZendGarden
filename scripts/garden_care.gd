@@ -2,9 +2,12 @@ class_name GardenCare
 extends RefCounted
 
 static func register_wild(g, node: Node3D, key: String, id: int) -> void:
+ node.set_meta("batch_groundcover",int(g.catalogue[id].layer)==0)
+ node.set_meta("batch_low_plant",int(g.catalogue[id].layer)<2)
  g.wild_plants.append({"id":id,"node":node,"key":key,"pos":node.position,"scale":node.scale})
 
 static func restore_wild(g) -> void:
+ if is_instance_valid(g.plant_batches):g.plant_batches.invalidate()
  for plant in g.wild_plants:
   var cuts=int(g.wild_pruning.get(plant.key,0))
   plant.node.visible=cuts<3
