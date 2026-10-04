@@ -117,6 +117,9 @@ def upgrade_environment():
         export_apply=True,export_animations=False,export_image_format='JPEG',export_image_quality=92)
     from glb_io import canonical_environment_names
     canonical_environment_names(path)
+    sys.path.insert(0,str(ROOT/'art_source'))
+    from export_environment import compact_environment
+    compact_environment(path)
     save('environment')
     bpy.context.window.scene=previous
     return {'kind':'lake_garden','folder':'environment','bytes':path.stat().st_size,'source':'art_source/overhaul/environment.blend','terrain':'unchanged'}

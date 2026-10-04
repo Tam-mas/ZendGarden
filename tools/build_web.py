@@ -144,10 +144,16 @@ def main():
     # Only remove our generated output, never source assets or saves.
     shutil.rmtree(OUT)
     OUT.mkdir()
-    for args in (['--editor', '--import'], ['--export-release', 'Web']):
+    for args, log in ((['--editor', '--import'], 'import.log'),
+                      (['--script', 'tools/prepare_export.gd'], 'texture-sharing.log'),
+                      (['--export-release', 'Web'], 'export.log'),
+                      (['--main-pack', str(OUT / 'index.pck'), '--script',
+                        str(ROOT / 'tests/exported_models.gd'), '--',
+                        '--model-list=' + str(ROOT / 'build/texture-sharing.json')],
+                       'exported-models.log')):
         result = subprocess.run([executable, '--headless', '--path', str(ROOT), *args],
                                 text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        (ROOT / 'build' / ('import.log' if '--import' in args else 'export.log')).write_text(result.stdout)
+        (ROOT / 'build' / log).write_text(result.stdout)
         if result.returncode or 'SCRIPT ERROR:' in result.stdout or 'ERROR:' in result.stdout:
             print(result.stdout)
             raise RuntimeError('Godot import/export failed; see build/*.log')

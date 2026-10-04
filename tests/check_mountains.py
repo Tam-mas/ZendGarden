@@ -9,9 +9,11 @@ def glb(path):
     binary=data[offset+8:]
     def accessor(index):
         a=doc['accessors'][index];view=doc['bufferViews'][a['bufferView']]
-        assert a['componentType']==5126 and a['type']=='VEC3'
-        start=view.get('byteOffset',0)+a.get('byteOffset',0);stride=view.get('byteStride',12)
-        return [struct.unpack_from('<fff',binary,start+i*stride) for i in range(a['count'])]
+        kind={5126:'f',5125:'I',5123:'H',5121:'B'}[a['componentType']]
+        count={'VEC3':3,'SCALAR':1}[a['type']]
+        fmt='<'+kind*count; width=struct.calcsize(fmt)
+        start=view.get('byteOffset',0)+a.get('byteOffset',0);stride=view.get('byteStride',width)
+        return [struct.unpack_from(fmt,binary,start+i*stride) for i in range(a['count'])]
     return doc,accessor
 
 def named_mesh(doc,name):
@@ -20,10 +22,14 @@ def named_mesh(doc,name):
 def positions(doc,accessor,name):
     return [v for p in named_mesh(doc,name)['primitives'] for v in accessor(p['attributes']['POSITION'])]
 
-def fingerprint(values):
-    # Normal/UV seams can split vertices without changing the rendered surface.
-    vertices=sorted(set(tuple(round(x,4) for x in v) for v in values))
-    return hashlib.sha256(repr(vertices).encode()).hexdigest()
+def triangle_signature(doc,read,name):
+    digest=hashlib.sha256()
+    for primitive in named_mesh(doc,name)['primitives']:
+        points=read(primitive['attributes']['POSITION'])
+        normals=read(primitive['attributes']['NORMAL'])
+        for (index,) in read(primitive['indices']):
+            digest.update(struct.pack('<6f',*points[index],*normals[index]))
+    return digest.hexdigest()
 
 parser=argparse.ArgumentParser();parser.add_argument('--baseline',type=Path);args=parser.parse_args()
 path=ROOT/'assets/environment/lake_garden.glb';doc,accessor=glb(path)
@@ -34,6 +40,7 @@ report={}
 for name,budget in [('AlpineLakeValley',500000),('OuterMountainRidges',50000)]:
     mesh=named_mesh(doc,name)
     triangles=sum(doc['accessors'][p['indices']]['count']//3 for p in mesh['primitives'])
+    assert all(set(p['attributes'])=={'POSITION','NORMAL'} for p in mesh['primitives']), (name,'unused terrain channels exported')
     verts=positions(doc,accessor,name)
     assert 0<triangles<=budget,(name,'triangle budget',triangles)
     assert all(math.isfinite(x) for v in verts for x in v),(name,'non-finite vertices')
@@ -55,7 +62,10 @@ report['woodland']={'trees':validation['forest_trees'],'triangles':forest_triang
 assert path.stat().st_size<95*1024*1024,'Landscape exceeded previous 98 MiB asset budget'
 if args.baseline:
     before,read_before=glb(args.baseline)
-    for name in ['HilltopMeadow','PlantableLoam','LimestonePathsAndWalls','GardenPavilion','PavilionShingleRoof','PavilionWindows']:
-        assert fingerprint(positions(doc,accessor,name))==fingerprint(positions(before,read_before,name)),('Playable garden changed',name)
-    report['playable_garden']='identical to baseline'
+    # Include the detailed shed parts actually present in the supplied baseline.
+    names=[n['name'] for n in before['nodes'] if 'mesh' in n]
+    assert set(names)=={n['name'] for n in doc['nodes'] if 'mesh' in n}
+    for name in names:
+        assert triangle_signature(doc,accessor,name)==triangle_signature(before,read_before,name),('Rendered positions, winding or normals changed',name)
+    report['all_rendered_geometry']='byte-identical triangle positions and normals to baseline'
 print('MOUNTAIN_ASSET_CHECK: PASS '+json.dumps(report))

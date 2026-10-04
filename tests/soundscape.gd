@@ -29,8 +29,11 @@ func run() -> void:
   if sound.bed!=0: failures.append("Theme flickers at boundary")
  sound.update_location(Vector3(10,0,0),plots)
  if sound.bed!=1: failures.append("Theme failed to change after crossing boundary")
- for voice in sound.players.values():
+ for kind in sound.players:
+  var voice=sound.players[kind]
   if voice.stream.loop_mode!=AudioStreamWAV.LOOP_FORWARD: failures.append("Imported track does not loop forward")
+  var expected=AudioStreamWAV.FORMAT_QOA if kind in sound.MUSIC or kind=="rain" else AudioStreamWAV.FORMAT_16_BITS
+  if voice.stream.format!=expected: failures.append("Audio compression policy changed")
   if voice.pitch_scale!=1.0: failures.append("Runtime altered concert pitch")
  sound.daylight=1.0
  sound.rainfall=0.0

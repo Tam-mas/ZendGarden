@@ -23,3 +23,6 @@ __pycache__/
 /build/
 /.web-tools/
 /.wrangler/
+
+# Generated, losslessly shared Godot texture resources
+/assets/shared_textures/
