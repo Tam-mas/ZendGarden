@@ -147,14 +147,21 @@ func configure() -> void:
 
 func apply_graphics() -> void:
  var low=g.settings.graphics=="mobile" or (g.settings.graphics=="auto" and enabled)
- var key=str(low)+str(g.settings.render_scale)
+ var population=g.planted.size() if is_instance_valid(g.plant_batches) else g.loaded_data.get("plants",[]).size()
+ var dense=not low and g.settings.graphics=="auto" and population>=GardenPlantBatches.MIN_PLANTS
+ var key=str(low)+str(dense)+str(g.settings.render_scale)
  if graphics_applied==key: return
  graphics_applied=key
  g.sun.shadow_enabled=not low
- get_viewport().scaling_3d_scale=maxf(.5,float(g.settings.render_scale)/100.0) if int(g.settings.render_scale)>0 else (.7 if low else 1.0)
- get_viewport().msaa_3d=Viewport.MSAA_DISABLED if low else Viewport.MSAA_2X
+ g.sun.directional_shadow_max_distance=40.0 if dense else 90.0
+ get_viewport().scaling_3d_scale=maxf(.5,float(g.settings.render_scale)/100.0) if int(g.settings.render_scale)>0 else (.7 if low else .85 if dense else 1.0)
+ get_viewport().msaa_3d=Viewport.MSAA_DISABLED if low or dense else Viewport.MSAA_2X
+ # Compatibility/WebGL does not implement Godot's screen-space AA.
+ get_viewport().screen_space_aa=Viewport.SCREEN_SPACE_AA_FXAA if dense and RenderingServer.get_current_rendering_method()!="gl_compatibility" else Viewport.SCREEN_SPACE_AA_DISABLED
+ get_viewport().mesh_lod_threshold=2.0 if dense else 1.0
  apply_detail(g.world_root,90.0 if low else 0.0)
  apply_detail(g.plant_root,65.0 if low else 0.0)
+ if is_instance_valid(g.plant_batches):g.plant_batches.invalidate()
 
 func apply_detail(node: Node, distance_limit: float) -> void:
  if node is MeshInstance3D and not node.get_meta("sculpt_registered",false) and node.get_aabb().size.length()<10:
@@ -525,6 +532,7 @@ func settings_page() -> void:
   choice.select(maxi(0,values.find(g.settings[key])))
   choice.item_selected.connect(func(index): g.settings[key]=values[index]; configure(); g.save_game())
   g.list_box.add_child(choice)
+ g.add_note("Auto graphics balances detail in fuller gardens. Choose Standard for full plant shadows, or set your preferred 3D resolution.")
  var handed=CheckButton.new()
  handed.text="Left-handed touch layout"
  handed.button_pressed=g.settings.left_handed

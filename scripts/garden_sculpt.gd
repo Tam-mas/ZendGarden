@@ -13,6 +13,7 @@ static func scan(g,node: Node) -> void:
   var p: Vector3=node.global_position
   p.y-=GardenTerrain.offset_at(p.x,p.z)
   g.terrain_anchors.append({"node":node,"base":p})
+  if is_instance_valid(g.plant_batches):g.plant_batches.invalidate()
   return
  if node is MeshInstance3D and str(node.name)=="HilltopMeadow":
   split_meadow(g,node)
@@ -175,6 +176,8 @@ static func apply_hoe(g) -> void:
 
 static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  g.terrain_revision+=1
+ g.plant_index.invalidate()
+ if is_instance_valid(g.plant_batches):g.plant_batches.invalidate()
  for entry in g.terrain_meshes:
   var node: MeshInstance3D=entry.node
   var bounds: AABB=node.global_transform*entry.base.get_aabb()
@@ -222,3 +225,4 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  for entry in g.wildlife:
   if not entry.get("hive",false):entry.target=GardenTerrain.point(entry.target)
  GardenBedSurfaces.rebuild(g,center)
+ GardenClimbingSupport.refresh(g)
