@@ -41,7 +41,7 @@ func spawn_kind(kind: String) -> void:
   guests.append({"node":n,"pos":pos,"home":pos,"target":pos,"age":0.0,"wait":float(i),"phase":float(i)*1.5,"kangaroo":kind=="kangaroo","kind":kind,"speed":speed})
 
 func safe(pos: Vector3) -> bool:
- return g.plantable_ground(pos) and g.bed_at(pos)<0 and g.nearest_plot(pos)<g.unlocked_plots
+ return g.plantable_ground(pos) and g.bed_at(pos)<0 and GardenAreaCatalogue.plot_open(g,g.nearest_plot(pos))
 
 func _process(delta: float) -> void:
  if not is_instance_valid(g) or is_instance_valid(g.welcome) or (g.settings.pause_menus and not g.gameplay_active() and not g.smoke): return

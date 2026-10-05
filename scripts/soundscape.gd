@@ -21,6 +21,7 @@ const AREA_HYSTERESIS=1.5
 
 static func theme_for_plot(index: int, plot_name: String) -> int:
  if index<4: return index
+ if index<14:return [1,2,3,0,3,0,2,1,3,2][index-4]
  if plot_name.begins_with("Woodland"): return 2
  if plot_name.begins_with("Orchard"): return 3
  return 0

@@ -48,6 +48,7 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
  if not integer(data.get("day",1),1) or not integer(data.get("unlocked_plots",1),1,1024):return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
  if plot_count%2:plot_count+=1
+ if data.has("areas"):plot_count+=10
  for plant in data.plants:
   if not plant is Dictionary or not integer(plant.get("id"),0,plant_count-1) or not integer(plant.get("plot"),0,plot_count-1) or not vector(plant.get("pos")):return false
   for key in ["age","water","stress"]:
@@ -98,4 +99,4 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
   if not value is String:return false
  for value in data.get("bed_surfaces",{}).values():
   if not value is String:return false
- return GardenWorkshop.valid_save(data,plant_count)
+ return GardenAreaCatalogue.valid_save(data) and GardenWorkshop.valid_save(data,plant_count)

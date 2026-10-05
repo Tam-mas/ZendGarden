@@ -161,3 +161,7 @@ to render all four directions and compare frame rates. The source counts and
 triangle totals are recorded in `art_source/landscape_validation.json`.
 
 Garden save download/upload checks: `Godot --headless --path . --script tests/save_files.gd` covers validation and backup/write failures. `--experience-test` checks Settings and responsive confirmation. With a packaged browser build, use `PLAYWRIGHT_MODULE=/path/to/playwright node tests/save_files_browser.cjs` for Chrome/WebKit file selection, and `node tests/save_files_game.cjs` with the same module path for actual Settings export/import, backup download and reload persistence. These browser tests use isolated storage and local assets.
+
+## Garden area review
+
+Run Godot with `-- --areas-showcase` to explore a mature example of all ten new areas through the normal atlas and gardening controls. This uses `user://areas-showcase-save.json` and leaves the player's ordinary garden file untouched. Use `-- --areas-test` for automated activities, terrain, movement, migration, save validation and real screenshots. `tests/run.sh` checks Compatibility and Forward+ rendering, while `tests/check_areas.py` verifies all 28 new GLBs. See `art_source/areas/README.md` for MCP regeneration, editable Blender source libraries and generated texture prompts.

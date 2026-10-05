@@ -17,6 +17,11 @@ static func offset_at(x: float,z: float) -> float:
 
 # Shared with the Blender landscape generator. Existing x/z coordinates remain valid.
 static func base_rise(x: float, z: float) -> float:
+ var habitat=GardenAreaCatalogue.height_at(Vector3(x,0,z))
+ if is_finite(habitat):return habitat
+ if x>=25.5 and x<44 and z>=4.5 and z<=7.5:
+  var west=0.8+0.55*sin(25.5*.15)+0.45*cos(z*.19)+0.12*sin((25.5+z)*.5)
+  return lerpf(west,1.2,smoothstep(25.5,44,x))
  var hill=0.8+0.55*sin(x*.15)+0.45*cos(z*.19)+0.12*sin((x+z)*.5)
  var bridge_a=smoothstep(2.4,5.5,Vector2((x-8.5)*.65,z-5.9).length())
  var bridge_b=smoothstep(2.4,5.5,Vector2(x-17,(z+8.5)*.65).length())

@@ -46,6 +46,7 @@ static func split_meadow(g,node: MeshInstance3D) -> void:
   for i in range(0,indices.size(),3):
    var a=indices[i];var b=indices[i+1];var c=indices[i+2]
    var center=node.global_transform*((verts[a]+verts[b]+verts[c])/3)
+   if center.x>=25 and center.x<=44 and center.z>=4.5 and center.z<=7.5:continue
    if center.x>-12 and center.x<29 and center.z>-29 and center.z<12:
     triangle(st,verts[a],verts[b],verts[c],uv[a],uv[b],uv[c],2)
    else:kept.append_array([a,b,c])
@@ -133,12 +134,14 @@ static func restore(g,saved: Dictionary) -> void:
   var parts=str(key).split(":")
   if parts.size()!=2 or not str(parts[0]).is_valid_int() or not str(parts[1]).is_valid_int():continue
   var x=int(parts[0]);var z=int(parts[1]);var value=float(saved[key])
-  if x< -10 or x>27 or z>11 or z<-(g.plots.size()/2)*17-12 or not is_finite(value):continue
+  var legacy=x>= -10 and x<=27 and z<=11 and z>=-(GardenAreaCatalogue.legacy_plot_count(g)/2)*17-12
+  var habitat=GardenAreaCatalogue.index_at(Vector3(x,0,z))>=0
+  if (not legacy and not habitat) or not is_finite(value):continue
   GardenTerrain.offsets[str(key)]=clampf(value,maxf(-3.0,.08-GardenTerrain.base_rise(x,z)),3.0)
  if had_edits or not GardenTerrain.offsets.is_empty():rebuild(g)
 
 static func allowed(g,p: Vector3) -> bool:
- if not g.plantable_ground(p) or g.nearest_plot(p)>=g.unlocked_plots:return false
+ if not g.plantable_ground(p) or not GardenAreaCatalogue.plot_open(g,g.nearest_plot(p)) or not GardenAreas.can_sculpt(p):return false
  # Keep water crossings and fixed masonry foundations intact, including the
  # interpolation apron surrounding each edited lattice point.
  if p.x>5.3 and p.x<11.7 and p.z>-8.3 and p.z<8.3:return false

@@ -93,7 +93,10 @@ static func animate(g, entry: Dictionary, delta: float, time: float) -> bool:
   entry.node.visible=not daylight if kind in ["emperor gum moth","firefly"] else daylight
   if not entry.node.visible:return true
   var center: Vector3=entry.target+Vector3(0,entry.get("height",.75),0)
-  if kind=="emperor gum moth":
+  if kind=="emperor gum moth" and int(entry.get("area",-1))==9:
+   var spot=[Vector3(-5,0,5),Vector3(5,0,4),Vector3(4,0,-5)][int(entry.phase)%3]
+   center=GardenTerrain.point(GardenAreaCatalogue.center(9)+spot)+Vector3(0,1.35,0)
+  elif kind=="emperor gum moth":
    for obj in g.objects:
     if obj.kind=="lantern":center=obj.pos+Vector3(0,1,0);break
   var cycle=fposmod(phase,14.0)

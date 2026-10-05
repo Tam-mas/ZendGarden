@@ -8,11 +8,12 @@ static func growth_context(g, p: Dictionary) -> Dictionary:
  for obj in g.objects:
   if obj.kind=="greenhouse" and obj.pos.distance_to(p.pos)<=4:
    return {"rate":1.0,"reason":"Protected by the greenhouse · grows year-round"}
- if not data.seasons.is_empty() and GardenClimate.season(g.day) not in data.seasons:
+ var habitat=GardenAreas.context(g,p,g.plots[p.plot].condition)
+ if not data.seasons.is_empty() and GardenClimate.season(g.day) not in data.seasons and not habitat.protected:
   var frame=GardenEquipment.near(g,p,"cold_frame",1.2,"closed")
   if int(data.layer)<2 and not frame.is_empty() and frame.work.get("closed",true):return {"rate":.6,"reason":"Sheltered by the cold frame · grows gently out of season"}
   return {"rate":0.0,"reason":"Resting until "+GardenCatalogue.growing_seasons(p.id)}
- var actual: String=g.plots[p.plot].condition
+ var actual: String=habitat.actual
  var shaded_by=""
  var canopy=GardenEquipment.near(g,p,"shade_canopy",1.8,"shade_on")
  if not canopy.is_empty() and canopy.work.get("shade_on",true):actual="shade";shaded_by="shade cloth"
@@ -27,6 +28,9 @@ static func growth_context(g, p: Dictionary) -> Dictionary:
   if not shaded_by.is_empty() and data.condition=="sun": reason="Slower growth · shaded by "+shaded_by
   else: reason="Slower growth · prefers "+{"sun":"sunlight","shade":"shade","water":"a waterside bed"}.get(data.condition,data.condition)
  elif not shaded_by.is_empty(): reason="Comfortable in the shade of "+shaded_by
+ if habitat.protected:rate=1.0
+ rate*=float(habitat.bonus)
+ if not str(habitat.reason).is_empty() and rate>=1:reason=habitat.reason
  return {"rate":rate,"reason":reason}
 
 static func lines(g, p: Dictionary) -> Array:

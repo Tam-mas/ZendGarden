@@ -182,6 +182,13 @@ var nursery_placing=-1
 var hover_container_uid=""
 var hover_container_slot=-1
 var climate: GardenClimate
+var areas_state=GardenAreas.initial_state()
+var area_roots: Array=[]
+var area_update_time=0.0
+var area_atlas_open=false
+var area_atlas_index=-1
+var area_atlas_return=false
+var area_notice=""
 
 func _ready() -> void:
  GardenTerrain.offsets.clear()
@@ -192,6 +199,8 @@ func _ready() -> void:
  if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--economy-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://economy-test-save.json"
  if "--workshop-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://workshop-test-save.json"
+ if "--areas-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-test-save.json"
+ if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
  if not browser_save_check():
   save_load_blocked=true
   set_process(false)
@@ -199,6 +208,7 @@ func _ready() -> void:
   browser_save_result(false)
   return
  load_game()
+ GardenAreas.restore(self,loaded_data)
  if OS.has_feature("web"):
   GardenSaveFiles.browser_mount_verified=true
   browser_save_result(true)
@@ -247,6 +257,8 @@ func _ready() -> void:
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
  elif "--economy-test" in OS.get_cmdline_user_args(): call_deferred("run_economy_test")
  elif "--workshop-test" in OS.get_cmdline_user_args(): call_deferred("run_workshop_test")
+ elif "--areas-test" in OS.get_cmdline_user_args():call_deferred("run_areas_test")
+ elif "--areas-showcase" in OS.get_cmdline_user_args():call_deferred("show_area_collection")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
  elif tutorial_state.get("active",false):
@@ -313,7 +325,8 @@ func make_world() -> void:
  sun.directional_shadow_max_distance = 90
  add_child(sun)
  GardenLandscape.build(self)
- for row in range(2,int(plots.size()/2)): GardenExpansion.build_row(self,row)
+ GardenAreas.build(self)
+ for row in range(2,int(GardenAreaCatalogue.legacy_plot_count(self)/2)): GardenExpansion.build_row(self,row)
  for j in range(2):
   var pet = Art.companion(j==0)
   pet.position = GardenTerrain.point(Vector3(-5+j*2,0,6))
@@ -484,6 +497,7 @@ func make_ui() -> void:
  detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  detail_label.custom_minimum_size.x = 256
  col.add_child(detail_label)
+ col.add_child(button("Garden atlas · ten new trails",func():GardenAreaAtlas.open(self),Vector2(0,40)))
  col.add_child(button("Settings",func(): open_sidebar("Settings"),Vector2(0,30)))
  var capacity = panel_at(Vector2(1054,112),Vector2(362,144))
  hud_capacity=capacity
@@ -744,7 +758,9 @@ func refresh_sidebar() -> void:
      list_box.add_child(button("Edit sign: "+str(objects[i].get("text","My garden")).left(22),func(): open_sign_editor(sign_index)))
    list_box.add_child(button("Stock pond with fish · 20 petals",stock_fish))
    add_note("A LITTLE MORE ROOM",14)
-   if unlocked_plots<plots.size(): list_box.add_child(button("Open "+plots[unlocked_plots].name+"   Petals: "+str(plots[unlocked_plots].cost),buy_plot))
+   if GardenAreaCatalogue.next_plot(self)<plots.size():
+    var next=GardenAreaCatalogue.next_plot(self)
+    list_box.add_child(button("Open "+plots[next].name+"   Petals: "+str(plots[next].cost),buy_plot))
    else: add_note("Every path is open. Keep making it yours.")
    detail_label.text = "Aim at a nearby patch of ground.\nNew beds open over time; after day 36, another opens every 12 days."
   "Orders":
@@ -789,6 +805,7 @@ func refresh_sidebar() -> void:
    add_note("WELCOMING WILDLIFE",15)
    add_note("Rabbits occasionally visit open ground. A shop beehive brings its own daytime bees.")
    add_note("Native plants -> native birds\nTwo flowering plants or produce -> lady beetles\nThree flowering plants -> bees & butterflies\nTrees or bird baths -> songbirds\nPonds -> frogs & dragonflies\nMoss and dusk -> fireflies\nFish -> stock a placed pond in the shop")
+   list_box.add_child(button("Garden atlas · ten new trails",func():GardenAreaAtlas.open(self)))
    add_note("STRUCTURES & PHOTOS",15)
    add_note("Use Turn left / Turn right on touch, or Q/E on keyboard, to rotate a structure in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
    add_note("COMPANIONS",15)
@@ -905,10 +922,12 @@ func replenish_orders() -> void:
 
 func _process(delta: float) -> void:
  GardenWorkshop.fit(self)
+ GardenAreaAtlas.fit(self)
  if not is_instance_valid(camera): return
  if is_instance_valid(welcome):
   if updates_open: GardenUpdates.layout(self)
   elif workshop_open: GardenWorkshop.fit(self)
+  elif area_atlas_open:GardenAreaAtlas.fit(self)
   elif not touch_active(): GardenInterface.fit_popup(self,welcome)
   return
  if is_instance_valid(request_popup):
@@ -953,6 +972,7 @@ func _process(delta: float) -> void:
     advance_growth()
  update_camera(delta)
  climate.update(self,delta)
+ GardenAreas.update(self,delta)
  update_lighting()
  climate.apply(self)
  action_cooldown = maxf(0,action_cooldown-delta)
@@ -1011,7 +1031,9 @@ func walk_motion(motion: Vector3) -> void:
  player.velocity.y=0
 
 func accessible(pos: Vector3) -> bool:
- var north=minf(-26,-(int(plots.size()/2)-1)*17-8)
+ if GardenAreaCatalogue.index_at(pos)>=0:return GardenAreas.walkable(pos)
+ if pos.x>=25.5 and pos.x<=44 and pos.z>=4.5 and pos.z<=7.5:return true
+ var north=minf(-26,-(int(GardenAreaCatalogue.legacy_plot_count(self)/2)-1)*17-8)
  if pos.x < -8.5 or pos.x > 25.5 or pos.z > 9 or pos.z < north: return false
  if pos.x>6.6 and pos.x<10.4 and pos.z>-7 and pos.z<7:
   return abs(pos.z-5.9)<0.92
@@ -1029,6 +1051,7 @@ func nearest_plot(pos: Vector3) -> int:
 
 func bed_at(pos: Vector3) -> int:
  for i in range(plots.size()):
+  if i>=4 and i<14:continue
   var c: Vector3 = plots[i].center
   if abs(pos.x-c.x)<4.7 and abs(pos.z-c.z)<4.7: return i
  return -1
@@ -1109,6 +1132,10 @@ func _input(event: InputEvent) -> void:
  GardenClearView.input(self,event)
 
 func _unhandled_input(event: InputEvent) -> void:
+ if area_atlas_open:
+  if event is InputEventKey and event.pressed and event.physical_keycode==KEY_ESCAPE:
+   GardenAreaAtlas.close(self);get_viewport().set_input_as_handled()
+  return
  if workshop_open:
   if event is InputEventKey and event.pressed and event.physical_keycode==KEY_ESCAPE:
    GardenWorkshop.close(self);get_viewport().set_input_as_handled()
@@ -1280,7 +1307,7 @@ func update_hover() -> void:
     if plant.node.visible and gap<nearest:
      nearest=gap
      hover_cell=plant.pos
- if hover_plot>=unlocked_plots: return
+ if not GardenAreaCatalogue.plot_open(self,hover_plot): return
  if player.position.distance_to(hover_cell)>7: return
  if not accessible(hover_cell) and bed_at(hover_cell)<0: return
  hover_valid=true
@@ -1402,6 +1429,7 @@ func object_at(pos: Vector3) -> int:
 
 func plantable_ground(pos: Vector3) -> bool:
  if not accessible(pos): return false
+ if GardenAreaCatalogue.index_at(pos)>=0:return GardenAreas.plantable(pos) and object_at(pos)<0 and not GardenAreas.prop_blocks(self,pos)
  if pos.x>6.3 and pos.x<10.7 and pos.z>-7.3 and pos.z<7.3: return false
  if pos.z>-10.3 and pos.z<-6.7 and pos.x>10 and pos.x<24: return false
  if absf(pos.x+7.4)<2 and absf(pos.z+18)<2: return false
@@ -1413,7 +1441,7 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
   var planter=GardenContainers.object(self,hover_container_uid)
   if not planter.is_empty() and GardenContainers.position(planter,hover_container_slot).distance_to(pos)<.01:
    return GardenContainers.can_plant(self,planter,hover_container_slot,id,excluding)
- if plot<0 or plot>=unlocked_plots: return "Choose an unlocked garden area."
+ if not GardenAreaCatalogue.plot_open(self,plot): return "Choose an unlocked garden area."
  var bed=bed_at(pos)
  if bed>=0 and bed!=plot: return "Choose an open garden bed."
  if bed<0 and not plantable_ground(pos): return "Choose dry ground away from bridges, water and structures."
@@ -1637,7 +1665,8 @@ func plant_scale(p: Dictionary) -> Vector3:
  # Seedlings start alike; each plant gradually reaches its own mature height.
  var height=lerpf(1.0,float(p.get("height_factor",1.0)),fraction)*(1.0-trim*.30)
  var outside_trim=1.0-minf(2,int(p.get("prune_cuts",0)))*.2
- return Vector3(width,height,width)*amount*outside_trim
+ var training={"open":Vector3(1.15,.9,1.15),"fan":Vector3(1.2,.9,.65),"espalier":Vector3(1.35,.8,.38)}.get(str(p.get("area_training","")),Vector3.ONE)
+ return Vector3(width,height,width)*amount*outside_trim*training
 
 func legacy_height_factor(p: Dictionary) -> float:
  # Old saves acquire a repeatable value, even before their first new save.
@@ -1665,6 +1694,7 @@ func refresh_plant(p: Dictionary, animate: bool=true) -> void:
  var highlighted=is_instance_valid(highlighted_plant) and highlighted_plant==p.node
  if highlighted: GardenPlantInspector.highlight(p.node,false)
  GardenPlantGrowth.apply(p.node,catalogue[p.id],fraction,int(p.shape_seed),plant_scale(p))
+ GardenAreas.apply_tree(self,p)
  if highlighted: GardenPlantInspector.highlight(p.node,true)
 
 func starter_garden() -> void:
@@ -1713,6 +1743,7 @@ func update_day_transition(delta: float) -> void:
 func advance_growth() -> void:
  rake_petals=0
  GardenEquipment.morning(self)
+ GardenAreas.morning(self)
  for p in planted:
   var plot = str(p.plot)
   if not GardenContainers.is_contained(p) and automation.has(plot+"water"): p.water=4.0
@@ -1722,10 +1753,11 @@ func advance_growth() -> void:
   p["prune_cuts"]=maxi(0,int(p.get("prune_cuts",0))-1)
   var health = (1.0 if p.water>0 else 0.4)*(1.0-p.stress*0.35)
   p.age=minf(float(catalogue[p.id].days),p.age+health*growth_rate*GardenEquipment.growth_multiplier(self,p,GardenTools.growth_multiplier(self,p.pos,float(day+1)-.000001)))
-  p.water=maxf(0,p.water-GardenEquipment.water_loss(self,p))
-  p.stress=minf(1,p.stress+GardenEquipment.stress_gain(self,p))
+  p.water=maxf(0,p.water-GardenAreas.water_loss(self,p,GardenEquipment.water_loss(self,p)))
+  p.stress=minf(1,p.stress+GardenAreas.stress_gain(self,p,GardenEquipment.stress_gain(self,p)))
   refresh_plant(p)
  day+=1
+ GardenAreas.after_morning(self)
  for obj in objects:GardenEquipment.visual(self,obj)
  GardenTutorial.event(self,"morning")
  GardenTools.expire_water(self)
@@ -1790,8 +1822,9 @@ func expand_bed() -> void:
 
 func buy_plot() -> void:
  GardenExpansion.prepare(self)
- if coins<int(plots[unlocked_plots].cost): toast("This plot also opens freely as the days pass."); return
- coins-=int(plots[unlocked_plots].cost)
+ var next=GardenAreaCatalogue.next_plot(self)
+ if coins<int(plots[next].cost): toast("This plot also opens freely as the days pass."); return
+ coins-=int(plots[next].cost)
  unlock_plot()
  refresh_ui()
 
@@ -1799,10 +1832,11 @@ func unlock_plot() -> void:
  GardenExpansion.prepare(self)
  unlocked_plots+=1
  GardenExpansion.prepare(self)
- for row in range(2,int(plots.size()/2)): GardenExpansion.build_row(self,row)
+ for row in range(2,int(GardenAreaCatalogue.legacy_plot_count(self)/2)): GardenExpansion.build_row(self,row)
  discover_seeds(3)
- toast(plots[unlocked_plots-1].name+" is open. Follow the path. Three new seed varieties await.")
- for i in range(plot_signs.size()): Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else ""))
+ toast(plots[GardenAreaCatalogue.next_plot(self)-1 if unlocked_plots>4 else unlocked_plots-1].name+" is open. Follow the path. Three new seed varieties await.")
+ for i in range(plot_signs.size()):
+  if is_instance_valid(plot_signs[i]):Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i if i<4 else i-10)) if not GardenAreaCatalogue.plot_open(self,i) else ""))
 
 func discover_seeds(count: int) -> void:
  for id in range(catalogue.size()):
@@ -1829,6 +1863,7 @@ func collect_plant(p: Dictionary) -> bool:
  if p.age<float(catalogue[p.id].days): return false
  var key=str(int(p.id))
  inventory[key]=int(inventory.get(key,0))+1
+ GardenAreas.harvested(self,p)
  p.age=maxf(0.5,p.age-1.5)
  refresh_plant(p)
  GardenTutorial.event(self,"gather",p)
@@ -1971,9 +2006,31 @@ func refresh_wildlife() -> void:
   var bird_slot=wildlife.filter(func(entry):return entry.kind==kind).size()
   wildlife.append({"bird_slot":bird_slot,"bird_count":species.count(kind),"feeder":feeder_uid,"legs":legs,"hive":i>=natural_count,"node":n,"kind":kind,"target":target,"phase":float(i)*1.73,"height":height})
 
+ for entry in GardenAreas.wildlife_entries(self):
+  var animal=Art.visitor(entry.kind);add_child(animal)
+  wildlife.append({"node":animal,"kind":entry.kind,"target":entry.target,"area":entry.area,"phase":float(wildlife.size())*1.73,"height":entry.height,"legs":[],"hive":false})
+
+func show_area_collection() -> void:
+ # An inspectable mature example with an isolated save, for reviewing new areas.
+ settings.intro_seen=true;settings.request_notifications=false;orders=[];coins=2000
+ unlocked_plants=range(catalogue.size())
+ for index in range(10):GardenAreas.initialize(self,index)
+ preload("res://tests/areas.gd").demo(self)
+ GardenAreas.visit(self,0);set_mode("walk",false);refresh_ui()
+ GardenAreaAtlas.open(self)
+
+func run_areas_test() -> void:
+ var failures=[]
+ await preload("res://tests/areas.gd").run(self,failures)
+ await get_tree().process_frame
+ await get_tree().process_frame
+ print("AREAS_RESULT: ",failures)
+ get_tree().quit(1 if not failures.is_empty() else 0)
+
 func animate_garden(delta: float, sample_time: float = -1.0) -> void:
  if sample_time<0:garden_animation_time+=maxf(0,delta)
  var t=garden_animation_time if sample_time<0 else sample_time
+ GardenAreas.animate(self,delta,t)
  if not is_instance_valid(plant_batches) or not plant_batches.active:
   for p in planted:p.node.rotation.z=sin(t*1.25+p.pos.x)*0.018
  for entry in wildlife:
@@ -2049,6 +2106,7 @@ func greet_pet() -> void:
  else: toast("Press C to call your companions, or choose Call in the Garden menu.")
 
 func toast(message: String) -> void:
+ if area_atlas_open:area_notice=message
  if workshop_open:workshop_notice=message
  toast_label.text=message
  toast_time=4.5
@@ -2085,6 +2143,7 @@ func capture_photo() -> void:
  if OS.has_feature("web"):
   JavaScriptBridge.download_buffer(img.save_png_to_buffer(),file.get_file(),"image/png")
  else: img.save_png(file)
+ GardenAreas.photograph(self)
  ui.visible=was_visible
  if is_instance_valid(touch): touch.visible=touch_was_visible
  toast("Photo download ready." if OS.has_feature("web") else "Photo saved in "+ProjectSettings.globalize_path(path))
@@ -2099,6 +2158,7 @@ func save_game() -> bool:
  for obj in objects: os.append({"uid":obj.uid,"work":obj.work,"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
  var data={"petal_remainder":petal_remainder,"bed_surfaces":bed_surfaces,"owned_surfaces":owned_surfaces,"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
  data["workshop"]=workshop_state
+ data["areas"]=areas_state
  return GardenSaveFiles.write_atomic(SAVE_PATH,JSON.stringify(data).to_utf8_buffer())
 
 func browser_save_result(safe: bool) -> void:
@@ -2123,6 +2183,7 @@ func browser_save_check() -> bool:
  if not data is Dictionary or int(data.get("version",0)) not in [1,2] or not data.get("plants") is Array: return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
  if plot_count%2: plot_count+=1
+ if data.has("areas"):plot_count+=10
  for p in data.plants:
   if not p is Dictionary or int(p.get("id",-1))<0 or int(p.get("id",-1))>=catalogue.size() or int(p.get("plot",-1))<0 or int(p.get("plot",-1))>=plot_count: return false
  for id in data.get("unlocked_plants",[]):
@@ -2153,6 +2214,7 @@ func load_game() -> void:
   if backup:
    backup.store_string(JSON.stringify(parsed))
    backup.close()
+ parsed=GardenAreaCatalogue.migrate(parsed)
  loaded_data=parsed
  GardenWorkshop.restore(self,parsed)
  favourite_plants=valid_plant_ids(parsed.get("favourite_plants",[]))
@@ -2204,13 +2266,16 @@ func restore_garden() -> void:
   plant.pruned=float(p.get("pruned",0.0))
   plant["prune_cuts"]=int(p.get("prune_cuts",0))
   plant["treatments"]=p.get("treatments",{}).duplicate(true)
+  for field in ["area_training","area_graft","area_offset_day"]:
+   if p.has(field):plant[field]=p[field]
   if p.has("watered_until"):plant["watered_until"]=float(p.watered_until)
   if p.has("container_uid"):
    var planter=GardenContainers.object(self,str(p.container_uid))
    if not planter.is_empty():GardenContainers.attach(self,plant,planter,int(p.container_slot))
   refresh_plant(plant,false)
  if loaded_data.has("player"): player.position=GardenTerrain.point(Vector3(loaded_data.player[0],0,loaded_data.player[1]))+Vector3(0,.1,0)
- for i in range(plot_signs.size()): Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i)) if i>=unlocked_plots else ""))
+ for i in range(plot_signs.size()):
+  if is_instance_valid(plot_signs[i]):Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i if i<4 else i-10)) if not GardenAreaCatalogue.plot_open(self,i) else ""))
  for key in automation:
   var index=int(key.trim_suffix("water").trim_suffix("prune"))
   var center: Vector3=plots[index].center

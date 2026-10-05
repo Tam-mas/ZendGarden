@@ -23,6 +23,7 @@ static func interact(g) -> void:
  if GardenWorkshop.interact(g):return
  var obj=target(g)
  if not obj.is_empty():rest(g,obj)
+ elif GardenAreas.interact(g):return
  else:g.greet_pet()
 
 static func rest(g, obj: Dictionary) -> void:
@@ -81,16 +82,18 @@ static func update(g) -> void:
  var obj=target(g)
  var resting=not g.rest_kind.is_empty()
  var working=GardenWorkshop.target(g)
+ var area=GardenAreaCatalogue.index_at(g.player.position)>=0
  var nearby=g.pets.any(func(p):return p.position.distance_to(g.player.position)<4)
- var visible=g.mode=="walk" and (resting or not obj.is_empty() or not working.is_empty() or nearby) and not g.photo_mode and not g.day_transition and not g.side_panel.visible and not is_instance_valid(g.welcome) and not g.tutorial_state.get("active",false)
+ var visible=g.mode=="walk" and (resting or not obj.is_empty() or not working.is_empty() or nearby or area) and not g.photo_mode and not g.day_transition and not g.side_panel.visible and not is_instance_valid(g.welcome) and not g.tutorial_state.get("active",false)
  # Touch has the same actions in its large Interact button and Garden drawer.
  g.leisure_panel.visible=visible and not g.touch_active() and (resting or g.gameplay_active())
  var col=g.leisure_panel.get_child(0)
- col.get_child(1).visible=resting or not obj.is_empty() or not working.is_empty()
+ col.get_child(1).visible=resting or not obj.is_empty() or not working.is_empty() or area
  col.get_child(1).text=("Stand up" if resting else VERBS.get(obj.get("kind",""),"Rest"))+" · E"
  if not resting and not working.is_empty():
   col.get_child(1).text="Use planter · E" if working.kind in GardenContainers.SPECS else "Use equipment · E"
   col.get_child(1).tooltip_text=GardenEquipment.name_of(g,working.kind)
+ if area and not resting and obj.is_empty() and working.is_empty():col.get_child(1).text="Garden activities · E"
  for i in range(2):
   col.get_child(i+2).visible=resting
   col.get_child(i+2).text="Invite "+g.companion_names[i]+" to settle"

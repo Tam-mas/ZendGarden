@@ -1,3 +1,13 @@
+### [2026-10-05 22:09] Added
+
+**Tech:** `GardenAreas`, `GardenAreaCatalogue`, `GardenAreaAtlas`, `build_distinct_areas.py` — ten connected, functional garden habitats
+
+**Dev:** Author ten distinct 24 m landscapes and eighteen collection plants through Blender MCP, with independent terrain, UV-mapped timber/stone/brick/glass, generated mossy granite and aged brick textures, packed editable source libraries and 28 self-contained GLBs. Add a free atlas, eastern walking approach, regional starter planting, usable benches/containers, water and shade controls, fern discoveries, succulent offsets/rain covers, pollinator journal/season coverage, orchard training/compatible grafts/fruit baskets, companion planting/rotation/kitchen recipes, three restorable year-round glasshouse bays with mist/vents/shade, stream irrigation gates, alpine windbreaks/snowmelt/chime and dusk-opening flowers/lanterns/photo memories. Preserve ordinary care, reserved request harvest, petal difficulty and one-time/daily rewards. Extend collision, sculpting, wildlife and sound transitions; orient native walking surfaces and authored masonry correctly and use continuous collision beneath narrow steps/planks. Keep legacy expansion coordinates and shift their indices, automation, nursery, surface and wild-collection keys only on the first migration. Persist activities and tree metadata, validate uploaded controls/species, retain update dismissal and add player releases 42–43. Provide actual mature in-game atlas previews and an isolated `--areas-showcase` garden. The complete project suite passes, including both renderer area runs, movement, all activities, save migration/reload, 320/390 px and landscape atlas layouts, existing tools/tutorial/touch/dense gardens and audio. Asset checks verify all 28 meshes and 987,333 triangles; read-only Blender checks verify every packed source library. A complete local Web build passes 397 exported models and 9,031 texture references, including the packed area layout; the packaged site is 448.2 MiB with 23 data pieces.
+
+**Plain:** Explore ten new gardens, each with its own scenery, plants and useful activities, while keeping your established garden's progress.
+
+**Why:** Different landscapes and gardening routines give players more places to discover, tend and make their own.
+
 ### [2026-10-05 19:45] Added
 
 **Tech:** `GardenEquipment`, `GardenWorkshop`, `GardenContainers` — functional equipment, elevated planting pockets and stored plants

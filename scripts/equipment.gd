@@ -61,6 +61,9 @@ static func spare(g, produce_only: bool=false) -> Dictionary:
   if amount>0:result[str(id)]=amount
  return result
 
+static func spare_count_for(g,id: int) -> int:
+ return int(spare(g).get(str(id),0))
+
 static func spare_count(g, produce_only: bool=false) -> int:
  var total=0
  for count in spare(g,produce_only).values():total+=int(count)

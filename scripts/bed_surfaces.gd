@@ -30,7 +30,7 @@ static func restore(g,data: Dictionary) -> void:
    if not str(key).is_valid_int():continue
    var index=int(key)
    var id=str(saved[key])
-   if index>=0 and index<g.unlocked_plots and id in g.owned_surfaces:g.bed_surfaces[str(index)]=id
+   if index>=0 and GardenAreaCatalogue.plot_open(g,index) and (index<4 or index>=14) and id in g.owned_surfaces:g.bed_surfaces[str(index)]=id
 
 static func material(id: String) -> ShaderMaterial:
  var item=finish(id)
@@ -45,7 +45,7 @@ static func material(id: String) -> ShaderMaterial:
 static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  for key in g.bed_surfaces:
   var index=int(key)
-  if index<0 or index>=g.unlocked_plots or index>=g.plots.size():continue
+  if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14):continue
   var c: Vector3=g.plots[index].center
   if center.is_finite() and (absf(center.x-c.x)>8 or absf(center.z-c.z)>8):continue
   if g.bed_surface_nodes.has(key):
@@ -92,7 +92,7 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
   g.bed_surface_nodes[key]=mesh
 
 static func apply(g,index: int,id: String) -> bool:
- if index<0 or index>=g.unlocked_plots or index>=g.plots.size():
+ if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14):
   g.toast("Choose an open bed first.");return false
  var item=finish(id)
  if item.id!=id:return false
@@ -114,10 +114,11 @@ static func shop(g) -> void:
  chooser.name="SurfaceBedChoice"
  chooser.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  chooser.custom_minimum_size.y=40
- for i in range(g.unlocked_plots):chooser.add_item(g.plots[i].name,i)
- g.surface_shop_plot=clampi(g.surface_shop_plot,0,g.unlocked_plots-1)
- chooser.select(g.surface_shop_plot)
- chooser.item_selected.connect(func(index):g.surface_shop_plot=index;g.refresh_sidebar())
+ for i in range(g.plots.size()):
+  if GardenAreaCatalogue.plot_open(g,i) and (i<4 or i>=14):chooser.add_item(g.plots[i].name,i)
+ if chooser.get_item_index(g.surface_shop_plot)<0:g.surface_shop_plot=0
+ chooser.select(chooser.get_item_index(g.surface_shop_plot))
+ chooser.item_selected.connect(func(index):g.surface_shop_plot=chooser.get_item_id(index);g.refresh_sidebar())
  g.list_box.add_child(chooser)
  var chosen=g.surface_shop_plot
  var selected=str(g.bed_surfaces.get(str(chosen),"soil"))
