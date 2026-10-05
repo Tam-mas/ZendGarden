@@ -7,7 +7,7 @@ files=list((root/'assets/plants').glob('plant_*.glb'))
 assert len(files)==148, f'Expected 148 species, got {len(files)}'
 tools=[root/'assets/tools'/f'{kind}.glb' for kind in ['can','shears','trowel','rake','hoe']]
 companions=[root/'assets/companions'/f'{kind}.glb' for kind in ['cat','dog']]
-shop=[root/'assets/shop'/f'{kind}.glb' for kind in ['stone','pot','bench','lantern','arbor','pergola','greenhouse','pond','bath','hive','sign','potting_bench','compost_bays','rain_barrel','raised_bed','trellis_screen','gazebo','arched_bridge','fountain','garden_swing','insect_hotel']]
+shop=[root/'assets/shop'/f'{kind}.glb' for kind in ['stone','pot','bench','lantern','arbor','pergola','greenhouse','pond','bath','hive','sign','potting_bench','compost_bays','rain_barrel','raised_bed','trellis_screen','gazebo','arched_bridge','fountain','garden_swing','insect_hotel','worm_farm','mulch_bin','shade_canopy','cold_frame','bird_feeder','wide_bowl','large_planter','herb_trough','hanging_basket','vertical_planter','tiered_planter']]
 wildlife=[root/'assets/wildlife'/f'{kind}.glb' for kind in ['rabbit','kangaroo','kangaroo_joey','songbird','native_bird','frog','bee','butterfly','dragonfly','firefly','fish','lady_beetle','echidna','wombat','fox','fairy_wren','kookaburra','lorikeet','magpie','blue_banded_bee','hoverfly','mantis','leaf_insect','emperor_gum_moth']]
 scenery=list((root/'assets/scenery').glob('*.glb'))
 assert len(scenery)==3
@@ -93,4 +93,4 @@ for path in files+[root/'assets/environment/lake_garden.glb']+tools+companions+s
  if path.name.startswith('plant_'):
 
   assert any('Foliage' in n.get('name','') for n in doc['nodes']),(path,'missing foliage')
-print('BLENDER_ASSET_CHECK: PASS — 148 species, environment, 5 tools, 21 shop structures, 24 wildlife models, 3 scenery models and 2 articulated companions, with no default-scene objects')
+print('BLENDER_ASSET_CHECK: PASS — 148 species, environment, 5 tools, 32 shop structures, 24 wildlife models, 3 scenery models and 2 articulated companions, with no default-scene objects')

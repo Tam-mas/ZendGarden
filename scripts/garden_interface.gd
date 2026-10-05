@@ -11,7 +11,7 @@ static func layout(g, force: bool=false) -> void:
  var sidebar=SIDEBAR_WIDTH
  var tip_width=size.x-sidebar-48 if menus else size.x-32
  g.tip_label.size=Vector2(tip_width,0)
- var tip_height=g.tip_label.get_minimum_size().y+8
+ var tip_height=maxf(g.tip_label.size.y,g.tip_label.get_minimum_size().y)+8
  g.tip_label.position=Vector2(sidebar+32 if menus else 16,size.y-92-tip_height if menus else size.y-16-tip_height)
  var key=str(size)+str(menus)+g.active_tab
  if not force and g.ui.get_meta("desktop_layout","")==key: return

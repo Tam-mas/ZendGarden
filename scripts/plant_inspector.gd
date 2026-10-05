@@ -9,9 +9,13 @@ static func growth_context(g, p: Dictionary) -> Dictionary:
   if obj.kind=="greenhouse" and obj.pos.distance_to(p.pos)<=4:
    return {"rate":1.0,"reason":"Protected by the greenhouse · grows year-round"}
  if not data.seasons.is_empty() and GardenClimate.season(g.day) not in data.seasons:
+  var frame=GardenEquipment.near(g,p,"cold_frame",1.2,"closed")
+  if int(data.layer)<2 and not frame.is_empty() and frame.work.get("closed",true):return {"rate":.6,"reason":"Sheltered by the cold frame · grows gently out of season"}
   return {"rate":0.0,"reason":"Resting until "+GardenCatalogue.growing_seasons(p.id)}
  var actual: String=g.plots[p.plot].condition
  var shaded_by=""
+ var canopy=GardenEquipment.near(g,p,"shade_canopy",1.8,"shade_on")
+ if not canopy.is_empty() and canopy.work.get("shade_on",true):actual="shade";shaded_by="shade cloth"
  for index in g.plant_index.nearby(g.planted,p.pos,2.3):
   var other: Dictionary=g.planted[index]
   if int(g.catalogue[other.id].layer)==3 and other.pos.distance_to(p.pos)<2.3 and other.age/float(g.catalogue[other.id].days)>=.52 and int(data.layer)<3:
@@ -29,14 +33,18 @@ static func lines(g, p: Dictionary) -> Array:
  var data: Dictionary=g.catalogue[p.id]
  var fraction=clampf(p.age/float(data.days),0,1)
  var text=[data.name+" · "+["Groundcover","Flowers","Shrubs","Canopy"][data.layer],"%s · %d%% grown"%[GardenPlantGrowth.stage(fraction,data),roundi(fraction*100)]]
+ if GardenContainers.is_contained(p):text.append("Container pocket %d"%(int(p.container_slot)+1))
  text.append("Thirsty · watering helps" if p.water<=0 else "Watered")
  var care=growth_context(g,p)
  if fraction<1: text.append(care.reason)
- if GardenTools.growth_multiplier(g,p.pos,GardenTools.now(g))>1: text.append("Watering boost · +20% growth")
+ if (float(p.get("watered_until",0))>GardenTools.now(g) if GardenContainers.is_contained(p) else GardenTools.growth_multiplier(g,p.pos,GardenTools.now(g))>1): text.append("Watering boost · +20% growth")
  if float(p.get("stress",0))>.2: text.append("Pruning would ease its stress")
+ for key in ["compost","castings","mulch"]:
+  if GardenEquipment.active(p,key,g.day):text.append(GardenEquipment.RECIPES[key].name+" · %d mornings"%(int(p.treatments[key])-g.day))
  var overlap=0
  for index in g.plant_index.nearby(g.planted,p.pos,g.GRID*.75):
   var other: Dictionary=g.planted[index]
+  if GardenContainers.is_contained(p) or GardenContainers.is_contained(other):continue
   if Vector2(other.pos.x-p.pos.x,other.pos.z-p.pos.z).length()<g.GRID*.75: overlap+=1
  if overlap>1: text.append("%d layers here · %s to switch"%[overlap,"Layer" if g.touch_active() else "L"])
  var actions={"move":"Click to pick up this plant","remove":"Click to remove this plant","prune":"Prune this square","water":"Water this area","harvest":"Gather ready plants in this square"}

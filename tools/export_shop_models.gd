@@ -3,7 +3,9 @@ extends SceneTree
 func _initialize() -> void:
  var directory="res://assets/shop"
  DirAccess.make_dir_recursive_absolute(directory)
+ var exported=0
  for item in GardenCatalogue.furnishings():
+  if "--working-garden" in OS.get_cmdline_user_args() and item.kind not in ["worm_farm","mulch_bin","shade_canopy","cold_frame","bird_feeder","wide_bowl","large_planter","herb_trough","hanging_basket","vertical_planter","tiered_planter"]:continue
   var model=Node3D.new()
   model.name=item.kind.capitalize()
   # Keep a GLB scene instance so textures stay in the imported resource.
@@ -22,6 +24,7 @@ func _initialize() -> void:
   var scene=PackedScene.new()
   scene.pack(model)
   ResourceSaver.save(scene,directory+"/"+item.kind+".tscn")
+  exported+=1
   model.free()
- print("SHOP_MODELS: exported ",GardenCatalogue.furnishings().size()," inspectable scenes (Blender GLB sources preserved)")
+ print("SHOP_MODELS: exported ",exported," inspectable scenes (Blender GLB sources preserved)")
  quit()

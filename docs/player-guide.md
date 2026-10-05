@@ -49,6 +49,16 @@ You can advance to the next morning whenever you want. The garden does not progr
 
 Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
 
+**Settings → Petal earnings** lets you choose **Easy (100%)**, **Medium (60%)**
+or **Hard (30%)** of the original earnings from selling spare harvest, delivering
+neighbour requests and finding petals while raking. Easy is the default and keeps
+existing gardens at their familiar rate. Change whenever you like; the setting
+only affects future earnings. Small fractions accumulate across rewards and
+saves, so several small sales earn the same total as one large sale. Your current
+petals, shop prices, full structure refunds, plant growth and free plot openings
+stay the same. The choice is saved with your garden and travels in downloaded
+save files.
+
 To pack away a placed structure, choose **Remove (7)** and aim at it. The
 structure turns warm red, and its name and petal refund appear. Click, or tap
 **Remove** on touch, to pack away that structure and return its full cost.
@@ -114,6 +124,42 @@ In **Settings**, choose Auto, Touch or Keyboard & mouse controls; switch to a le
 
 Mobile layouts and simultaneous touch input are covered by automated tests and browser emulation. Performance and on-screen keyboard behaviour still need testing on physical iOS and Android devices, particularly with large gardens. Saves stay with the browser profile and site address; they do not automatically sync across devices or domains.
 
+## Working equipment and container gardens
+
+Find equipment and planters in **Shop**. Choose **Working garden · equipment & planters** to see supplies, prepared batches and stored plants. In Wander, face a placed item within a few steps and press **E**; on touch, use **Interact**. This opens its controls and pauses garden time.
+
+| Equipment | Price | Benefit |
+| --- | ---: | --- |
+| Compost bays | 55 | Eight spare harvest items make four portions after two mornings. One portion gives a plant +10% growth for four mornings. |
+| Worm farm | 70 | Six spare produce items make four portions after three mornings. Castings ease stress immediately and slow its return for four mornings. |
+| Leaf mulch bin | 50 | Six spare harvest items make four portions after one morning. Mulch halves a plant's water use for six mornings. |
+| Potting bench | 75 | Four spare harvest items and six petals make four starter-mix portions after one morning. Enable starter mix to give each new plant 8% growth and a full drink. |
+| Rain barrel | 60 | Collects rain, up to 12 drinks. Enable irrigation to water thirsty container plants within 4 metres each morning, spending one drink per plant. |
+| Shade cloth canopy | 85 | Open or fold the cloth to give plants within 1.8 metres shade. Choose plants that prefer shade. |
+| Glass cold frame | 80 | Close its lid to let groundcover and flowers within 1.2 metres grow at 60% pace outside their normal season. Open it to return to normal seasonal rules. |
+| Bird feeding table | 55 | Three spare harvest items attract two extra songbirds that visit the table for three garden days. |
+| Beehive | 65 | Adds daytime bees and +5% growth for produce within 4 metres. |
+| Insect hotel | 45 | Attracts small pollinators and slows stress buildup for flowers and produce within 3 metres. |
+
+Crafting keeps aside the harvest needed for current neighbour requests. Batches finish automatically on their promised morning and never deliver twice. A 40-petal upgrade lets a crafting station prepare two batches at once, or doubles barrel storage to 24 drinks. Removing upgraded equipment returns the upgrade cost too. Prepared batches remain yours if a station is packed away.
+
+Apply supplies to open-ground plants in the current bed from Working garden, or to individual container pockets in their controls. Active treatments cannot be reapplied until they finish. Watering, compost and hive bonuses combine up to +30% growth; rain-barrel irrigation supplies water without the extra hand-watering bonus. Starter mix is used only for new plants, so moving or replanting a grown plant preserves its progress.
+
+| Container | Price | Planting pockets and role |
+| --- | ---: | --- |
+| Terracotta pot | 25 | One pocket for a compact flower, herb or succulent. |
+| Raised garden bed | 35 | Six pockets for flowers, herbs and vegetables. |
+| Wide succulent bowl | 30 | Two pockets for low foliage and small succulents. |
+| Large timber planter | 50 | One deep pocket accommodating shrubs and larger flowers. |
+| Herb trough | 45 | Three raised pockets for compact herbs and flowers. |
+| Hanging basket stand | 55 | One elevated pocket for small trailing plants and strawberries. |
+| Vertical pocket planter | 95 | Six compact pockets in a freestanding timber wall. |
+| Tiered planting steps | 85 | Six pockets arranged across three levels. |
+
+Each pocket has its own plant and care. Aim Plant, Water, Prune or Gather at a pocket, including the upper pockets, or use the container controls. The seed selector offers unlocked plants that fit its height and planting layer. Containers provide their own capacity; trees still need open ground. Bed soakers and auto-pruners tend open-ground plants, while rain barrels provide container irrigation.
+
+Aim **Move** at the container's frame to carry the whole display, or at a plant to move that plant alone. Growth, shape and care travel with it. **Remove** aimed at a container packs its plants into **Stored plants** and refunds the container. Replant stored plants into suitable pockets or place them on open ground. Touch **Undo lift** restores the container and its contents together. Removing an individual plant still lifts it normally; use **Keep this plant in the nursery** in its pocket controls when you want to keep it.
+
 ## Shop reference
 
 Prices are in petals. Select a structure in Shop, then aim at open ground to place it. **Q/E** rotates it; **Move** relocates it. **Remove** (formerly “Lift”) removes a plant or ornament; it does not raise the ground. Removing an ornament refunds its purchase price. Plants do not refund petals, but unlocked seeds stay available. Use the hoe to raise or lower the ground.
@@ -121,7 +167,7 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 | Item | Price | Function |
 | --- | ---: | --- |
 | Path stone | 3 | Places one small limestone stone for a decorative border or path. |
-| Terracotta pot | 25 | Decorative pot. |
+| Terracotta pot | 25 | One planting pocket for a compact flower, herb or succulent. |
 | Garden bench | 45 | Decorative seating for a quiet garden corner. |
 | Stone lantern | 55 | Glows after dusk. |
 | Climbing arbor | 65 | Supports nearby climbing plants. |
@@ -129,11 +175,11 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 | Glass greenhouse | 120 | Lets plants within 4 metres grow year-round and protects their growing conditions. |
 | Lily pond | 75 | Attracts frogs and dragonflies; can hold fish. |
 | Bird bath | 40 | Birds land, dip and splash in daylight; nearby calls follow the nature-volume setting. |
-| Beehive | 65 | Adds four daytime bees around the hive. |
+| Beehive | 65 | Four daytime bees and +5% growth for produce within 4 metres. |
 | Custom garden sign | 15 | Places a sign with your text and colour; existing signs can be edited for free. |
 | Stock nearest pond with fish | 20 | Adds decorative fish to an unstocked pond in the current garden area. |
-| Soaker system | 45 per bed | From day 7, restores the bed’s plants’ water every morning. |
-| Gentle auto-pruner | 45 per bed | From day 7, removes stress from the bed’s plants each morning; does not collect items. |
+| Soaker system | 45 per bed | From day 7, restores the bed’s open-ground plants’ water every morning. |
+| Gentle auto-pruner | 45 per bed | From day 7, removes stress from the bed’s open-ground plants each morning; does not collect items. |
 | Expand bed capacity | 65 | Adds 80 planting capacity to the current bed; repeatable. |
 | Watering can upgrades | 45, then 90 | Wider watering area and a longer-lasting water supply. |
 | Gather reach upgrades | 45, then 90 | From days 3 and 18; expands the gathering square to 2.1 m, then 2.9 m. Hold Gather to sweep across ready plants. |

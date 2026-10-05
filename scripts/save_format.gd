@@ -44,6 +44,7 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
  for key in ["settings","terrain","watered_ground","wild_collection","wild_pruning","inventory","upgrades","automation","expansions","path_widths","climate","tutorial","bed_surfaces"]:
   if data.has(key) and not data[key] is Dictionary:return false
  if not fields(data,["coins","clock","fulfilled","planted_total","rake_petals","prune_width"],["hoe_raise","request_unread"]):return false
+ if data.has("petal_remainder") and not integer(data.petal_remainder,0,99):return false
  if not integer(data.get("day",1),1) or not integer(data.get("unlocked_plots",1),1,1024):return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
  if plot_count%2:plot_count+=1
@@ -90,10 +91,11 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
  if not fields(tutorial,["step","plant","seed","morning"],["active"]):return false
  if tutorial.has("pos") and not vector(tutorial.pos):return false
  var settings: Dictionary=data.get("settings",{})
- if not fields(settings,["control_size","render_scale","updates_seen","volume","music_volume","nature_volume","sensitivity","fov"],["left_handed","intro_seen","request_notifications","reduced_motion","invert_x","invert_y","pause_menus"],["controls","graphics"]):return false
+ if not fields(settings,["control_size","render_scale","updates_seen","volume","music_volume","nature_volume","sensitivity","fov"],["left_handed","intro_seen","request_notifications","reduced_motion","invert_x","invert_y","pause_menus"],["controls","graphics","petal_rate"]):return false
+ if settings.has("petal_rate") and settings.petal_rate not in GardenEconomy.MODES:return false
  if settings.has("learned_hints") and (not settings.learned_hints is Array or not settings.learned_hints.all(func(value):return value is String)):return false
  for value in data.get("owned_surfaces",[]):
   if not value is String:return false
  for value in data.get("bed_surfaces",{}).values():
   if not value is String:return false
- return true
+ return GardenWorkshop.valid_save(data,plant_count)

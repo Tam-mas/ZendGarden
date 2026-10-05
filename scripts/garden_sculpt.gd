@@ -202,6 +202,7 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
   if is_instance_valid(anchor.node):anchor.node.global_position=anchor.base+Vector3(0,GardenTerrain.offset_at(anchor.base.x,anchor.base.z),0)
  for plant in g.wild_plants:plant.pos=plant.node.position
  for plant in g.planted:
+  if GardenContainers.is_contained(plant):continue
   if center.is_finite() and Vector2(plant.pos.x-center.x,plant.pos.z-center.z).length()>3:continue
   plant.pos=GardenTerrain.point(plant.pos);plant.node.position=plant.pos;plant.marker.position=plant.pos
  var grass=g.world_root.get_node_or_null("MeadowGrass")
@@ -225,4 +226,5 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  for entry in g.wildlife:
   if not entry.get("hive",false):entry.target=GardenTerrain.point(entry.target)
  GardenBedSurfaces.rebuild(g,center)
+ GardenContainers.sync(g)
  GardenClimbingSupport.refresh(g)

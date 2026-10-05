@@ -1,3 +1,13 @@
+### [2026-10-05 19:45] Added
+
+**Tech:** `GardenEquipment`, `GardenWorkshop`, `GardenContainers` — functional equipment, elevated planting pockets and stored plants
+
+**Dev:** Give ten working equipment kinds distinct benefits: compost, castings, mulch and starter-mix recipes, rain storage and finite morning irrigation, toggled shade and seasonal shelter, fed songbirds, hive growth and insect-hotel stress relief. Reserve active neighbour-order harvest, cap combined growth bonuses at 30%, upgrade batch slots or rain capacity, retain paid upgrade refunds and finish resting batches once. Add eight container specifications with size/layer limits, ray-targeted elevated pockets and modal controls for planting, care, gathering and nursery storage. Stable structure IDs preserve each pocket through moving, rotation, terrain edits and save restoration; pack contents before refunding containers and restore complete displays with touch Undo. Keep plant growth, variation and care when storing/replanting, preserve compatible v1/v2 garden saves and validate new uploaded state. Add eleven textured GLBs, shop cards and inspectable scenes with a separate packed Blender source library and deterministic builder. Add player releases 40–41, guide/reference notes and focused real-game, save, tool, recipe, wildlife and responsive-layout checks in both renderers. Match existing embedded texture imports and remove redundant generated JPEG copies. The full project suite passes, including legacy saves, update dismissal, tools, orders, touch, dense rendering and Compatibility/Forward+ checks; final focused tests verify the embedded models, workshop feedback and Wander/touch entry controls. Read-only Blender source checks and all 32 structure asset checks pass.
+
+**Plain:** Make useful garden supplies and plant real displays in pots, raised beds, hanging baskets and vertical or tiered planters.
+
+**Why:** Equipment and containers create more ways to tend, arrange and expand a garden with benefits players can choose for themselves.
+
 ### [2026-10-05 17:34] Fixed
 
 **Tech:** `GardenPlantGrowth`, `fruit_tree_geometry.py`, `fruit_growth.gdshaderinc` — branch-attached fruit growth and varied fruit-tree models
@@ -7,6 +17,16 @@
 **Plain:** Fruit stays on its branches as it ripens, and fruit trees have more natural sizes, colours and spacing.
 
 **Why:** Fruiting trees should look alive and grounded instead of floating fruit around their trunks or repeating identical decorations.
+
+### [2026-10-05 17:17] Added
+
+**Tech:** `GardenEconomy`, `GardenExperience.settings_page`, petal awards and save validation — selectable petal earnings
+
+**Dev:** Add Easy (100% of original earnings), Medium (60%) and Hard (30%) in Settings, applying the selected rate to spare-harvest sales, neighbour deliveries and raked finds. Carry integer hundredths across rewards, rate changes and saves so split sales do not lose value through rounding; preview actual order payouts. Preserve current balances, prices, refunds, growth and free plot progression. Default new and legacy gardens to Easy, persist the choice and remainder in compatible v1/v2 save handling, and validate uploaded fields. Add player release 39 and guide notes. Focused arithmetic, upload/recovery and update-dismissal tests pass; real Compatibility-renderer checks cover each income source, reserved items, duplicate deliveries, full refunds, reloads and desktop/touch Settings layouts.
+
+**Plain:** Choose Easy, Medium or Hard petal earnings in Settings and change the pace whenever you like.
+
+**Why:** Slower optional earnings make purchases more deliberate as a mature garden produces more harvest.
 
 ### [2026-10-04 19:09] Performance
 

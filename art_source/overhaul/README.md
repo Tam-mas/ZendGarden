@@ -2,7 +2,7 @@
 
 Created on `codex/blender-garden-model-overhaul` through the connected Blender MCP. All models are original project assets and use the repository licence. The dedicated garden scenes preserve unrelated scenes and selections in the interactive Blender session.
 
-This library supplies 21 placeable structures, 26 animal models, three permanent scenery models, five held tools, and the upgraded environment. Existing furniture kind names, catalogue order and saved garden coordinates remain compatible. The ten new furnishing kinds are appended to the catalogue.
+This library supplies 32 placeable structures, 26 animal models, three permanent scenery models, five held tools, and the upgraded environment. Existing furniture kind names, catalogue order and saved garden coordinates remain compatible. The ten new furnishing kinds are appended to the catalogue.
 
 The completed comparison keeps the original cat, dog, bee, frog and rabbit from
 GitHub main `ca52914`, and the new versions of the other 50 models in the game.
@@ -28,12 +28,13 @@ and hand-painted surface refinement possible.
 | Library | Contents |
 | --- | --- |
 | `structures.blend` | Eleven existing structures and ten new structures, arranged in a gallery |
+| `WorkingGarden.blend` | Five working equipment models and six functional containers, including vertical and tiered displays |
 | `animals.blend` | Cat, dog, rabbit, two kangaroo variants, echidna, wombat, fox, six birds, frog, fish and ten insects |
 | `scenery.blend` | Garden shed, straight footbridge and lakeside cottage |
 | `tools.blend` | Five held tools, preserving original grips and geometry |
 | `environment.blend` | Upgraded shed, limestone walls and distant cottages within the existing landscape |
 
-The existing structure silhouettes guide their replacements: shallow arbor, deeper pergola, pitched greenhouse, flat-topped hive, round stone-edged pond and turned birdbath. New models add a potting bench, compost bays, rain barrel, raised bed, trellis screen, hexagonal gazebo, arched bridge, tiered fountain, garden swing and insect hotel. The gazebo and swing support the existing rest interaction; the insect hotel attracts small visitors. Other new furnishings are decorative rather than new resource systems.
+The existing structure silhouettes guide their replacements: shallow arbor, deeper pergola, pitched greenhouse, flat-topped hive, round stone-edged pond and turned birdbath. New models add a potting bench, compost bays, rain barrel, raised bed, trellis screen, hexagonal gazebo, arched bridge, tiered fountain, garden swing and insect hotel. The gazebo and swing support the existing rest interaction; the insect hotel attracts small visitors. Working equipment now produces garden supplies or changes care conditions; planted containers have individual pockets. `WorkingGarden.blend` adds eleven models without replacing the earlier libraries. Rebuild these with `art_source/build_working_garden.py` in a separate approved background Blender process, then run the shop-scene and card exporters with `-- --working-garden`.
 
 Wood, stone, plaster, clay, metal, coats, feathers, scales and insect cuticle have colour, roughness and normal maps. The packed source maps live under `textures/`; this folder is ignored by Godot and excluded from the web export. Shipped GLBs embed their textures, using JPEG compression. The environment shed consolidates its 462 authored pieces into eight material batches; landscape chunk names and geometry remain intact. Each individual structure/animal stays below 65,000 triangles; `manifest.json` records the current dimensions, mesh count, triangle count, byte size and clips.
 

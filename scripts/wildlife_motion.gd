@@ -8,6 +8,10 @@ static func foot_clearance(kind: String) -> float:
  return {"songbird":.061,"native bird":.062,"fairy wren":.042,"kookaburra":.097,"lorikeet":.069,"magpie":.083}.get(kind,.06)
 
 static func perch(g, entry: Dictionary) -> Vector3:
+ if not str(entry.get("feeder","")).is_empty():
+  var feeder=GardenContainers.object(g,entry.feeder)
+  if not feeder.is_empty() and int(feeder.work.get("feed_until",0))>g.day:
+   return feeder.node.to_global(Vector3(-.20 if int(entry.get("bird_slot",0))%2==0 else .20,1.125+foot_clearance(entry.kind),0))
  var nearest=INF
  var point=GardenTerrain.point(entry.target)+Vector3(0,foot_clearance(entry.kind),0)
  for obj in g.objects:

@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/bird_feeder.glb" id="1_gsl6t"]
+
+[node name="Bird Feeder" type="Node3D" unique_id=763398990]
+
+[node name="Model" type="Node3D" parent="." unique_id=1992979025 instance=ExtResource("1_gsl6t")]

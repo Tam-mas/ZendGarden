@@ -22,7 +22,7 @@ static func aim(g, obj: Dictionary) -> Dictionary:
  for frame in range(2):await g.get_tree().physics_frame
  var face=surface_point(obj.node)
  g.player.position=GardenTerrain.point(obj.pos)+Vector3(0,.1,0)
- g.camera.global_position=face.point+face.normal*1.8
+ g.camera.global_position=face.point+face.normal*3.5
  g.camera.look_at(face.point,Vector3.FORWARD if absf(face.normal.y)>.98 else Vector3.UP)
  g.hover_target=-1
  g.update_hover()
@@ -61,7 +61,9 @@ static func run(g, failures: Array) -> void:
   g.set_mode("remove");await aim(g,obj)
   var ray_origin=g.camera.global_position
   var direction=(face.point-ray_origin).normalized()
-  if not GardenStructureTarget.ray(g,ray_origin,direction,ray_origin+direction*.2).is_empty():failures.append("Structure selected through terrain: "+item.kind)
+  var surface_hit=GardenStructureTarget.ray(g,ray_origin,direction,Vector3.INF)
+  var blocker_distance=minf(.2,ray_origin.distance_to(surface_hit.position)*.25) if not surface_hit.is_empty() else .1
+  if not GardenStructureTarget.ray(g,ray_origin,direction,ray_origin+direction*blocker_distance).is_empty():failures.append("Structure selected through terrain: "+item.kind)
   g.player.position+=Vector3(30,0,0)
   g.update_hover();GardenPlantInspector.update(g)
   if g.hover_valid or is_instance_valid(g.highlighted_structure):failures.append("Distant structure still selectable: "+item.kind)

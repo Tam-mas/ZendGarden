@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/vertical_planter.glb" id="1_to7im"]
+
+[node name="Vertical Planter" type="Node3D" unique_id=1835214824]
+
+[node name="Model" type="Node3D" parent="." unique_id=2109311671 instance=ExtResource("1_to7im")]

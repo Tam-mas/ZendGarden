@@ -351,7 +351,9 @@ func _process(delta: float) -> void:
  stick_knob.position=origin+stick*radius*.65-stick_knob.size/2
  if blocked():
   if is_instance_valid(g.request_popup) and g.request_popup.visible: fit_popup(g.request_popup)
-  if is_instance_valid(g.welcome): fit_popup(g.welcome)
+  if is_instance_valid(g.welcome):
+   if g.workshop_open:GardenWorkshop.fit(g)
+   else:fit_popup(g.welcome)
   return
  var moving=g.mode=="move" and (g.moved_index>=0 or g.moved_object>=0)
  var rotating=g.mode=="build" or (g.mode=="move" and g.moved_object>=0)
@@ -380,8 +382,10 @@ func _process(delta: float) -> void:
  buttons.right.visible=(rotating or g.mode=="prune") and not g.photo_mode
  buttons.right.text="Larger" if g.mode=="prune" else "Turn right"
  var rest_target=GardenLeisure.target(g)
- buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (not g.rest_kind.is_empty() or not rest_target.is_empty() or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
+ var work_target=GardenWorkshop.target(g)
+ buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (not g.rest_kind.is_empty() or not rest_target.is_empty() or not work_target.is_empty() or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
  buttons.greet.text="Stand up" if not g.rest_kind.is_empty() else GardenLeisure.VERBS.get(rest_target.get("kind",""),"Pet companion")
+ if g.rest_kind.is_empty() and not work_target.is_empty():buttons.greet.text="Use planter" if work_target.kind in GardenContainers.SPECS else "Use equipment"
  if not g.rest_kind.is_empty():
   context_title.text={"bench":"Sitting in your garden","pergola":"Resting in the shade","pond":"Watching the pond"}.get(g.rest_kind,"Resting")
   context_hint.text="Drag to look. Garden lets you invite a companion. Walk or tap Stand up to leave."
@@ -492,6 +496,7 @@ func act(repeating: bool=false) -> void:
   var index=g.aimed_plant()
   if index>=0:
    removed=g.planted[index].duplicate()
+   if GardenContainers.is_contained(g.planted[index]):removed=GardenContainers.record(g.planted[index])
    removed.erase("node"); removed.erase("marker")
    removed["plant"]=true
   else:
@@ -509,14 +514,27 @@ func undo_remove() -> void:
  if removed.is_empty(): return
  var old=removed
  if old.plant:
+  if old.has("container_uid"):
+   var planter=GardenContainers.object(g,str(old.container_uid))
+   if planter.is_empty() or not GardenContainers.can_plant(g,planter,int(old.container_slot),int(old.id)).is_empty():g.toast("Make room in that pocket before undoing.");return
+   GardenContainers.restore_record(g,old)
+   removed.clear();g.refresh_ui();g.toast("Back in its planting pocket.");return
   if not g.can_plant(old.id,old.pos,old.plot).is_empty(): g.toast("Make room in that spot before undoing."); return
   var p=g.add_plant(old.id,old.pos,old.plot,old.age,old.height_factor,float(old.get("orientation",0)),int(old.get("shape_seed",0)))
-  for key in ["water","stress","pruned"]: p[key]=old[key]
+  for key in ["water","stress","pruned","prune_cuts","treatments","watered_until"]:
+   if old.has(key):p[key]=old[key]
   g.refresh_plant(p)
  else:
   if g.coins<old.price or g.object_at(old.pos)>=0: g.toast("The refund and the original space are needed to undo."); return
   g.coins-=old.price
-  g.add_object(old.kind,old.pos,old.price,old.fish,old.get("rotation",0.0),old.get("text","My garden"),Color.from_string(old.get("text_color","f1e5c7"),Color("f1e5c7")))
+  g.add_object(old.kind,old.pos,old.price,old.fish,old.get("rotation",0.0),old.get("text","My garden"),Color.from_string(old.get("text_color","f1e5c7"),Color("f1e5c7")),old)
+  var restored=g.objects.back()
+  if old.kind in GardenContainers.SPECS:
+   for saved in g.workshop_state.nursery.duplicate():
+    if saved.get("storage_source","")==old.uid:
+     var slot=int(saved.get("storage_slot",-1))
+     if GardenContainers.can_plant(g,restored,slot,int(saved.id)).is_empty():
+      GardenContainers.replant(g,g.workshop_state.nursery.find(saved),restored,slot)
  removed.clear()
  g.refresh_ui()
  g.toast("Back where it belongs.")

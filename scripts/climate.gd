@@ -58,6 +58,7 @@ func update(g, delta: float) -> void:
  snow_particles.emitting=snow>.03
  snow_particles.material_override.albedo_color.a=.8*snow
  if not g.photo_mode:
+  GardenEquipment.weather(g,current.y,delta)
   for plant in g.planted:
    plant.water=minf(4.0,plant.water+current.y*delta/24.0)
 
