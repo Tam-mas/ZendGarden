@@ -1,3 +1,13 @@
+### [2026-10-06 09:53] Changed
+
+**Tech:** `GardenAreas`, `GardenAreaFlora`, `GardenBedSurfaces`, `area_refinement.py`, `area_botanicals.py` — refined habitats, detailed collection plants and grounded placement
+
+**Dev:** Refine all ten habitats through Blender MCP and reuse the established botanical geometry/detail/PBR workflow for all eighteen regional species and their four growth stages. Replace decorative placeholder plants with shared detailed meshes batched by habitat and canopy/dusk controls; refresh their transforms after terrain edits. Fit continuous flowing water, softened textured banks and curved paving to native creek/path geometry. Add UV-mapped weathered bark from built-in ImageGen, log end grain, repaired bridge rails, woven glasshouse shade, aligned potted collections, slatted bench and harvest table. Reserve rock/log/step/container clearance during authoring and reject planting through scenery and furniture across garden beds. Move only the four unchanged free terrace starter containers to safe locations, preserving IDs and contents; retain user-moved containers. Make orchard and kitchen soil use existing changeable bed finishes with compatible save restoration and sculpted-ground metadata. Preserve catalogue IDs, existing plants, activity progress, dismissal state and saves; add player release 45. Review actual whole-garden and walking-height captures across multiple passes. The complete project suite passes, including Compatibility and Forward+ area/gameplay checks, all atlas arrivals, 490 ground rays, twelve walks, sculpting, migration, finishes and container restoration; asset checks verify all 28 area models with 465,842 triangles, and read-only Blender checks pass all 33 source libraries with packed images. A fresh local Web export verifies every model and texture reference and packages successfully; the review gallery works at 320 px with all twenty photographs.
+
+**Plain:** All ten new gardens have more natural plants, water, paths and furnishings, with clear planting spaces and soil finishes players can change.
+
+**Why:** Richer, coherent scenery and correctly placed objects make the gardens more enjoyable to explore and personalise.
+
 ### [2026-10-05 22:47] Fixed
 
 **Tech:** `GardenAreas.prepare_meshes`, `tests/areas.gd`, `tests/walking.gd` — imported habitat ground collision

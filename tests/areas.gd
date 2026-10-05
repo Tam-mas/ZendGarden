@@ -57,7 +57,7 @@ static func demo(g) -> void:
   for j in range(60 if index==3 else 36):
    var x=[-4.4,-3.2,-2,2,3.2,4.4][j%6];var z=[-4.4,-3.2,-2,2,3.2,4.4][floori(j/6.0)%6]
    var pos=GardenAreaCatalogue.center(index)+Vector3(x,0,z)
-   if not GardenAreas.plantable(pos):continue
+   if not g.plantable_ground(pos):continue
    var id={2:[124,125,126,129,130,134,135,127],3:[0,1,2,7,65,66,36,37],5:[46,47,48,54,56,51,52,104],7:[8,13,16,109,146,147]}[index][j%(8 if index in [2,3,5] else 6)]
    add(g,index,id,x,z)
  mature(g,4)
@@ -96,6 +96,30 @@ static func run(g,failures: Array) -> void:
     ray.exclude=[g.player.get_rid()]
     var ground=g.get_world_3d().direct_space_state.intersect_ray(ray)
     check(not ground.is_empty() and ground.position.y> -1 and ground.normal.y>0,failures,"Missing ground collision in "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
+ # Bed surfaces retain the precise soil footprint and save their choices.
+ for plot in [8,9]:
+  var soils=g.terrain_meshes.filter(func(e):return int(e.node.get_meta("area_bed_plot",-1))==plot)
+  check(not soils.is_empty(),failures,"Missing changeable habitat soil: "+str(plot))
+  check(GardenBedSurfaces.apply(g,plot,"bark"),failures,"Habitat bed cannot change surface: "+str(plot))
+  for soil in soils:
+   check(soil.node.material_override.get_shader_parameter("earth").resource_path.ends_with("beds/bark.webp"),failures,"Bed finish missed an authored soil patch")
+  var surface_save={"owned_surfaces":g.owned_surfaces.duplicate(),"bed_surfaces":g.bed_surfaces.duplicate()}
+  GardenBedSurfaces.restore(g,surface_save);GardenBedSurfaces.rebuild(g)
+  check(g.bed_surfaces[str(plot)]=="bark",failures,"Habitat bed finish did not survive restore")
+  GardenBedSurfaces.apply(g,plot,"soil")
+ # Ordinary bed planting must reject the actual stone footprint too.
+ var bed_point: Vector3=g.plots[0].center
+ g.add_object("stone",bed_point,0,false,.7)
+ await g.get_tree().physics_frame
+ check(not g.can_plant(0,bed_point,0).is_empty(),failures,"Planting inside an ordinary bed still ignores stone surfaces")
+ var temporary=g.objects.pop_back();temporary.node.free()
+ var boulder=GardenAreaCatalogue.center(1)+Vector3(-5,0,-5)
+ check(not g.plantable_ground(boulder),failures,"Fern Gully boulder remains plantable")
+ for old in [Vector3(-5,0,5),Vector3(4,0,-5),Vector3(3,0,0),Vector3(-5,0,-6)]:
+  var original=GardenAreaCatalogue.center(2)+old
+  var corrected=GardenAreas.repair_starter_container("pot",original,0)
+  check(corrected.distance_to(original)>.2,failures,"Original terrace container was not freed from masonry")
+  check(GardenAreas.repair_starter_container("pot",original+Vector3(.2,0,0),0)==original+Vector3(.2,0,0),failures,"A moved player container was repositioned")
  # Traverse real collisions on the eastern approach and every area path.
  var walker=preload("res://tests/walking.gd")
  for segment in [[Vector3(25.2,0,6),Vector3(34.5,0,6)],[Vector3(34.5,0,6),Vector3(44.5,0,6)]]:
@@ -202,6 +226,7 @@ static func run(g,failures: Array) -> void:
  # Real rendered previews and small-screen controls are part of the regression.
  demo(g)
  for index in range(10):await capture(g,index)
+ await details(g)
  if DisplayServer.get_name()!="headless":
   g.ui.show();g.player.show();g.photo_mode=false
   for dimensions in [Vector2i(320,568),Vector2i(390,844),Vector2i(667,375)]:
@@ -213,3 +238,29 @@ static func run(g,failures: Array) -> void:
    g.get_viewport().get_texture().get_image().save_png("res://captures/areas/atlas-%dx%d.png"%[dimensions.x,dimensions.y])
    GardenAreaAtlas.close(g)
   DisplayServer.window_set_size(Vector2i(1280,800))
+
+static func details(g) -> void:
+ if DisplayServer.get_name()=="headless":return
+ g.ui.hide();g.touch.hide();g.player.hide();g.photo_mode=true;g.camera.fov=52
+ var views=[
+  [1,"fern-fronds",Vector3(5.7,4,3.9),Vector3(3,2.6,1)],
+  [1,"fern-creek",Vector3(3,2.1,7),Vector3(-.1,1.1,0)],
+  [1,"fallen-log",Vector3(-.5,2.5,4.7),Vector3(-3.3,1.8,2.1)],
+  [2,"terrace-containers",Vector3(-1,2.4,8.4),Vector3(-4.5,1.7,6)],
+  [4,"orchard-bench-soil",Vector3(-2,2.9,8),Vector3(-5,2,4)],
+  [4,"harvest-table",Vector3(2.7,2.5,8.4),Vector3(0,2.1,6)],
+  [5,"kitchen-beds",Vector3(1,3.1,5.8),Vector3(-3.2,1.6,1.8)],
+  [6,"potted-orchids",Vector3(-1,3.4,3),Vector3(-3.8,3.05,0)],
+  [6,"woven-shade",Vector3(0,2.8,3.3),Vector3(0,4.55,0)],
+  [7,"stream-bridge",Vector3(-4.7,2.5,5.8),Vector3(0,1.9,3)]
+ ]
+ DirAccess.make_dir_recursive_absolute("res://captures/area-refinement/details")
+ for view in views:
+  var center=GardenAreaCatalogue.center(view[0]);g.clock_time=.43
+  g.camera.global_position=center+view[2];g.camera.look_at(center+view[3]);g.update_lighting()
+  await g.get_tree().process_frame;await RenderingServer.frame_post_draw
+  var image=g.get_viewport().get_texture().get_image()
+  image.save_png("res://captures/area-refinement/details/"+view[1]+".png")
+  image.resize(960,600,Image.INTERPOLATE_LANCZOS)
+  image.save_webp("res://captures/area-refinement/details/"+view[1]+"-gallery.webp",true,.65)
+ g.ui.show();g.player.show();g.photo_mode=false

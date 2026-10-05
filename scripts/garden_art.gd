@@ -115,7 +115,7 @@ static func add_leaf_wind(node: Node) -> void:
      material.set_shader_parameter("fruit_anchors",anchored)
      material.set_shader_parameter("fruit_growth",fruit_growth)
      material.set_shader_parameter("leaf_texture",original.albedo_texture)
-     var leafy=str(original.resource_name).begins_with("Leaf")
+     var leafy=str(original.resource_name).begins_with("Leaf") or str(original.resource_name).contains("botanical leaf") or str(original.resource_name).contains("young leaf") or str(original.resource_name).contains("silver felt")
      material.set_shader_parameter("has_color_map",original.albedo_texture!=null)
      material.set_shader_parameter("wind_strength",1.0 if leafy and not anchored else 0.0)
      material.set_shader_parameter("surface_backlight",.10 if leafy else 0.0)

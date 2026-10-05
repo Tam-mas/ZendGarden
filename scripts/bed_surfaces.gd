@@ -24,13 +24,15 @@ static func restore(g,data: Dictionary) -> void:
    var id=str(value)
    if finish(id).id==id and id not in g.owned_surfaces:g.owned_surfaces.append(id)
  g.bed_surfaces.clear()
+ for entry in g.terrain_meshes:
+  if int(entry.node.get_meta("area_bed_plot",-1)) in [8,9]:entry.node.material_override=area_material(int(entry.node.get_meta("area_bed_plot")),"soil")
  var saved=data.get("bed_surfaces",{})
  if saved is Dictionary:
   for key in saved:
    if not str(key).is_valid_int():continue
    var index=int(key)
    var id=str(saved[key])
-   if index>=0 and GardenAreaCatalogue.plot_open(g,index) and (index<4 or index>=14) and id in g.owned_surfaces:g.bed_surfaces[str(index)]=id
+   if index>=0 and GardenAreaCatalogue.plot_open(g,index) and (index<4 or index>=14 or index in [8,9]) and id in g.owned_surfaces:g.bed_surfaces[str(index)]=id
 
 static func material(id: String) -> ShaderMaterial:
  var item=finish(id)
@@ -42,10 +44,24 @@ static func material(id: String) -> ShaderMaterial:
  mat.set_shader_parameter("broad_mix",.08 if id in ["gravel","pebbles","slate","bark"] else .32)
  return mat
 
+static func area_material(index: int,id: String) -> ShaderMaterial:
+ var mat=material(id)
+ if index==8:
+  mat.shader=load("res://shaders/habitat_ground.gdshader")
+  mat.set_shader_parameter("habitat_kind",4)
+  mat.set_shader_parameter("habitat_center",Vector2(GardenAreaCatalogue.center(4).x,GardenAreaCatalogue.center(4).z))
+  mat.set_shader_parameter("meadow",load("res://assets/textures/Meadow_earth.webp"))
+  mat.set_shader_parameter("meadow_normal",load("res://assets/textures/Meadow_earth_normal.webp"))
+ return mat
+
 static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  for key in g.bed_surfaces:
   var index=int(key)
-  if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14):continue
+  if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14 and index not in [8,9]):continue
+  if index in [8,9]:
+   for entry in g.terrain_meshes:
+    if int(entry.node.get_meta("area_bed_plot",-1))==index:entry.node.material_override=area_material(index,g.bed_surfaces[key])
+   continue
   var c: Vector3=g.plots[index].center
   if center.is_finite() and (absf(center.x-c.x)>8 or absf(center.z-c.z)>8):continue
   if g.bed_surface_nodes.has(key):
@@ -92,7 +108,7 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
   g.bed_surface_nodes[key]=mesh
 
 static func apply(g,index: int,id: String) -> bool:
- if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14):
+ if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14 and index not in [8,9]):
   g.toast("Choose an open bed first.");return false
  var item=finish(id)
  if item.id!=id:return false
@@ -115,7 +131,7 @@ static func shop(g) -> void:
  chooser.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  chooser.custom_minimum_size.y=40
  for i in range(g.plots.size()):
-  if GardenAreaCatalogue.plot_open(g,i) and (i<4 or i>=14):chooser.add_item(g.plots[i].name,i)
+  if GardenAreaCatalogue.plot_open(g,i) and (i<4 or i>=14 or i in [8,9]):chooser.add_item(g.plots[i].name,i)
  if chooser.get_item_index(g.surface_shop_plot)<0:g.surface_shop_plot=0
  chooser.select(chooser.get_item_index(g.surface_shop_plot))
  chooser.item_selected.connect(func(index):g.surface_shop_plot=chooser.get_item_id(index);g.refresh_sidebar())

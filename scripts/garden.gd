@@ -1433,7 +1433,7 @@ func plantable_ground(pos: Vector3) -> bool:
  if pos.x>6.3 and pos.x<10.7 and pos.z>-7.3 and pos.z<7.3: return false
  if pos.z>-10.3 and pos.z<-6.7 and pos.x>10 and pos.x<24: return false
  if absf(pos.x+7.4)<2 and absf(pos.z+18)<2: return false
- if object_at(pos)>=0: return false
+ if object_at(pos)>=0 or GardenAreas.prop_blocks(self,pos): return false
  return true
 
 func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
@@ -1444,7 +1444,7 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
  if not GardenAreaCatalogue.plot_open(self,plot): return "Choose an unlocked garden area."
  var bed=bed_at(pos)
  if bed>=0 and bed!=plot: return "Choose an open garden bed."
- if bed<0 and not plantable_ground(pos): return "Choose dry ground away from bridges, water and structures."
+ if not plantable_ground(pos): return "Choose dry ground away from bridges, water and structures."
  if capacity_used(plot,excluding)+int(catalogue[id].capacity)>plot_capacity(plot): return "This bed is full. Remove a plant, move one, or expand its capacity."
  if plant_at(pos,catalogue[id].layer,excluding)>=0: return "This layer is occupied. Another layer can share this square."
  # Root systems require room at canopy level, but allow genuine underplanting.
@@ -1636,7 +1636,7 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  return p
 
 func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orientation: float = 0.0, text: String = "My garden", color: Color = Color("f1e5c7"), saved: Dictionary={}) -> void:
- pos=GardenTerrain.point(pos)
+ pos=GardenTerrain.point(GardenAreas.repair_starter_container(kind,pos,price))
  var n = Art.furnishing(kind)
  object_root.add_child(n)
  n.position=pos

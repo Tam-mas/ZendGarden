@@ -115,6 +115,7 @@ static func chunks(g,node: MeshInstance3D) -> void:
    var st: SurfaceTool=tiles[key];st.index();st.set_material(node.mesh.surface_get_material(surface))
    var patch=MeshInstance3D.new();patch.name="GroundTile_%d_%d"%[key.x,key.y]
    patch.mesh=st.commit();patch.material_override=node.material_override
+   if node.has_meta("area_bed_plot"):patch.set_meta("area_bed_plot",node.get_meta("area_bed_plot"))
    node.get_parent().add_child(patch);patch.transform=node.transform
    register(g,patch,false)
  node.hide()
@@ -228,6 +229,7 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  if is_instance_valid(g.player):g.player.position.y=maxf(g.player.position.y,GardenTerrain.point(g.player.position).y+.12)
  for entry in g.wildlife:
   if not entry.get("hive",false):entry.target=GardenTerrain.point(entry.target)
+ for habitat in g.area_roots:GardenAreaFlora.refresh(habitat)
  GardenBedSurfaces.rebuild(g,center)
  GardenContainers.sync(g)
  GardenClimbingSupport.refresh(g)

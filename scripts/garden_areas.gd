@@ -48,7 +48,8 @@ static func build(g) -> void:
   var root=Node3D.new();root.name="Habitat_"+info.kind
   g.world_root.add_child(root);root.position=GardenAreaCatalogue.center(index)
   var model=instantiate("res://assets/areas/"+info.kind+".glb")
-  if model:root.add_child(model);prepare_meshes(model)
+  if model:root.add_child(model);prepare_meshes(model,false,false,index+4)
+  GardenAreaFlora.build(g,root)
   var collection=Node3D.new();collection.name="LivingCollection";root.add_child(collection)
   g.area_roots.append(root)
   water_features(g,root,index)
@@ -87,7 +88,7 @@ static func build(g) -> void:
   root.visible=true
  build_trail(g)
 
-static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false) -> void:
+static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed_plot: int=-1) -> void:
  var name=String(node.name)
  # Godot keeps glTF custom properties in extras. Blender also numbers repeated
  # pivot names across the library, so the first area's "Ground" is not enough.
@@ -96,14 +97,31 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false) ->
  solid=solid or node.get_meta("area_collision",false) or extras.get("collision",false) or extras.get("area_collision",false) or SOLID_PIVOTS.any(func(part):return name.begins_with(part))
  if node is MeshInstance3D:
   if not ground and String(node.name).contains("mossrock"):solid=true
+  if not ground and str(node.name).contains("weathered bark"):
+   for surface in range(node.mesh.get_surface_count()):
+    var original=node.mesh.surface_get_material(surface)
+    if original is StandardMaterial3D:
+     var bark=original.duplicate();bark.albedo_color=Color(.82,.78,.72);node.set_surface_override_material(surface,bark)
   node.visibility_range_end=0 if ground else 80
-  if ground:node.set_meta("editable_ground",true)
+  if ground:
+   node.set_meta("editable_ground",true)
+   if bed_plot in [8,9] and (str(node.name).contains("potting loam") or bed_plot==8 and str(node.name).contains("Area grass")):
+    node.set_meta("area_bed_plot",bed_plot);node.material_override=GardenBedSurfaces.area_material(bed_plot,"soil")
+   if bed_plot in [4,5,6,7,11,12,13] and not str(node.name).contains("limestone"):
+    var mat=ShaderMaterial.new();mat.shader=load("res://shaders/habitat_ground.gdshader")
+    mat.set_shader_parameter("habitat_kind",bed_plot-4)
+    var c=GardenAreaCatalogue.center(bed_plot-4);mat.set_shader_parameter("habitat_center",Vector2(c.x,c.z))
+    mat.set_shader_parameter("meadow",load("res://assets/textures/beds/sand.webp" if bed_plot==6 else "res://assets/textures/Meadow_earth.webp"))
+    mat.set_shader_parameter("meadow_normal",load("res://assets/textures/beds/sand_normal.webp" if bed_plot==6 else "res://assets/textures/Meadow_earth_normal.webp"))
+    mat.set_shader_parameter("earth",load("res://assets/textures/beds/gravel.webp"))
+    mat.set_shader_parameter("relief",load("res://assets/textures/beds/gravel_normal.webp"))
+    node.material_override=mat
   elif solid:
    node.create_trimesh_collision()
    for body in node.get_children():
     if body is StaticBody3D:body.set_meta("area_obstacle",true)
  for child in node.get_children():
-  if child is Node3D and not child is StaticBody3D:prepare_meshes(child,ground,solid)
+  if child is Node3D and not child is StaticBody3D:prepare_meshes(child,ground,solid,bed_plot)
 
 static func find(root: Node, prefix: String) -> Node3D:
  if String(root.name).begins_with(prefix) and root is Node3D and not root is MeshInstance3D:return root
@@ -155,7 +173,7 @@ static func water_surface(g,root: Node3D,name: String,points: Array,height: floa
    st.set_uv(Vector2(p.x,p.z)*.2);st.add_vertex(Vector3(p.x,height,p.z))
  st.generate_normals()
  var n=MeshInstance3D.new();n.name=name;n.mesh=st.commit()
- var material=ShaderMaterial.new();material.shader=load("res://shaders/lake.gdshader")
+ var material=ShaderMaterial.new();material.shader=load("res://shaders/habitat_water.gdshader")
  material.set_shader_parameter("deep_color",Color("29454b"));material.set_shader_parameter("edge_color",Color("63847b"))
  n.material_override=material;n.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
  root.add_child(n);return n
@@ -168,21 +186,34 @@ static func circle_points(x: float,z: float,rx: float,rz: float) -> Array:
 static func ribbon(g,root: Node3D,name: String,points: Array,width: float,raised: float=0) -> Node3D:
  var node=Node3D.new();node.name=name;root.add_child(node)
  var index=GardenAreaCatalogue.index_at(root.position)
- for k in range(points.size()-1):
-  var a: Vector3=points[k];var b: Vector3=points[k+1]
-  var side=(b-a).cross(Vector3.UP).normalized()*width*.5
-  var level=minf(local_point(index,a).y,local_point(index,b).y)+raised
-  water_surface(g,node,"Ribbon%d"%k,[a-side,a+side,b+side,b-side],level)
+ var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+ var rows=[];var distance=0.0
+ for k in range(points.size()):
+  var point: Vector3=points[k]
+  var tangent: Vector3=points[mini(k+1,points.size()-1)]-points[maxi(0,k-1)]
+  var side=tangent.cross(Vector3.UP).normalized()*width*.5
+  var level=.88+.008*point.z if index==1 and name=="MainStream" else .78 if name=="MainStream" else local_point(index,point).y+raised
+  if k>0:distance+=point.distance_to(points[k-1])
+  rows.append([Vector3(point.x-side.x,level,point.z-side.z),Vector3(point.x+side.x,level,point.z+side.z),distance])
+ for k in range(rows.size()-1):
+  var a=rows[k];var b=rows[k+1]
+  for v in [[a[0],Vector2(0,a[2])],[b[0],Vector2(0,b[2])],[a[1],Vector2(1,a[2])],[a[1],Vector2(1,a[2])],[b[0],Vector2(0,b[2])],[b[1],Vector2(1,b[2])]]:
+   st.set_uv(v[1]);st.add_vertex(v[0])
+ st.generate_normals();st.generate_tangents()
+ var mesh=MeshInstance3D.new();mesh.name="ContinuousWater";mesh.mesh=st.commit()
+ var material=ShaderMaterial.new();material.shader=load("res://shaders/habitat_water.gdshader")
+ material.set_shader_parameter("flowing",true);mesh.material_override=material
+ mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;node.add_child(mesh)
  return node
 
 static func water_features(g,root: Node3D,index: int) -> void:
  if index==0:water_surface(g,root,"InletWater",circle_points(-1.4,0,4.25,3.8),.72)
  elif index==1 or index==7:
   var points=[]
-  for k in range(21):
-   var z=-9+k*.9
-   points.append(Vector3(0 if index==1 else 1.5*sin(z*.4),0,z))
-  ribbon(g,root,"MainStream",points,.45 if index==1 else 1.2,.12)
+  for k in range(121):
+   var z=-9+k*.15
+   points.append(Vector3(1.0*sin(z*.42)+.30*sin(z*.83) if index==1 else 1.5*sin(z*.4),0,z))
+  ribbon(g,root,"MainStream",points,1.10 if index==1 else 1.2,.12)
   if index==7:
    for side in range(2):
     var x=-3.0 if side==0 else 3.0
@@ -227,7 +258,7 @@ static func initialize(g,index: int) -> void:
   for slot in [0,3,6]:plant_collection(g,index,slot,default_species(index,slot),false)
  elif index==1:plant_collection(g,index,0,"maidenhair",false)
  elif index==2:
-  for j in range(4):g.add_object("wide_bowl" if j%2==0 else "pot",c+Vector3([-5,4,3,-5][j],0,[5,-5,0,-6][j]),0,false)
+  for j in range(4):g.add_object("wide_bowl" if j%2==0 else "pot",c+Vector3([-4.5,4.1,3.3,-4.4][j],0,[6,-6.8,1.5,-2.8][j]),0,false)
  elif index==4:
   for j in range(4):
    var id=[35,83,84,82][j]
@@ -314,10 +345,11 @@ static func visual_collection(g,index: int) -> void:
   model.name="Pocket%d"%slot;collection.add_child(model)
   model.position=slot_position(g,index,slot,p)
   model.rotation.y=slot*2.399
-  model.scale=Vector3.ONE*lerpf(.22,1.0,age)
+  GardenAreaFlora.growth(model,age,index!=9 or dusk(g))
+  g.Art.add_leaf_wind(model)
   model.set_meta("species",p.species)
   var flowers=find(model,"Flowers")
-  if flowers:flowers.visible=age>=.72 and (index!=9 or dusk(g))
+  if flowers and age>=.78:flowers.visible=index!=9 or dusk(g)
   var marker=Node3D.new();marker.name="Label";model.add_child(marker)
   g.Art.seed_marker(marker,Color("e2d9a2"));marker.visible=age<.30
  for slot in range(GardenAreaCatalogue.entry(index).slots.size()):
@@ -337,10 +369,25 @@ static func collision_enabled(node: Node,enabled: bool) -> void:
 
 static func prop_blocks(g,pos: Vector3) -> bool:
  var origin=GardenTerrain.point(pos)
- var query=PhysicsRayQueryParameters3D.create(origin+Vector3(0,3,0),origin+Vector3(0,.08,0))
- query.exclude=[g.player.get_rid()]
- var result=g.get_world_3d().direct_space_state.intersect_ray(query)
- return not result.is_empty() and result.collider.get_meta("area_obstacle",false)
+ var space=g.get_world_3d().direct_space_state
+ # Include tool-target surfaces of user furniture, even inside ordinary beds.
+ # A few centimetres of root clearance prevents stems entering rock edges.
+ for offset in [Vector3.ZERO,Vector3(.14,0,0),Vector3(-.14,0,0),Vector3(0,0,.14),Vector3(0,0,-.14)]:
+  var query=PhysicsRayQueryParameters3D.create(origin+offset+Vector3(0,2.4,0),origin+offset-Vector3(0,.06,0),3)
+  if is_instance_valid(g.player):query.exclude=[g.player.get_rid()]
+  query.hit_back_faces=true
+  var hit=space.intersect_ray(query)
+  if not hit.is_empty() and is_instance_valid(hit.collider) and (hit.collider.get_meta("area_obstacle",false) or hit.collider.get_meta("planting_obstacle",false) or hit.collider.has_meta("structure")):return true
+ return false
+
+static func repair_starter_container(kind: String,pos: Vector3,price: int) -> Vector3:
+ if price!=0 or kind not in ["pot","wide_bowl"]:return pos
+ var center=GardenAreaCatalogue.center(2)
+ var previous=[Vector3(-5,0,5),Vector3(4,0,-5),Vector3(3,0,0),Vector3(-5,0,-6)]
+ var corrected=[Vector3(-4.5,0,6),Vector3(4.1,0,-6.8),Vector3(3.3,0,1.5),Vector3(-4.4,0,-2.8)]
+ for j in range(4):
+  if Vector2(pos.x-center.x-previous[j].x,pos.z-center.z-previous[j].z).length()<.01:return center+corrected[j]
+ return pos
 
 static func visual(g,index: int) -> void:
  if index<0 or index>=g.area_roots.size():return
@@ -674,7 +721,7 @@ static func plantable(pos: Vector3) -> bool:
  if absf(p.x)>8.1 or absf(p.z)>8.1:return false
  match index:
   0:return Vector2(p.x+1.4,p.z*1.1).length()>5.1 and absf(p.z-5.1)>1.0
-  1:return absf(p.x)>1.0
+  1:return absf(p.x-(1.0*sin(p.z*.42)+.30*sin(p.z*.83)))>.90 and absf(p.x-(1.0*sin(p.z*.42)+.30*sin(p.z*.83))-1.55)>.65
   2:return absf(p.x)<5.7 and absf(p.z+5)>.5 and absf(p.z+.5)>.5 and absf(p.z-4)>.5
   3:return absf(p.x-3*sin(p.z*.4))>1.0
   4:return absf(p.z+6)>.5

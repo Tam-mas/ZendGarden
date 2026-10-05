@@ -135,6 +135,8 @@ class Geometry:
                 for li in face.loop_indices:
                     v=me.vertices[me.loops[li].vertex_index].co
                     layer.data[li].uv=(v[axes[0]]/scale,v[axes[1]]/scale)
+                    if mat.name.startswith('Area weathered bark'):
+                        layer.data[li].uv=(math.atan2(-v.y-.25*(v.x+1.65)/3.3,v.z-.33)/math.tau,v.x/1.2)
             ob=bpy.data.objects.new(parent.name+' '+mat.name,me);bpy.context.scene.collection.objects.link(ob)
             ob.parent=parent;me.materials.append(mat)
             if parent.get('ground'):ob['area_ground']=True
@@ -357,8 +359,8 @@ def props_glasshouse(G,root,i):
             ps=[(4.4*math.cos(k*math.pi/24),3.6+2.0*math.sin(k*math.pi/24),z+dz) for k in range(25)]
             G.tube(frame,MATS['iron'],ps,[.048]*25,8)
             for x in [-4.4,4.4]:G.box(frame,MATS['iron'],(x,2.55,z+dz),(.07,2.1,.07))
-        for j in range(8):
-            a=j*math.pi/8;b=(j+1)*math.pi/8
+        for j in range(24):
+            a=j*math.pi/24;b=(j+1)*math.pi/24
             for dz in [-.88,.88]:
                 pts=[(4.4*math.cos(t),3.6+2*math.sin(t),z+d) for t,d in [(a,dz-.85),(b,dz-.85),(b,dz+.85),(a,dz+.85)]]
                 G.poly(panes,MATS['glass'],pts,[(0,3,2,1)])
@@ -533,7 +535,7 @@ def layout():
             for key,depth,points in [('lily','deep',[[-2,0],[-.3,0],[-2,-1.8]]),('iris','margin',[[1.5,-2.4],[1.8,1.1],[-3.8,1.6]]),('mint','bank',[[-4.7,-3.4],[3.1,3.1]])]:
                 for x,z in points:slots.append({'pos':[x,z],'depth':depth,'default':key})
         elif i==1:
-            for x,z,key in [(-3,0,'maidenhair'),(0,-2,'birdsnest'),(3,1,'treefern'),(-2,4,'maidenhair'),(3,-3,'birdsnest')]:slots.append({'pos':[x,z],'default':key})
+            for x,z,key in [(-3,0,'maidenhair'),(2.4,-2,'birdsnest'),(3,1,'treefern'),(-2,4,'maidenhair'),(3,-3,'birdsnest')]:slots.append({'pos':[x,z],'default':key})
         elif i==6:
             for bay,z in enumerate([-3.6,0,3.6]):
                 for x in [-3.8,3.8]:slots.append({'pos':[x,z],'elevation':1.41,'bay':bay,'default':['orchid','cymbidium','hoya'][bay]})
@@ -554,14 +556,15 @@ def build_one(index):
     previous=bpy.context.window.scene;selected=list(bpy.context.selected_objects);active=bpy.context.view_layer.objects.active
     if bpy.context.mode!='OBJECT':raise RuntimeError('Switch to Object mode before authoring habitats')
     info=layout()[index];materials()
-    s=hq.scene('Area_'+info['kind'])
+    s=hq.scene('AreaRefined_'+info['kind'])
     for old in [o for o in s.objects if o.parent is None and o.get('area_kind')==info['kind']]:
         for child in list(old.children_recursive)+[old]:bpy.data.objects.remove(child,do_unlink=True)
     root=pivot('Area_'+info['kind'],None)
     root['area_kind']=info['kind'];root['metre_scale']=True
     G=Geometry();ground(G,root,index);BUILDERS[index](G,root,index);borders(G,root,index);G.flush()
     record=hq.export(root,'areas',info['kind'])
-    path=hq.save('Area_'+info['kind'])
+    path=str(hq.SOURCE/('Area_'+info['kind']+'.blend'))
+    bpy.data.libraries.write(path,{s},fake_user=True,compress=True)
     bpy.context.window.scene=previous
     bpy.ops.object.select_all(action='DESELECT')
     for o in selected:
@@ -570,15 +573,21 @@ def build_one(index):
     return {'asset':record,'source':path}
 
 def build_specialties():
+    import area_botanicals as bot
     previous=bpy.context.window.scene
-    s=hq.scene('Area_Collections');materials();records=[]
+    s=hq.scene('AreaRefined_Collections');records=[];mats=bot.materials(ROOT)
     for old in [o for o in s.objects if o.parent is None and str(o.get('export_path','')).startswith('assets/areas/plants/')]:
         for child in list(old.children_recursive)+[old]:bpy.data.objects.remove(child,do_unlink=True)
     for index,key in enumerate(SPECIALTIES):
-        root=pivot('Collection_'+key,None);G=Geometry();specialist(G,root,key,index);G.flush()
+        root=pivot('Collection_'+key,None);bot.build(key,root,mats,pivot)
         records.append(hq.export(root,'areas/plants',key))
-    path=hq.save('Area_Collections');bpy.context.window.scene=previous
+    path=str(hq.SOURCE/'Area_Collections.blend')
+    bpy.data.libraries.write(path,{s},fake_user=True,compress=True)
+    bpy.context.window.scene=previous
     return {'plants':records,'source':path}
+
+import area_refinement
+area_refinement.install(sys.modules[__name__])
 
 if __name__=='__main__':
     args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []

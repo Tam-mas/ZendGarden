@@ -79,6 +79,7 @@ static func build(g) -> void:
 
 static func trunk_collision(parent: Node3D, radius: float, height: float) -> void:
  var body=StaticBody3D.new()
+ body.set_meta("planting_obstacle",true)
  var collision=CollisionShape3D.new()
  var shape=CylinderShape3D.new()
  shape.radius=radius

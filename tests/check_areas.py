@@ -28,15 +28,23 @@ for path in sorted((ROOT/'assets/areas').rglob('*.glb')):
                 start=v.get('byteOffset',0)+a.get('byteOffset',0);stride=v.get('byteStride',4*width)
                 assert all(all(math.isfinite(x) for x in struct.unpack_from('<'+'f'*width,binary,start+i*stride)) for i in range(a['count'])),(path,channel)
             assert 'pbrMetallicRoughness' in doc['materials'][p['material']],path
-    assert 0<count<=(250000 if path.parent.name=='areas' else 5000), (path,count)
+    assert 0<count<=(250000 if path.parent.name=='areas' else 120000), (path,count)
     assert all('bufferView' in im and 'uri' not in im for im in doc.get('images',[])),(path,'external image')
     assert path.with_suffix('.glb.import').is_file(),(path,'missing import settings')
     assert 'gltf/embedded_image_handling=2' in path.with_suffix('.glb.import').read_text(),path
     if path.parent.name=='areas':
         assert any(node.get('extras',{}).get('area_ground') for node in doc['nodes']), (path,'missing editable terrain')
         assert doc.get('images'), (path,'missing surface textures')
+        rocks=[node['extras']['footprint'] for node in doc['nodes'] if 'footprint' in node.get('extras',{})]
+        anchors=[node for node in doc['nodes'] if 'area_species' in node.get('extras',{})]
+        for node in anchors:
+            x,_,z=node.get('translation',[0,0,0])
+            assert all(((x-rx)/rw)**2+((z-rz)/rd)**2>=1 for rx,rz,rw,rd in rocks), (path,'plant rooted inside stone',node['name'])
     else:
         assert any(node['name'].startswith('Leaves') for node in doc['nodes']),path
+        assert doc.get('images'), (path,'missing botanical PBR textures')
+        assert all(any(node['name'].startswith(stage) for node in doc['nodes']) for stage in ['Seedling','Juvenile','Buds']), (path,'missing anatomical growth stages')
+        assert any(m.get('normalTexture') for m in doc['materials']), (path,'missing leaf relief')
         assert any(node['name'].startswith('Flowers') for node in doc['nodes']),path
     triangles+=count
 assert len(hashes)==28 and triangles<1200000
