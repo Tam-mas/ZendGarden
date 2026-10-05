@@ -69,6 +69,26 @@ read-only `tests/check_blender_sources.py` now includes the growth library.
 
 The supplementary meshes total 572,200 triangles, below the 900,000 budget.
 Runtime stages change at 20%, 52% and 78% growth, with full blooms/fruit at 100%.
+
+Fruit trees retain branch attachment positions through budding and ripening.
+`fruit_tree_geometry.py` varies fruit size, hanging angle, occupied twigs and
+pigment with a separate repeatable random stream, preserving the existing
+trunks, branches and foliage. The grouped `BloomFruit` and `BudsFruit` meshes
+store attachment X/Y in a second UV layer and attachment Z in two colour bytes.
+The fruit growth shader decodes glTF's flipped V coordinate and grows each organ
+locally before applying the saved plant shape. Shared size materials at 32 steps
+retain efficient batching; previews and selection outlines use the same growth.
+Other flowers and produce retain their existing stage behaviour.
+
+For a focused rebuild of the 13 trees, run a separate approved Blender process
+with `--background --python art_source/build_fruit_trees.py`. This preserves all
+other plant exports, seedlings and juveniles, verifies unchanged foliage, and
+updates the three editable libraries and their manifests. Before writing, it
+creates verified recovery copies under ignored
+`captures/fruit-tree-review/rebuild-backup/`, excluded from Godot imports.
+The standard mature and growth builders also reproduce the fruit geometry.
+After importing, run `tests/fruit_trees.gd` in Godot with both rendering methods
+to check imported anchors, growth, outlines, previews and batch updates.
 The mature model and original height/pruning scale remain authoritative.
 Supplementary scenes load only when an early stage is needed; hidden stages do
 not render. Shape bending and twist stay coherent across mature foliage,

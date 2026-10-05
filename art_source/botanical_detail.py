@@ -64,6 +64,11 @@ def detail_geometry(base):
     class BotanicalGeometry(base):
         def __init__(self,name,role):
             super().__init__();self.species=name;self.role=role
+        def object(self,name,mats):
+            obj=super().object(name,mats)
+            from fruit_tree_geometry import add_anchor_channels
+            add_anchor_channels(obj.data,self)
+            return obj
         def leaf(self,base,tip,width,mat=1,curl=.12,segments=5,lobed=False):
             base=Vector(base);tip=Vector(tip);d=tip-base;length=d.length
             if length<.00001:return

@@ -252,10 +252,10 @@
   {
     "id": 31,
     "name": "Olive",
-    "vertices": 50273,
+    "vertices": 55158,
     "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_31.glb",
     "morphology_version": 3,
-    "triangles": 76088
+    "triangles": 85710
   },
   {
     "id": 32,
@@ -276,18 +276,18 @@
   {
     "id": 34,
     "name": "Lemon",
-    "vertices": 54900,
+    "vertices": 56485,
     "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_34.glb",
     "morphology_version": 3,
-    "triangles": 84536
+    "triangles": 88086
   },
   {
     "id": 35,
     "name": "Apple",
-    "vertices": 54900,
+    "vertices": 59418,
     "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_35.glb",
     "morphology_version": 3,
-    "triangles": 84536
+    "triangles": 93140
   },
   {
     "id": 36,
@@ -682,8 +682,8 @@
   {
     "id": 82,
     "name": "Fig",
-    "vertices": 52346,
-    "triangles": 78620,
+    "vertices": 46175,
+    "triangles": 67678,
     "path": "assets/plants/plant_82.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -691,8 +691,8 @@
   {
     "id": 83,
     "name": "Pear",
-    "vertices": 98210,
-    "triangles": 152708,
+    "vertices": 92637,
+    "triangles": 142850,
     "path": "assets/plants/plant_83.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -700,8 +700,8 @@
   {
     "id": 84,
     "name": "Peach",
-    "vertices": 63574,
-    "triangles": 88084,
+    "vertices": 58796,
+    "triangles": 78952,
     "path": "assets/plants/plant_84.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -709,8 +709,8 @@
   {
     "id": 85,
     "name": "Plum",
-    "vertices": 97090,
-    "triangles": 151588,
+    "vertices": 91487,
+    "triangles": 140938,
     "path": "assets/plants/plant_85.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -718,8 +718,8 @@
   {
     "id": 86,
     "name": "Apricot",
-    "vertices": 97090,
-    "triangles": 151588,
+    "vertices": 92587,
+    "triangles": 142962,
     "path": "assets/plants/plant_86.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -727,8 +727,8 @@
   {
     "id": 87,
     "name": "Nectarine",
-    "vertices": 63574,
-    "triangles": 88084,
+    "vertices": 59071,
+    "triangles": 79458,
     "path": "assets/plants/plant_87.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -736,8 +736,8 @@
   {
     "id": 88,
     "name": "Orange",
-    "vertices": 61810,
-    "triangles": 95140,
+    "vertices": 56757,
+    "triangles": 85502,
     "path": "assets/plants/plant_88.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -745,8 +745,8 @@
   {
     "id": 89,
     "name": "Mandarin",
-    "vertices": 61810,
-    "triangles": 95140,
+    "vertices": 56207,
+    "triangles": 84490,
     "path": "assets/plants/plant_89.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -754,8 +754,8 @@
   {
     "id": 90,
     "name": "Lime",
-    "vertices": 61810,
-    "triangles": 95140,
+    "vertices": 57032,
+    "triangles": 86008,
     "path": "assets/plants/plant_90.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"
@@ -763,8 +763,8 @@
   {
     "id": 91,
     "name": "Avocado",
-    "vertices": 61810,
-    "triangles": 95140,
+    "vertices": 57032,
+    "triangles": 86008,
     "path": "assets/plants/plant_91.glb",
     "morphology_version": 3,
     "source": "art_source/botanical_expansion.blend"

@@ -1,8 +1,10 @@
 shader_type spatial;
 render_mode cull_front, unshaded, shadows_disabled;
 #include "res://shaders/plant_shape.gdshaderinc"
+#include "res://shaders/fruit_growth.gdshaderinc"
 uniform float wind_strength=1.0;
 void vertex() {
+ attached_fruit_growth(VERTEX,UV2,COLOR);
  botanical_shape(VERTEX,NORMAL);
  vec3 p=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;
  float weight=clamp(VERTEX.y*.4,0.0,1.0);

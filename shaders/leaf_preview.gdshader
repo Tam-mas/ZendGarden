@@ -8,11 +8,13 @@ uniform bool has_roughness_map=false;
 uniform vec4 leaf_color : source_color = vec4(1.0);
 uniform vec4 preview_tint : source_color = vec4(.82,.95,.66,.4);
 #include "res://shaders/plant_shape.gdshaderinc"
+#include "res://shaders/fruit_growth.gdshaderinc"
 uniform bool has_color_map=true;
 uniform float wind_strength=1.0;
 uniform float surface_roughness=.82;
 uniform float surface_backlight=.10;
 void vertex(){
+ attached_fruit_growth(VERTEX,UV2,COLOR);
  botanical_shape(VERTEX,NORMAL);
  vec3 p=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;
  float weight=clamp(VERTEX.y*.4,0.0,1.0);

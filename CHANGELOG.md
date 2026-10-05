@@ -1,3 +1,13 @@
+### [2026-10-05 17:34] Fixed
+
+**Tech:** `GardenPlantGrowth`, `fruit_tree_geometry.py`, `fruit_growth.gdshaderinc` — branch-attached fruit growth and varied fruit-tree models
+
+**Dev:** Replace origin scaling for all 13 fruit trees with local shader growth around encoded twig attachments, including young fruit. Preserve the existing foliage and saved shape variation; use grouped meshes and shared size materials with batch invalidation at size changes. Carry growth through placement previews and selection outlines. Rebuild only the affected mature and bud GLBs and three editable libraries with verified recovery copies; vary occupied twigs, fruit size, tilt, stalk length, profiles and pigment using an independent deterministic random stream. Correct inward-facing fruit normals and refresh all 13 seed-menu portraits. Keep catalogue IDs, save compatibility and harvest behaviour stable. Add focused imported-attachment, growth, preview, outline and batching regression checks, workflow notes and player release 38. The full gameplay smoke suite passes, followed by final asset/placement checks and imported fruit checks plus 65 stage renders per renderer in Compatibility and Forward+. Read-only Blender checks verify all source libraries and packed images.
+
+**Plain:** Fruit stays on its branches as it ripens, and fruit trees have more natural sizes, colours and spacing.
+
+**Why:** Fruiting trees should look alive and grounded instead of floating fruit around their trunks or repeating identical decorations.
+
 ### [2026-10-04 19:09] Performance
 
 **Tech:** `prepare_export.gd`, `build_web.py`, `export_environment.py`, Web preset and audio imports — smaller browser download with unchanged model detail

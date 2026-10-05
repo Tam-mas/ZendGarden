@@ -77,12 +77,14 @@ for idx,row in enumerate(specs[60:106],60):
     if name=='Leek':
         primary=mat('leek white shaft','e7e5cb','smooth');palette[6]=primary
     bloom_palette=[primary,secondary,pollen,bloom_stem,shade]
+    from fruit_tree_geometry import FRUIT_TREES, fruit_palette
+    if name in FRUIT_TREES:bloom_palette=fruit_palette(name,bloom_palette,maps)
     build(name,category,g,b)
     assert g.v and b.v,(name,'empty geometry')
     root=bpy.data.objects.new(f'Plant_{idx:02d}_{name}',None);scene.collection.objects.link(root)
     root['catalogue_id']=idx;root['botanical_notes']='See botanical_expansion_references.md'
     foliage=g.object('Foliage',palette);foliage.parent=root
-    bloom=b.object('Bloom',bloom_palette);bloom.parent=root
+    bloom=b.object('BloomFruit' if hasattr(b,'fruit_anchors') else 'Bloom',bloom_palette);bloom.parent=root
     # Exact semantic child names on every export, independent of Blender suffixes.
     bpy.ops.object.select_all(action='DESELECT')
     for obj in [root,foliage,bloom]:obj.select_set(True)

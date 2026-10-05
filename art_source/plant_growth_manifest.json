@@ -221,7 +221,7 @@
     "name": "Olive",
     "family": "sapling",
     "height": 3.8556,
-    "triangles": 8784
+    "triangles": 12800
   },
   {
     "id": 32,
@@ -242,14 +242,14 @@
     "name": "Lemon",
     "family": "sapling",
     "height": 3.1557,
-    "triangles": 8784
+    "triangles": 6384
   },
   {
     "id": 35,
     "name": "Apple",
     "family": "sapling",
     "height": 3.8737,
-    "triangles": 8784
+    "triangles": 11760
   },
   {
     "id": 36,
@@ -578,70 +578,70 @@
     "name": "Fig",
     "family": "broad",
     "height": 4.0723,
-    "triangles": 6688
+    "triangles": 5712
   },
   {
     "id": 83,
     "name": "Pear",
     "family": "sapling",
     "height": 3.8486,
-    "triangles": 8784
+    "triangles": 8224
   },
   {
     "id": 84,
     "name": "Peach",
     "family": "sapling",
     "height": 3.9468,
-    "triangles": 8784
+    "triangles": 8432
   },
   {
     "id": 85,
     "name": "Plum",
     "family": "sapling",
     "height": 3.7076,
-    "triangles": 8640
+    "triangles": 5232
   },
   {
     "id": 86,
     "name": "Apricot",
     "family": "sapling",
     "height": 3.7978,
-    "triangles": 8784
+    "triangles": 8640
   },
   {
     "id": 87,
     "name": "Nectarine",
     "family": "sapling",
     "height": 3.7407,
-    "triangles": 8784
+    "triangles": 5616
   },
   {
     "id": 88,
     "name": "Orange",
     "family": "sapling",
     "height": 3.7838,
-    "triangles": 8784
+    "triangles": 8224
   },
   {
     "id": 89,
     "name": "Mandarin",
     "family": "sapling",
     "height": 3.422,
-    "triangles": 8784
+    "triangles": 5232
   },
   {
     "id": 90,
     "name": "Lime",
     "family": "sapling",
     "height": 4.0671,
-    "triangles": 8784
+    "triangles": 8432
   },
   {
     "id": 91,
     "name": "Avocado",
     "family": "sapling",
     "height": 4.2069,
-    "triangles": 8784
+    "triangles": 8432
   },
   {
     "id": 92,
