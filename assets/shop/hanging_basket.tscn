@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/hanging_basket.glb" id="1_hyr2s"]
+
+[node name="Hanging Basket" type="Node3D" unique_id=1889810806]
+
+[node name="Model" type="Node3D" parent="." unique_id=1731064327 instance=ExtResource("1_hyr2s")]

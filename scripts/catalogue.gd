@@ -175,7 +175,7 @@ static func plants() -> Array:
 
 static func furnishings() -> Array:
  return [
-  {"name":"Terracotta pot", "price":25, "kind":"pot", "hint":"A little warmth for a path edge."},
+  {"name":"Terracotta pot", "price":25, "kind":"pot", "hint":"One planting pocket for a compact flower, herb or succulent. E to manage."},
   {"name":"Garden bench", "price":45, "kind":"bench", "hint":"A quiet spot to watch the garden."},
   {"name":"Stone lantern", "price":55, "kind":"lantern", "hint":"A soft light after dusk."},
   {"name":"Climbing arbor", "price":65, "kind":"arbor", "hint":"Nearby climbing plants trail across its frame."},
@@ -183,17 +183,28 @@ static func furnishings() -> Array:
   {"name":"Glass greenhouse", "price":120, "kind":"greenhouse", "hint":"Protects plants within 4 metres in any conditions."},
   {"name":"Lily pond", "price":75, "kind":"pond", "hint":"Attracts frogs and dragonflies. Stock fish in the shop."},
   {"name":"Bird bath", "price":40, "kind":"bath", "hint":"Draws visiting birds."},
-  {"name":"Beehive", "price":65, "kind":"hive", "hint":"A timber hive with its own bees visiting during daylight."},
+  {"name":"Beehive", "price":65, "kind":"hive", "hint":"Daytime bees and +5% growth for produce within four metres."},
   {"name":"Path stone", "price":3, "kind":"stone", "hint":"One decorative limestone stone for a path or border."},
   {"name":"Custom garden sign", "price":15, "kind":"sign", "hint":"Your words and colours. Q/E to rotate; edit in the garden shed."},
-  {"name":"Potting bench", "price":75, "kind":"potting_bench", "hint":"A zinc-topped workbench with drawers and terracotta pots."},
-  {"name":"Compost bays", "price":55, "kind":"compost_bays", "hint":"Three timber bays for a working garden corner."},
-  {"name":"Rain barrel", "price":60, "kind":"rain_barrel", "hint":"A staved oak barrel with brass tap and screened lid."},
-  {"name":"Raised garden bed", "price":35, "kind":"raised_bed", "hint":"A low timber bed filled with rich, textured soil."},
+  {"name":"Potting bench", "price":75, "kind":"potting_bench", "hint":"Prepare starter mix so new plants begin with 8% growth and full water."},
+  {"name":"Compost bays", "price":55, "kind":"compost_bays", "hint":"Turn eight spare harvest items into four growth-boosting compost portions."},
+  {"name":"Rain barrel", "price":60, "kind":"rain_barrel", "hint":"Stores rain for automatic morning watering of containers within four metres."},
+  {"name":"Raised garden bed", "price":35, "kind":"raised_bed", "hint":"Six real planting pockets for flowers, herbs and vegetables."},
   {"name":"Trellis screen", "price":45, "kind":"trellis_screen", "hint":"Three lattice panels for nearby climbing plants."},
   {"name":"Hexagonal gazebo", "price":180, "kind":"gazebo", "hint":"A shingled shelter with built-in seats. Rest underneath."},
   {"name":"Arched garden bridge", "price":95, "kind":"arched_bridge", "hint":"A decorative low arch with shaped timber rails."},
   {"name":"Tiered fountain", "price":120, "kind":"fountain", "hint":"Two carved limestone bowls with slender water streams."},
   {"name":"Garden swing", "price":110, "kind":"garden_swing", "hint":"A suspended oak seat with a gentle sway."},
-  {"name":"Insect hotel", "price":45, "kind":"insect_hotel", "hint":"Reeds, bored wood and twigs draw small garden visitors."}
+  {"name":"Insect hotel", "price":45, "kind":"insect_hotel", "hint":"Draws small visitors and slows care stress in flowers and produce within three metres."},
+  {"name":"Worm farm", "price":70, "kind":"worm_farm", "hint":"Six spare produce items become castings that ease plant stress."},
+  {"name":"Leaf mulch bin", "price":50, "kind":"mulch_bin", "hint":"Six spare harvest items become mulch that makes water last twice as long."},
+  {"name":"Shade cloth canopy", "price":85, "kind":"shade_canopy", "hint":"Foldable shade creates a comfortable corner for shade-loving plants."},
+  {"name":"Glass cold frame", "price":80, "kind":"cold_frame", "hint":"Shelters small plants so they grow gently outside their season."},
+  {"name":"Bird feeding table", "price":55, "kind":"bird_feeder", "hint":"Three spare harvest items welcome two extra songbirds for three days."},
+  {"name":"Wide succulent bowl", "price":30, "kind":"wide_bowl", "hint":"Two planting pockets for low foliage and little succulents."},
+  {"name":"Large timber planter", "price":50, "kind":"large_planter", "hint":"A deeper pocket for a shrub or larger flower."},
+  {"name":"Herb trough", "price":45, "kind":"herb_trough", "hint":"Three raised pockets for compact herbs and flowers."},
+  {"name":"Hanging basket stand", "price":55, "kind":"hanging_basket", "hint":"An elevated basket for low flowers, strawberries and trailing foliage."},
+  {"name":"Vertical pocket planter", "price":95, "kind":"vertical_planter", "hint":"Six elevated pockets form a living display on a freestanding timber wall."},
+  {"name":"Tiered planting steps", "price":85, "kind":"tiered_planter", "hint":"Six planting pockets on three levels for a layered garden display."}
  ]

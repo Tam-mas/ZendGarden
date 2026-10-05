@@ -26,11 +26,11 @@ static func gather(g, repeating: bool=false) -> void:
  var width=gather_width(g)
  var collected=0
  for plant in g.planted:
-  if in_square(plant.pos,g.hover_cell,width) and g.collect_plant(plant):
+  if GardenContainers.tool_covers(g,plant,in_square(plant.pos,g.hover_cell,width)) and g.collect_plant(plant):
    collected+=1
    g.care_effect(plant.pos,Color("efdda7"))
  for plant in g.wild_plants:
-  if in_square(plant.pos,g.hover_cell,width) and GardenCare.collect_wild(g,plant):
+  if g.hover_container_uid.is_empty() and in_square(plant.pos,g.hover_cell,width) and GardenCare.collect_wild(g,plant):
    collected+=1
    g.care_effect(plant.pos,Color("efdda7"))
  g.action_cooldown=GATHER_INTERVAL

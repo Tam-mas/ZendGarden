@@ -51,6 +51,7 @@ static func settings_page(g) -> void:
  g.side_title.text="Make yourself at home"
  g.add_note("ZEND GARDEN · UPDATE %d" % GardenUpdates.CURRENT_VERSION,13)
  g.list_box.add_child(g.button("What’s new",func(): GardenUpdates.show(g)))
+ GardenEconomy.settings_page(g)
  g.add_note("GARDEN SAVE FILES",15)
  g.list_box.add_child(g.button("Download save file",func(): g.save_files.download()))
  g.list_box.add_child(g.button("Upload save file…",func(): g.save_files.upload()))

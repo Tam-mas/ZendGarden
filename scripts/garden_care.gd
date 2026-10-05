@@ -51,11 +51,11 @@ static func rake(g) -> void:
  g.path_widths[key]=width
  GardenGroundFinish.path(g,center,width)
  var found=mini(1+int(g.upgrades.rake),maxi(0,4-g.rake_petals)) if fresh else 0
- g.coins+=found
+ var earned=GardenEconomy.earn(g,found)
  g.rake_petals+=found
  g.action_cooldown=.3
  g.care_effect(GardenTerrain.point(center),Color("bda078"))
- g.toast(("Cleared grass and raked a grooved path." if fresh else "Widened this path with your upgraded rake.")+(" Found %d petals." % found if found>0 else ""))
+ g.toast(("Cleared grass and raked a grooved path." if fresh else "Widened this path with your upgraded rake.")+(" Found %d petals." % earned if earned>0 else ""))
 
 static func collect_wild(g, plant: Dictionary) -> bool:
  if not plant.node.visible or int(g.wild_collection.get(plant.key,-1))==g.day: return false

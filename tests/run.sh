@@ -18,6 +18,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+economy_log="$(mktemp -t zend-garden-economy)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/economy.gd > "$economy_log" 2>&1 || { cat "$economy_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$economy_log" || ! rg -Fq 'ECONOMY_RESULT: []' "$economy_log"; then
+  cat "$economy_log"
+  exit 1
+fi
 save_log="$(mktemp -t zend-garden-save-files)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/save_files.gd > "$save_log" 2>&1 || { cat "$save_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$save_log" || ! rg -Fq 'SAVE_FILES_RESULT: []' "$save_log"; then
@@ -124,6 +130,14 @@ for renderer in forward_plus gl_compatibility; do
   "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --view-water-test > "$view_log" 2>&1 || { cat "$view_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$view_log" || ! rg -Fq 'VIEW_WATER_RESULT: []' "$view_log"; then
     cat "$view_log"
+    exit 1
+  fi
+done
+for renderer in gl_compatibility forward_plus; do
+  workshop_log="$(mktemp -t zend-garden-workshop)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --workshop-test > "$workshop_log" 2>&1 || { cat "$workshop_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$workshop_log" || ! rg -Fq 'WORKSHOP_RESULT: []' "$workshop_log"; then
+    cat "$workshop_log"
     exit 1
   fi
 done

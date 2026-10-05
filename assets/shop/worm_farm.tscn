@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/worm_farm.glb" id="1_r0uwi"]
+
+[node name="Worm Farm" type="Node3D" unique_id=44954728]
+
+[node name="Model" type="Node3D" parent="." unique_id=2108515056 instance=ExtResource("1_r0uwi")]

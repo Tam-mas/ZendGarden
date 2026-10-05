@@ -15,7 +15,15 @@ static func setup(root: Node3D) -> void:
  collect_shapes(root,root,body)
  root.add_child(body)
 
+static func refresh(root: Node3D) -> void:
+ var body=root.get_node_or_null("StructureTarget")
+ if body:
+  root.remove_child(body)
+  body.queue_free()
+ setup(root)
+
 static func collect_shapes(node: Node, root: Node3D, body: StaticBody3D) -> void:
+ if node is Node3D and not node.visible:return
  if node is MeshInstance3D and node.mesh:
   var key=node.mesh.get_instance_id()
   if not shapes.has(key):

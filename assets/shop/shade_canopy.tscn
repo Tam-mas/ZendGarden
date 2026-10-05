@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/shade_canopy.glb" id="1_1qvi6"]
+
+[node name="Shade Canopy" type="Node3D" unique_id=247531419]
+
+[node name="Model" type="Node3D" parent="." unique_id=1458089157 instance=ExtResource("1_1qvi6")]
