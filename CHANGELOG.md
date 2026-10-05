@@ -1,3 +1,33 @@
+### [2026-10-06 09:53] Changed
+
+**Tech:** `GardenAreas`, `GardenAreaFlora`, `GardenBedSurfaces`, `area_refinement.py`, `area_botanicals.py` — refined habitats, detailed collection plants and grounded placement
+
+**Dev:** Refine all ten habitats through Blender MCP and reuse the established botanical geometry/detail/PBR workflow for all eighteen regional species and their four growth stages. Replace decorative placeholder plants with shared detailed meshes batched by habitat and canopy/dusk controls; refresh their transforms after terrain edits. Fit continuous flowing water, softened textured banks and curved paving to native creek/path geometry. Add UV-mapped weathered bark from built-in ImageGen, log end grain, repaired bridge rails, woven glasshouse shade, aligned potted collections, slatted bench and harvest table. Reserve rock/log/step/container clearance during authoring and reject planting through scenery and furniture across garden beds. Move only the four unchanged free terrace starter containers to safe locations, preserving IDs and contents; retain user-moved containers. Make orchard and kitchen soil use existing changeable bed finishes with compatible save restoration and sculpted-ground metadata. Preserve catalogue IDs, existing plants, activity progress, dismissal state and saves; add player release 45. Review actual whole-garden and walking-height captures across multiple passes. The complete project suite passes, including Compatibility and Forward+ area/gameplay checks, all atlas arrivals, 490 ground rays, twelve walks, sculpting, migration, finishes and container restoration; asset checks verify all 28 area models with 465,842 triangles, and read-only Blender checks pass all 33 source libraries with packed images. A fresh local Web export verifies every model and texture reference and packages successfully; the review gallery works at 320 px with all twenty photographs.
+
+**Plain:** All ten new gardens have more natural plants, water, paths and furnishings, with clear planting spaces and soil finishes players can change.
+
+**Why:** Richer, coherent scenery and correctly placed objects make the gardens more enjoyable to explore and personalise.
+
+### [2026-10-05 22:47] Fixed
+
+**Tech:** `GardenAreas.prepare_meshes`, `tests/areas.gd`, `tests/walking.gd` — imported habitat ground collision
+
+**Dev:** Read Blender terrain and solid custom properties from Godot's glTF `extras` metadata, retaining direct metadata and name compatibility. Numbered ground pivots now register every area's editable terrain with matching collision; alpine moss-rock ground is no longer misclassified as an obstacle. Reproduce missing floor rays and actual viewer falling in eight atlas arrivals before the fix. Add checks for all ten arrivals through the real viewer update, 490 terrain rays across collision partitions, twelve area/approach walks, matching collision after a restored terrain edit, and floor landing before/after walking with rejection of falling below terrain. Route the Moon Garden walking fixture around its lantern and allow a brief landing after descending paths. Preserve assets and garden saves; add player release 44 and import workflow notes. Area gameplay checks pass headless and in Compatibility and Forward+, and original garden walking, area asset and update-dismissal checks pass.
+
+**Plain:** All ten new garden areas now have solid ground so visitors can walk through them safely.
+
+**Why:** Players should be able to explore the new gardens without falling through the scenery and off the map.
+
+### [2026-10-05 22:09] Added
+
+**Tech:** `GardenAreas`, `GardenAreaCatalogue`, `GardenAreaAtlas`, `build_distinct_areas.py` — ten connected, functional garden habitats
+
+**Dev:** Author ten distinct 24 m landscapes and eighteen collection plants through Blender MCP, with independent terrain, UV-mapped timber/stone/brick/glass, generated mossy granite and aged brick textures, packed editable source libraries and 28 self-contained GLBs. Add a free atlas, eastern walking approach, regional starter planting, usable benches/containers, water and shade controls, fern discoveries, succulent offsets/rain covers, pollinator journal/season coverage, orchard training/compatible grafts/fruit baskets, companion planting/rotation/kitchen recipes, three restorable year-round glasshouse bays with mist/vents/shade, stream irrigation gates, alpine windbreaks/snowmelt/chime and dusk-opening flowers/lanterns/photo memories. Preserve ordinary care, reserved request harvest, petal difficulty and one-time/daily rewards. Extend collision, sculpting, wildlife and sound transitions; orient native walking surfaces and authored masonry correctly and use continuous collision beneath narrow steps/planks. Keep legacy expansion coordinates and shift their indices, automation, nursery, surface and wild-collection keys only on the first migration. Persist activities and tree metadata, validate uploaded controls/species, retain update dismissal and add player releases 42–43. Provide actual mature in-game atlas previews and an isolated `--areas-showcase` garden. The complete project suite passes, including both renderer area runs, movement, all activities, save migration/reload, 320/390 px and landscape atlas layouts, existing tools/tutorial/touch/dense gardens and audio. Asset checks verify all 28 meshes and 987,333 triangles; read-only Blender checks verify every packed source library. A complete local Web build passes 397 exported models and 9,031 texture references, including the packed area layout; the packaged site is 448.2 MiB with 23 data pieces.
+
+**Plain:** Explore ten new gardens, each with its own scenery, plants and useful activities, while keeping your established garden's progress.
+
+**Why:** Different landscapes and gardening routines give players more places to discover, tend and make their own.
+
 ### [2026-10-05 19:45] Added
 
 **Tech:** `GardenEquipment`, `GardenWorkshop`, `GardenContainers` — functional equipment, elevated planting pockets and stored plants

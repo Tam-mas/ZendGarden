@@ -124,6 +124,29 @@ In **Settings**, choose Auto, Touch or Keyboard & mouse controls; switch to a le
 
 Mobile layouts and simultaneous touch input are covered by automated tests and browser emulation. Performance and on-screen keyboard behaviour still need testing on physical iOS and Android devices, particularly with large gardens. Saves stay with the browser profile and site address; they do not automatically sync across devices or domains.
 
+## Ten new garden trails
+
+Open **Garden atlas · ten new trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. Choose a trail and **Visit this garden** to arrive there. You can also follow the eastern path from the original garden and walk between all ten areas. Every trail is free to visit. Face the garden, press **E** while wandering, or use **Garden activities** on touch to open its controls. Nearby benches retain their usual rest interaction.
+
+Your original garden, later expansion beds, plants, surfaces, care and stored plants keep their positions and progress. The new areas occupy a separate extension. Starter planting and usable structures arrive once on your first visit; removing a starter object does not repeatedly create a replacement.
+
+| Trail | What to do and what it changes |
+| --- | --- |
+| **Reedwater Garden** | Adjust the sluice through three water levels. Plant lilies and water hawthorn in deep pockets, marsh iris and soft rush at the margin, or water mint on the bank. Matching the water depth improves collection growth. Walk along the timber boardwalk and watch frogs and dragonflies. |
+| **Fern Gully** | Open or close three canopy clearings to change shade. Walk to the mossy hollow, old fern grove and spring clearing to discover new collection choices. Grow maidenhair, bird’s nest and tree ferns among mossy rocks and stepping stones. |
+| **Limestone Terraces** | Succulents grow 15% faster and lose less water. Unfold three rain covers to keep their small pockets dry. Mature succulents can provide a young offset in Stored plants, then rest four mornings before another offset. Pots and shallow bowls are usable containers. |
+| **Pollinator Meadow** | Plant different flowering species to fill a six-visitor habitat journal. First sightings unlock seed gifts once. Read the flower calendar to see which seasons your planting covers; native flowers and evening planting bring further visitors. |
+| **Orchard Clearing** | Train fruit trees as open, fan or espalier shapes. Mature compatible trees can receive a visible graft using two spare donor-fruit items, adding donor fruit to later harvests. Make one seasonal basket per morning from three different spare fruits for petals and compost. |
+| **Walled Kitchen Garden** | Plant produce beside herbs or companion flowers for 15% faster growth. Grow a different crop family after a harvest for a further 10% rotation bonus. Fill vertical planters and herb troughs; make a salad, soup or herb basket from three listed ingredients for petals and supplies, once each morning. |
+| **Old Glasshouse** | Restore three bays for 30 petals each. Restored bays support year-round ordinary planting and unlock orchid or hoya collection pockets. Adjust shade, ventilation and mist separately in each bay; mist waters plants each morning and reduces water loss. |
+| **Stream Garden** | Open the west or east gate to feed its corresponding growing strip each morning. Flowing strips also gain 10% growth. Cross the timber bridge or stepping stones and listen to the stream. |
+| **Alpine Lookout** | Fold or unfold three stone windbreaks. Sheltered low plants grow 15% faster and suffer less stress. Collect edelweiss, gentian and saxifrage; spring snowmelt waters plants for three mornings. Listen for the moving chime on the hillside. |
+| **Moon Garden** | Grow moonflower, flowering tobacco, evening primrose and night phlox, which open at dusk. Choose unlit, soft or bright lanterns, wait until twilight and compose photographs. Capture at least three mature dusk collection flowers in soft light to record a memory and unlock Iceberg rose seeds once. |
+
+The eighteen collection plants belong to the special pockets shown in **Garden activities**. Each has its own growth and watering; plant, water, clear or replace a pocket from that panel. Other unlocked seeds use the familiar planting tools on suitable open ground. Collection pockets keep their identity when water, shade or shelter changes. Basket and graft recipes keep active neighbour-request harvest aside, and basket rewards follow your Easy, Medium or Hard petal setting.
+
+Kitchen recipes use one spare item of each ingredient: **salad** uses lettuce, tomato and cucumber; **soup** uses carrot, leek and basil; **herbs** uses basil, lavender and thyme. The kitchen table prepares one basket total per morning. The orchard has its own daily basket limit.
+
 ## Working equipment and container gardens
 
 Find equipment and planters in **Shop**. Choose **Working garden · equipment & planters** to see supplies, prepared batches and stored plants. In Wander, face a placed item within a few steps and press **E**; on touch, use **Interact**. This opens its controls and pauses garden time.

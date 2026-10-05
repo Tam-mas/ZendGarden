@@ -10,6 +10,7 @@ python3 tests/check_fruit_trees.py
 python3 tests/check_botanical_additions.py
 python3 tests/check_low_grasses.py
 python3 tests/check_audio.py
+python3 tests/check_areas.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
 import_log="$(mktemp -t zend-garden-import)"
@@ -138,6 +139,14 @@ for renderer in gl_compatibility forward_plus; do
   "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --workshop-test > "$workshop_log" 2>&1 || { cat "$workshop_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$workshop_log" || ! rg -Fq 'WORKSHOP_RESULT: []' "$workshop_log"; then
     cat "$workshop_log"
+    exit 1
+  fi
+done
+for renderer in gl_compatibility forward_plus; do
+  areas_log="$(mktemp -t zend-garden-areas)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --areas-test > "$areas_log" 2>&1 || { cat "$areas_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$areas_log" || ! rg -Fq 'AREAS_RESULT: []' "$areas_log"; then
+    cat "$areas_log"
     exit 1
   fi
 done

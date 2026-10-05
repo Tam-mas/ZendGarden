@@ -47,6 +47,7 @@ static func build(g) -> void:
   g.world_root.add_child(plant)
   GardenCare.register_wild(g,plant,"border:%d" % j,id)
  for plot in g.plots:
+  if g.plots.find(plot)>=4 and g.plots.find(plot)<14:continue
   for j in range(24):
    var side=-1.0 if j%2==0 else 1.0
    var p=plot.center+Vector3(-4.2+float(j/2)*.72,0.04,side*5.25)
@@ -58,6 +59,7 @@ static func build(g) -> void:
    GardenCare.register_wild(g,border,"edge:%d:%d" % [g.plots.find(plot),j],id)
  # Bed names belong on small physical labels, not floating across the horizon.
  for i in range(g.plots.size()):
+  if i>=4 and i<14:g.plot_signs.append(null);continue
   var plot=g.plots[i]
   var sign=Art.sign_board()
   sign.set_meta("terrain_anchor",true)
@@ -77,6 +79,7 @@ static func build(g) -> void:
 
 static func trunk_collision(parent: Node3D, radius: float, height: float) -> void:
  var body=StaticBody3D.new()
+ body.set_meta("planting_obstacle",true)
  var collision=CollisionShape3D.new()
  var shape=CylinderShape3D.new()
  shape.radius=radius

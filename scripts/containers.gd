@@ -35,7 +35,7 @@ static func position(obj: Dictionary, slot: int) -> Vector3:
 
 static func can_plant(g, obj: Dictionary, slot: int, id: int, excluding: int=-1) -> String:
  if obj.kind not in SPECS or slot<0 or slot>=SPECS[obj.kind].slots.size():return "Choose a planting pocket."
- if g.nearest_plot(obj.pos)>=g.unlocked_plots:return "Choose a planter in an open garden area."
+ if not GardenAreaCatalogue.plot_open(g,g.nearest_plot(obj.pos)):return "Choose a planter in an open garden area."
  var data=g.catalogue[id]
  var spec=SPECS[obj.kind]
  if int(data.layer)>int(spec.layers) or float(data.height)>float(spec.height):return "This plant needs a larger planter or open soil."
@@ -82,6 +82,8 @@ static func record(p: Dictionary) -> Dictionary:
  var result={"orientation":p.node.rotation.y,"shape_seed":p.get("shape_seed",0),"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0),"treatments":p.get("treatments",{}).duplicate(true)}
  if is_contained(p):result.merge({"container_uid":p.container_uid,"container_slot":p.container_slot})
  if p.has("watered_until"):result["watered_until"]=p.watered_until
+ for field in ["area_training","area_graft","area_offset_day"]:
+  if p.has(field):result[field]=p[field]
  return result
 
 static func store(g, p: Dictionary, source: String="") -> void:

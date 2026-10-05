@@ -37,12 +37,12 @@ static func prepare_navigation(g) -> void:
  if open_plots==g.unlocked_plots: return
  open_plots=g.unlocked_plots
  navigation=AStarGrid2D.new()
- var north=-int(g.plots.size()/2)*34+16
- navigation.region=Rect2i(-17,north,69,19-north)
+ var north=mini(-216,-int(GardenAreaCatalogue.legacy_plot_count(g)/2)*34+16)
+ navigation.region=Rect2i(-17,north,203,19-north)
  navigation.cell_size=Vector2(.5,.5)
  navigation.diagonal_mode=AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
  navigation.update()
- for x in range(-17,52):
+ for x in range(-17,186):
   for z in range(north,19):
    var p=Vector3(x*.5,0,z*.5)
    var pavilion=absf(p.x+7.4)<1.9 and absf(p.z+18)<1.8
@@ -64,7 +64,8 @@ func animate(g, delta: float, index: int) -> void:
  elif cycle!=wander_cycle:
   wander_cycle=cycle
   # Choose safe path-side resting spots within the unlocked plots.
-  var plot_index=(cycle+index*2)%g.unlocked_plots
+  var old_index=(cycle+index*2)%g.unlocked_plots
+  var plot_index=old_index if old_index<4 else old_index+10
   var center: Vector3=g.plots[plot_index].center
   var angle=cycle*2.399+index*1.8
   destination=center+Vector3(cos(angle)*5.6,0,sin(angle)*5.6)

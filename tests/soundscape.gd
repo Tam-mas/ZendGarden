@@ -20,9 +20,11 @@ func run() -> void:
   {"name":"Wildflower garden 7","center":Vector3(0,0,-51)},
   {"name":"Woodland garden 8","center":Vector3(17,0,-51)}
  ]
+ var themes=[0,1,2,3,1,2,3,0,3,0,2,1,3,2,0,3,0,2]
+ plots=plots.slice(0,4)+GardenAreaCatalogue.entries().map(func(info):return {"name":info.name,"center":Vector3(info.center[0],0,info.center[1])})+plots.slice(4)
  for i in range(plots.size()):
   sound.update_location(plots[i].center,plots)
-  if sound.bed!=[0,1,2,3,0,3,0,2][i]: failures.append("Theme does not match area "+str(i))
+  if sound.bed!=themes[i]: failures.append("Theme does not match area "+str(i))
  sound.update_location(Vector3.ZERO,plots)
  for x in [8.4,8.6,8.4,8.7]:
   sound.update_location(Vector3(x,0,0),plots)

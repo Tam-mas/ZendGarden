@@ -228,12 +228,16 @@ static func valid_save(data: Dictionary, plant_count: int) -> bool:
    if obj.work.has("feed_until") and not GardenSaveFormat.integer(obj.work.feed_until,0):return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
  if plot_count%2:plot_count+=1
+ if data.has("areas"):plot_count+=10
  for p in data.plants+state.get("nursery",[]):
   if not p is Dictionary or not GardenSaveFormat.integer(p.get("id"),0,plant_count-1):return false
   if not GardenSaveFormat.vector(p.get("pos")) or not GardenSaveFormat.integer(p.get("plot"),0,plot_count-1):return false
   for key in ["age","water","stress"]:
    if not GardenSaveFormat.number(p.get(key)):return false
   if not GardenSaveFormat.fields(p,["height_factor","orientation","shape_seed","pruned","prune_cuts","watered_until"],[],["storage_source"]):return false
+  if p.has("area_training") and p.area_training not in ["open","fan","espalier"]:return false
+  if p.has("area_graft") and (not GardenSaveFormat.integer(p.area_graft,0,plant_count-1) or int(p.area_graft) not in GardenAreas.compatible_grafts(int(p.id))):return false
+  if p.has("area_offset_day") and not GardenSaveFormat.integer(p.area_offset_day,0):return false
   if p.has("storage_slot") and not GardenSaveFormat.integer(p.storage_slot,-1,5):return false
   if p.has("container_slot") and not p.has("container_uid"):return false
   if p.has("treatments"):

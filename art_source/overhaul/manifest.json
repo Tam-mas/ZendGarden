@@ -1,4 +1,396 @@
 {
+  "areas/alpine": {
+    "bytes": 3784212,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      8.85014009475708,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "alpine",
+    "meshes": 34,
+    "triangles": 26756,
+    "variant": "new"
+  },
+  "areas/fern_gully": {
+    "bytes": 5063892,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      5.771204471588135,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "fern_gully",
+    "meshes": 15,
+    "triangles": 26628,
+    "variant": "new"
+  },
+  "areas/glasshouse": {
+    "bytes": 3647660,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      7.6479997634887695,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "glasshouse",
+    "meshes": 25,
+    "triangles": 28884,
+    "variant": "new"
+  },
+  "areas/kitchen": {
+    "bytes": 3082304,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      6.889999866485596,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "kitchen",
+    "meshes": 11,
+    "triangles": 20272,
+    "variant": "new"
+  },
+  "areas/limestone": {
+    "bytes": 2177772,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      6.867120265960693,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "limestone",
+    "meshes": 22,
+    "triangles": 22528,
+    "variant": "new"
+  },
+  "areas/moon": {
+    "bytes": 2069796,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      6.125,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "moon",
+    "meshes": 15,
+    "triangles": 20256,
+    "variant": "new"
+  },
+  "areas/orchard": {
+    "bytes": 2556852,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      5.50816011428833,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "orchard",
+    "meshes": 8,
+    "triangles": 21416,
+    "variant": "new"
+  },
+  "areas/plants/birdsnest": {
+    "bytes": 139220,
+    "clips": [],
+    "dimensions": [
+      1.0240033268928528,
+      0.8953840732574463,
+      0.9651718139648438
+    ],
+    "folder": "areas/plants",
+    "kind": "birdsnest",
+    "meshes": 4,
+    "triangles": 1848,
+    "variant": "new"
+  },
+  "areas/plants/cymbidium": {
+    "bytes": 285980,
+    "clips": [],
+    "dimensions": [
+      0.7690170407295227,
+      0.7302014657616382,
+      0.7068732678890228
+    ],
+    "folder": "areas/plants",
+    "kind": "cymbidium",
+    "meshes": 6,
+    "triangles": 7128,
+    "variant": "new"
+  },
+  "areas/plants/edelweiss": {
+    "bytes": 164896,
+    "clips": [],
+    "dimensions": [
+      0.29780660569667816,
+      0.24199999868869781,
+      0.2945305407047272
+    ],
+    "folder": "areas/plants",
+    "kind": "edelweiss",
+    "meshes": 6,
+    "triangles": 2156,
+    "variant": "new"
+  },
+  "areas/plants/gentian": {
+    "bytes": 148788,
+    "clips": [],
+    "dimensions": [
+      0.29780660569667816,
+      0.20350000262260437,
+      0.2945305407047272
+    ],
+    "folder": "areas/plants",
+    "kind": "gentian",
+    "meshes": 6,
+    "triangles": 1548,
+    "variant": "new"
+  },
+  "areas/plants/hawthorn": {
+    "bytes": 177292,
+    "clips": [],
+    "dimensions": [
+      0.979119598865509,
+      0.1298445649445057,
+      0.9191772937774658
+    ],
+    "folder": "areas/plants",
+    "kind": "hawthorn",
+    "meshes": 6,
+    "triangles": 2448,
+    "variant": "new"
+  },
+  "areas/plants/hoya": {
+    "bytes": 391036,
+    "clips": [],
+    "dimensions": [
+      0.6336697340011597,
+      0.919952442869544,
+      0.33937665075063705
+    ],
+    "folder": "areas/plants",
+    "kind": "hoya",
+    "meshes": 6,
+    "triangles": 10556,
+    "variant": "new"
+  },
+  "areas/plants/iris": {
+    "bytes": 112048,
+    "clips": [],
+    "dimensions": [
+      0.5519999861717224,
+      1.0913802853319794,
+      0.26980797946453094
+    ],
+    "folder": "areas/plants",
+    "kind": "iris",
+    "meshes": 6,
+    "triangles": 1728,
+    "variant": "new"
+  },
+  "areas/plants/lily": {
+    "bytes": 200096,
+    "clips": [],
+    "dimensions": [
+      1.0120275616645813,
+      0.18299999926239252,
+      0.9797424376010895
+    ],
+    "folder": "areas/plants",
+    "kind": "lily",
+    "meshes": 6,
+    "triangles": 3268,
+    "variant": "new"
+  },
+  "areas/plants/maidenhair": {
+    "bytes": 258480,
+    "clips": [],
+    "dimensions": [
+      1.0179814100265503,
+      0.428088653832674,
+      1.021328330039978
+    ],
+    "folder": "areas/plants",
+    "kind": "maidenhair",
+    "meshes": 4,
+    "triangles": 6256,
+    "variant": "new"
+  },
+  "areas/plants/mint": {
+    "bytes": 620564,
+    "clips": [],
+    "dimensions": [
+      0.4742230474948883,
+      0.6161124893696979,
+      0.4293811619281769
+    ],
+    "folder": "areas/plants",
+    "kind": "mint",
+    "meshes": 6,
+    "triangles": 17742,
+    "variant": "new"
+  },
+  "areas/plants/moonflower": {
+    "bytes": 412328,
+    "clips": [],
+    "dimensions": [
+      0.7756514251232147,
+      1.3727182452566922,
+      0.8135195076465607
+    ],
+    "folder": "areas/plants",
+    "kind": "moonflower",
+    "meshes": 6,
+    "triangles": 11442,
+    "variant": "new"
+  },
+  "areas/plants/nicotiana": {
+    "bytes": 340384,
+    "clips": [],
+    "dimensions": [
+      0.6837266385555267,
+      1.1357043967582285,
+      0.7083407044410706
+    ],
+    "folder": "areas/plants",
+    "kind": "nicotiana",
+    "meshes": 6,
+    "triangles": 8714,
+    "variant": "new"
+  },
+  "areas/plants/nightphlox": {
+    "bytes": 445928,
+    "clips": [],
+    "dimensions": [
+      0.6980754137039185,
+      0.4000304276123643,
+      0.6967962384223938
+    ],
+    "folder": "areas/plants",
+    "kind": "nightphlox",
+    "meshes": 6,
+    "triangles": 11974,
+    "variant": "new"
+  },
+  "areas/plants/orchid": {
+    "bytes": 215180,
+    "clips": [],
+    "dimensions": [
+      0.6055218577384949,
+      0.7302014655288076,
+      0.5497903227806091
+    ],
+    "folder": "areas/plants",
+    "kind": "orchid",
+    "meshes": 6,
+    "triangles": 4104,
+    "variant": "new"
+  },
+  "areas/plants/primrose": {
+    "bytes": 306900,
+    "clips": [],
+    "dimensions": [
+      0.7210153639316559,
+      1.0340120238251984,
+      0.7364530563354492
+    ],
+    "folder": "areas/plants",
+    "kind": "primrose",
+    "meshes": 6,
+    "triangles": 7562,
+    "variant": "new"
+  },
+  "areas/plants/reed": {
+    "bytes": 197564,
+    "clips": [],
+    "dimensions": [
+      0.46359093487262726,
+      1.1497377678751945,
+      0.4539629966020584
+    ],
+    "folder": "areas/plants",
+    "kind": "reed",
+    "meshes": 5,
+    "triangles": 5436,
+    "variant": "new"
+  },
+  "areas/plants/saxifrage": {
+    "bytes": 366708,
+    "clips": [],
+    "dimensions": [
+      0.2787333205342293,
+      0.19458244112320244,
+      0.2966299057006836
+    ],
+    "folder": "areas/plants",
+    "kind": "saxifrage",
+    "meshes": 6,
+    "triangles": 9300,
+    "variant": "new"
+  },
+  "areas/plants/treefern": {
+    "bytes": 3868164,
+    "clips": [],
+    "dimensions": [
+      3.4273862838745117,
+      2.7621688582003117,
+      3.048066735267639
+    ],
+    "folder": "areas/plants",
+    "kind": "treefern",
+    "meshes": 4,
+    "triangles": 109696,
+    "variant": "new"
+  },
+  "areas/pollinator": {
+    "bytes": 2709696,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      4.1942298412323,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "pollinator",
+    "meshes": 4,
+    "triangles": 19868,
+    "variant": "new"
+  },
+  "areas/reedwater": {
+    "bytes": 3410308,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      4.6549999713897705,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "reedwater",
+    "meshes": 10,
+    "triangles": 20452,
+    "variant": "new"
+  },
+  "areas/stream": {
+    "bytes": 4025876,
+    "clips": [],
+    "dimensions": [
+      24.0,
+      4.596999883651733,
+      24.0
+    ],
+    "folder": "areas",
+    "kind": "stream",
+    "meshes": 60,
+    "triangles": 35876,
+    "variant": "new"
+  },
   "companions/cat": {
     "baseline": "ca52914172ed22ada94bda93e95f063e1fb69b0c",
     "bytes": 5458600,
@@ -114,18 +506,17 @@
     "variant": "new"
   },
   "shop/bench": {
-    "bytes": 754208,
+    "bytes": 504108,
     "clips": [],
     "dimensions": [
-      1.75,
-      1.1064353585243225,
-      0.7354343235492706
+      1.840000033378601,
+      1.1067864894866943,
+      0.7705000042915344
     ],
     "folder": "shop",
     "kind": "bench",
     "meshes": 3,
-    "sha256": "3e8567e190f8554c1afc3ad8ad4e4fb56baa5fe8c233e37b8fc7c8f5abb1c1b2",
-    "triangles": 7012,
+    "triangles": 812,
     "variant": "new"
   },
   "shop/bird_feeder": {

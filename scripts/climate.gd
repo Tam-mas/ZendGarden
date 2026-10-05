@@ -60,7 +60,7 @@ func update(g, delta: float) -> void:
  if not g.photo_mode:
   GardenEquipment.weather(g,current.y,delta)
   for plant in g.planted:
-   plant.water=minf(4.0,plant.water+current.y*delta/24.0)
+   if GardenAreas.rain_reaches(g,plant):plant.water=minf(4.0,plant.water+current.y*delta/24.0)
 
 func apply(g) -> void:
  if is_instance_valid(g.ambient): g.ambient.rainfall=current.y

@@ -214,6 +214,7 @@ func show_drawer(kind: String) -> void:
  col.add_theme_constant_override("v_separation",8)
  col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  scroll.add_child(col)
+ if kind=="garden":col.add_child(g.button("Garden atlas · ten new trails",func():close_menu();GardenAreaAtlas.open(g),Vector2(0,48)))
  var choices=[["Seeds","Seeds"],["Shop","Shop"],["Orders","Orders"],["Guide","Guide"],["Settings","Settings"]]
  if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"],["hoe","Hoe"]]
  for entry in choices:
@@ -353,6 +354,7 @@ func _process(delta: float) -> void:
   if is_instance_valid(g.request_popup) and g.request_popup.visible: fit_popup(g.request_popup)
   if is_instance_valid(g.welcome):
    if g.workshop_open:GardenWorkshop.fit(g)
+   elif g.area_atlas_open:GardenAreaAtlas.fit(g)
    else:fit_popup(g.welcome)
   return
  var moving=g.mode=="move" and (g.moved_index>=0 or g.moved_object>=0)
@@ -383,8 +385,9 @@ func _process(delta: float) -> void:
  buttons.right.text="Larger" if g.mode=="prune" else "Turn right"
  var rest_target=GardenLeisure.target(g)
  var work_target=GardenWorkshop.target(g)
- buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (not g.rest_kind.is_empty() or not rest_target.is_empty() or not work_target.is_empty() or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
+ buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (not g.rest_kind.is_empty() or not rest_target.is_empty() or not work_target.is_empty() or GardenAreaCatalogue.index_at(g.player.position)>=0 or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
  buttons.greet.text="Stand up" if not g.rest_kind.is_empty() else GardenLeisure.VERBS.get(rest_target.get("kind",""),"Pet companion")
+ if g.rest_kind.is_empty() and work_target.is_empty() and rest_target.is_empty() and GardenAreaCatalogue.index_at(g.player.position)>=0:buttons.greet.text="Garden activities"
  if g.rest_kind.is_empty() and not work_target.is_empty():buttons.greet.text="Use planter" if work_target.kind in GardenContainers.SPECS else "Use equipment"
  if not g.rest_kind.is_empty():
   context_title.text={"bench":"Sitting in your garden","pergola":"Resting in the shade","pond":"Watching the pond"}.get(g.rest_kind,"Resting")

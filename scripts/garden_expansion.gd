@@ -5,14 +5,19 @@ static func opening_day(index: int) -> int:
  return [1,7,18,36][index] if index<4 else 48+(index-4)*12
 
 static func prepare(g) -> void:
- # Keep one unopened row ahead; deterministic coordinates survive save/reload.
+ # Ten habitats have stable indices; legacy expansion rows keep their positions.
+ while g.plots.size()<14:
+  var index=g.plots.size()-4
+  var info=GardenAreaCatalogue.entry(index)
+  g.plots.append({"name":info.name,"subtitle":info.description,"center":GardenAreaCatalogue.center(index),"condition":info.condition,"cap":120,"cost":0})
  var target=maxi(4,g.unlocked_plots+2)
- if target%2: target+=1
- while g.plots.size()<target:
-  var i=g.plots.size()
-  g.plots.append({"name":["Meadow","Orchard","Wildflower","Woodland"][(i-4)%4]+" garden "+str(i+1),"subtitle":"A new corner to make your own","center":Vector3((i%2)*17,0,-int(i/2)*17),"condition":["sun","shade","any"][(i-4)%3],"cap":85,"cost":380+(i-3)*40})
+ if target%2:target+=1
+ while g.plots.size()<target+10:
+  var old=g.plots.size()-10
+  g.plots.append({"name":["Meadow","Orchard","Wildflower","Woodland"][(old-4)%4]+" garden "+str(old+1),"subtitle":"A new corner to make your own","center":Vector3((old%2)*17,0,-int(old/2)*17),"condition":["sun","shade","any"][(old-4)%3],"cap":85,"cost":380+(old-3)*40})
 
 static func build_row(g, index: int) -> void:
+ if index*2+10>=g.plots.size():return
  var root=Node3D.new()
  root.name="GrowingRow%d" % index
  if g.world_root.has_node(NodePath(root.name)): root.free(); return
@@ -49,7 +54,7 @@ static func build_row(g, index: int) -> void:
   var tree=g.Art.plant(g.catalogue[29 if index%2 else 31],true)
   tree.position=GardenTerrain.point(Vector3(side,0,center_z))
   root.add_child(tree)
- for i in range(index*2,index*2+2):
+ for i in range(index*2+10,index*2+12):
   var center: Vector3=g.plots[i].center
   var soil=SurfaceTool.new()
   soil.begin(Mesh.PRIMITIVE_TRIANGLES)
