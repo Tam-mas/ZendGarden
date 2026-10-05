@@ -1,3 +1,13 @@
+### [2026-10-05 22:47] Fixed
+
+**Tech:** `GardenAreas.prepare_meshes`, `tests/areas.gd`, `tests/walking.gd` — imported habitat ground collision
+
+**Dev:** Read Blender terrain and solid custom properties from Godot's glTF `extras` metadata, retaining direct metadata and name compatibility. Numbered ground pivots now register every area's editable terrain with matching collision; alpine moss-rock ground is no longer misclassified as an obstacle. Reproduce missing floor rays and actual viewer falling in eight atlas arrivals before the fix. Add checks for all ten arrivals through the real viewer update, 490 terrain rays across collision partitions, twelve area/approach walks, matching collision after a restored terrain edit, and floor landing before/after walking with rejection of falling below terrain. Route the Moon Garden walking fixture around its lantern and allow a brief landing after descending paths. Preserve assets and garden saves; add player release 44 and import workflow notes. Area gameplay checks pass headless and in Compatibility and Forward+, and original garden walking, area asset and update-dismissal checks pass.
+
+**Plain:** All ten new garden areas now have solid ground so visitors can walk through them safely.
+
+**Why:** Players should be able to explore the new gardens without falling through the scenery and off the map.
+
 ### [2026-10-05 22:09] Added
 
 **Tech:** `GardenAreas`, `GardenAreaCatalogue`, `GardenAreaAtlas`, `build_distinct_areas.py` — ten connected, functional garden habitats

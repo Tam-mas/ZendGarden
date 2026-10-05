@@ -89,8 +89,11 @@ static func build(g) -> void:
 
 static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false) -> void:
  var name=String(node.name)
- ground=ground or name=="Ground" or node.get_meta("area_ground",false)
- solid=solid or node.get_meta("area_collision",false) or SOLID_PIVOTS.any(func(part):return name.begins_with(part))
+ # Godot keeps glTF custom properties in extras. Blender also numbers repeated
+ # pivot names across the library, so the first area's "Ground" is not enough.
+ var extras: Dictionary=node.get_meta("extras",{})
+ ground=ground or name=="Ground" or node.get_meta("area_ground",false) or extras.get("ground",false) or extras.get("area_ground",false)
+ solid=solid or node.get_meta("area_collision",false) or extras.get("collision",false) or extras.get("area_collision",false) or SOLID_PIVOTS.any(func(part):return name.begins_with(part))
  if node is MeshInstance3D:
   if not ground and String(node.name).contains("mossrock"):solid=true
   node.visibility_range_end=0 if ground else 80

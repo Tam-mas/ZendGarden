@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":44,"date":"5 October 2026","title":"Firm ground on every trail","note":"Walk safely through all ten new gardens, with solid ground beneath their arrival points, paths and planting areas."},
  {"version":43,"date":"5 October 2026","title":"Gardens with their own rhythm","note":"Discover eighteen collection plants in water, fern, glasshouse, alpine and twilight gardens. Adjust water and shade, restore glasshouse bays, train and graft fruit trees, prepare harvest baskets, guide stream water and keep a pollinator journal. Each trail has its own activities and growing benefits."},
  {"version":42,"date":"5 October 2026","title":"Ten new garden trails","note":"Follow the eastern path or open Garden atlas to explore ten detailed new landscapes, from Reedwater and Fern Gully to a walled kitchen garden, Alpine Lookout and Moon Garden. Visit each freely, tend its starter planting, and find a bench to stay awhile. Your established garden keeps its plants and progress."},
  {"version":41,"date":"5 October 2026","title":"Plant beyond the garden bed","note":"Plant real flowers, herbs and little succulents in pots, raised beds, bowls, troughs, hanging baskets and vertical or tiered planters. Tend each pocket, carry the whole display with Move, and keep its plants safely in stored plants when you pack the container away."},

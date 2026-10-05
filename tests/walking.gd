@@ -1,19 +1,31 @@
 extends RefCounted
 
-static func cross(g, start: Vector3, finish: Vector3, failures: Array, title: String) -> void:
- g.player.position=GardenTerrain.point(start)+Vector3(0,.65,0)
- g.player.velocity=Vector3.ZERO
- # Land on the actual surface, which may be a deck above planting terrain.
+static func land(g) -> void:
+ g.player.velocity.x=0;g.player.velocity.z=0
  for settling in range(40):
   await g.get_tree().physics_frame
   g.player.velocity.y=0 if g.player.is_on_floor() else g.player.velocity.y-18*g.get_physics_process_delta_time()
   g.player.move_and_slide()
   if g.player.is_on_floor():break
+
+static func cross(g, start: Vector3, finish: Vector3, failures: Array, title: String) -> void:
+ g.player.position=GardenTerrain.point(start)+Vector3(0,.65,0)
+ g.player.velocity=Vector3.ZERO
+ # Land on the actual surface, which may be a deck above planting terrain.
+ await land(g)
+ if not g.player.is_on_floor():
+  failures.append(title+" has no floor at the start: "+str(g.player.position));return
  for frame in range(220):
   await g.get_tree().physics_frame
   var direction=finish-g.player.position
   direction.y=0
-  if direction.length()<.2: return
+  if g.player.position.y<GardenTerrain.point(g.player.position).y-1:
+   failures.append(title+" fell through the ground at "+str(g.player.position));return
+  if direction.length()<.2:
+   # A descending path can end briefly above its next surface; let it settle.
+   await land(g)
+   if not g.player.is_on_floor():failures.append(title+" finished without a floor at "+str(g.player.position))
+   return
   direction=direction.normalized()
   var dt=g.get_physics_process_delta_time()
   var motion=direction*3.2*dt

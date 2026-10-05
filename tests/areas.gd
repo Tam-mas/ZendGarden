@@ -82,16 +82,40 @@ static func run(g,failures: Array) -> void:
   GardenAreas.initialize(g,index)
   check(g.planted.size()==initialized and g.objects.size()==structures,failures,"Starter collection repeated on another visit")
   check(is_finite(GardenTerrain.base_rise(g.player.position.x,g.player.position.z)),failures,"Invalid authored terrain height")
+  # Exercise the viewer's actual update after an atlas visit, including gravity.
+  # Horizontal progress alone used to pass even while the player fell below it.
+  for frame in range(40):
+   await g.get_tree().physics_frame
+   g._process(g.get_physics_process_delta_time())
+  check(g.player.is_on_floor() and absf(g.player.position.y-GardenTerrain.point(g.player.position).y)<.5,failures,"Atlas arrival fell through "+GardenAreaCatalogue.entry(index).name+" at "+str(g.player.position))
+  # Include every eight-metre collision partition, boundaries and varied slopes.
+  for x in [-10,-8,-4,0,4,8,10]:
+   for z in [-10,-8,-4,0,4,8,10]:
+    var pos=GardenAreaCatalogue.center(index)+Vector3(x,0,z)
+    var ray=PhysicsRayQueryParameters3D.create(Vector3(pos.x,12,pos.z),Vector3(pos.x,-3,pos.z))
+    ray.exclude=[g.player.get_rid()]
+    var ground=g.get_world_3d().direct_space_state.intersect_ray(ray)
+    check(not ground.is_empty() and ground.position.y> -1 and ground.normal.y>0,failures,"Missing ground collision in "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
  # Traverse real collisions on the eastern approach and every area path.
  var walker=preload("res://tests/walking.gd")
  for segment in [[Vector3(25.2,0,6),Vector3(34.5,0,6)],[Vector3(34.5,0,6),Vector3(44.5,0,6)]]:
   await walker.cross(g,segment[0],segment[1],failures,"Eastern trail")
- var routes=[[[6,5.1],[0,5.1]],[[0,6],[0,1]],[[6.5,6],[6.5,0]],[[0,5],[0,0]],[[0,4],[0,-2]],[[0,8.5],[0,2]],[[0,7],[0,0]],[[-3.5,3],[3.5,3]],[[0,5],[0,0]],[[5,6],[5,0]]]
+ var routes=[[[6,5.1],[0,5.1]],[[0,6],[0,1]],[[6.5,6],[6.5,0]],[[0,5],[0,0]],[[0,4],[0,-2]],[[0,8.5],[0,2]],[[0,7],[0,0]],[[-3.5,3],[3.5,3]],[[0,5],[0,0]],[[6,6],[6,0]]]
  for index in range(10):
   var a=routes[index][0];var b=routes[index][1];var center=GardenAreaCatalogue.center(index)
   await walker.cross(g,center+Vector3(a[0],0,a[1]),center+Vector3(b[0],0,b[1]),failures,"Trail "+GardenAreaCatalogue.entry(index).name)
  var trail_hit=g.get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(34.5,4,6),Vector3(34.5,-2,6)))
  check(not trail_hit.is_empty() and trail_hit.normal.y>.8 and absf(trail_hit.position.y-(GardenTerrain.point(Vector3(34.5,0,6)).y+.12))<.02,failures,"Eastern trail has a backward or mismatched walking surface")
+ # A restored terrain edit must move the collider along with the visible ground.
+ var sculpt_ray=PhysicsRayQueryParameters3D.create(Vector3(82,12,-22),Vector3(82,-3,-22))
+ sculpt_ray.exclude=[g.player.get_rid()]
+ var before=g.get_world_3d().direct_space_state.intersect_ray(sculpt_ray)
+ GardenSculpt.restore(g,{"82:-22":.3})
+ await g.get_tree().physics_frame
+ var after=g.get_world_3d().direct_space_state.intersect_ray(sculpt_ray)
+ check(not before.is_empty() and not after.is_empty() and absf(after.position.y-before.position.y-.3)<.02,failures,"Edited habitat ground lost its matching collision")
+ GardenSculpt.restore(g,{})
+ await g.get_tree().physics_frame
  # Reedwater really follows the sluice level and depth preferences.
  var inlet=GardenAreas.state(g,0);GardenAreas.plant_collection(g,0,4,"reed",false)
  inlet.sluice=0;var low=GardenAreas.pocket_rate(g,0,4,inlet.beds["4"])
