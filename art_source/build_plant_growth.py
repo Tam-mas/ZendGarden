@@ -11,6 +11,7 @@ from botanical_detail import detail_geometry
 from botanical_forms import compound, palmate, round_leaf
 from botanical_additions_data import ADDITIONS
 from botanical_additions_forms import grasses, succulents
+from fruit_tree_geometry import FRUIT_TREES, attached_buds, add_anchor_channels
 Detailed=detail_geometry(Geometry)
 scene=bpy.data.scenes.new('ZendGarden_PlantGrowth')
 bpy.context.window.scene=scene
@@ -142,7 +143,7 @@ for idx,row in enumerate(specs):
         # Non-flowering carpets and leafy crops develop new growing tips instead.
         tips=sorted((v.co.copy() for v in foliage.data.vertices),key=lambda v:v.z,reverse=True)
         points=[tips[int(i*min(len(tips)-1,80)/4)] for i in range(4)]
-    for c in points:
+    for c in ([] if name in FRUIT_TREES else points):
         r=max(.016,min(.065,height*.023))
         # Closed sepals surround the coloured tip; fruit starts small and green.
         buds.ellipsoid(c,(r*.68,r*.68,r),0,5,8)
@@ -150,7 +151,10 @@ for idx,row in enumerate(specs):
             a=j*math.pi/2
             base=c+Vector((0,0,-r*.8))
             buds.leaf(base,c+Vector((math.cos(a)*r*.65,math.sin(a)*r*.65,r*.45)),r*.22,1,.1,4)
-    obj=buds.object('Buds',[leafm if category=='Produce' or layer==3 else flowers.data.materials[0],leafm,young]);obj.parent=root;organs.append(obj)
+    if name in FRUIT_TREES:attached_buds(flowers.data,buds,height)
+    obj=buds.object('BudsFruit' if name in FRUIT_TREES else 'Buds',[leafm if category=='Produce' or layer==3 else flowers.data.materials[0],leafm,young])
+    add_anchor_channels(obj.data,buds)
+    obj.parent=root;organs.append(obj)
     bpy.ops.object.select_all(action='DESELECT')
     for o in [root,*organs]:o.select_set(True)
     bpy.context.view_layer.objects.active=organs[0]

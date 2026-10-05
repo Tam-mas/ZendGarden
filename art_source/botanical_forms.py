@@ -136,6 +136,8 @@ def flower_head(g,p,size,style):
             g.ellipsoid(loc,(size*.019,size*.019,size*.026),2 if style=='sunflower' else 1,2,4)
 
 def tree(name,g,b,flower):
+    from fruit_tree_geometry import fruit_rng, hanging_fruit
+    fruit_random=fruit_rng(name)
     H={'Cherry blossom':4.5,'Silver birch':6.4,'Japanese maple':3.6,'Olive':4.2,'Willow':5.3,'Magnolia':4.3,'Lemon':3.5,'Apple':4.1,'Eucalyptus':7.5}[name]
     eucalyptus=name=='Eucalyptus';willow=name=='Willow';maple=name=='Japanese maple'
     trunkmat=6 if name in ['Eucalyptus','Silver birch'] else 5
@@ -191,10 +193,9 @@ def tree(name,g,b,flower):
                     loc=tip+radial(l*2.4,.09,random.uniform(-.03,.06))
                     g.tube([tip,loc],[.002,.001],0,3)
                     flower_head(b,loc,.09 if name=='Cherry blossom' else .22,'cherry' if name=='Cherry blossom' else 'magnolia')
-            if name in ['Apple','Lemon','Olive'] and k%3==0:
-                size=.09 if name!='Olive' else .035;loc=tip-Vector((0,0,size*1.7))
-                b.tube([tip,loc+Vector((0,0,size))],[.003,.002],3,4)
-                b.ellipsoid(loc,(size*.85,size*.85,size*(1.3 if name=='Lemon' else 1)),0,8,14)
+            if name in ['Apple','Lemon','Olive'] and k%3==0 and fruit_random.random()<(.75 if name=='Olive' else .62):
+                anchor=on_path(twig,fruit_random.uniform(.72,1.0))
+                hanging_fruit(b,anchor,name,.09 if name!='Olive' else .035,fruit_random,fruit_random.choice([0,0,4,5]))
 
 def shrub(name,g,b,flower):
     settings={

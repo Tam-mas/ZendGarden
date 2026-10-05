@@ -103,17 +103,21 @@ static func plant(data: Dictionary, decorative: bool = false) -> Node3D:
 
 static func add_leaf_wind(node: Node) -> void:
  if node is MeshInstance3D:
+  var anchored=str(node.name).begins_with("BloomFruit") or str(node.name).begins_with("BudsFruit")
+  var fruit_growth=float(node.get_meta("fruit_growth",1.0)) if anchored else 1.0
   for surface in range(node.mesh.get_surface_count()):
    var original=node.mesh.surface_get_material(surface)
    if original is StandardMaterial3D:
-    var key=str(original.get_instance_id())
+    var key=str(original.get_instance_id())+":"+str(anchored)+":"+str(fruit_growth)
     if not leaf_materials.has(key):
      var material=ShaderMaterial.new()
      material.shader=load("res://shaders/leaf_wind.gdshader")
+     material.set_shader_parameter("fruit_anchors",anchored)
+     material.set_shader_parameter("fruit_growth",fruit_growth)
      material.set_shader_parameter("leaf_texture",original.albedo_texture)
      var leafy=str(original.resource_name).begins_with("Leaf")
      material.set_shader_parameter("has_color_map",original.albedo_texture!=null)
-     material.set_shader_parameter("wind_strength",1.0 if leafy else 0.0)
+     material.set_shader_parameter("wind_strength",1.0 if leafy and not anchored else 0.0)
      material.set_shader_parameter("surface_backlight",.10 if leafy else 0.0)
      material.set_shader_parameter("surface_roughness",original.roughness)
      material.set_shader_parameter("leaf_color",original.albedo_color)
@@ -123,6 +127,8 @@ static func add_leaf_wind(node: Node) -> void:
      material.set_shader_parameter("has_roughness_map",original.roughness_texture!=null)
      leaf_materials[key]=material
     node.set_surface_override_material(surface,leaf_materials[key])
+  # A new growth material must replace any previously private shape material.
+  node.remove_meta("shape_materials")
  for child in node.get_children(): add_leaf_wind(child)
 
 static func collect_blooms(node: Node, target: Node3D) -> void:

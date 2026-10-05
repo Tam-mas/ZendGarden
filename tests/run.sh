@@ -6,6 +6,7 @@ python3 tests/check_greenhouse.py
 python3 tests/check_mountains.py
 python3 tests/check_plants.py
 python3 tests/check_plant_growth.py
+python3 tests/check_fruit_trees.py
 python3 tests/check_botanical_additions.py
 python3 tests/check_low_grasses.py
 python3 tests/check_audio.py
@@ -107,6 +108,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$compat_log" || ! rg -Fq 'IMPROVEMENTS_IN_GAME_R
   exit 1
 fi
 for renderer in forward_plus gl_compatibility; do
+  fruit_log="$(mktemp -t zend-garden-fruit)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" --script tests/fruit_trees.gd > "$fruit_log" 2>&1 || { cat "$fruit_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$fruit_log" || ! rg -Fq 'FRUIT_TREES_RESULT: []' "$fruit_log"; then
+    cat "$fruit_log"
+    exit 1
+  fi
   dense_log="$(mktemp -t zend-garden-dense)"
   "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" --script tests/dense_garden.gd > "$dense_log" 2>&1 || { cat "$dense_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$dense_log" || ! rg -Fq 'DENSE_GARDEN_RESULT: []' "$dense_log"; then

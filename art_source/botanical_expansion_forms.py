@@ -198,6 +198,8 @@ def gum_bloom(b,p):
             b.ellipsoid(end,(.0027,)*3,2,3,5)
 
 def tree(name,g,b):
+    from fruit_tree_geometry import fruit_rng, hanging_fruit
+    fruit_random=fruit_rng(name)
     gum='gum' in name;alpine=name=='Alpine snow gum';snow='snow gum' in name.lower()
     h=3.6 if alpine else 4.5 if gum else 4.0 if name=='Ginkgo' else 3.0 if name=='Mandarin' else 3.7
     spread=1.8 if gum else 1.35 if name=='Ginkgo' else 1.5
@@ -223,9 +225,9 @@ def tree(name,g,b):
                     tree_leaf(name,g,base,la,ll,4 if snow else 1 if m%3 else 2)
                 terminals.append(end)
                 if k in [2,5] and name not in ['Ginkgo','Snow gum','Alpine snow gum','Red flowering gum']:
-                    f=loc.lerp(end,.65)-Z*.13
-                    b.tube([loc.lerp(end,.65),f],[.003,.002],3,4)
-                    fruit(b,f,.085 if name in ['Fig','Plum','Apricot','Lime'] else .12 if name=='Avocado' else .105,name,0 if j%3 else 4)
+                    if fruit_random.random()<.86:
+                        anchor=loc.lerp(end,fruit_random.uniform(.48,.88))
+                        hanging_fruit(b,anchor,name,.085 if name in ['Fig','Plum','Apricot','Lime'] else .12 if name=='Avocado' else .105,fruit_random,fruit_random.choice([0,0,4]))
     if name=='Red flowering gum':
         for p in terminals[::4]:gum_bloom(b,p)
         for p in terminals[2::13]:

@@ -1327,7 +1327,7 @@ func ghost_material(node: Node, tint: Color = Color(0.82,0.95,0.66,0.4)) -> void
    if original is ShaderMaterial and original.shader.resource_path.ends_with("leaf_wind.gdshader"):
     material=ShaderMaterial.new()
     material.shader=load("res://shaders/leaf_preview.gdshader")
-    for parameter in ["leaf_texture","leaf_color","leaf_normal","leaf_roughness","has_color_map","has_normal_map","has_roughness_map","wind_strength","surface_backlight","surface_roughness"]:
+    for parameter in ["leaf_texture","leaf_color","leaf_normal","leaf_roughness","has_color_map","has_normal_map","has_roughness_map","wind_strength","surface_backlight","surface_roughness","fruit_anchors","fruit_growth"]:
      material.set_shader_parameter(parameter,original.get_shader_parameter(parameter))
     if RenderingServer.get_current_rendering_method()=="gl_compatibility":
      material.set_shader_parameter("plant_shape",original.get_shader_parameter("plant_shape"))

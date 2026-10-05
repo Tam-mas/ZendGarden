@@ -7,6 +7,7 @@ uniform bool has_normal_map=false;
 uniform bool has_roughness_map=false;
 uniform vec4 leaf_color : source_color = vec4(1.0);
 #include "res://shaders/plant_shape.gdshaderinc"
+#include "res://shaders/fruit_growth.gdshaderinc"
 uniform bool has_color_map=true;
 uniform float wind_strength=1.0;
 uniform float surface_roughness=.82;
@@ -14,6 +15,7 @@ uniform float surface_backlight=.10;
 uniform bool batched_plant=false;
 uniform float batch_plant_height=1.0;
 void vertex(){
+ attached_fruit_growth(VERTEX,UV2,COLOR);
  if(batched_plant) {
   botanical_shape_values(VERTEX,NORMAL,INSTANCE_CUSTOM,batch_plant_height);
  } else {

@@ -39,10 +39,19 @@ func changing(p: Dictionary) -> void:
  if previous<0 or stage_key(previous)!=stage_key(next):
   restore(p.node)
   dirty=true
+ elif int(p.id) in GardenPlantGrowth.FRUIT_TREES and fruit_size_key(previous)!=fruit_size_key(next):
+  # Local fruit growth selects a shared size material; refresh its batch group.
+  restore(p.node)
+  dirty=true
  tweening[p.node.get_instance_id()]=p
 
 func stage_key(fraction: float) -> int:
  return 0 if fraction<.20 else 1 if fraction<.52 else 2 if fraction<.78 else 3
+
+func fruit_size_key(fraction: float) -> int:
+ if fraction<.52:return 0
+ var size=lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1)) if fraction<.78 else lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1))
+ return roundi(size*32.0)
 
 func _process(delta: float) -> void:
  if not active and garden.planted.size()>=MIN_PLANTS:

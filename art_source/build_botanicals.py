@@ -92,6 +92,9 @@ for idx,row in enumerate(specs[:60]):
     texture_material(petal,'fruit' if category=='Produce' or name in ['Apple','Lemon','Olive','Blueberry','Lilly pilly'] else 'petal',surface_maps)
     mats=[stem,*leaves,bark]
     bloom_mats=[petal,disk if name in ['Sunflower','Poppy'] else pollen,pollen,stem]
+    if name in ['Apple','Lemon','Olive']:
+        from fruit_tree_geometry import fruit_palette
+        bloom_mats=fruit_palette(name,bloom_mats,surface_maps)
     # Species-specific foliage colours do not recolour flowers or menu swatches.
     accent=material('Leaf '+name+' characteristic foliage',{'Japanese maple':'943f32','Blue fescue':'799fa7','Lettuce':'9eba65','Beetroot':'9a3c50'}.get(name,'547536'))
     texture_material(accent,'leaf',surface_maps)
@@ -99,7 +102,7 @@ for idx,row in enumerate(specs[:60]):
     botanical_forms.build(name,category,layer,foliage,bloom,flower)
     root=bpy.data.objects.new('Plant_%02d_%s'%(idx,name.replace(' ','_')),None); scene.collection.objects.link(root)
     leaf_obj=foliage.object('Foliage',mats); leaf_obj.parent=root
-    bloom_obj=bloom.object('Bloom',bloom_mats); bloom_obj.parent=root
+    bloom_obj=bloom.object('BloomFruit' if hasattr(bloom,'fruit_anchors') else 'Bloom',bloom_mats); bloom_obj.parent=root
     bpy.ops.object.select_all(action='DESELECT')
     for ob in [root,leaf_obj,bloom_obj]: ob.select_set(True)
     bpy.context.view_layer.objects.active=leaf_obj

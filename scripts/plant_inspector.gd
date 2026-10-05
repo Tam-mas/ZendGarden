@@ -59,6 +59,8 @@ static func highlight(node: Node, enabled: bool) -> void:
       outline.shader=load("res://shaders/plant_outline.gdshader")
       if original is ShaderMaterial:
        outline.set_shader_parameter("wind_strength",original.get_shader_parameter("wind_strength"))
+       outline.set_shader_parameter("fruit_anchors",original.get_shader_parameter("fruit_anchors"))
+       outline.set_shader_parameter("fruit_growth",original.get_shader_parameter("fruit_growth"))
        if RenderingServer.get_current_rendering_method()=="gl_compatibility":
         outline.set_shader_parameter("plant_shape",original.get_shader_parameter("plant_shape"))
         outline.set_shader_parameter("plant_height",original.get_shader_parameter("plant_height"))
