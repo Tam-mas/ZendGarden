@@ -2032,8 +2032,8 @@ func run_areas_test() -> void:
  get_tree().quit(1 if not failures.is_empty() else 0)
 
 func run_cohesion_review() -> void:
- await preload("res://tests/area_cohesion_review.gd").run(self)
- get_tree().quit()
+ var code=await preload("res://tests/area_cohesion_review.gd").run(self)
+ get_tree().quit(code)
 
 func animate_garden(delta: float, sample_time: float = -1.0) -> void:
  if sample_time<0:garden_animation_time+=maxf(0,delta)

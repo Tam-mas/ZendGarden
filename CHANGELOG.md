@@ -1,3 +1,13 @@
+### [2026-10-06 19:41] Fixed
+
+**Tech:** `garden_routes.py`, `garden_paving.py` — continuous Fern Gully bend and oval Moon Garden threshold
+
+**Dev:** Widen the two tight approach turns. Join Fern Gully's arrival and bank path as one ribbon with a shared cross-section and gradual width change, eliminating its triangular spur and pinched join. Clip Moon Garden's final stones to the gravel court's actual oval boundary and retain a 15mm reveal above the underlying terrain to prevent coincident faces. Rebuild the two GLBs and packed Blender sources, update their shared clearance routes and Atlas arrivals/previews, and add player release 49 without changing terrain grids, collection IDs or saved progress. Extend exported paving checks for bend coverage, turning radius and oval fit; add focused original-angle/overhead review views and curved threshold probes. Both native renderers pass eighteen real player crossings and produce six reviewed photographs each. The complete headless garden regression and player-update checks pass. All ten paving networks, 28 area models with 505,264 triangles and all 33 Blender source libraries pass. A local Web export verifies 397 models and 10,015 texture references, packages 440.4 MiB into 23 pieces and passes deployable-file/security checks.
+
+**Plain:** Fern Gully's slate path follows a smooth bend, and the Moon Garden entrance meets its curved gravel courtyard cleanly.
+
+**Why:** These entrances now look deliberately built and remain reliable to walk through.
+
 ### [2026-10-06 17:12] Fixed
 
 **Tech:** `garden_paving.py`, `garden_routes.py`, `GardenAreas.prepare_meshes`, `GardenSculpt.chunks` — fitted paving networks and level destination thresholds

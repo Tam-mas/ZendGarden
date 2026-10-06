@@ -8,11 +8,12 @@ static func paving_material(node: Node,failures: Array,title: String) -> void:
  for child in node.get_children():
   if not child is StaticBody3D:paving_material(child,failures,title)
 
-static func run(g,failures: Array) -> void:
+static func run(g,failures: Array,indices: Array=[]) -> void:
  var walker=preload("res://tests/walking.gd")
  # Traverse the new entrances with the player's real capsule, gravity and
  # step-up movement. Include the long kitchen and glasshouse door approaches.
- for index in range(10):
+ if indices.is_empty():indices=range(10)
+ for index in indices:
   var paving=GardenAreas.find(g.area_roots[index],"Arrival path fitted network")
   if paving:paving_material(paving,failures,GardenAreaCatalogue.entry(index).name)
   else:failures.append("Missing fitted paving network in "+GardenAreaCatalogue.entry(index).name)
@@ -36,11 +37,15 @@ static func run(g,failures: Array) -> void:
    for side in [-.70,.70]:
     for along in [-.04,.04]:
      var pos=center+Vector3(join.x+side,0,join.y+along)
+     if index==9:
+      # Sample the curved court boundary on each side of the approach.
+      var x=join.x+side
+      pos=center+Vector3(x,0,6.3*sqrt(.98*.98-pow((x+1)/6.5,2))+along)
      # Start below the entry arch; an overhead lintel is not the threshold.
      var ray=PhysicsRayQueryParameters3D.create(GardenTerrain.point(pos)+Vector3.UP*.4,pos+Vector3.DOWN*3)
      ray.exclude=[g.player.get_rid()]
      var hit=g.get_world_3d().direct_space_state.intersect_ray(ray)
-     if hit.is_empty() or absf(hit.position.y-1.235)>.015:
+     if hit.is_empty() or absf(hit.position.y-1.235)>(.02 if index==9 else .015):
       failures.append("Raised courtyard threshold in "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
   for t in [0.,.5,1.]:
    var sample=GardenAreaTransitions.approach(index,t)
@@ -52,6 +57,9 @@ static func run(g,failures: Array) -> void:
   var p=GardenAreaTransitions.approach(index,.5)
   if g.plantable_ground(center+Vector3(p.x,0,p.y)):
    failures.append("Planting can block the entrance to "+GardenAreaCatalogue.entry(index).name)
+ if indices.size()!=10:
+  print("COHESION_ROUTES_RESULT: ",failures)
+  return
  # Cross shared seams instead of teleporting between atlas entries.
  for row in range(4):
   var z=-12-row*24

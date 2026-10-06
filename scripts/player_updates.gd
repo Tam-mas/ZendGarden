@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":49,"date":"6 October 2026","title":"Smoother woodland and moonlit entrances","note":"Fern Gully's slate path now sweeps smoothly around the stream into its bank path. The Moon Garden entrance follows the curved gravel courtyard, with neatly fitted stones that stay clear of the ground beneath them."},
  {"version":48,"date":"6 October 2026","title":"Neater path junctions","note":"Stone paths now meet with one tidy paving pattern at their splits. Fitted thresholds join courtyards, steps and bridges, with narrower approaches at small crossings and level finishes at garden entrances."},
  {"version":47,"date":"6 October 2026","title":"Bluestone between the gardens","note":"Follow a blue-grey stone trail between all ten gardens, with smaller paths that meet their boardwalks, steps, doorways and inner paths. A new route links the eastern approach to the shared trail. The atlas explains where you can plant, rearrange starter plants and change specialist collections."},
  {"version":46,"date":"6 October 2026","title":"A garden that belongs together","note":"Follow a connected garden trail with fitted entrances and clearer signs. Enjoy consistent weathered stone, timber and clay, mixed low planting, scattered leaves and softer ground transitions. Gentler daylight, cooler woodland shade and balanced evening colours bring all ten gardens together."},

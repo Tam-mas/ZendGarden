@@ -14,7 +14,7 @@
     "variant": "new"
   },
   "areas/fern_gully": {
-    "bytes": 5424876,
+    "bytes": 5384972,
     "clips": [],
     "dimensions": [
       24.0,
@@ -24,7 +24,7 @@
     "folder": "areas",
     "kind": "fern_gully",
     "meshes": 18,
-    "triangles": 31976,
+    "triangles": 31503,
     "variant": "new"
   },
   "areas/glasshouse": {
@@ -70,7 +70,7 @@
     "variant": "new"
   },
   "areas/moon": {
-    "bytes": 2272024,
+    "bytes": 2448668,
     "clips": [],
     "dimensions": [
       24.0,
@@ -80,7 +80,7 @@
     "folder": "areas",
     "kind": "moon",
     "meshes": 18,
-    "triangles": 23363,
+    "triangles": 26069,
     "variant": "new"
   },
   "areas/orchard": {

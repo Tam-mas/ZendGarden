@@ -79,7 +79,7 @@ def end_width(index):
 
 def terminal(index):
     """An exact squared threshold at the court, first tread or deck edge."""
-    axis,end,direction={0:(0,7.055,1),2:(1,6.35,1),5:(1,7.,1),6:(1,5.5,1),7:(0,-3.385,-1),9:(1,6.,1)}.get(index,(None,0,0))
+    axis,end,direction={0:(0,7.055,1),2:(1,6.35,1),5:(1,7.,1),6:(1,5.5,1),7:(0,-3.385,-1)}.get(index,(None,0,0))
     if axis is None:return None
     center=garden_routes.point(index,1)
     w=end_width(index)*.5
@@ -88,14 +88,33 @@ def terminal(index):
 
 def footprints(index):
     pieces=[];native=native_path(index)
+    if index==1:
+        # One continuous ribbon has a shared cross-section through the bend.
+        # Two separately capped strips left a triangular spur and a pinched
+        # inner edge, even after their overlapping faces were removed.
+        approach=garden_routes.ROUTES['approaches'][index]
+        center,width=native;end=approach[-1][1]
+        count=math.ceil((end+9)/.12)
+        points=approach[:-1]+[(center(end-j*(end+9)/count),end-j*(end+9)/count) for j in range(count+1)]
+        ratio=(len(points)-1)/(len(approach)-1)
+        return ribbon(points,lambda t:1.8+(width-1.8)*smooth(.60,.95,min(1,t*ratio)))
     if native:
         center,width=native
-        end=8.36 if index==1 else 9.
+        end=9.
         count=math.ceil((end+9)/.12)
         points=[(center(-9+j*(end+9)/count),-9+j*(end+9)/count) for j in range(count+1)]
         pieces.extend(ribbon(points,lambda t:width))
     width=lambda t:1.8+(end_width(index)-1.8)*smooth(.65,1,t)
-    pieces.extend(ribbon(garden_routes.ROUTES['approaches'][index],width))
+    points=garden_routes.ROUTES['approaches'][index]
+    if index==9:
+        # Continue the ribbon slightly into the court, then cut every flag to
+        # the oval boundary. A square terminal here produced an L-shaped strip.
+        a,end=points[-2:];length=math.dist(a,end)
+        points=points+[tuple(end[k]+(end[k]-a[k])*.65/length for k in range(2))]
+    pieces.extend(ribbon(points,width))
+    if index==9:
+        oval=[(-1+6.5*.98*math.cos(j*math.tau/256),6.3*.98*math.sin(j*math.tau/256)) for j in range(256)]
+        pieces=[part for poly in pieces for part in difference(poly,oval)]
     slab=terminal(index)
     if slab:
         # Remove the last partial flag row. One threshold, cut exactly at the
@@ -166,8 +185,11 @@ def build(b,G,root,index):
         y-=.020*(1-smooth(0,.15,t))
         end=garden_routes.point(index,1)
         distance=abs((x-end[0]) if index in [0,7] else (z-end[1])) if index in [0,2,4,5,6,7,9] else math.dist((x,z),end)
+        if index==9:distance=max(0,(math.hypot((x+1)/6.5,z/6.3)-.98)*6.3)
         if index in [0,2,5,6,7,9]:
-            target=1.51 if index==0 else 1.40+.2*(1-(end[0]/3.6)**2) if index==7 else b.height(index,x,z)+(.155 if index==2 else .035)
+            # The oval court's terrain continues underneath the flags. Leave
+            # 15mm of reveal there; coincident faces flicker and expose wedges.
+            target=1.51 if index==0 else 1.40+.2*(1-(end[0]/3.6)**2) if index==7 else b.height(index,x,z)+(.155 if index==2 else .05 if index==9 else .035)
             y+=(target-y)*(1-smooth(.22,1.1,distance))
         elif index==4:
             # A modest level landing meets the orchard turf without a raised

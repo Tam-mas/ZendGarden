@@ -65,15 +65,43 @@ def audit(index,baseline):
         for cell in cells:buckets.setdefault(cell,[]).append(j)
     assert not overlaps,(KINDS[index],'stacked path flags',len(overlaps),overlaps[:3])
     if not baseline:
-        if index in [2,5,6,9]:
-            edge={2:6.35,5:7.,6:5.5,9:6.}[index]
+        if index in [2,5,6]:
+            edge={2:6.35,5:7.,6:5.5}[index]
             assert min(p[2] for p in points)>=edge-1e-5,(KINDS[index],'paving projects into destination')
         if index==0:assert min(p[0] for p in points)>=7.055-1e-5,('paving projects into boardwalk',points)
         if index==7:assert max(p[0] for p in points)<=-3.385+1e-5,('paving projects into bridge',points)
-        if index in [5,6,9]:
-            edge={5:7.,6:5.5,9:6.}[index]
+        if index in [5,6]:
+            edge={5:7.,6:5.5}[index]
             ends=[p for p in points if abs(p[2]-edge)<1e-5]
             assert len(ends)>=2 and all(abs(p[1]-1.235)<1e-5 for p in ends),(KINDS[index],'raised courtyard threshold',ends)
+        if index==9:
+            # The Moon court is oval, so a constant-Z bound cannot detect
+            # the long sideways strip or fit both sides of its entrance.
+            radius=lambda p:math.hypot((p[0]+1)/6.5,p[2]/6.3)
+            assert min(radius(p) for p in points)>.9798,('paving projects into oval court',min(radius(p) for p in points))
+            ends=[p for p in points if abs(radius(p)-.98)<.0002]
+            assert len(ends)>8 and all(abs(p[1]-1.250)<1e-5 for p in ends),('incorrect oval threshold reveal',ends)
+        if index in [1,9]:
+            route=json.loads((ROOT/'assets/areas/routes.json').read_text())['approaches'][index]
+            radii=[math.dist(a,b)*math.dist(b,c)*math.dist(c,a)/(2*abs(cross(a,b,c))) for a,b,c in zip(route,route[1:],route[2:]) if abs(cross(a,b,c))>1e-8]
+            assert min(radii)>1.1,(KINDS[index],'turn too tight for the paving width',min(radii))
+            # A bend must retain its walkable width in the final export.
+            # Allow only the 2cm mortar joints, not missing wedges or a spur.
+            for j in range(int(len(route)*.70),len(route)-1):
+                a,b,c=route[j-1:j+2];length=math.dist(a,c)
+                normal=(-(c[1]-a[1])/length,(c[0]-a[0])/length)
+                for side in [-.38,0,.38]:
+                    point=(b[0]+normal[0]*side,b[1]+normal[1]*side)
+                    if index==9 and math.hypot((point[0]+1)/6.5,point[1]/6.3)<.981:continue
+                    candidates=buckets.get((math.floor(point[0]),math.floor(point[1])),[])
+                    covered=False
+                    for dx,dz in [(0,0),(.025,0),(-.025,0),(0,.025),(0,-.025)]:
+                        q=(point[0]+dx,point[1]+dz)
+                        for k in candidates:
+                            signs=[cross(p,r,q) for p,r in zip(triangles[k],triangles[k][1:]+triangles[k][:1])]
+                            if min(signs)>=-1e-7 or max(signs)<=1e-7:covered=True;break
+                        if covered:break
+                    assert covered,(KINDS[index],'missing paving across bend',point)
     print(f'PATH_PAVING: {KINDS[index]} — {len(triangles)} disjoint triangles, fitted destination edge')
 
 if __name__=='__main__':

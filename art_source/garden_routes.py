@@ -31,12 +31,13 @@ def data():
         6: [[11.15,8.25],[7.0,8.25],[0,8.25],[0,5.5]],
         7: [[-11.15,7.9],[-8.7,7.9],[-8.7,3.0],[-3.385,3.0]],
         8: [[11.15,7.9],[8.0,7.9],[4.0,6.0],[2.4*math.sin(2.7),6.0]],
-        9: [[-11.15,7.9],[-7.0,7.9],[-2.5,7.0],[-2.5,6.0]],
+        # Arrive normal to the oval gravel court, with room for a broad bend.
+        9: [[-11.15,7.9],[-7.2,7.9],[-2.95,7.85],[-2.5,6.3*math.sqrt(.98**2-(1.5/6.5)**2)]],
     }
     routes=[curve(curves[i]) if i in curves else [] for i in range(10)]
     # Straight final courses square up to the destination edge, leaving room
     # for a complete threshold slab rather than a thin, diagonally cut tile.
-    for i in [0,2,6,7,9]:
+    for i in [0,2,6,7]:
         controls=[list(p) for p in curves[i]];end=controls[-1][:]
         axis=0 if i in [0,7] else 1;direction=-1 if i==7 else 1
         controls[-1][axis]+=direction*.60
@@ -48,8 +49,7 @@ def data():
     fern=[]
     for controls in [
         [[-11.15,7.9],[-8.5,7.9],[-6,10.35],[-2,10.35]],
-        [[-2,10.35],[-.5,10.35],[1.65,10.35],[1.65,9.5]],
-        [[1.65,9.5],[1.65,9.0],[creek(8.3)+1.55+(.42*math.cos(8.3*.42)+.249*math.cos(8.3*.83))*.7,9.0],[creek(8.3)+1.55,8.3]],
+        [[-2,10.35],[0,10.35],[creek(8.3)+1.55+(.42*math.cos(8.3*.42)+.249*math.cos(8.3*.83))*1.5,9.8],[creek(8.3)+1.55,8.3]],
     ]:
         fern.extend([cubic(controls,i/120) for i in range(120)])
     fern.append(tuple([creek(8.3)+1.55,8.3]));routes[1]=resample(fern)
