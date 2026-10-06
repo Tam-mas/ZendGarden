@@ -5,6 +5,9 @@ collection pocket identities. Existing detailed botanical assets supply plants.
 """
 import bpy, math, random
 from mathutils import Vector
+import garden_routes
+
+garden_routes.write()
 
 PALETTES = [
     [147,146,140], [136,145,137], [142,139,144], [140,141,139],
@@ -13,24 +16,13 @@ PALETTES = [
 ]
 
 def approach(index,t):
-    side=1 if index%2==0 else -1
-    blend=t*t*(3-2*t)
-    if index==0:return (12-4*t,7.9-2.8*blend)
-    if index==5:
-        straight=10.85;arc=math.pi*1.15/2;distance=t*(straight+arc+.5)
-        if distance<straight:return (-12+distance,8.25)
-        if distance<straight+arc:
-            angle=(distance-straight)/1.15
-            return (-1.15+1.15*math.sin(angle),7.1+1.15*math.cos(angle))
-        return (0,7.1-(distance-straight-arc))
-    if index==6:return (12*(1-t),8.25-2.10*blend)
-    if index==4:return (12-6*t,8.15-.5*blend)
-    return (side*(12-6*t),7.9-1.9*blend)
+    return garden_routes.point(index,t)
 
 def on_route(index,x,z,margin=.98):
     if abs(x-(12 if index%2==0 else -12))<1.02:return True
-    for j in range(31):
-        a,b=approach(index,j/30)
+    points=garden_routes.ROUTES['approaches'][index]
+    if index==0:points=points+[[a-56,b] for a,b in garden_routes.ROUTES['eastern_link']]
+    for a,b in points:
         if math.hypot(x-a,z-b)<margin:return True
     return False
 
@@ -163,21 +155,39 @@ def install(b):
                 G.tube(detail,b.MATS['darkwood'],points,[.010,.007,.004],5)
         # A shared family of fitted entrance stones joins the central trail.
         path=b.pivot('Arrival path',root,ground=True,flat=True,arrival_path=True)
-        segments=32 if index==5 else 22
+        samples=garden_routes.ROUTES['approaches'][index]
+        length=sum(math.dist(a,b) for a,b in zip(samples,samples[1:]))
+        segments=max(22,math.ceil(length/.58))
+        grid=b.layout()[index]['heightmap']
+        def paving_height(x,z):
+            # Match the game's metre-grid interpolation at shared junctions,
+            # rather than crossing its blue stones with an analytic surface.
+            xx=max(0,min(24,x+12));zz=max(0,min(24,z+12))
+            ix=min(23,int(xx));iz=min(23,int(zz));tx=xx-ix;tz=zz-iz
+            a=grid[iz][ix]*(1-tx)+grid[iz][ix+1]*tx
+            c=grid[iz+1][ix]*(1-tx)+grid[iz+1][ix+1]*tx
+            return a*(1-tz)+c*tz
         def path_normal(t):
             d=(Vector(approach(index,min(1,t+.001)))-Vector(approach(index,max(0,t-.001)))).normalized()
             return Vector((-d.y,d.x))
         for k in range(segments):
             t0=(k+.018)/segments;t1=(k+.982)/segments
             a=Vector(approach(index,t0));c=Vector(approach(index,t1))
-            if index==5:first_normal=path_normal(t0);last_normal=path_normal(t1)
-            else:
-                d=(c-a).normalized();first_normal=last_normal=Vector((-d.y,d.x))
+            first_normal=path_normal(t0);last_normal=path_normal(t1)
             for lane in range(3):
                 lo=(lane/3-.5)*1.8+.012;hi=((lane+1)/3-.5)*1.8-.012
                 points=[a+first_normal*lo,c+last_normal*lo,c+last_normal*hi,a+first_normal*hi]
-                G.poly(path,b.MATS['stone'],[b.at(index,p.x,p.y,.015) for p in points],[(0,3,2,1)])
-        root['cohesion_version']=1
+                heights=[]
+                for p,t in zip(points,[t0,t1,t1,t0]):
+                    lift=.035+.020*b.smooth(0,.15,t)
+                    if index==0:lift+=.185*b.smooth(.65,1,t)
+                    if index==7:
+                        end=approach(index,1)
+                        deck=1.40+.2*(1-(end[0]/3.6)**2)
+                        lift+=(deck-paving_height(*end)-.07-.055)*b.smooth(.65,1,t)
+                    heights.append((p.x,paving_height(p.x,p.y)+.07+lift,p.y))
+                G.poly(path,b.MATS['stone'],heights,[(0,3,2,1)])
+        root['cohesion_version']=2
     b.borders=borders
 
     old_layout=b.layout

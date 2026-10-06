@@ -61,7 +61,9 @@ static func open(g,index: int=-1) -> void:
   preview(g,col,index);note(g,col,info.description,16)
   action(g,col,"Visit "+info.name,func():GardenAreas.visit(g,index))
   if not s.initialized:note(g,col,"Visit to receive its starter collection and begin the garden activities. All ten trails are open.")
-  else:activities(g,col,index)
+  else:
+   note(g,col,"Make this garden your own: use Seeds and Plant on clear ground, and Move or Remove for your ordinary plants and starter equipment. Keep water, paths, rocks and buildings clear. Specialist collection plants use the planting and clearing buttons in Activities; the surrounding landscape planting stays in place.",14)
+   activities(g,col,index)
  if index>=0:frame.add_child(g.button("All ten garden trails",func():open(g),Vector2(0,48)))
  frame.add_child(g.button("Back to garden" if g.area_atlas_return else "Done",func():close(g),Vector2(0,48)))
  fit(g)

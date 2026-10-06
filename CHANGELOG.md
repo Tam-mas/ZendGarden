@@ -729,3 +729,12 @@
 **Plain:** You can now reverse left/right and up/down mouse movement separately in Settings.
 
 **Why:** Makes camera controls easier to find and adapt to your preferred way of looking around.
+### [2026-10-06 16:03] Changed
+
+**Tech:** `GardenAreaTransitions`, `garden_routes.py`, `area_cohesion.py`, `bluestone.gdshader` — continuous bluestone main trail and complete habitat entrance routes
+
+**Dev:** Replace the shared and eastern main trails with metre-scaled, textured blue-grey stone slabs and narrow running-bond joints. Add the missing northern Reedwater link from the original eastern approach to the shared trail. Author shared route samples for both Blender paving and runtime planting clearance, rebuild all ten editable landscapes, extend approaches to their actual inner paths, terrace steps, courtyards, doors and crossing ends, and grade Reedwater/Stream joins to their decks. Trim entrance starts to the shared trail edges, use its exact lattice heights and recess the small overlap to remove coplanar pale/blue paving artifacts. Route Fern Gully around its creek head and reserve scenery clearance along every revised path. Keep existing plant IDs, collection pockets, terrain grids and saved progress compatible. Explain ordinary gardening, specialist pockets and fixed decorative planting in the Atlas; add player release 47. Expand player traversal checks through every inner join and the eastern link, floor-ray coverage and Plant/Move/Remove checks in all ten habitats. Final Compatibility and Forward+ runs pass all ten arrivals, 102 real player walks per renderer, Plant/Move/Remove throughout the habitats, floor rays, terrain edit/collision restoration, activities, bed finishes and save restoration. The full gameplay regression and player update/dismissal checks pass. Asset checks pass 28 models and 486,318 triangles; read-only checks pass all 33 Blender source libraries with the interactive scene preserved. Review sixteen fresh game photographs of every connection. Use lossless, mipmapped browser texture copies and verify their colour/normal resources plus route JSON inside the exported game pack; the final local Web build checks 397 models and 10,027 texture references and packages into 23 pieces.
+
+**Plain:** The main trail is now bluestone, smaller paths reach into each garden, and the atlas explains how to personalise the planting.
+
+**Why:** Properly joined paths make the ten gardens easier to explore, while clear planting controls help players make them their own.

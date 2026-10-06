@@ -96,6 +96,32 @@ static func run(g,failures: Array) -> void:
     ray.exclude=[g.player.get_rid()]
     var ground=g.get_world_3d().direct_space_state.intersect_ray(ray)
     check(not ground.is_empty() and ground.position.y> -1 and ground.normal.y>0,failures,"Missing ground collision in "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
+ # Verify ordinary gardening through the same tools players use, rather than
+ # assuming all ten habitats accept plants because demo helpers can add them.
+ for index in range(10):
+  var positions=[];var center=GardenAreaCatalogue.center(index)
+  for x in range(-17,18):
+   for z in range(-17,18):
+    var pos=GardenTerrain.point(center+Vector3(x*g.GRID,0,z*g.GRID))
+    if g.can_plant(0,pos,index+4).is_empty():positions.append(pos)
+    if positions.size()==2:break
+   if positions.size()==2:break
+  if positions.size()<2:
+   failures.append("No editable planting ground in "+GardenAreaCatalogue.entry(index).name);continue
+  var count=g.planted.size()
+  g.mode="plant";g.selected=0;g.hover_cell=positions[0];g.hover_plot=index+4
+  g.hover_valid=true;g.hover_target=-1;g.hover_object=null;g.action_cooldown=0
+  g.perform_action()
+  check(g.planted.size()==count+1,failures,"Plant tool failed in "+GardenAreaCatalogue.entry(index).name)
+  if g.planted.size()!=count+1:continue
+  g.mode="move";g.moved_index=count;g.moved_object=-1;g.hover_cell=positions[1];g.action_cooldown=0
+  g.perform_action()
+  check(g.planted[count].pos.is_equal_approx(positions[1]),failures,"Move tool failed in "+GardenAreaCatalogue.entry(index).name)
+  g.mode="remove";g.hover_cell=g.planted[count].pos;g.hover_target=count
+  g.hover_valid=true;g.hover_object=null;g.action_cooldown=0
+  g.perform_action()
+  check(g.planted.size()==count,failures,"Remove tool failed in "+GardenAreaCatalogue.entry(index).name)
+ g.mode="walk";g.moved_index=-1;g.hover_valid=false
  # Bed surfaces retain the precise soil footprint and save their choices.
  for plot in [8,9]:
   var soils=g.terrain_meshes.filter(func(e):return int(e.node.get_meta("area_bed_plot",-1))==plot)
