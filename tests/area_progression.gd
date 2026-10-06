@@ -45,7 +45,7 @@ static func run(g,failures: Array) -> void:
  for index in range(10):
   check(GardenAreaCatalogue.entry(index).name in overview and GardenAreaProgression.requirement(index) in overview,failures,"Atlas omits a milestone: %d"%index)
  await capture_atlas(g,"locked-glasshouse",6)
- check("100 new plants" in labels(g.welcome) and "Visit Old Glasshouse" in labels(g.welcome) and "Restore bay" not in labels(g.welcome),failures,"Locked area must show target and permit visiting without activities")
+ check("2000 new plants" in labels(g.welcome) and "Visit Old Glasshouse" in labels(g.welcome) and "Restore bay" not in labels(g.welcome),failures,"Locked area must show target and permit visiting without activities")
  GardenAreaAtlas.close(g)
  if DisplayServer.get_name()!= "headless":
   var original_size=g.get_window().size
@@ -82,6 +82,22 @@ static func run(g,failures: Array) -> void:
  for s in old.areas.gardens.values():s.erase("unlocked")
  GardenAreas.restore(g,old)
  check(not GardenAreaProgression.unlocked(g,6) and GardenAreas.state(g,6).beds["0"].age==3.0 and g.objects.size()==stock_count,failures,"Existing areas bypass milestones or lose saved collections")
+ # Earlier planting rewards must use the higher totals on existing saves.
+ old.areas.erase("planting_milestones_revision")
+ for index in [3,4,5,6]:old.areas.gardens[GardenAreaCatalogue.entry(index).kind].unlocked=true
+ g.planted_total=100;GardenAreas.restore(g,old)
+ for index in [3,4,5,6]:
+  check(not GardenAreaProgression.unlocked(g,index),failures,"Earlier planting reward bypasses the higher target: %d"%index)
+ check(GardenAreas.state(g,6).beds["0"].age==3.0 and g.objects.size()==stock_count,failures,"Higher target migration loses planting or furniture")
+ g.planted_total=2000;GardenAreas.restore(g,old)
+ for index in [3,4,5,6]:
+  check(GardenAreaProgression.unlocked(g,index),failures,"Eligible old save loses its earned planting reward: %d"%index)
+ var revised={"areas":g.areas_state.duplicate(true)}
+ g.planted_total=0;GardenAreas.restore(g,revised)
+ for index in [3,4,5,6]:
+  check(GardenAreaProgression.unlocked(g,index),failures,"Revised permanent reward is revoked on reload: %d"%index)
+ var invalid_revision=revised.duplicate(true);invalid_revision.areas.planting_milestones_revision="broken"
+ check(not GardenAreaCatalogue.valid_save(invalid_revision),failures,"Invalid planting revision passes save validation")
  # Each threshold is independent and awards permanent access exactly at target.
  for index in range(10):
   for s in g.areas_state.gardens.values():s.unlocked=false
@@ -93,7 +109,7 @@ static func run(g,failures: Array) -> void:
   check(GardenAreas.state(g,index).unlocked and GardenAreaCatalogue.plot_open(g,index+4),failures,"Milestone does not open at target: %d"%index)
   g.set(rule.metric,1 if rule.metric=="day" else 0)
   check(GardenAreaProgression.unlocked(g,index),failures,"Earned reward was revoked: %d"%index)
- g.day=100;g.planted_total=100;g.fulfilled=8;GardenAreaProgression.refresh(g,false)
+ g.day=100;g.planted_total=2000;g.fulfilled=8;GardenAreaProgression.refresh(g,false)
  for index in range(10):GardenAreas.initialize(g,index)
  var metric_before=g.planted_total
  for index in range(10):GardenAreas.initialize(g,index)

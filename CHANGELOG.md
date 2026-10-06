@@ -1,3 +1,13 @@
+### [2026-10-06 21:13] Changed
+
+**Tech:** `GardenAreaProgression.RULES/restore` — later-game planting reward thresholds
+
+**Dev:** Raise Pollinator Meadow to 250 cumulative new plantings, Walled Kitchen Garden to 500, Orchard Clearing to 1,000 and Old Glasshouse to 2,000. Atlas, Guide and local HUD read the shared targets; update the player guide and add release 51. Save a planting-milestone revision and recheck old planting unlocks once against the higher totals, preserving collections, growth, furniture, activities and other milestones. Rewards earned under this revision remain permanent on subsequent reloads. Extend regression coverage for earlier unlocked saves below and above the new targets, permanent revised rewards after reload and malformed revision validation. The native milestone/furniture regression, phone layout review, player update history and save-file compatibility checks pass. The local browser export verifies 400 models and 10,167 texture references, packages 440.6 MiB into 23 pieces and passes deployable-file and security checks.
+
+**Plain:** The meadow, kitchen garden, orchard and glasshouse now open after 250, 500, 1,000 and 2,000 new plantings, giving established gardeners bigger rewards to work towards.
+
+**Why:** Higher planting targets place these garden rewards later in the player's progress.
+
 ### [2026-10-06 21:00] Added
 
 **Tech:** `GardenAreaProgression`, `GardenAreaFurnishings` — milestone rewards and owned habitat furniture

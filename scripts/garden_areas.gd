@@ -19,7 +19,7 @@ const SOLID_PIVOTS=["Boardwalk","Sluice wheel","Fallen log","Stepping stones","T
 static var scenes: Dictionary={}
 
 static func initial_state() -> Dictionary:
- return {"version":1,"gardens":{}}
+ return {"version":1,"planting_milestones_revision":GardenAreaProgression.PLANTING_REVISION,"gardens":{}}
 
 static func state(g,index: int) -> Dictionary:
  var kind: String=GardenAreaCatalogue.entry(index).kind
@@ -37,6 +37,7 @@ static func restore(g,saved: Dictionary) -> void:
   if old.get("initialized",false) and not old.has("planting_initialized"):old["planting_initialized"]=true
   g.areas_state.gardens.erase(kind)
   state(g,index).merge(old,true)
+ GardenAreaProgression.restore(g)
 
 static func instantiate(path: String) -> Node3D:
  if not ResourceLoader.exists(path):return null

@@ -2,13 +2,24 @@ class_name GardenAreaProgression
 extends RefCounted
 
 # Index order follows the atlas, not an enforced unlock order.
+const PLANTING_REVISION=1
 const RULES=[
  {"metric":"day","target":14}, {"metric":"day","target":7},
- {"metric":"fulfilled","target":5}, {"metric":"planted_total","target":10},
- {"metric":"planted_total","target":50}, {"metric":"planted_total","target":25},
- {"metric":"planted_total","target":100}, {"metric":"fulfilled","target":8},
+ {"metric":"fulfilled","target":5}, {"metric":"planted_total","target":250},
+ {"metric":"planted_total","target":1000}, {"metric":"planted_total","target":500},
+ {"metric":"planted_total","target":2000}, {"metric":"fulfilled","target":8},
  {"metric":"day","target":60}, {"metric":"day","target":100}
 ]
+
+static func restore(g) -> void:
+ # Apply the higher planting targets to saves from the initial balance too.
+ # Once earned under this revision, access remains a permanent reward.
+ if int(g.areas_state.get("planting_milestones_revision",0))<PLANTING_REVISION:
+  for index in range(10):
+   if RULES[index].metric=="planted_total":
+    var s=GardenAreas.state(g,index)
+    s.unlocked=bool(s.unlocked) and int(g.planted_total)>=int(RULES[index].target)
+ g.areas_state["planting_milestones_revision"]=PLANTING_REVISION
 
 static func unlocked(g,index: int) -> bool:
  return index>=0 and index<10 and (bool(GardenAreas.state(g,index).unlocked) or int(g.get(RULES[index].metric))>=int(RULES[index].target))

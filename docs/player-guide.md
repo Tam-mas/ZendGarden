@@ -130,18 +130,20 @@ Open **Garden atlas · milestones & trails** from the garden menus, or **Garden 
 
 | Garden | Milestone |
 | --- | --- |
-| Pollinator Meadow | Plant 10 new plants |
+| Pollinator Meadow | Plant 250 new plants |
 | Fern Gully | Reach game day 7 |
-| Walled Kitchen Garden | Plant 25 new plants |
+| Walled Kitchen Garden | Plant 500 new plants |
 | Reedwater Garden | Reach game day 14 |
 | Limestone Terraces | Complete 5 neighbour requests |
-| Orchard Clearing | Plant 50 new plants |
+| Orchard Clearing | Plant 1,000 new plants |
 | Stream Garden | Complete 8 neighbour requests |
-| Old Glasshouse | Plant 100 new plants |
+| Old Glasshouse | Plant 2,000 new plants |
 | Alpine Lookout | Reach game day 60 |
 | Moon Garden | Reach game day 100 |
 
 Guide and Garden atlas list every requirement, live progress and unlock status. Plantings are cumulative and include containers and specialist collection planting. Automatic starter plants, moving plants and replanting stored plants do not add to this count. Day milestones use game days. Existing saves use these milestones too: saved planting, arrangements, surfaces and activities remain in place, and plants keep growing while further interactions wait for the reward.
+
+The planting rewards are later-game goals. Saves made with the earlier 10/25/50/100 targets are checked against the higher totals above; planting and arrangements stay intact. Once earned under these targets, each reward remains permanent.
 
 Once a garden is unlocked, face it and press **E**, or tap **Garden activities**, to open its controls. Use **Move** and **Remove** for starter benches, planters, nursery shelves, harvest tables, the alpine chime, the Moon Garden pergola and lanterns. The kitchen pocket planters face into the courtyard; benches face their garden features. Paths, walls, bridges and the surrounding landscape remain part of the area.
 

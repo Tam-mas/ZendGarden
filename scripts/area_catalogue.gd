@@ -81,6 +81,7 @@ static func valid_save(saved: Dictionary) -> bool:
  if not saved.has("areas"):return true
  var state=saved.areas
  if not state is Dictionary or not GardenSaveFormat.integer(state.get("version"),1,1) or not state.get("gardens") is Dictionary:return false
+ if not GardenSaveFormat.integer(state.get("planting_milestones_revision",0),0,GardenAreaProgression.PLANTING_REVISION):return false
  if state.gardens.size()>COUNT:return false
  var kinds=entries().map(func(item):return item.kind)
  for kind in state.gardens:
