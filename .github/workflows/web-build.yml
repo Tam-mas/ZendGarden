@@ -34,6 +34,8 @@ jobs:
         run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/audio_compression.gd
       - name: Test garden milestones and removable displays
         run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --fixed-fps 60 --path . -- --milestones-test
+      - name: Test continuous garden land and walking seams
+        run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --fixed-fps 60 --path . -- --land-test
       - name: Test garden save files
         run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/save_files.gd
       - name: Verify deployable files

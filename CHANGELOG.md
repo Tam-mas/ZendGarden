@@ -1,3 +1,13 @@
+### [2026-10-06 22:29] Changed
+
+**Tech:** `GardenConnectedLand`, `GardenTerrain`, `GardenSculpt` — continuous land between the original garden and ten habitats
+
+**Dev:** Fill the 18.5-metre gap along the full western habitat boundary with a half-metre terrain grid graded between the existing meadow and habitat heights. Blend established grass textures, normals and roughness in world space and add short lawn tufts that follow saved terrain edits. Cut the original hillside at exact footprint boundaries, remove inward-facing habitat cliff faces and omit internal expansion-row earth banks. Register matching walking collision and saved hoe offsets across the lawn; subdivide the bluestone connector for terrain edits and keep planting clear of its stones. Preserve plot centres, plant/furniture coordinates, milestone rewards and save compatibility; add player release 52. Add continuous-land checks to the local runner and browser workflow. Headless and native checks pass 84 floor samples and 26 real walks, bank clearance and terrain-save restoration. The ten-area routes/activities, milestone/furniture regression, player updates, save-file checks and complete native Compatibility gameplay regression pass. Fresh-garden walking and overhead captures show the join. The local browser export verifies 400 models and 10,167 texture references, packages 440.6 MiB into 23 pieces and passes deployable-file/security checks.
+
+**Plain:** The original garden and all ten new gardens now share continuous grassy land, with a gently sloping lawn beside the bluestone path.
+
+**Why:** Players can explore one connected landscape without an exposed gap between the garden sections.
+
 ### [2026-10-06 21:13] Changed
 
 **Tech:** `GardenAreaProgression.RULES/restore` — later-game planting reward thresholds

@@ -23,9 +23,17 @@ Leaf litter reuses the established botanical pigment/normal/roughness workflow. 
 
 ## Entrances and planted margins
 
-A continuous gravel trail follows the shared garden boundary, with paired signs every garden row. Fitted entrance stones lead into all ten areas. The orchard route stays outside its fence; the kitchen route turns through its arch; the glasshouse route reaches its open front. Paths follow the original height field, participate in native terrain editing/collision and reserve planting clearance. Landmark trees and authored rocks are kept clear of entrances.
+A continuous bluestone trail follows the shared garden boundary, with paired signs every garden row. Fitted entrance stones lead into all ten areas. The orchard route stays outside its fence; the kitchen route turns through its arch; the glasshouse route reaches its open front. Paths follow the original height field, participate in native terrain editing/collision and reserve planting clearance. Landmark trees and authored rocks are kept clear of entrances.
 
 Use irregular clusters of the existing detailed low plants: fine grasses, sedges, mondo, acorus and small ferns. Match their palette to the habitat, vary orientation and size, and retain clear collection pockets and stone footprints. Mix a little litter, fine twigs or pebbles into the margins rather than evenly spacing identical plants. These decorative plants use the existing batched flora workflow and follow terrain edits. Common world-space meadow texture blends back in near every boundary, including the formal gardens; dry terraces retain their sandy interior.
+
+## Connected land
+
+`GardenConnectedLand` fills the old gap between the original meadow and the ten habitats, from x=25.5 to 44 and z=-108 to 12. Its half-metre surface grades between the original meadow height and the actual western habitat boundary. `GardenSculpt` cuts the old eastern hillside exactly at the new footprint, registers the replacement meadow and connector paving with matching collision, and restores saved offsets throughout the join. Internal western habitat cliff faces and eastern expansion-row banks are removed at runtime; original Blender assets, habitat grids and saved x/z positions remain intact.
+
+`connected_ground.gdshader` blends the existing meadow and common habitat lawn finishes at their original world-space texture scales. Short grass follows the same ground and avoids the bluestone connector. Walking is available over the full joining lawn from the start; each habitat retains its own gardening milestone.
+
+Run `Godot --headless --fixed-fps 60 --path . -- --land-test` for 84 floor samples, 26 real player walks, internal-bank probes, saved terrain offsets, trail planting clearance and milestone checks. A native run also captures the fresh-garden walking and overhead views in `captures/connected-land`; add `--land-review` for floor and save checks plus captures without repeating the full walking sequence. The original-garden gameplay regression and ten-area route checks cover both sides of the join.
 
 ## Light and colour
 

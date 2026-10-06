@@ -21,6 +21,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   exit 1
 fi
 economy_log="$(mktemp -t zend-garden-economy)"
+land_log="$(mktemp -t zend-garden-land)"
+"$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --land-test > "$land_log" 2>&1 || { cat "$land_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$land_log" || ! rg -Fq 'CONNECTED_LAND_RESULT: []' "$land_log"; then
+  cat "$land_log"
+  exit 1
+fi
 "$GODOT_BIN" --headless --path "$PWD" --script tests/economy.gd > "$economy_log" 2>&1 || { cat "$economy_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$economy_log" || ! rg -Fq 'ECONOMY_RESULT: []' "$economy_log"; then
   cat "$economy_log"

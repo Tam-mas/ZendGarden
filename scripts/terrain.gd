@@ -19,9 +19,12 @@ static func offset_at(x: float,z: float) -> float:
 static func base_rise(x: float, z: float) -> float:
  var habitat=GardenAreaCatalogue.height_at(Vector3(x,0,z))
  if is_finite(habitat):return habitat
- if x>=25.5 and x<44 and z>=4.5 and z<=7.5:
-  var west=0.8+0.55*sin(25.5*.15)+0.45*cos(z*.19)+0.12*sin((25.5+z)*.5)
-  return lerpf(west,1.2,smoothstep(25.5,44,x))
+ if GardenConnectedLand.contains(Vector3(x,0,z)):
+  var east=GardenAreaCatalogue.height_at(Vector3(GardenConnectedLand.EAST,0,z))
+  return lerpf(original_rise(GardenConnectedLand.WEST,z),east,smoothstep(GardenConnectedLand.WEST,GardenConnectedLand.EAST,x))
+ return original_rise(x,z)
+
+static func original_rise(x: float,z: float) -> float:
  var hill=0.8+0.55*sin(x*.15)+0.45*cos(z*.19)+0.12*sin((x+z)*.5)
  var bridge_a=smoothstep(2.4,5.5,Vector2((x-8.5)*.65,z-5.9).length())
  var bridge_b=smoothstep(2.4,5.5,Vector2(x-17,(z+8.5)*.65).length())

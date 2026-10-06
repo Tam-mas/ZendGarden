@@ -106,6 +106,8 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
  ground=ground or name=="Ground" or node.get_meta("area_ground",false) or extras.get("ground",false) or extras.get("area_ground",false)
  solid=solid or node.get_meta("area_collision",false) or extras.get("collision",false) or extras.get("area_collision",false) or SOLID_PIVOTS.any(func(part):return name.begins_with(part))
  if node is MeshInstance3D:
+  if ground and not paving and bed_plot>=4 and (bed_plot-4)%2==0:
+   if not GardenConnectedLand.trim_habitat_bank(node):return
   if not ground and String(node.name).contains("mossrock"):solid=true
   if not ground and str(node.name).contains("weathered bark"):
    for surface in range(node.mesh.get_surface_count()):
@@ -150,12 +152,16 @@ static func build_trail(g) -> void:
  var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
  for j in range(38):
   var x=25+j*.5
-  for points in [[Vector3(x,0,4.5),Vector3(x,0,7.5),Vector3(x+.5,0,7.5)],[Vector3(x,0,4.5),Vector3(x+.5,0,7.5),Vector3(x+.5,0,4.5)]]:
-   for p in [points[0],points[2],points[1]]:st.set_uv(Vector2(p.x,p.z)*.4);st.add_vertex(GardenTerrain.point(p)+Vector3(0,.12,0))
+  for k in range(6):
+   var a=Vector3(x,0,4.5+k*.5)
+   for p in [a,a+Vector3(.5,0,0),a+Vector3(.5,0,.5),a,a+Vector3(.5,0,.5),a+Vector3(0,0,.5)]:
+    st.set_uv(Vector2(p.x,p.z)*.4);st.add_vertex(GardenTerrain.point(p)+Vector3(0,.12,0))
  st.generate_normals();st.generate_tangents()
  var mesh=MeshInstance3D.new();mesh.name="Eastern trail";mesh.mesh=st.commit()
+ mesh.set_meta("editable_ground",true)
  mesh.material_override=GardenAreaTransitions.bluestone();root.add_child(mesh);mesh.create_trimesh_collision()
  var sign=g.Art.furnishing("sign");root.add_child(sign)
+ sign.set_meta("terrain_anchor",true)
  sign.position=GardenTerrain.point(Vector3(27,0,7.6))
  g.Art.set_sign_text(sign,"TEN GARDEN TRAILS\nFollow the eastern path")
 
