@@ -6,6 +6,8 @@ static func note(g,column: Control,text: String,size: int=15) -> void:
 
 static func action(g,column: Control,text: String,callback: Callable,enabled: bool=true) -> Button:
  var button=g.button(text,func():
+  if g.area_atlas_index>=0 and text.begins_with("Visit ")==false and not GardenAreaProgression.unlocked(g,g.area_atlas_index):
+   g.toast(GardenAreaProgression.message(g,g.area_atlas_index));return
   g.area_notice="";callback.call()
   if g.area_atlas_open:
    if g.area_atlas_index>=0:GardenAreas.visual(g,g.area_atlas_index)
@@ -48,10 +50,11 @@ static func open(g,index: int=-1) -> void:
  col.add_theme_constant_override("separation",10);scroll.add_child(col)
  if not g.area_notice.is_empty():note(g,col,g.area_notice,16)
  if index<0:
-  note(g,col,"Ten new trails beyond the eastern path. Each has its own planting choices and gentle activities. Visit any of them now; your original beds keep their own progression.")
+  note(g,col,"Explore all ten trails from the beginning. Earn each garden’s milestone to plant, tend and rearrange it. Rewards are free, permanent and independent: you can unlock several together. New plantings include containers; starter plants and moving stored plants do not count.")
   for j in range(10):
    var selected=j;var info=GardenAreaCatalogue.entry(j)
-   action(g,col,info.name+" · "+("Visited" if GardenAreas.state(g,j).visited else "New trail"),func():open(g,selected))
+   action(g,col,info.name+" · "+("Unlocked" if GardenAreaProgression.unlocked(g,j) else "Growing towards unlock"),func():open(g,selected))
+   note(g,col,GardenAreaProgression.requirement(j)+" · "+GardenAreaProgression.progress(g,j),15)
    note(g,col,info.description,14)
   action(g,col,"Return to the beginning",func():
    close(g);g.player.position=GardenTerrain.point(Vector3(0,0,6))+Vector3(0,.15,0)
@@ -60,9 +63,12 @@ static func open(g,index: int=-1) -> void:
   var info=GardenAreaCatalogue.entry(index);var s=GardenAreas.state(g,index)
   preview(g,col,index);note(g,col,info.description,16)
   action(g,col,"Visit "+info.name,func():GardenAreas.visit(g,index))
-  if not s.initialized:note(g,col,"Visit to receive its starter collection and begin the garden activities. All ten trails are open.")
+  note(g,col,GardenAreaProgression.requirement(index)+" · "+GardenAreaProgression.progress(g,index),17)
+  if not GardenAreaProgression.unlocked(g,index):
+   note(g,col,"Explore this garden now. Planting, care, furniture changes and Activities become available when you earn this milestone. Your saved plants and arrangements stay safely in place.")
   else:
    note(g,col,"Make this garden your own: use Seeds and Plant on clear ground, and Move or Remove for your ordinary plants and starter equipment. Keep water, paths, rocks and buildings clear. Specialist collection plants use the planting and clearing buttons in Activities; the surrounding landscape planting stays in place.",14)
+   action(g,col,"Restore starter furniture",func():GardenAreaFurnishings.restore_missing(g,index))
    activities(g,col,index)
  if index>=0:frame.add_child(g.button("All ten garden trails",func():open(g),Vector2(0,48)))
  frame.add_child(g.button("Back to garden" if g.area_atlas_return else "Done",func():close(g),Vector2(0,48)))
@@ -193,6 +199,8 @@ static func collection(g,column: Control,index: int) -> void:
    action(g,column,"Water pocket %d"%(slot+1),func():s.beds[str(chosen)].water=4.0;g.toast("A drink for pocket %d."%(chosen+1)),index!=0 and float(p.water)<4)
    action(g,column,"Clear pocket %d"%(slot+1),func():s.beds.erase(str(chosen));g.toast("The pocket is ready for another plant."))
   else:
+   if index==6 and GardenAreaFurnishings.object(g,"glasshouse:pot%d"%slot).is_empty():
+    note(g,column,"Pocket %d · pot packed away. Restore starter furniture to recover its collection, or arrange ordinary planters from the shop."%(slot+1),14);continue
    note(g,column,"Pocket %d%s · ready to plant"%[slot+1,band],15)
    var choices=GardenAreas.choices(g,index,slot)
    if choices.is_empty():note(g,column,"Restore this bay to open its collection pocket.",14);continue

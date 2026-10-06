@@ -1,6 +1,6 @@
 {
   "areas/alpine": {
-    "bytes": 4213328,
+    "bytes": 4213016,
     "clips": [],
     "dimensions": [
       24.0,
@@ -27,8 +27,50 @@
     "triangles": 31503,
     "variant": "new"
   },
+  "areas/furniture/harvest_table": {
+    "bytes": 449936,
+    "clips": [],
+    "dimensions": [
+      2.0999999046325684,
+      1.1950000524520874,
+      0.8799999952316284
+    ],
+    "folder": "areas/furniture",
+    "kind": "harvest_table",
+    "meshes": 2,
+    "triangles": 648,
+    "variant": "new"
+  },
+  "areas/furniture/nursery_shelf": {
+    "bytes": 345360,
+    "clips": [],
+    "dimensions": [
+      1.0700000524520874,
+      0.9200000166893005,
+      8.600000381469727
+    ],
+    "folder": "areas/furniture",
+    "kind": "nursery_shelf",
+    "meshes": 2,
+    "triangles": 168,
+    "variant": "new"
+  },
+  "areas/furniture/wind_chime": {
+    "bytes": 464444,
+    "clips": [],
+    "dimensions": [
+      0.775000024586916,
+      2.5999999046325684,
+      0.10000000149011612
+    ],
+    "folder": "areas/furniture",
+    "kind": "wind_chime",
+    "meshes": 3,
+    "triangles": 304,
+    "variant": "new"
+  },
   "areas/glasshouse": {
-    "bytes": 3847156,
+    "bytes": 3880664,
     "clips": [],
     "dimensions": [
       24.0,
@@ -37,12 +79,12 @@
     ],
     "folder": "areas",
     "kind": "glasshouse",
-    "meshes": 28,
-    "triangles": 31694,
+    "meshes": 57,
+    "triangles": 32894,
     "variant": "new"
   },
   "areas/kitchen": {
-    "bytes": 3246048,
+    "bytes": 3245036,
     "clips": [],
     "dimensions": [
       24.0,
@@ -51,7 +93,7 @@
     ],
     "folder": "areas",
     "kind": "kitchen",
-    "meshes": 14,
+    "meshes": 16,
     "triangles": 22594,
     "variant": "new"
   },
@@ -70,11 +112,11 @@
     "variant": "new"
   },
   "areas/moon": {
-    "bytes": 2448668,
+    "bytes": 2448992,
     "clips": [],
     "dimensions": [
       24.0,
-      6.125,
+      6.194999694824219,
       24.0
     ],
     "folder": "areas",
@@ -84,7 +126,7 @@
     "variant": "new"
   },
   "areas/orchard": {
-    "bytes": 2746196,
+    "bytes": 2746036,
     "clips": [],
     "dimensions": [
       24.0,

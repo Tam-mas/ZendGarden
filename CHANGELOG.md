@@ -1,3 +1,13 @@
+### [2026-10-06 21:00] Added
+
+**Tech:** `GardenAreaProgression`, `GardenAreaFurnishings` — milestone rewards and owned habitat furniture
+
+**Dev:** Keep all ten habitats and their starter planting visible and walkable from day one; independently reward permanent gardening access at 10/25/50/100 cumulative new plantings, game days 7/14/60/100 and 5/8 completed neighbour requests. Show every target and live progress in Guide, Atlas and the local HUD. Apply gates to existing saves, including visited gardens, while preserving plants, arrangements, finishes, collections and passive growth. Guard planting, care, terrain work, equipment, activities, rest and furniture changes; exclude automatic starters, moves and nursery replanting from new planting counts. Convert 22 formerly embedded loose props into selectable, movable and removable objects with stable IDs, elevated pot positions and saved removals. Correct starter bench headings and courtyard-facing vertical pockets, rebuild level slatted glasshouse shelves with upright supports, carry pots and planting with moved shelves, and preserve ordinary and specialist planting when displays are packed or restored. Match Moon pergola climbing shoots to its actual posts and remove inherited plant rotation/scale from support stems. Add replacement harvest tables, nursery shelves and chimes with shop models and cards. Preserve saved What’s new dismissal state and add player release 50. Extend native and browser test workflows for exact milestone thresholds, legacy gating, real tool selection/removal, shelf movement, touch Undo, phone layouts, seed counts and complete save reconstruction; update the older touch fixture to water an original-garden plant rather than a newly present locked orchard tree. Both native renderers pass the milestone/furniture regression. Terrain and activity assertions pass 112 real routes; the headless route runner also reports an audio-playback cleanup warning at shutdown. All ten paving audits, 31 area/furniture models and 33 read-only Blender source libraries pass. The complete Compatibility gameplay regression passes, including simultaneous touch controls, planting tools, orders and save reconstruction. The local browser export verifies 400 models and 10,167 texture references and packages 440.6 MiB into 23 pieces.
+
+**Plain:** Explore every garden from the start, earn its planting and arranging milestone, and move or pack away starter furniture to make the space your own.
+
+**Why:** Visible rewards give players reasons to return while editable, correctly oriented displays make each garden easier to personalise.
+
 ### [2026-10-06 19:41] Fixed
 
 **Tech:** `garden_routes.py`, `garden_paving.py` — continuous Fern Gully bend and oval Moon Garden threshold

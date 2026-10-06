@@ -132,7 +132,7 @@ def install(b):
   old_orchard(G,root,i)
   for key in list(G.groups):
    if key[0].name.startswith('Harvest table'):del G.groups[key]
-  table=b.pivot('Harvest table refined',root,b.at(i,0,6),collision=True,flat=True)
+  table=b.pivot('Harvest table refined',root,b.at(i,0,6),collision=True,flat=True,fixture_id='orchard:table',fixture_kind='harvest_table')
   for x in [-.85,.85]:
    for z in [-.32,.32]:G.box(table,b.MATS['wood'],(x,.42,z),(.075,.84,.075))
    G.box(table,b.MATS['darkwood'],(x,.76,0),(.07,.08,.83))
@@ -154,8 +154,11 @@ def install(b):
    parent,mat=key
    if parent==root and mat in [b.MATS['clay'],b.MATS['soil']]:del G.groups[key]
    if parent.name.startswith('GlassShade'):del G.groups[key]
-  for x in [-3.8,3.8]:
-   for z in [-3.6,0,3.6]:b.pot(G,root,(x,2.12,z),.31)
+  for side,x in enumerate([-3.8,3.8]):
+   for row,z in enumerate([-3.6,0,3.6]):
+    slot=row*2+side
+    holder=b.pivot('Collection pot%d'%slot,root,(x,2.12,z),fixture_id='glasshouse:pot%d'%slot,fixture_kind='pot',fixture_soil=.56,collection_slot=slot,fixture_support='glasshouse:shelf%d'%side)
+    b.pot(G,holder,(0,0,0),.31)
   for bay,z in enumerate([-3.65,0,3.65]):
    shade=b.pivot('GlassShade%d'%bay,root,flat=True)
    # Open woven mesh: real holes pass direct sun and give dappled shadows.

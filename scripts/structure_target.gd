@@ -88,4 +88,5 @@ static func update(g) -> Array:
  var title=obj.kind.capitalize()
  for item in g.furniture:
   if item.kind==obj.kind:title=item.name;break
+ if not GardenAreaProgression.allowed(g,obj.pos):return [title,"Milestone reward",GardenAreaProgression.requirement(GardenAreaCatalogue.index_at(obj.pos)),GardenAreaProgression.progress(g,GardenAreaCatalogue.index_at(obj.pos))]
  return [title,"Selected for removal","Returns %d petals"%int(obj.price),"Tap Remove to pack away" if g.touch_active() else "Click to pack away"]

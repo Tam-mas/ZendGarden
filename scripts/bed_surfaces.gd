@@ -32,7 +32,7 @@ static func restore(g,data: Dictionary) -> void:
    if not str(key).is_valid_int():continue
    var index=int(key)
    var id=str(saved[key])
-   if index>=0 and GardenAreaCatalogue.plot_open(g,index) and (index<4 or index>=14 or index in [8,9]) and id in g.owned_surfaces:g.bed_surfaces[str(index)]=id
+   if index>=0 and (index in range(4,14) or GardenAreaCatalogue.plot_open(g,index)) and (index<4 or index>=14 or index in [8,9]) and id in g.owned_surfaces:g.bed_surfaces[str(index)]=id
 
 static func material(id: String) -> ShaderMaterial:
  var item=finish(id)
@@ -57,7 +57,7 @@ static func area_material(index: int,id: String) -> ShaderMaterial:
 static func rebuild(g,center: Vector3=Vector3.INF) -> void:
  for key in g.bed_surfaces:
   var index=int(key)
-  if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14 and index not in [8,9]):continue
+  if index<0 or (index not in range(4,14) and not GardenAreaCatalogue.plot_open(g,index)) or index>=g.plots.size() or (index>=4 and index<14 and index not in [8,9]):continue
   if index in [8,9]:
    for entry in g.terrain_meshes:
     if int(entry.node.get_meta("area_bed_plot",-1))==index:entry.node.material_override=area_material(index,g.bed_surfaces[key])
@@ -108,7 +108,8 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
   g.bed_surface_nodes[key]=mesh
 
 static func apply(g,index: int,id: String) -> bool:
- if index<0 or not GardenAreaCatalogue.plot_open(g,index) or index>=g.plots.size() or (index>=4 and index<14 and index not in [8,9]):
+ if not GardenAreaCatalogue.plot_open(g,index):return false
+ if index<0 or (index not in range(4,14) and not GardenAreaCatalogue.plot_open(g,index)) or index>=g.plots.size() or (index>=4 and index<14 and index not in [8,9]):
   g.toast("Choose an open bed first.");return false
  var item=finish(id)
  if item.id!=id:return false

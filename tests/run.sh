@@ -144,6 +144,14 @@ for renderer in gl_compatibility forward_plus; do
   fi
 done
 for renderer in gl_compatibility forward_plus; do
+  milestone_log="$(mktemp -t zend-garden-milestones)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --milestones-test > "$milestone_log" 2>&1 || { cat "$milestone_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$milestone_log" || ! rg -Fq 'MILESTONES_RESULT: []' "$milestone_log"; then
+    cat "$milestone_log"
+    exit 1
+  fi
+done
+for renderer in gl_compatibility forward_plus; do
   areas_log="$(mktemp -t zend-garden-areas)"
   "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --areas-test > "$areas_log" 2>&1 || { cat "$areas_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$areas_log" || ! rg -Fq 'AREAS_RESULT: []' "$areas_log"; then

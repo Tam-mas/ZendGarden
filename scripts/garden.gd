@@ -199,6 +199,7 @@ func _ready() -> void:
  if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--economy-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://economy-test-save.json"
  if "--workshop-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://workshop-test-save.json"
+ if "--milestones-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://milestones-test-save.json"
  if "--areas-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-test-save.json"
  if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
  if "--cohesion-review" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://cohesion-review-save.json"
@@ -234,6 +235,9 @@ func _ready() -> void:
  add_child(plant_batches)
  plant_batches.setup(self)
  restore_garden()
+ GardenAreaFurnishings.restore(self)
+ for index in range(10):GardenAreas.seed_starters(self,index)
+ GardenAreaProgression.refresh(self,false)
  GardenClimbingSupport.refresh(self)
  if plant_batches.active: plant_batches.rebuild()
  visitors=GardenVisitors.new()
@@ -244,7 +248,7 @@ func _ready() -> void:
  make_orders()
  apply_settings()
  refresh_ui()
- if planted.is_empty() and loaded_data.is_empty(): starter_garden()
+ if loaded_data.is_empty() and not planted.any(func(p):return int(p.plot)<4):starter_garden()
  if not settings.intro_seen and not smoke: show_welcome()
  if "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
  elif "--inhabit-test" in OS.get_cmdline_user_args():call_deferred("run_inhabit_test")
@@ -258,6 +262,7 @@ func _ready() -> void:
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
  elif "--economy-test" in OS.get_cmdline_user_args(): call_deferred("run_economy_test")
  elif "--workshop-test" in OS.get_cmdline_user_args(): call_deferred("run_workshop_test")
+ elif "--milestones-test" in OS.get_cmdline_user_args():call_deferred("run_milestones_test")
  elif "--areas-test" in OS.get_cmdline_user_args():call_deferred("run_areas_test")
  elif "--areas-showcase" in OS.get_cmdline_user_args():call_deferred("show_area_collection")
  elif "--cohesion-review" in OS.get_cmdline_user_args():call_deferred("run_cohesion_review")
@@ -500,7 +505,7 @@ func make_ui() -> void:
  detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  detail_label.custom_minimum_size.x = 256
  col.add_child(detail_label)
- col.add_child(button("Garden atlas · ten new trails",func():GardenAreaAtlas.open(self),Vector2(0,40)))
+ col.add_child(button("Garden atlas · milestones & trails",func():GardenAreaAtlas.open(self),Vector2(0,40)))
  col.add_child(button("Settings",func(): open_sidebar("Settings"),Vector2(0,30)))
  var capacity = panel_at(Vector2(1054,112),Vector2(362,144))
  hud_capacity=capacity
@@ -808,7 +813,7 @@ func refresh_sidebar() -> void:
    add_note("WELCOMING WILDLIFE",15)
    add_note("Rabbits occasionally visit open ground. A shop beehive brings its own daytime bees.")
    add_note("Native plants -> native birds\nTwo flowering plants or produce -> lady beetles\nThree flowering plants -> bees & butterflies\nTrees or bird baths -> songbirds\nPonds -> frogs & dragonflies\nMoss and dusk -> fireflies\nFish -> stock a placed pond in the shop")
-   list_box.add_child(button("Garden atlas · ten new trails",func():GardenAreaAtlas.open(self)))
+   list_box.add_child(button("Garden atlas · milestones & trails",func():GardenAreaAtlas.open(self)))
    add_note("STRUCTURES & PHOTOS",15)
    add_note("Use Turn left / Turn right on touch, or Q/E on keyboard, to rotate a structure in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
    add_note("COMPANIONS",15)
@@ -855,6 +860,9 @@ func update_hud() -> void:
  var used = capacity_used(current_plot)
  var cap = plot_capacity(current_plot)
  var pending = int(catalogue[selected].capacity) if mode=="plant" and hover_valid else 0
+ var habitat=current_plot-4
+ if habitat>=0 and habitat<10 and not GardenAreaProgression.unlocked(self,habitat):
+  compact_hud.text+="\n"+GardenAreaProgression.requirement(habitat)+" · "+GardenAreaProgression.progress(self,habitat)
  capacity_label.text = plots[current_plot].name+"   "+str(used)+(" +"+str(pending) if pending else "")+" / "+str(cap)
  capacity_bar.max_value = cap
  capacity_bar.value = used+pending
@@ -1350,13 +1358,18 @@ func update_placement_preview(pid: String) -> void:
   if pid.begins_with("p"): preview=Art.plant(catalogue[int(pid.substr(1))])
   elif pid.begins_with("m"): preview=Art.plant(catalogue[planted[moved_index].id])
   elif pid.begins_with("f"): preview=Art.furnishing(furniture[selected_furniture].kind)
-  else: preview=Art.furnishing(objects[moved_object].kind)
+  else:
+   preview=GardenAreaFurnishings.instantiate(str(objects[moved_object].get("area_fixture","")))
+   if not preview:preview=Art.furnishing(objects[moved_object].kind)
+   GardenAreaFurnishings.collision(preview,false)
   if pid.begins_with("p"): preview.rotation.y=rng.randf()*TAU
   if pid.begins_with("f") and furniture[selected_furniture].kind=="sign": Art.set_sign_text(preview,sign_text,sign_color)
   if pid.begins_with("o") and objects[moved_object].kind=="sign": Art.set_sign_text(preview,objects[moved_object].text,Color.from_string(objects[moved_object].text_color,Color("f1e5c7")))
   add_child(preview)
   preview_id=pid
  preview.position=hover_cell
+ if pid.begins_with("f"):preview.position=GardenAreaFurnishings.placement(self,furniture[selected_furniture].kind,hover_cell)
+ if pid.begins_with("o"):preview.position=GardenAreaFurnishings.placement(self,objects[moved_object].kind,hover_cell,objects[moved_object])
  if pid.begins_with("m"):
   var source=planted[moved_index].node
   preview.scale=source.scale
@@ -1444,6 +1457,7 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
   var planter=GardenContainers.object(self,hover_container_uid)
   if not planter.is_empty() and GardenContainers.position(planter,hover_container_slot).distance_to(pos)<.01:
    return GardenContainers.can_plant(self,planter,hover_container_slot,id,excluding)
+ if not GardenAreaProgression.allowed(self,pos):return GardenAreaProgression.message(self,GardenAreaCatalogue.index_at(pos))
  if not GardenAreaCatalogue.plot_open(self,plot): return "Choose an unlocked garden area."
  var bed=bed_at(pos)
  if bed>=0 and bed!=plot: return "Choose an open garden bed."
@@ -1482,6 +1496,15 @@ func perform_action(repeating: bool=false) -> void:
   toast("Walk a little closer to an open garden area.")
   return
  if action_cooldown>0: return
+ var action_pos=hover_cell
+ var picked_object=aimed_object()
+ var picked_plant=aimed_plant()
+ if mode in ["remove","move"] and moved_object<0 and moved_index<0:
+  if picked_plant>=0:action_pos=planted[picked_plant].pos
+  elif picked_object>=0:action_pos=objects[picked_object].pos
+ if not GardenAreaProgression.allowed(self,action_pos,true):return
+ if moved_object>=0 and not GardenAreaProgression.allowed(self,objects[moved_object].pos,true):return
+ if moved_index>=0 and not GardenAreaProgression.allowed(self,planted[moved_index].pos,true):return
  if mode=="harvest":
   GardenTools.gather(self,repeating)
   return
@@ -1493,6 +1516,7 @@ func perform_action(repeating: bool=false) -> void:
    if not error.is_empty(): toast(error); return
    var orientation=preview.rotation.y if is_instance_valid(preview) and preview_id=="p"+str(selected) else NAN
    var planter=GardenContainers.object(self,hover_container_uid)
+   var new_seed=nursery_placing<0
    if nursery_placing>=0 and nursery_placing<workshop_state.nursery.size():
     if not planter.is_empty():GardenContainers.replant(self,nursery_placing,planter,hover_container_slot)
     else:
@@ -1506,7 +1530,7 @@ func perform_action(repeating: bool=false) -> void:
     add_plant(selected,hover_cell,hover_plot,0.0,0.0,orientation)
     GardenEquipment.starter(self,planted.back())
    preview_id="" # Give the next seed its own orientation.
-   if planter.is_empty():planted_total+=1
+   if planter.is_empty() and new_seed:planted_total+=1
    GardenSeedCollection.record_planting(self,selected)
    GardenTutorial.event(self,"plant",planted.back())
    action_cooldown=0.55/(1.0+int(upgrades.trowel))
@@ -1520,6 +1544,7 @@ func perform_action(repeating: bool=false) -> void:
    var cleared=0
    var collected_before=basket_total()
    for p in planted.duplicate():
+    if not GardenAreaProgression.allowed(self,p.pos):continue
     var covered=Vector2(p.pos.x-hover_cell.x,p.pos.z-hover_cell.z).length()<=radius if mode=="water" else GardenTools.in_square(p.pos,hover_cell,radius*2)
     covered=GardenContainers.tool_covers(self,p,covered)
     if covered:
@@ -1557,6 +1582,7 @@ func perform_action(repeating: bool=false) -> void:
     var obj = aimed_object()
     if obj>=0:
      GardenStructureTarget.clear(self)
+     GardenAreaFurnishings.before_remove(self,objects[obj])
      if objects[obj].kind in GardenContainers.SPECS:GardenContainers.pack(self,objects[obj])
      coins+=int(objects[obj].price)
      objects[obj].node.queue_free()
@@ -1590,27 +1616,33 @@ func perform_action(repeating: bool=false) -> void:
     set_mode("move")
     toast("A fresh arrangement. Growth stays with your plant.")
    else:
-    var occupied=object_at(hover_cell)
+    var destination=GardenAreaFurnishings.placement(self,objects[moved_object].kind,hover_cell,objects[moved_object])
+    var occupied=object_at(destination)
     if occupied>=0 and occupied!=moved_object: toast("Another ornament is here."); return
-    objects[moved_object].pos=hover_cell
-    objects[moved_object].node.position=hover_cell
+    GardenAreaFurnishings.before_move(self,objects[moved_object])
+    objects[moved_object]["elevation"]=destination.y-GardenTerrain.point(destination).y
+    objects[moved_object].pos=destination
+    objects[moved_object].node.position=destination
     var rotation_change=structure_rotation-float(objects[moved_object].get("rotation",0.0))
     for p in planted:
      if p.get("container_uid","")==objects[moved_object].uid:p.node.rotation.y+=rotation_change
     objects[moved_object].rotation=structure_rotation
     objects[moved_object].node.rotation.y=structure_rotation
     GardenContainers.sync(self,objects[moved_object])
+    GardenAreaFurnishings.after_move(self,objects[moved_object])
     set_mode("move")
   "build":
    var f = furniture[selected_furniture]
    if coins<f.price: toast("Gather or fill a neighbour’s order for more petals."); return
-   if object_at(hover_cell)>=0: toast("There is already an ornament here."); return
+   var destination=GardenAreaFurnishings.placement(self,f.kind,hover_cell)
+   if object_at(destination)>=0: toast("There is already an ornament here."); return
    coins-=f.price
-   add_object(f.kind,hover_cell,f.price,false,structure_rotation,sign_text,sign_color)
+   add_object(f.kind,destination,f.price,false,structure_rotation,sign_text,sign_color)
    toast(f.name+" placed. "+f.hint)
   "rake":
    GardenCare.rake(self)
  if mode=="water":GardenTutorial.event(self,"water")
+ GardenAreaProgression.refresh(self)
  refresh_ui()
  refresh_wildlife()
  if mode in ["plant","prune","move","remove","build","hoe"]:GardenClimbingSupport.refresh(self)
@@ -1639,8 +1671,12 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  return p
 
 func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orientation: float = 0.0, text: String = "My garden", color: Color = Color("f1e5c7"), saved: Dictionary={}) -> void:
- pos=GardenTerrain.point(GardenAreas.repair_starter_container(kind,pos,price))
- var n = Art.furnishing(kind)
+ pos=GardenTerrain.point(GardenAreas.repair_starter_container(kind,pos,price))+Vector3(0,float(saved.get("elevation",0)),0)
+ if not saved.has("elevation"):
+  pos=GardenAreaFurnishings.placement(self,kind,pos)
+  saved=saved.duplicate(true);saved["elevation"]=pos.y-GardenTerrain.point(pos).y
+ var n=GardenAreaFurnishings.instantiate(str(saved.get("area_fixture","")))
+ if not n:n=Art.furnishing(kind)
  if GardenAreaCatalogue.index_at(pos)>=0:GardenAreaMaterials.prepare(n)
  object_root.add_child(n)
  n.position=pos
@@ -1651,6 +1687,8 @@ func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orie
   n.add_child(life)
   life.setup(self)
  objects.append({"rotation":orientation,"kind":kind,"pos":pos,"price":price,"fish":fish,"node":n})
+ for key in ["area_fixture","elevation","starter_id","starter_orientation_version"]:
+  if saved.has(key):objects[-1][key]=saved[key]
  if saved.has("uid"):objects[-1]["uid"]=saved.uid
  if saved.has("work"):objects[-1]["work"]=saved.work.duplicate(true)
  GardenEquipment.setup(self,objects[-1])
@@ -1761,6 +1799,7 @@ func advance_growth() -> void:
   p.stress=minf(1,p.stress+GardenAreas.stress_gain(self,p,GardenEquipment.stress_gain(self,p)))
   refresh_plant(p)
  day+=1
+ GardenAreaProgression.refresh(self)
  GardenAreas.after_morning(self)
  for obj in objects:GardenEquipment.visual(self,obj)
  GardenTutorial.event(self,"morning")
@@ -1788,6 +1827,7 @@ func make_irrigation(center: Vector3) -> void:
  GardenSculpt.scan(self,pipes)
 
 func buy_automation(kind: String) -> void:
+ if not GardenAreaProgression.allowed(self,plots[current_plot].center,true):return
  if day<7: toast("Bed care systems arrive on day 7."); return
  var key = str(current_plot)+kind
  if automation.has(key): toast("Already caring for this bed."); return
@@ -1818,6 +1858,7 @@ func buy_tool(kind: String) -> void:
  refresh_ui()
 
 func expand_bed() -> void:
+ if not GardenAreaProgression.allowed(self,plots[current_plot].center,true):return
  if coins<65: toast("An expansion costs 65 petals."); return
  coins-=65
  expansions[str(current_plot)]=int(expansions.get(str(current_plot),0))+1
@@ -1864,6 +1905,7 @@ func basket_summary() -> void:
  if basket_total()==0: add_note("Your basket is empty. Prune or gather a mature plant to begin.")
 
 func collect_plant(p: Dictionary) -> bool:
+ if not GardenAreaProgression.allowed(self,p.pos):return false
  if p.age<float(catalogue[p.id].days): return false
  var key=str(int(p.id))
  inventory[key]=int(inventory.get(key,0))+1
@@ -1886,6 +1928,7 @@ func fulfill_order(idx: int) -> void:
  inventory[key]=int(inventory[key])-int(order.count)
  var earned=GardenEconomy.earn(self,int(order.reward))
  fulfilled+=1
+ GardenAreaProgression.refresh(self)
  orders[idx]["pending"]=true
  orders[idx]["ready_day"]=day+2
  if fulfilled in [3,8,15]: discover_seeds(3)
@@ -2015,6 +2058,7 @@ func refresh_wildlife() -> void:
   wildlife.append({"node":animal,"kind":entry.kind,"target":entry.target,"area":entry.area,"phase":float(wildlife.size())*1.73,"height":entry.height,"legs":[],"hive":false})
 
 func show_area_collection() -> void:
+ GardenAreaProgression.unlock_review(self)
  # An inspectable mature example with an isolated save, for reviewing new areas.
  settings.intro_seen=true;settings.request_notifications=false;orders=[];coins=2000
  unlocked_plants=range(catalogue.size())
@@ -2022,6 +2066,14 @@ func show_area_collection() -> void:
  preload("res://tests/areas.gd").demo(self)
  GardenAreas.visit(self,0);set_mode("walk",false);refresh_ui()
  GardenAreaAtlas.open(self)
+
+func run_milestones_test() -> void:
+ await get_tree().process_frame
+ var failures=[]
+ await preload("res://tests/area_progression.gd").run(self,failures)
+ for frame in range(2):await get_tree().process_frame
+ print("MILESTONES_RESULT: ",JSON.stringify(failures))
+ get_tree().quit(0 if failures.is_empty() else 1)
 
 func run_areas_test() -> void:
  var failures=[]
@@ -2143,7 +2195,11 @@ func save_game() -> bool:
  var ps: Array=[]
  for p in planted: ps.append(GardenContainers.record(p))
  var os: Array=[]
- for obj in objects: os.append({"uid":obj.uid,"work":obj.work,"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")})
+ for obj in objects:
+  var saved={"uid":obj.uid,"work":obj.work,"kind":obj.kind,"pos":[obj.pos.x,obj.pos.z],"price":obj.price,"fish":obj.fish,"rotation":obj.get("rotation",0.0),"text":obj.get("text","My garden"),"text_color":obj.get("text_color","f1e5c7")}
+  for key in ["area_fixture","elevation","starter_id","starter_orientation_version"]:
+   if obj.has(key):saved[key]=obj[key]
+  os.append(saved)
  var data={"petal_remainder":petal_remainder,"bed_surfaces":bed_surfaces,"owned_surfaces":owned_surfaces,"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
  data["workshop"]=workshop_state
  data["areas"]=areas_state

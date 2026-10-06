@@ -24,7 +24,7 @@ static func initial_state() -> Dictionary:
 static func state(g,index: int) -> Dictionary:
  var kind: String=GardenAreaCatalogue.entry(index).kind
  if not g.areas_state.gardens.has(kind):
-  g.areas_state.gardens[kind]={"visited":false,"initialized":false,"beds":{},"sluice":1,"clearings":[false,false,false],"discoveries":[],"shelters":[false,false,false],"journal":[],"basket_day":0,"rotation":{},"rotation_day":0,"restored":[false,false,false],"vents":[true,true,true],"shade":[false,false,false],"mist":[false,false,false],"gates":[true,false],"windbreaks":[true,true,true],"melt":0,"lanterns":1,"photo":false}
+  g.areas_state.gardens[kind]={"visited":false,"initialized":false,"planting_initialized":false,"unlocked":false,"furniture_initialized":false,"beds":{},"packed_beds":{},"sluice":1,"clearings":[false,false,false],"discoveries":[],"shelters":[false,false,false],"journal":[],"basket_day":0,"rotation":{},"rotation_day":0,"restored":[false,false,false],"vents":[true,true,true],"shade":[false,false,false],"mist":[false,false,false],"gates":[true,false],"windbreaks":[true,true,true],"melt":0,"lanterns":1,"photo":false}
  return g.areas_state.gardens[kind]
 
 static func restore(g,saved: Dictionary) -> void:
@@ -34,6 +34,7 @@ static func restore(g,saved: Dictionary) -> void:
  for index in range(10):
   var kind: String=GardenAreaCatalogue.entry(index).kind
   var old: Dictionary=g.areas_state.gardens.get(kind,{}).duplicate(true)
+  if old.get("initialized",false) and not old.has("planting_initialized"):old["planting_initialized"]=true
   g.areas_state.gardens.erase(kind)
   state(g,index).merge(old,true)
 
@@ -43,6 +44,7 @@ static func instantiate(path: String) -> Node3D:
  return scenes[path].instantiate()
 
 static func build(g) -> void:
+ GardenAreaFurnishings.templates.clear()
  for index in range(10):
   var info=GardenAreaCatalogue.entry(index)
   var root=Node3D.new();root.name="Habitat_"+info.kind
@@ -87,6 +89,7 @@ static func build(g) -> void:
      bulb.name="LampWick"
      var glow=StandardMaterial3D.new();glow.albedo_color=Color("ffe6b4");glow.emission_enabled=true
      glow.emission=Color("ffb650");glow.emission_energy_multiplier=2;bulb.material_override=glow
+  GardenAreaFurnishings.register(model,index)
   root.visible=true
  build_trail(g)
  GardenAreaTransitions.build(g)
@@ -252,34 +255,35 @@ static func visit(g,index: int) -> void:
  g.player.velocity=Vector3.ZERO;g.yaw=PI/4 if index%2==0 else -PI/4;g.pitch=.08
  g.current_plot=index+4;g.set_mode("walk",false);g.side_panel.hide()
  g.dismiss_request();g.resume_controls();visual(g,index);g.refresh_wildlife();g.refresh_ui();g.save_game()
- g.toast(GardenAreaCatalogue.entry(index).name+" · E opens this garden’s activities. The atlas is in Guide.")
+ g.toast(GardenAreaCatalogue.entry(index).name+" · Plant and arrange here. E opens Activities." if GardenAreaProgression.unlocked(g,index) else GardenAreaProgression.message(g,index))
 
 static func initialize(g,index: int) -> void:
  var s=state(g,index)
- if s.initialized:return
+ if not GardenAreaProgression.unlocked(g,index) or s.initialized:return
  s.initialized=true
- var bench_spots=[Vector3(6,0,3),Vector3(-5,0,7),Vector3(2,0,6.5),Vector3(6,0,5),Vector3(-6,0,6),Vector3(5.5,0,-5.8),Vector3(0,0,-4.6),Vector3(-5,0,5),Vector3(-2,0,-7),Vector3(3.8,0,6)]
- g.add_object("bench",GardenAreaCatalogue.center(index)+bench_spots[index],0,false)
- var seeds: Array=GardenAreaCatalogue.entry(index).seeds
+ var seeds: Array=GardenAreaCatalogue.entry(index).seeds.duplicate()
+ if index==4 and 82 not in seeds:seeds.append(82)
  for id in seeds:
   if int(id) not in g.unlocked_plants:g.unlocked_plants.append(int(id))
+ visual(g,index)
+
+static func seed_starters(g,index: int) -> void:
+ # The landscape and its starter planting exist before the reward is earned.
+ # A separate flag preserves removals and old saves whose starters were edited.
+ var s=state(g,index)
+ if s.planting_initialized:return
+ s.planting_initialized=true
  var c=GardenAreaCatalogue.center(index)
- if index==0:
-  for slot in [0,3,6]:plant_collection(g,index,slot,default_species(index,slot),false)
- elif index==1:plant_collection(g,index,0,"maidenhair",false)
- elif index==2:
-  for j in range(4):g.add_object("wide_bowl" if j%2==0 else "pot",c+Vector3([-4.5,4.1,3.3,-4.4][j],0,[6,-6.8,1.5,-2.8][j]),0,false)
- elif index==4:
+ if index in [0,1,8,9]:
+  var slots=[0,3,6] if index==0 else [0,1] if index==9 else [0]
+  for slot in slots:
+   if not s.beds.has(str(slot)):s.beds[str(slot)]={"species":default_species(index,slot),"age":0.0,"water":4.0,"offset_day":0}
+ if index==4:
   for j in range(4):
    var id=[35,83,84,82][j]
-   if id not in g.unlocked_plants:g.unlocked_plants.append(id)
-   g.add_plant(id,c+Vector3(-4 if j%2==0 else 4,0,4 if j<2 else -1),index+4,float(g.catalogue[id].days)*.55)
- elif index==5:
-  for j in range(2):g.add_object("vertical_planter",c+Vector3(-5.6 if j==0 else 5.6,0,-6.1),0,false)
-  g.add_object("herb_trough",c+Vector3(0,0,-5.6),0,false)
- elif index==8:plant_collection(g,index,0,"edelweiss",false)
- elif index==9:
-  plant_collection(g,index,0,"moonflower",false);plant_collection(g,index,1,"nicotiana",false)
+   var pos=c+Vector3(-4 if j%2==0 else 4,0,4 if j<2 else -1)
+   if g.planted.any(func(p):return int(p.plot)==8 and int(g.catalogue[int(p.id)].layer)==3 and Vector2(p.pos.x-pos.x,p.pos.z-pos.z).length()<.2):continue
+   g.add_plant(id,pos,index+4,float(g.catalogue[id].days)*.55)
  visual(g,index)
 
 static func default_species(index: int,slot: int) -> String:
@@ -300,15 +304,25 @@ static func choices(g,index: int,slot: int) -> Array:
  return []
 
 static func plant_collection(g,index: int,slot: int,species: String,notify: bool=true) -> bool:
+ if not GardenAreaProgression.unlocked(g,index):return false
  var slots: Array=GardenAreaCatalogue.entry(index).slots
  if slot<0 or slot>=slots.size() or species not in choices(g,index,slot):return false
+ if index==6:
+  var pot=GardenAreaFurnishings.object(g,"glasshouse:pot%d"%slot)
+  if pot.is_empty() or GardenContainers.occupant(g,pot,0)>=0:return false
  var s=state(g,index)
  if s.beds.has(str(slot)):return false
  s.beds[str(slot)]={"species":species,"age":0.0,"water":4.0,"offset_day":0}
  if notify:g.toast(GardenAreaCatalogue.data().specialties[species].name+" planted in pocket %d."%(slot+1))
- visual_collection(g,index);return true
+ visual_collection(g,index)
+ if notify:
+  g.planted_total+=1;GardenAreaProgression.refresh(g)
+ return true
 
 static func slot_position(g,index: int,slot: int,plant: Dictionary={}) -> Vector3:
+ if index==6:
+  var pot=GardenAreaFurnishings.object(g,"glasshouse:pot%d"%slot)
+  if not pot.is_empty():return GardenContainers.position(pot,0)-GardenAreaCatalogue.center(index)
  var spec=GardenAreaCatalogue.entry(index).slots[slot]
  var local=Vector3(float(spec.pos[0]),0,float(spec.pos[1]))
  var p=local_point(index,local)
@@ -430,7 +444,7 @@ static func visual(g,index: int) -> void:
   9:
    visible_node(root,"DuskFlowers",dusk(g))
    for j in range(3):
-    var lantern=find(root,"MoonLantern%d"%j)
+    var lantern=GardenAreaFurnishings.node(g,"moon:lamp%d"%j)
     if lantern and lantern.has_node("MoonLight"):
      lantern.get_node("MoonLight").light_energy=[0.0,.9,1.6][int(s.lanterns)] if dusk(g) else 0
      lantern.get_node("LampWick").visible=dusk(g) and int(s.lanterns)>0
@@ -442,14 +456,20 @@ static func dusk(g) -> bool:
 static func animate(g,delta: float,time: float) -> void:
  if g.area_roots.size()<9:return
  var root: Node3D=g.area_roots[8]
- var swing=find(root,"ChimeSwing")
- if swing:swing.rotation.z=0 if g.settings.reduced_motion else sin(time*.9)*(.045+g.climate.current.x*.05)
+ var chime: Node3D=null;var distance=INF
+ for obj in g.objects:
+  if obj.kind!="wind_chime":continue
+  var swing=find(obj.node,"ChimeSwing")
+  if swing:swing.rotation.z=0 if g.settings.reduced_motion else sin(time*.9)*(.045+g.climate.current.x*.05)
+  var near=g.player.position.distance_to(obj.pos)
+  if near<distance:chime=obj.node;distance=near
  var voice=root.get_node("ChimeVoice")
  var volume=float(g.ambient.nature_volume) if is_instance_valid(g.ambient) else 1.0
  voice.volume_db=-17+linear_to_db(maxf(.0001,volume))
  var timer=float(root.get_meta("chime_timer",12.0))-delta
  if timer<=0:
-  if volume>0 and g.player.position.distance_to(root.position)<22:voice.play()
+  if is_instance_valid(chime) and volume>0 and g.player.position.distance_to(chime.global_position)<22:
+   voice.global_position=chime.global_position+Vector3(0,2,0);voice.play()
   timer=18+fposmod(time,11.0)
  root.set_meta("chime_timer",timer)
  var stream=g.area_roots[7].get_node_or_null("StreamVoice")
@@ -571,6 +591,7 @@ static func harvested(g,p: Dictionary) -> void:
   g.inventory[str(id)]=int(g.inventory.get(str(id),0))+1
 
 static func train(g,p: Dictionary,style: String) -> bool:
+ if not GardenAreaProgression.unlocked(g,4):return false
  if int(p.plot)!=8 or int(p.id) not in GardenPlantGrowth.FRUIT_TREES or style not in ["open","fan","espalier"]:return false
  p["area_training"]=style;p.stress=maxf(0,float(p.stress)-.15);g.refresh_plant(p,false)
  g.toast(g.catalogue[int(p.id)].name+" trained as "+style+".");return true
@@ -581,6 +602,7 @@ static func compatible_grafts(id: int) -> Array:
  return []
 
 static func graft(g,p: Dictionary,donor: int) -> bool:
+ if not GardenAreaProgression.unlocked(g,4):return false
  if int(p.plot)!=8 or donor not in compatible_grafts(int(p.id)) or p.has("area_graft") or float(p.age)<float(g.catalogue[int(p.id)].days)*.78:return false
  if GardenEquipment.spare_count_for(g,donor)<2:g.toast("Keep two spare donor fruit items for a graft. Neighbour requests are kept aside.");return false
  g.inventory[str(donor)]=int(g.inventory[str(donor)])-2
@@ -599,6 +621,7 @@ static func apply_tree(g,p: Dictionary) -> void:
  if branch:branch.visible=float(p.age)>=float(g.catalogue[int(p.id)].days)*.78
 
 static func offsets(g,p: Dictionary) -> bool:
+ if not GardenAreaProgression.unlocked(g,2):return false
  if int(p.plot)!=6 or g.catalogue[int(p.id)].category!="Cacti & succulents" or float(p.age)<float(g.catalogue[int(p.id)].days):return false
  if int(p.get("area_offset_day",0))>g.day:g.toast("This plant is resting after its last offsets.");return false
  var saved=GardenContainers.record(p);saved.erase("container_uid");saved.erase("container_slot")
@@ -608,6 +631,7 @@ static func offsets(g,p: Dictionary) -> bool:
  g.toast("A young "+g.catalogue[int(p.id)].name+" offset is ready in Stored plants.");return true
 
 static func kitchen_basket(g,key: String) -> bool:
+ if not GardenAreaProgression.unlocked(g,5):return false
  if not KITCHEN_RECIPES.has(key):return false
  var s=state(g,5)
  if int(s.basket_day)==g.day:g.toast("The kitchen table will be ready for another basket tomorrow.");return false
@@ -620,6 +644,7 @@ static func kitchen_basket(g,key: String) -> bool:
  g.toast(recipe.name+" prepared · petals and two portions of "+GardenEquipment.RECIPES[recipe.supply].name+".");return true
 
 static func orchard_basket(g) -> bool:
+ if not GardenAreaProgression.unlocked(g,4):return false
  var s=state(g,4)
  if int(s.basket_day)==g.day:g.toast("The orchard table will be ready again tomorrow.");return false
  var ids=[]
@@ -632,6 +657,7 @@ static func orchard_basket(g) -> bool:
  g.toast("Seasonal orchard basket ready · petals and two compost portions.");return true
 
 static func restore_bay(g,bay: int) -> bool:
+ if not GardenAreaProgression.unlocked(g,6):return false
  var s=state(g,6)
  if bay<0 or bay>2 or s.restored[bay]:return false
  if g.coins<30:g.toast("Restoring a glasshouse bay takes 30 petals.");return false
@@ -642,6 +668,7 @@ static func restore_bay(g,bay: int) -> bool:
  visual(g,6);g.toast("Bay %d restored. Its collection pocket and growing controls are ready."%(bay+1));return true
 
 static func observe_meadow(g,notify: bool=true) -> Array:
+ if not GardenAreaProgression.unlocked(g,3):return []
  var flowers=0;var ids=[];var native=false
  for p in g.planted:
   if int(p.plot)!=7 or float(p.age)<float(g.catalogue[int(p.id)].days)*.78:continue
@@ -673,6 +700,7 @@ static func season_coverage(g) -> Array:
  return coverage
 
 static func photograph(g) -> void:
+ if not GardenAreaProgression.unlocked(g,9):return
  if GardenAreaCatalogue.index_at(g.camera.position)!=9 or not dusk(g):return
  var s=state(g,9);var blooms=0
  for p in s.beds.values():
@@ -688,6 +716,7 @@ static func update(g,delta: float) -> void:
  if g.area_update_time<.5:return
  var elapsed=g.area_update_time
  g.area_update_time=0
+ GardenAreaProgression.refresh(g)
  for j in range(10):
   for pocket in state(g,j).beds.values():
    var wet=g.climate.current.y>0 and j!=6
@@ -701,13 +730,13 @@ static func update(g,delta: float) -> void:
    visual(g,j);root.set_meta("activity_visual_ready",true)
  if index>=0:
   initialize(g,index);state(g,index).visited=true
-  if index==1:
+  if index==1 and GardenAreaProgression.unlocked(g,index):
    var points=[Vector3(-3,0,3),Vector3(3,0,-4),Vector3(-3,0,-6)]
    var names=["Mossy hollow","Old fern grove","Spring clearing"]
    for j in range(3):
     if names[j] not in state(g,1).discoveries and Vector2(g.player.position.x-GardenAreaCatalogue.center(1).x-points[j].x,g.player.position.z-GardenAreaCatalogue.center(1).z-points[j].z).length()<1.8:
      state(g,1).discoveries.append(names[j]);g.toast("Discovered "+names[j]+" · another fern collection is ready in Activities.")
-  elif index==3:
+  elif index==3 and GardenAreaProgression.unlocked(g,index):
    var found=observe_meadow(g)
    if not found.is_empty():g.refresh_wildlife()
  if g.area_roots.size()>9 and g.area_roots[9].visible:
@@ -719,7 +748,7 @@ static func update(g,delta: float) -> void:
     var p=state(g,9).beds.get(str(slot),{})
     flowers.visible=not p.is_empty() and float(p.age)>=float(GardenAreaCatalogue.data().specialties[p.species].days)*.72 and dusk(g)
   for j in range(3):
-   var lantern=find(root,"MoonLantern%d"%j)
+   var lantern=GardenAreaFurnishings.node(g,"moon:lamp%d"%j)
    if lantern and lantern.has_node("MoonLight"):
     lantern.get_node("MoonLight").light_energy=[0.0,.9,1.6][int(state(g,9).lanterns)] if dusk(g) else 0
     lantern.get_node("LampWick").visible=dusk(g) and int(state(g,9).lanterns)>0

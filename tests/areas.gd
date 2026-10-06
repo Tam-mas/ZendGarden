@@ -39,6 +39,7 @@ static func capture(g,index: int,suffix: String="") -> void:
  g.ui.show();g.player.show();g.photo_mode=false
 
 static func demo(g) -> void:
+ GardenAreaProgression.unlock_review(g)
  # Mature example planting for review captures; this test uses its own save.
  for index in [0,1,6,8,9]:
   var s=GardenAreas.state(g,index)
@@ -67,6 +68,7 @@ static func demo(g) -> void:
  g.refresh_wildlife()
 
 static func run(g,failures: Array) -> void:
+ GardenAreaProgression.unlock_review(g)
  g.set_process(false);g.settings.intro_seen=true;g.settings.request_notifications=false
  if is_instance_valid(g.welcome):GardenExperience.finish(g)
  g.dismiss_request();g.side_panel.hide();g.settings.controls="keyboard";g.touch.configure()

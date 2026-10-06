@@ -9,6 +9,7 @@ static func paving_material(node: Node,failures: Array,title: String) -> void:
   if not child is StaticBody3D:paving_material(child,failures,title)
 
 static func run(g,failures: Array,indices: Array=[]) -> void:
+ GardenAreaProgression.unlock_review(g)
  var walker=preload("res://tests/walking.gd")
  # Traverse the new entrances with the player's real capsule, gravity and
  # step-up movement. Include the long kitchen and glasshouse door approaches.

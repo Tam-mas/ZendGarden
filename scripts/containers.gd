@@ -30,14 +30,24 @@ static func occupant(g, obj: Dictionary, slot: int, excluding: int=-1) -> int:
   if i!=excluding and g.planted[i].get("container_uid","")==obj.uid and int(g.planted[i].get("container_slot",-1))==slot:return i
  return -1
 
+static func spec(obj: Dictionary) -> Dictionary:
+ var result: Dictionary=SPECS[obj.kind].duplicate(true)
+ var data=GardenAreaFurnishings.extras(obj)
+ if data.has("fixture_soil"):result.slots=[Vector3(0,float(data.fixture_soil),0)]
+ if str(obj.get("area_fixture","")).begins_with("glasshouse:basket"):
+  result.layers=0;result.height=.45
+ return result
+
 static func position(obj: Dictionary, slot: int) -> Vector3:
- return obj.node.to_global(SPECS[obj.kind].slots[slot])
+ return obj.node.to_global(spec(obj).slots[slot])
 
 static func can_plant(g, obj: Dictionary, slot: int, id: int, excluding: int=-1) -> String:
  if obj.kind not in SPECS or slot<0 or slot>=SPECS[obj.kind].slots.size():return "Choose a planting pocket."
  if not GardenAreaCatalogue.plot_open(g,g.nearest_plot(obj.pos)):return "Choose a planter in an open garden area."
  var data=g.catalogue[id]
- var spec=SPECS[obj.kind]
+ var spec=spec(obj)
+ var collection_slot=GardenAreaFurnishings.collection_slot(obj)
+ if collection_slot>=0 and GardenAreas.state(g,6).beds.has(str(collection_slot)):return "Clear this collection pocket in Garden atlas before sowing ordinary seeds here."
  if int(data.layer)>int(spec.layers) or float(data.height)>float(spec.height):return "This plant needs a larger planter or open soil."
  if occupant(g,obj,slot,excluding)>=0:return "This pocket already has a plant."
  return ""
@@ -49,6 +59,7 @@ static func plant(g, obj: Dictionary, slot: int, id: int) -> Dictionary:
  attach(g,p,obj,slot)
  GardenEquipment.starter(g,p)
  g.planted_total+=1;GardenSeedCollection.record_planting(g,id)
+ GardenAreaProgression.refresh(g)
  return p
 
 static func attach(g, p: Dictionary, obj: Dictionary, slot: int) -> void:
@@ -61,6 +72,7 @@ static func attach(g, p: Dictionary, obj: Dictionary, slot: int) -> void:
 
 static func move_plant(g, index: int, obj: Dictionary, slot: int) -> String:
  var p=g.planted[index]
+ if not GardenAreaProgression.allowed(g,p.pos):return "This garden has not reached its milestone yet."
  var error=can_plant(g,obj,slot,int(p.id),index)
  if not error.is_empty():return error
  attach(g,p,obj,slot)

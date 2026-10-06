@@ -34,6 +34,8 @@ static func note(g, column: Control, text: String, size: int=15) -> void:
 
 static func action(g, column: Control, text: String, callback: Callable, enabled: bool=true) -> Button:
  var button=g.button(text,func():
+  var target_obj=GardenContainers.object(g,g.workshop_uid)
+  if not target_obj.is_empty() and not GardenAreaProgression.allowed(g,target_obj.pos,true):return
   g.workshop_notice=""
   callback.call()
   for obj in g.objects:GardenEquipment.visual(g,obj)
@@ -73,6 +75,7 @@ static func open(g, uid: String="") -> void:
  scroll.add_child(column)
  if not g.workshop_notice.is_empty():note(g,column,g.workshop_notice,16)
  if obj.is_empty():overview(g,column)
+ elif not GardenAreaProgression.allowed(g,obj.pos):note(g,column,GardenAreaProgression.message(g,GardenAreaCatalogue.index_at(obj.pos)),16)
  elif obj.kind in GardenContainers.SPECS:planter(g,column,obj)
  else:equipment(g,column,obj)
  if not obj.is_empty():frame.add_child(g.button("Equipment & stored plants",func():open(g),Vector2(0,48)))
@@ -166,7 +169,12 @@ static func equipment(g, column: Control, obj: Dictionary) -> void:
  supplies(g,column)
 
 static func planter(g, column: Control, obj: Dictionary) -> void:
- var spec=GardenContainers.SPECS[obj.kind]
+ var spec=GardenContainers.spec(obj)
+ var collection_slot=GardenAreaFurnishings.collection_slot(obj)
+ if collection_slot>=0 and GardenAreas.state(g,6).beds.has(str(collection_slot)):
+  note(g,column,"This pot holds a specialist glasshouse collection. Manage its planting and watering in Garden atlas, or pack the pot away to keep its collection safely for restoration.",15)
+  action(g,column,"Manage glasshouse collection",func():close(g);GardenAreaAtlas.open(g,6))
+  return
  note(g,column,"%d planting pocket%s. Plant, gather and tend each pocket here, or aim your usual tools at it. Move carries the whole display; Remove keeps the contents in stored plants."%[spec.slots.size(),"s" if spec.slots.size()>1 else ""],15)
  for slot in range(spec.slots.size()):
   var pocket=slot

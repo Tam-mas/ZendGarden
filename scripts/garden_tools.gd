@@ -30,7 +30,7 @@ static func gather(g, repeating: bool=false) -> void:
    collected+=1
    g.care_effect(plant.pos,Color("efdda7"))
  for plant in g.wild_plants:
-  if g.hover_container_uid.is_empty() and in_square(plant.pos,g.hover_cell,width) and GardenCare.collect_wild(g,plant):
+  if GardenAreaProgression.allowed(g,plant.pos) and g.hover_container_uid.is_empty() and in_square(plant.pos,g.hover_cell,width) and GardenCare.collect_wild(g,plant):
    collected+=1
    g.care_effect(plant.pos,Color("efdda7"))
  g.action_cooldown=GATHER_INTERVAL
@@ -72,6 +72,7 @@ static func boost_until(g, pos: Vector3) -> float:
  return until
 
 static func growth_multiplier(g, pos: Vector3, at_time: float) -> float:
+ if not GardenAreaProgression.allowed(g,pos):return 1.0
  return 1.2 if boost_until(g,pos)>at_time else 1.0
 
 static func expire_water(g) -> void:

@@ -206,5 +206,8 @@ static func furnishings() -> Array:
   {"name":"Herb trough", "price":45, "kind":"herb_trough", "hint":"Three raised pockets for compact herbs and flowers."},
   {"name":"Hanging basket stand", "price":55, "kind":"hanging_basket", "hint":"An elevated basket for low flowers, strawberries and trailing foliage."},
   {"name":"Vertical pocket planter", "price":95, "kind":"vertical_planter", "hint":"Six elevated pockets form a living display on a freestanding timber wall."},
+  {"name":"Orchard harvest table", "price":65, "kind":"harvest_table", "hint":"A slatted table with fruit crates. Move, rotate or pack it away."},
+  {"name":"Glasshouse nursery shelf", "price":60, "kind":"nursery_shelf", "hint":"A level timber display bench with slender steel legs."},
+  {"name":"Alpine wind chime", "price":45, "kind":"wind_chime", "hint":"A timber stand with gently swaying metal chimes."},
   {"name":"Tiered planting steps", "price":85, "kind":"tiered_planter", "hint":"Six planting pockets on three levels for a layered garden display."}
  ]

@@ -306,7 +306,7 @@ static func detailed_model(folder: String, kind: String) -> Node3D:
 
 static func furnishing(kind: String) -> Node3D:
  if kind=="sign": return sign_board()
- var n=detailed_model("shop",kind)
+ var n=detailed_model("areas/furniture" if kind in ["harvest_table","nursery_shelf","wind_chime"] else "shop",kind)
  if kind=="lantern":
   var light=OmniLight3D.new()
   light.position.y=1

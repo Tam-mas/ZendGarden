@@ -83,6 +83,7 @@ static func jobs(g, uid: String) -> Array:
  return g.workshop_state.jobs.filter(func(job):return job.station==uid)
 
 static func start(g, obj: Dictionary) -> bool:
+ if not GardenAreaProgression.allowed(g,obj.pos,true):return false
  var key=recipe_for(obj.kind)
  if key.is_empty():return false
  var recipe=RECIPES[key]
@@ -97,6 +98,7 @@ static func start(g, obj: Dictionary) -> bool:
  return true
 
 static func upgrade(g, obj: Dictionary) -> bool:
+ if not GardenAreaProgression.allowed(g,obj.pos,true):return false
  if obj.work.get("upgraded",false):return false
  if obj.kind!="rain_barrel" and recipe_for(obj.kind).is_empty():return false
  if g.coins<40:g.toast("This equipment upgrade costs 40 petals.");return false
@@ -105,6 +107,7 @@ static func upgrade(g, obj: Dictionary) -> bool:
  return true
 
 static func feed(g, obj: Dictionary) -> bool:
+ if not GardenAreaProgression.allowed(g,obj.pos,true):return false
  if obj.kind!="bird_feeder":return false
  if int(obj.work.get("feed_until",0))>g.day:g.toast("There is still food on the bird table.");return false
  if not consume(g,3):g.toast("Set aside three spare harvest items for the birds.");return false
@@ -141,6 +144,7 @@ static func active(p: Dictionary, treatment: String, day: int) -> bool:
  return int(p.get("treatments",{}).get(treatment,0))>day
 
 static func treat(g, p: Dictionary, key: String) -> bool:
+ if not GardenAreaProgression.allowed(g,p.pos):return false
  if key not in ["compost","castings","mulch"] or active(p,key,g.day):return false
  if int(g.workshop_state.resources.get(key,0))<=0:return false
  if not p.has("treatments"):p["treatments"]={}
@@ -156,6 +160,7 @@ static func growth_multiplier(g, p: Dictionary, manual: float) -> float:
  return minf(1.30,manual+bonus)
 
 static func water_pocket(g, p: Dictionary, amount: float=4.0) -> void:
+ if not GardenAreaProgression.allowed(g,p.pos):return
  p.water=amount
  p["watered_until"]=GardenTools.now(g)+GardenTools.WATER_BOOST_DAYS
  g.care_effect(p.pos,Color("a8dce1"))

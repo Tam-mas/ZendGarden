@@ -44,6 +44,8 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
  for key in ["settings","terrain","watered_ground","wild_collection","wild_pruning","inventory","upgrades","automation","expansions","path_widths","climate","tutorial","bed_surfaces"]:
   if data.has(key) and not data[key] is Dictionary:return false
  if not fields(data,["coins","clock","fulfilled","planted_total","rake_petals","prune_width"],["hoe_raise","request_unread"]):return false
+ for counter in ["fulfilled","planted_total"]:
+  if data.has(counter) and not integer(data[counter]):return false
  if data.has("petal_remainder") and not integer(data.petal_remainder,0,99):return false
  if not integer(data.get("day",1),1) or not integer(data.get("unlocked_plots",1),1,1024):return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
@@ -56,7 +58,9 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
   if not fields(plant,["orientation","shape_seed","prune_cuts","height_factor","pruned"]):return false
  for item in data.get("objects",[]):
   if not item is Dictionary or item.get("kind") not in kinds or not vector(item.get("pos")) or not number(item.get("price")) or not item.get("fish") is bool:return false
-  if not fields(item,["rotation"],[],["text","text_color"]):return false
+  if not fields(item,["rotation","elevation","starter_orientation_version"],[],["text","text_color","area_fixture","starter_id"]):return false
+  if item.has("elevation") and absf(float(item.elevation))>10:return false
+  if item.has("area_fixture") and not GardenAreaFurnishings.valid_id(str(item.area_fixture),str(item.kind)):return false
  for key in ["unlocked_plants","favourite_plants","recent_plants"]:
   for id in data.get(key,[]):
    if not integer(id,0,plant_count-1):return false

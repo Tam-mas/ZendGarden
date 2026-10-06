@@ -25,6 +25,7 @@ func render_cards() -> void:
  var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.current=true;stage.add_child(camera)
  DirAccess.make_dir_recursive_absolute("res://assets/ui/shop")
  for item in GardenCatalogue.furnishings():
+  if "--area-furniture" in OS.get_cmdline_user_args() and item.kind not in ["harvest_table","nursery_shelf","wind_chime"]:continue
   if "--working-garden" in OS.get_cmdline_user_args() and item.kind not in ["worm_farm","mulch_bin","shade_canopy","cold_frame","bird_feeder","wide_bowl","large_planter","herb_trough","hanging_basket","vertical_planter","tiered_planter"]:continue
   var model=GardenArt.furnishing(item.kind)
   stage.add_child(model)

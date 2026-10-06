@@ -1,6 +1,7 @@
 extends RefCounted
 
 static func run(g) -> int:
+ GardenAreaProgression.unlock_review(g)
  g.set_process(false);g.settings.intro_seen=true;g.settings.request_notifications=false
  if is_instance_valid(g.welcome):GardenExperience.finish(g)
  g.coins=2000;g.orders=[];g.unlocked_plants=range(g.catalogue.size())
