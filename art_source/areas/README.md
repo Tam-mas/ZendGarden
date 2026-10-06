@@ -8,6 +8,8 @@ To regenerate through MCP, inspect the current Blender scene and Object mode fir
 
 Landscape GLBs contain grouped, UV-mapped meshes, embedded surface images and independent functional pivots for canopy clearings, rain covers, glasshouse panes/vents/shade, stream gates, alpine windbreaks and lanterns. Runtime water, light, mist, wildlife and plant growth respond to saved activity controls. Narrow stair treads and bridge planks have continuous runtime collision surfaces. Existing container and equipment models provide usable benches, pots and vertical planters on first arrival.
 
+`../garden_routes.py` authors the sampled centre lines in `assets/areas/routes.json`. Blender entrance paving and runtime planting clearance read the same routes. Every approach meets an existing inner path, stair, courtyard or crossing; Fern Gully passes around the creek head. The original eastern approach joins the shared trail through a northern Reedwater perimeter path. Main-trail bluestone uses metre-scaled running-bond joints and the existing detailed stone pigment and relief maps. Paving and matching collisions follow saved terrain edits. Ordinary plants and starter equipment use the regular gardening tools; specialist collections remain in their named pockets, and decorative landscape planting stays fixed.
+
 ## Image-generated textures
 
 Generated with the built-in ImageGen tool and copied unchanged into this directory:

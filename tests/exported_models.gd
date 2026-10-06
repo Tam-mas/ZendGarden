@@ -21,6 +21,13 @@ func _initialize() -> void:
   instance.free()
  var layout=JSON.parse_string(FileAccess.get_file_as_string("res://assets/areas/layout.json"))
  if not layout is Dictionary or not layout.get("areas") is Array or layout.areas.size()!=10:failures.append("New garden trail layout missing from exported game")
+ var transitions=load("res://scripts/garden_area_transitions.gd")
+ var routes=transitions.route_data()
+ if not routes.get("approaches") is Array or routes.approaches.size()!=10 or routes.get("eastern_link",[]).size()<2:failures.append("Garden entrance routes missing from exported game")
+ var paving=transitions.bluestone()
+ for channel in ["stone","relief"]:
+  var texture=paving.get_shader_parameter(channel) as Texture2D
+  if not texture or texture.get_width()==0:failures.append("Bluestone "+channel+" texture missing from exported game")
  if texture_count==0:failures.append("No exported textures found")
  print("EXPORTED_MODELS_CHECKED: ",report.model_paths.size()," models, ",texture_count," texture references")
  print("EXPORTED_MODELS_RESULT: ",failures)

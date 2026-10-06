@@ -64,31 +64,13 @@ def install(b):
 
  current=[0]
  old_ground=b.ground
- def curved_path(G,parent,i,center,width,zmin=-9,zmax=9,material='gravel'):
-  # Continuous fitted flagstones. Joint gaps follow the same curve as edges.
-  path=b.pivot('Fitted garden path',parent,flat=True)
-  pitch=.62;count=int((zmax-zmin)/pitch)
-  for k in range(count):
-   z0=zmin+k*pitch+.012;z1=zmin+(k+1)*pitch-.012
-   for lane in range(3):
-    lo=(lane/3-.5)*width+.012;hi=((lane+1)/3-.5)*width-.012
-    # Small quads conform to curved edges and the sculpted elevation.
-    for q in range(4):
-     za=z0+(z1-z0)*q/4;zb=z0+(z1-z0)*(q+1)/4
-     points=[]
-     for z,t in [(za,lo),(zb,lo),(zb,hi),(za,hi)]:
-      x=center(z);dx=(center(z+.02)-center(z-.02))/.04
-      inv=1/math.sqrt(1+dx*dx);xx=x+t*inv;zz=z-t*dx*inv
-      points.append(b.at(i,xx,zz,.01+(k%3)*.002))
-     G.poly(path,b.MATS[material],points,[(0,1,2,3)])
  def ground(G,root,i):
   current[0]=i;rocks.clear();reservations.clear()
   reservations.extend((s['pos'][0],s['pos'][1],.40) for s in b.layout()[i]['slots'])
   if i==2:reservations.extend((x,z,.55) for x,z in [(-4.5,6),(4.1,-6.8),(3.3,1.5),(-4.4,-2.8)])
   old_ground(G,root,i)
-  if i==1:curved_path(G,root,i,lambda z:creek(z)+1.55,1.05,material='slate')
-  if i==3:curved_path(G,root,i,lambda z:3*math.sin(z*.4),1.55,material='gravel')
-  if i==8:curved_path(G,root,i,lambda z:2.4*math.sin(z*.45),1.35,material='stone')
+  # The cohesion pass fits the inner and entrance paths as one paving network.
+  # Independent ribbons here would double the flags at every intersection.
  b.ground=ground
  def fern_props(G,root,i):
   rocks.append((-3.3,2.23,1.98,.60))
@@ -150,7 +132,7 @@ def install(b):
   old_orchard(G,root,i)
   for key in list(G.groups):
    if key[0].name.startswith('Harvest table'):del G.groups[key]
-  table=b.pivot('Harvest table refined',root,b.at(i,0,6),collision=True,flat=True)
+  table=b.pivot('Harvest table refined',root,b.at(i,0,6),collision=True,flat=True,fixture_id='orchard:table',fixture_kind='harvest_table')
   for x in [-.85,.85]:
    for z in [-.32,.32]:G.box(table,b.MATS['wood'],(x,.42,z),(.075,.84,.075))
    G.box(table,b.MATS['darkwood'],(x,.76,0),(.07,.08,.83))
@@ -172,8 +154,11 @@ def install(b):
    parent,mat=key
    if parent==root and mat in [b.MATS['clay'],b.MATS['soil']]:del G.groups[key]
    if parent.name.startswith('GlassShade'):del G.groups[key]
-  for x in [-3.8,3.8]:
-   for z in [-3.6,0,3.6]:b.pot(G,root,(x,2.12,z),.31)
+  for side,x in enumerate([-3.8,3.8]):
+   for row,z in enumerate([-3.6,0,3.6]):
+    slot=row*2+side
+    holder=b.pivot('Collection pot%d'%slot,root,(x,2.12,z),fixture_id='glasshouse:pot%d'%slot,fixture_kind='pot',fixture_soil=.56,collection_slot=slot,fixture_support='glasshouse:shelf%d'%side)
+    b.pot(G,holder,(0,0,0),.31)
   for bay,z in enumerate([-3.65,0,3.65]):
    shade=b.pivot('GlassShade%d'%bay,root,flat=True)
    # Open woven mesh: real holes pass direct sun and give dappled shadows.

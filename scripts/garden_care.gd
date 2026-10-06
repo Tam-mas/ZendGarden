@@ -17,7 +17,7 @@ static func prune_wild(g, pos: Vector3, radius: float, square: bool = false) -> 
  var count=0
  for plant in g.wild_plants:
   var inside=GardenTools.in_square(plant.pos,pos,radius*2) if square else plant.pos.distance_to(pos)<=radius
-  if not plant.node.visible or not inside: continue
+  if not GardenAreaProgression.allowed(g,plant.pos) or not plant.node.visible or not inside: continue
   collect_wild(g,plant)
   g.wild_pruning[plant.key]=mini(3,int(g.wild_pruning.get(plant.key,0))+1)
   count+=1
@@ -31,7 +31,7 @@ static func rake(g) -> void:
  for dx in [-.5,0,.5]:
   for dz in [-.5,0,.5]:
    var point=center+Vector3(dx*width,0,dz*width)
-   if g.bed_at(point)>=0 or not g.plantable_ground(point):
+   if not GardenAreaProgression.allowed(g,point) or g.bed_at(point)>=0 or not g.plantable_ground(point):
     g.toast("Choose open lawn or a path, away from beds, bridges and ornaments.")
     return
  for plant in g.planted:
@@ -58,6 +58,7 @@ static func rake(g) -> void:
  g.toast(("Cleared grass and raked a grooved path." if fresh else "Widened this path with your upgraded rake.")+(" Found %d petals." % earned if earned>0 else ""))
 
 static func collect_wild(g, plant: Dictionary) -> bool:
+ if not GardenAreaProgression.allowed(g,plant.pos):return false
  if not plant.node.visible or int(g.wild_collection.get(plant.key,-1))==g.day: return false
  g.wild_collection[plant.key]=g.day
  var key=str(plant.id)

@@ -11,6 +11,7 @@ python3 tests/check_botanical_additions.py
 python3 tests/check_low_grasses.py
 python3 tests/check_audio.py
 python3 tests/check_areas.py
+python3 tests/check_path_paving.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
 import_log="$(mktemp -t zend-garden-import)"
@@ -139,6 +140,14 @@ for renderer in gl_compatibility forward_plus; do
   "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --workshop-test > "$workshop_log" 2>&1 || { cat "$workshop_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$workshop_log" || ! rg -Fq 'WORKSHOP_RESULT: []' "$workshop_log"; then
     cat "$workshop_log"
+    exit 1
+  fi
+done
+for renderer in gl_compatibility forward_plus; do
+  milestone_log="$(mktemp -t zend-garden-milestones)"
+  "$GODOT_BIN" --rendering-method "$renderer" --always-on-top --path "$PWD" -- --milestones-test > "$milestone_log" 2>&1 || { cat "$milestone_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$milestone_log" || ! rg -Fq 'MILESTONES_RESULT: []' "$milestone_log"; then
+    cat "$milestone_log"
     exit 1
   fi
 done

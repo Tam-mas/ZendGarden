@@ -3,6 +3,7 @@ uniform sampler2D meadow : source_color,filter_linear_mipmap,repeat_enable;
 uniform sampler2D meadow_normal : hint_normal,filter_linear_mipmap,repeat_enable;
 uniform sampler2D earth : source_color,filter_linear_mipmap,repeat_enable;
 uniform sampler2D relief : hint_normal,filter_linear_mipmap,repeat_enable;
+uniform sampler2D dry_floor : source_color,filter_linear_mipmap,repeat_enable;
 uniform vec4 tint : source_color = vec4(1.);
 uniform float texture_scale = .72;
 uniform vec2 habitat_center;
@@ -11,8 +12,14 @@ varying vec3 world;
 void vertex(){world=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
 void fragment(){
  vec2 p=world.xz-habitat_center;
- vec3 grass=texture(meadow,world.xz*.6).rgb*(habitat_kind==2?vec3(1.):vec3(.72,.86,.72));
- if(habitat_kind!=2){float luma=dot(grass,vec3(.22,.68,.10));grass=mix(grass,vec3(luma)*vec3(.83,.95,.72),.28)*.70;}
+ vec3 grass=texture(meadow,world.xz*.6).rgb*vec3(.72,.86,.72);
+ float luma=dot(grass,vec3(.22,.68,.10));
+ grass=mix(grass,vec3(luma)*vec3(.83,.95,.72),.28)*.70;
+ vec3 common_lawn=grass;
+ float broad=texture(meadow,world.xz*.091+vec2(.28,.39)).g;
+ grass*=mix(.93,1.06,broad);
+ if(habitat_kind==2)grass=texture(dry_floor,world.xz*.6).rgb*vec3(.90,.88,.83);
+ if(habitat_kind==1)grass*=vec3(.98,.95,.87);
  vec3 gravel=texture(earth,world.xz*texture_scale).rgb*tint.rgb;
  float irregular=sin(p.x*9.+sin(p.y*4.))*sin(p.y*11.)*.035;
  float mask=0.;
@@ -37,7 +44,8 @@ void fragment(){
   gravel*=vec3(.66,.69,.60);
   grass*=habitat_kind==1?vec3(.86,.91,.81):vec3(1.);
  }
- ALBEDO=mix(grass,gravel,mask);ROUGHNESS=.97;
- NORMAL_MAP=mix(texture(meadow_normal,world.xz*.6).rgb,texture(relief,world.xz*texture_scale).rgb,mask);
+ float border=smoothstep(9.1,11.8,max(abs(p.x),abs(p.y)));
+ ALBEDO=mix(mix(grass,gravel,mask),common_lawn,border);ROUGHNESS=.97;SPECULAR=.18;
+ NORMAL_MAP=mix(mix(texture(meadow_normal,world.xz*.6).rgb,texture(relief,world.xz*texture_scale).rgb,mask),texture(meadow_normal,world.xz*.6).rgb,border);
  NORMAL_MAP_DEPTH=.5;
 }

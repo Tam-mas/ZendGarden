@@ -126,9 +126,30 @@ Mobile layouts and simultaneous touch input are covered by automated tests and b
 
 ## Ten new garden trails
 
-Open **Garden atlas · ten new trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. Choose a trail and **Visit this garden** to arrive there. You can also follow the eastern path from the original garden and walk between all ten areas. Every trail is free to visit. Face the garden, press **E** while wandering, or use **Garden activities** on touch to open its controls. Nearby benches retain their usual rest interaction.
+Open **Garden atlas · milestones & trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas or follow the eastern path and walk between them. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
 
-Your original garden, later expansion beds, plants, surfaces, care and stored plants keep their positions and progress. The new areas occupy a separate extension. Starter planting and usable structures arrive once on your first visit; removing a starter object does not repeatedly create a replacement.
+| Garden | Milestone |
+| --- | --- |
+| Pollinator Meadow | Plant 250 new plants |
+| Fern Gully | Reach game day 7 |
+| Walled Kitchen Garden | Plant 500 new plants |
+| Reedwater Garden | Reach game day 14 |
+| Limestone Terraces | Complete 5 neighbour requests |
+| Orchard Clearing | Plant 1,000 new plants |
+| Stream Garden | Complete 8 neighbour requests |
+| Old Glasshouse | Plant 2,000 new plants |
+| Alpine Lookout | Reach game day 60 |
+| Moon Garden | Reach game day 100 |
+
+Guide and Garden atlas list every requirement, live progress and unlock status. Plantings are cumulative and include containers and specialist collection planting. Automatic starter plants, moving plants and replanting stored plants do not add to this count. Day milestones use game days. Existing saves use these milestones too: saved planting, arrangements, surfaces and activities remain in place, and plants keep growing while further interactions wait for the reward.
+
+The planting rewards are later-game goals. Saves made with the earlier 10/25/50/100 targets are checked against the higher totals above; planting and arrangements stay intact. Once earned under these targets, each reward remains permanent.
+
+Once a garden is unlocked, face it and press **E**, or tap **Garden activities**, to open its controls. Use **Move** and **Remove** for starter benches, planters, nursery shelves, harvest tables, the alpine chime, the Moon Garden pergola and lanterns. The kitchen pocket planters face into the courtyard; benches face their garden features. Paths, walls, bridges and the surrounding landscape remain part of the area.
+
+Packing an ordinary planted container keeps its plants in the nursery. Packing a specialist glasshouse pot preserves its collection’s growth separately; **Restore starter furniture** in that garden’s atlas recovers the pot and collection. Removed furniture stays removed after visits and reloads. Small pots, bowls and troughs placed over a nursery shelf sit on its top. Moving a shelf carries its supported pots; removing it lowers those pots gently to the ground, and touch Undo restores the complete display. Replacement tables, shelves and chimes are available in Shop.
+
+Your original beds and later expansions retain their existing progression. The ten habitats occupy a separate extension, with stable plant IDs, positions and save records.
 
 | Trail | What to do and what it changes |
 | --- | --- |
@@ -177,6 +198,9 @@ Apply supplies to open-ground plants in the current bed from Working garden, or 
 | Herb trough | 45 | Three raised pockets for compact herbs and flowers. |
 | Hanging basket stand | 55 | One elevated pocket for small trailing plants and strawberries. |
 | Vertical pocket planter | 95 | Six compact pockets in a freestanding timber wall. |
+| Orchard harvest table | 65 | Slatted timber table with fruit crates; movable and removable. |
+| Glasshouse nursery shelf | 60 | Horizontal timber display shelf; supports small pots, bowls and troughs. |
+| Alpine wind chime | 45 | Upright timber stand with moving metal chimes and gentle sound. |
 | Tiered planting steps | 85 | Six pockets arranged across three levels. |
 
 Each pocket has its own plant and care. Aim Plant, Water, Prune or Gather at a pocket, including the upper pockets, or use the container controls. The seed selector offers unlocked plants that fit its height and planting layer. Containers provide their own capacity; trees still need open ground. Bed soakers and auto-pruners tend open-ground plants, while rain barrels provide container irrigation.

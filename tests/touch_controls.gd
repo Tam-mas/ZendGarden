@@ -51,12 +51,16 @@ static func run(g, failures: Array) -> void:
  # A third finger can water while the first two still walk and look.
  g.mode="water"
  g.hover_valid=true
- g.hover_cell=g.planted[0].pos
- g.planted[0].water=0.0
+ # Habitat starter trees now exist on day one too; water an original-garden
+ # plant so this input test does not try to bypass an area milestone.
+ var watered=g.planted.filter(func(plant):return int(plant.plot)==0)[0]
+ g.hover_plot=0
+ g.hover_cell=watered.pos
+ watered.water=0.0
  g.action_cooldown=0
  touch._process(0)
  press(3,touch.buttons.action.get_global_rect().get_center())
- if g.planted[0].water<=0 or touch.stick_id!=1 or touch.look_id!=2: failures.append("Three-finger watering interrupted walking or looking")
+ if watered.water<=0 or touch.stick_id!=1 or touch.look_id!=2: failures.append("Three-finger watering interrupted walking or looking")
  press(3,touch.buttons.action.get_global_rect().get_center(),false)
  if touch.held: failures.append("Water button stayed held after release")
  press(2,Vector2(530,220),false)

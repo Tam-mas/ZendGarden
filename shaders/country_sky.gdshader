@@ -11,7 +11,7 @@ float fbm(vec2 p){float v=0.0,a=.5;for(int i=0;i<5;i++){v+=noise(p)*a;p=p*2.04+v
 void sky(){
  vec3 d=normalize(EYEDIR);
  float h=max(d.y,0.0);
- vec3 horizon=mix(vec3(.025,.037,.08),vec3(.75,.79,.72),daylight);
+ vec3 horizon=mix(vec3(.025,.037,.08),vec3(.70,.78,.83),daylight);
  horizon=mix(horizon,vec3(.88,.34,.13),twilight*.67);
  vec3 zenith=mix(vec3(.003,.006,.025),vec3(.19,.40,.57),daylight);
  vec3 col=mix(horizon,zenith,pow(h,.42));
@@ -43,7 +43,7 @@ void sky(){
   float sunward=fbm(q+light_offset);
   float lighting=clamp(.55+(billow-sunward)*3.8+sun_direction.y*.18,0.,1.);
   vec3 shade=mix(vec3(.012,.018,.04),vec3(.36,.43,.49),daylight);
-  vec3 bright=mix(vec3(.055,.073,.12),vec3(.99,.95,.86),daylight);
+  vec3 bright=mix(vec3(.055,.073,.12),vec3(.93,.95,.96),daylight);
   bright=mix(bright,vec3(.98,.49,.25),twilight*.65);
   vec3 cloud_color=mix(shade,bright,lighting);
   float rim=pow(max(dot(d,sun_direction),0.),12.)*(1.-shape)*.5;

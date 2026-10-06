@@ -1,3 +1,63 @@
+### [2026-10-06 21:13] Changed
+
+**Tech:** `GardenAreaProgression.RULES/restore` — later-game planting reward thresholds
+
+**Dev:** Raise Pollinator Meadow to 250 cumulative new plantings, Walled Kitchen Garden to 500, Orchard Clearing to 1,000 and Old Glasshouse to 2,000. Atlas, Guide and local HUD read the shared targets; update the player guide and add release 51. Save a planting-milestone revision and recheck old planting unlocks once against the higher totals, preserving collections, growth, furniture, activities and other milestones. Rewards earned under this revision remain permanent on subsequent reloads. Extend regression coverage for earlier unlocked saves below and above the new targets, permanent revised rewards after reload and malformed revision validation. The native milestone/furniture regression, phone layout review, player update history and save-file compatibility checks pass. The local browser export verifies 400 models and 10,167 texture references, packages 440.6 MiB into 23 pieces and passes deployable-file and security checks.
+
+**Plain:** The meadow, kitchen garden, orchard and glasshouse now open after 250, 500, 1,000 and 2,000 new plantings, giving established gardeners bigger rewards to work towards.
+
+**Why:** Higher planting targets place these garden rewards later in the player's progress.
+
+### [2026-10-06 21:00] Added
+
+**Tech:** `GardenAreaProgression`, `GardenAreaFurnishings` — milestone rewards and owned habitat furniture
+
+**Dev:** Keep all ten habitats and their starter planting visible and walkable from day one; independently reward permanent gardening access at 10/25/50/100 cumulative new plantings, game days 7/14/60/100 and 5/8 completed neighbour requests. Show every target and live progress in Guide, Atlas and the local HUD. Apply gates to existing saves, including visited gardens, while preserving plants, arrangements, finishes, collections and passive growth. Guard planting, care, terrain work, equipment, activities, rest and furniture changes; exclude automatic starters, moves and nursery replanting from new planting counts. Convert 22 formerly embedded loose props into selectable, movable and removable objects with stable IDs, elevated pot positions and saved removals. Correct starter bench headings and courtyard-facing vertical pockets, rebuild level slatted glasshouse shelves with upright supports, carry pots and planting with moved shelves, and preserve ordinary and specialist planting when displays are packed or restored. Match Moon pergola climbing shoots to its actual posts and remove inherited plant rotation/scale from support stems. Add replacement harvest tables, nursery shelves and chimes with shop models and cards. Preserve saved What’s new dismissal state and add player release 50. Extend native and browser test workflows for exact milestone thresholds, legacy gating, real tool selection/removal, shelf movement, touch Undo, phone layouts, seed counts and complete save reconstruction; update the older touch fixture to water an original-garden plant rather than a newly present locked orchard tree. Both native renderers pass the milestone/furniture regression. Terrain and activity assertions pass 112 real routes; the headless route runner also reports an audio-playback cleanup warning at shutdown. All ten paving audits, 31 area/furniture models and 33 read-only Blender source libraries pass. The complete Compatibility gameplay regression passes, including simultaneous touch controls, planting tools, orders and save reconstruction. The local browser export verifies 400 models and 10,167 texture references and packages 440.6 MiB into 23 pieces.
+
+**Plain:** Explore every garden from the start, earn its planting and arranging milestone, and move or pack away starter furniture to make the space your own.
+
+**Why:** Visible rewards give players reasons to return while editable, correctly oriented displays make each garden easier to personalise.
+
+### [2026-10-06 19:41] Fixed
+
+**Tech:** `garden_routes.py`, `garden_paving.py` — continuous Fern Gully bend and oval Moon Garden threshold
+
+**Dev:** Widen the two tight approach turns. Join Fern Gully's arrival and bank path as one ribbon with a shared cross-section and gradual width change, eliminating its triangular spur and pinched join. Clip Moon Garden's final stones to the gravel court's actual oval boundary and retain a 15mm reveal above the underlying terrain to prevent coincident faces. Rebuild the two GLBs and packed Blender sources, update their shared clearance routes and Atlas arrivals/previews, and add player release 49 without changing terrain grids, collection IDs or saved progress. Extend exported paving checks for bend coverage, turning radius and oval fit; add focused original-angle/overhead review views and curved threshold probes. Both native renderers pass eighteen real player crossings and produce six reviewed photographs each. The complete headless garden regression and player-update checks pass. All ten paving networks, 28 area models with 505,264 triangles and all 33 Blender source libraries pass. A local Web export verifies 397 models and 10,015 texture references, packages 440.4 MiB into 23 pieces and passes deployable-file/security checks.
+
+**Plain:** Fern Gully's slate path follows a smooth bend, and the Moon Garden entrance meets its curved gravel courtyard cleanly.
+
+**Why:** These entrances now look deliberately built and remain reliable to walk through.
+
+### [2026-10-06 17:12] Fixed
+
+**Tech:** `garden_paving.py`, `garden_routes.py`, `GardenAreas.prepare_meshes`, `GardenSculpt.chunks` — fitted paving networks and level destination thresholds
+
+**Dev:** Replace independently overlaid entrance and inner-path tiles with one clipped ribbon union and a shared running-bond flag pattern. Cut each stone to curved boundaries and remove duplicate coverage without additional authoring dependencies. Match approach widths to narrow paths, steps and bridge decks; use straight final courses and full-width thresholds that stop at the actual courtyard, first tread or plank edge. Grade the whole threshold width to its destination, retain slate on the woodland path, keep editable paving out of the ground-texture override, and preserve prepared stone finishes when partitioning fitted path meshes. Cut invisible subfaces at metre-grid controls so saved terrain edits raise paving and collision by the exact same amount. Flow Fern Gully into its bank path without an extra stub and swing the stream approach clear of its bench. Preserve terrain grids, plant/collection IDs and saved progress. Add player release 48, an independent exported-triangle overlap/overshoot audit, threshold corner rays, reverse crossings, stone-material checks and close walking-height review views. The audit reproduces 120 overlapping triangle pairs in the previous meadow export and finds no stacked paving across the rebuilt gardens. Final Compatibility and Forward+ runs pass 112 real walks per renderer, arrivals, threshold corner rays, stone finishes, planting tools, restored terrain edits, activities and save restoration. Player update/dismissal and gameplay regression checks pass. All 28 area assets pass with 503,031 triangles and packed textures; all 33 Blender source libraries pass read-only checks. Review fourteen final close-up photographs in each renderer. The local Web build verifies 397 models and 10,015 texture references, packages 440.3 MiB into 23 pieces and passes deployable-file/security checks. Run the exported paving audit in the regular test runner and browser workflow.
+
+**Plain:** Path splits share one tidy stone pattern, and garden entrances finish neatly at level thresholds.
+
+**Why:** Clean junctions and fitted ends make the garden paths look intentionally built and easier to follow.
+
+### [2026-10-06 16:03] Changed
+
+**Tech:** `GardenAreaTransitions`, `garden_routes.py`, `area_cohesion.py`, `bluestone.gdshader` — continuous bluestone main trail and complete habitat entrance routes
+
+**Dev:** Replace the shared and eastern main trails with metre-scaled, textured blue-grey stone slabs and narrow running-bond joints. Add the missing northern Reedwater link from the original eastern approach to the shared trail. Author shared route samples for both Blender paving and runtime planting clearance, rebuild all ten editable landscapes, extend approaches to their actual inner paths, terrace steps, courtyards, doors and crossing ends, and grade Reedwater/Stream joins to their decks. Trim entrance starts to the shared trail edges, use its exact lattice heights and recess the small overlap to remove coplanar pale/blue paving artifacts. Route Fern Gully around its creek head and reserve scenery clearance along every revised path. Keep existing plant IDs, collection pockets, terrain grids and saved progress compatible. Explain ordinary gardening, specialist pockets and fixed decorative planting in the Atlas; add player release 47. Expand player traversal checks through every inner join and the eastern link, floor-ray coverage and Plant/Move/Remove checks in all ten habitats. Final Compatibility and Forward+ runs pass all ten arrivals, 102 real player walks per renderer, Plant/Move/Remove throughout the habitats, floor rays, terrain edit/collision restoration, activities, bed finishes and save restoration. The full gameplay regression and player update/dismissal checks pass. Asset checks pass 28 models and 486,318 triangles; read-only checks pass all 33 Blender source libraries with the interactive scene preserved. Review sixteen fresh game photographs of every connection. Use lossless, mipmapped browser texture copies and verify their colour/normal resources plus route JSON inside the exported game pack; the final local Web build checks 397 models and 10,027 texture references and packages into 23 pieces.
+
+**Plain:** The main trail is now bluestone, smaller paths reach into each garden, and the atlas explains how to personalise the planting.
+
+**Why:** Properly joined paths make the ten gardens easier to explore, while clear planting controls help players make them their own.
+
+### [2026-10-06 13:48] Changed
+
+**Tech:** `area_cohesion.py`, `GardenAreaMaterials`, `GardenAreaTransitions`, `GardenWorldLighting` — shared surface standards and connected habitat scenery
+
+**Dev:** Add a reproducible third Blender pass across all ten landscapes with physical texture scale, directional timber grain, mixed detailed low-plant clusters and batched leaf litter, twigs and pebbles. Preserve imported pigment/normal/roughness maps in shared material profiles and retain editable bed finishes. Join habitats with a continuous sculptable gravel trail, paired signs and fitted approaches around orchard fencing and through the kitchen/glasshouse entrances; reserve planting and rock clearance. Fit a rounded kitchen approach with radial tile joints, use correctly facing trail geometry and subdivide its centre for terrain edits. Blend ground colours at boundaries and apply one neutral daylight/exposure baseline, warmer low sun, restrained contact shadows and smooth woodland/waterside atmosphere. Keep terrain grids, collection slots, catalogue IDs, player plants and saved progress compatible. Add player release 46, a forty-view isolated lighting review and actual player traversal/collision/sculpt checks for the new connections. All project test stages pass after the route corrections, including Compatibility and Forward+ area checks, all ten arrivals, 490 floor rays, forty real walks, sculpting, bed finishes, activities, save restoration and the full gameplay regression. Asset checks verify 28 area/collection models and 486,244 triangles; read-only Blender checks pass all 33 source libraries. Review morning, midday, dusk and rain in both renderers. The final local Web export verifies 397 models and 10,027 texture references and packages successfully. The review gallery includes 56 real photographs and works at 320 and 736 px.
+
+**Plain:** All ten gardens now share more natural materials, planted edges, connected entrances and gentler lighting.
+
+**Why:** Consistent finishes and thoughtful connections make the different gardens feel like parts of one place.
+
 ### [2026-10-06 09:53] Changed
 
 **Tech:** `GardenAreas`, `GardenAreaFlora`, `GardenBedSurfaces`, `area_refinement.py`, `area_botanicals.py` — refined habitats, detailed collection plants and grounded placement

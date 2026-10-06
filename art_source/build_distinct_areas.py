@@ -340,7 +340,9 @@ def props_kitchen(G,root,i):
     trellis=pivot('Kitchen espalier',root,collision=True)
     for k in range(13):G.box(trellis,MATS['wood'],(-6+k,2.4,-6.65),(.035,2.2,.04))
     for y in [1.6,2.1,2.6,3.1]:G.box(trellis,MATS['wood'],(0,y,-6.65),(12,.035,.04))
-    for x in [-6,6]:pot(G,root,at(i,x,5),.38)
+    for j,x in enumerate([-6,6]):
+        holder=pivot('Kitchen pot%d'%j,root,at(i,x,5),fixture_id='kitchen:pot%d'%j,fixture_kind='pot',fixture_soil=.56)
+        pot(G,holder,(0,0,0),.38)
     bench(G,root,i,5.5,-5.8)
 
 def props_glasshouse(G,root,i):
@@ -375,14 +377,17 @@ def props_glasshouse(G,root,i):
         G.box(vent,MATS['iron'],(0,.05,0),(1.4,.05,1.1))
     for x in [-4.4,4.4]:
         for y in [1.9,3.6]:G.box(structure,MATS['iron'],(x,y,0),(.06,.06,11))
-    for x in [-3.8,3.8]:
-        G.box(structure,MATS['wood'],(x,2.08,0),(1.1,.08,8.6))
-        for z in [-3,0,3]:G.box(structure,MATS['iron'],(x,1.65,z),(.05,.9,.9))
-        for z in [-3.7,-2.1,-.5,1.1,2.7]:pot(G,root,(x,2.12,z),.26)
-    for x in [-4.0,4.0]:
+    for j,x in enumerate([-3.8,3.8]):
+        shelf=pivot('Nursery shelf%d'%j,root,(x,1.2,0),collision=True,fixture_id='glasshouse:shelf%d'%j,fixture_kind='nursery_shelf')
+        for k in range(5):G.box(shelf,MATS['wood'],(-.44+k*.22,.88,0),(.19,.08,8.6))
         for z in [-3,0,3]:
-            G.tube(root,MATS['iron'],[(x,4.3,z),(x,3.7,z)],[.008,.008],6)
-            pot(G,root,(x,3.05,z),.18,'zinc')
+            for dx in [-.43,.43]:G.box(shelf,MATS['iron'],(dx,.43,z),(.05,.86,.05))
+            G.box(shelf,MATS['iron'],(0,.73,z),(.96,.06,.06))
+    for side,x in enumerate([-4.0,4.0]):
+        for j,z in enumerate([-3,0,3]):
+            basket=pivot('Hanging zinc pot%d%d'%(side,j),root,(x,3.05,z),fixture_id='glasshouse:basket%d%d'%(side,j),fixture_kind='pot',fixture_soil=.56)
+            G.tube(basket,MATS['iron'],[(0,1.25,0),(0,.65,0)],[.008,.008],6)
+            pot(G,basket,(0,0,0),.18,'zinc')
     bench(G,root,i,0,-4.6)
 
 def props_stream(G,root,i):
@@ -418,7 +423,7 @@ def props_alpine(G,root,i):
     lookout=pivot('Lookout railing',root,collision=True)
     rail(G,lookout,i,(-6,-7.5),(2,-8.5),.95)
     bench(G,root,i,-2,-7)
-    chime=pivot('Alpine wind chime',root,at(i,-6,-5))
+    chime=pivot('Alpine wind chime',root,at(i,-6,-5),fixture_id='alpine:chime',fixture_kind='wind_chime')
     G.box(chime,MATS['wood'],(0,1.3,0),(.10,2.6,.10))
     G.box(chime,MATS['wood'],(.35,2.55,0),(.75,.09,.09))
     swing=pivot('ChimeSwing',chime,(.35,2.55,0))
@@ -430,17 +435,17 @@ def props_moon(G,root,i):
     rim=pivot('Reflection pool rim',root,collision=True)
     ps=[(-1+3.12*math.cos(k*math.tau/64),1.12,3.12*math.sin(k*math.tau/64)) for k in range(65)]
     G.tube(rim,MATS['cream'],ps,[.18]*65,10)
-    pergola=pivot('Moon pergola',root,collision=True,flat=True)
+    pergola=pivot('Moon pergola',root,at(i,-4.7,-1.75),collision=True,flat=True,fixture_id='moon:pergola',fixture_kind='pergola')
     for x in [-5.9,-3.5]:
-        for z in [-4.5,1]:G.box(pergola,MATS['cream'],(x,2.55,z),(.15,2.7,.15))
-    for x in [-6,-3.4]:G.box(pergola,MATS['cream'],(x,3.93,-1.75),(.16,.18,6.0))
-    for k in range(10):G.box(pergola,MATS['cream'],(-4.7,4.08,-4.8+k*.64),(3.2,.09,.14))
+        for z in [-4.5,1]:G.box(pergola,MATS['cream'],(x+4.7,1.35,z+1.75),(.15,2.7,.15))
+    for x in [-6,-3.4]:G.box(pergola,MATS['cream'],(x+4.7,2.73,0),(.16,.18,6.0))
+    for k in range(10):G.box(pergola,MATS['cream'],(0,2.88,-3.05+k*.64),(3.2,.09,.14))
     blooms=pivot('DuskFlowers',root)
     for k in range(28):
         x=(-1 if k%2 else 1)*(3.8+(k%3)*.55);z=-6+(k//2)*.9
         grass(G,root,at(i,x,z),.45,k,'silver');flower(G,blooms,at(i,x+.2,z),'white',.65,3,k)
     for j,(x,z) in enumerate([(-5,5),(5,4),(4,-5)]):
-        lamp=pivot('MoonLantern%d'%j,root,at(i,x,z),collision=True)
+        lamp=pivot('MoonLantern%d'%j,root,at(i,x,z),collision=True,fixture_id='moon:lamp%d'%j,fixture_kind='lantern')
         G.box(lamp,MATS['stone'],(0,.55,0),(.18,1.1,.18))
         G.box(lamp,MATS['iron'],(0,1.15,0),(.45,.08,.45))
         G.box(lamp,MATS['glass'],(0,1.35,0),(.29,.34,.29))
@@ -563,6 +568,19 @@ def build_one(index):
     root['area_kind']=info['kind'];root['metre_scale']=True
     G=Geometry();ground(G,root,index);BUILDERS[index](G,root,index);borders(G,root,index);G.flush()
     record=hq.export(root,'areas',info['kind'])
+    for fixture in list(root.children):
+        if fixture.get('fixture_kind') not in ['harvest_table','nursery_shelf','wind_chime']:continue
+        if fixture.get('fixture_id')=='glasshouse:shelf1':continue
+        clone=fixture.copy();clone.name='Shop_'+fixture['fixture_kind'];s.collection.objects.link(clone)
+        clone.parent=None;clone.location=(0,0,0)
+        for child in fixture.children_recursive:
+            copy=child.copy();copy.data=child.data.copy() if child.data else None;s.collection.objects.link(copy)
+            # These three assets only use direct meshes plus the chime swing.
+            copy.parent=clone if child.parent==fixture else next(o for o in clone.children_recursive if o.get('source_name')==child.parent.name)
+            copy['source_name']=child.name
+        for key in ['fixture_id','fixture_kind','fixture_support','collection_slot']:
+            if key in clone:del clone[key]
+        hq.export(clone,'areas/furniture',fixture['fixture_kind'])
     path=str(hq.SOURCE/('Area_'+info['kind']+'.blend'))
     bpy.data.libraries.write(path,{s},fake_user=True,compress=True)
     bpy.context.window.scene=previous
@@ -588,6 +606,8 @@ def build_specialties():
 
 import area_refinement
 area_refinement.install(sys.modules[__name__])
+import area_cohesion
+area_cohesion.install(sys.modules[__name__])
 
 if __name__=='__main__':
     args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []

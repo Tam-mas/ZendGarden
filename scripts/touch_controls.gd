@@ -389,6 +389,8 @@ func _process(delta: float) -> void:
  buttons.greet.text="Stand up" if not g.rest_kind.is_empty() else GardenLeisure.VERBS.get(rest_target.get("kind",""),"Pet companion")
  if g.rest_kind.is_empty() and work_target.is_empty() and rest_target.is_empty() and GardenAreaCatalogue.index_at(g.player.position)>=0:buttons.greet.text="Garden activities"
  if g.rest_kind.is_empty() and not work_target.is_empty():buttons.greet.text="Use planter" if work_target.kind in GardenContainers.SPECS else "Use equipment"
+ var habitat=GardenAreaCatalogue.index_at(g.player.position)
+ if g.rest_kind.is_empty() and habitat>=0 and not GardenAreaProgression.unlocked(g,habitat):buttons.greet.text="Garden milestone"
  if not g.rest_kind.is_empty():
   context_title.text={"bench":"Sitting in your garden","pergola":"Resting in the shade","pond":"Watching the pond"}.get(g.rest_kind,"Resting")
   context_hint.text="Drag to look. Garden lets you invite a companion. Walk or tap Stand up to leave."
@@ -506,6 +508,7 @@ func act(repeating: bool=false) -> void:
    index=g.aimed_object()
    if index>=0:
     removed=g.objects[index].duplicate()
+    removed["supported_pots"]=GardenAreaFurnishings.removal_snapshot(g,g.objects[index])
     removed.erase("node")
     removed["plant"]=false
  var count=g.planted.size()+g.objects.size()
@@ -528,10 +531,14 @@ func undo_remove() -> void:
    if old.has(key):p[key]=old[key]
   g.refresh_plant(p)
  else:
-  if g.coins<old.price or g.object_at(old.pos)>=0: g.toast("The refund and the original space are needed to undo."); return
+  if not GardenAreaProgression.allowed(g,old.pos,true):return
+  var occupied=g.objects.any(func(obj):return obj.pos.distance_to(old.pos)<.8 and not old.get("supported_pots",{}).has(obj.uid))
+  if g.coins<old.price or occupied: g.toast("The refund and the original space are needed to undo."); return
   g.coins-=old.price
   g.add_object(old.kind,old.pos,old.price,old.fish,old.get("rotation",0.0),old.get("text","My garden"),Color.from_string(old.get("text_color","f1e5c7"),Color("f1e5c7")),old)
   var restored=g.objects.back()
+  GardenAreaFurnishings.restore_collection(g,restored)
+  GardenAreaFurnishings.restore_dependents(g,old.get("supported_pots",{}))
   if old.kind in GardenContainers.SPECS:
    for saved in g.workshop_state.nursery.duplicate():
     if saved.get("storage_source","")==old.uid:

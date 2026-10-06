@@ -38,7 +38,7 @@ static func height_at(pos: Vector3) -> float:
  return lerpf(lerpf(float(grid[iz][ix]),float(grid[iz][ix+1]),x-ix),lerpf(float(grid[iz+1][ix]),float(grid[iz+1][ix+1]),x-ix),z-iz)
 
 static func plot_open(g, index: int) -> bool:
- if index>=FIRST and index<LEGACY_FIRST:return true
+ if index>=FIRST and index<LEGACY_FIRST:return GardenAreaProgression.unlocked(g,index-FIRST)
  return index>=0 and (index if index<FIRST else index-COUNT)<g.unlocked_plots
 
 static func next_plot(g) -> int:
@@ -81,12 +81,13 @@ static func valid_save(saved: Dictionary) -> bool:
  if not saved.has("areas"):return true
  var state=saved.areas
  if not state is Dictionary or not GardenSaveFormat.integer(state.get("version"),1,1) or not state.get("gardens") is Dictionary:return false
+ if not GardenSaveFormat.integer(state.get("planting_milestones_revision",0),0,GardenAreaProgression.PLANTING_REVISION):return false
  if state.gardens.size()>COUNT:return false
  var kinds=entries().map(func(item):return item.kind)
  for kind in state.gardens:
   var garden=state.gardens[kind]
   if kind not in kinds or not garden is Dictionary:return false
-  if not GardenSaveFormat.fields(garden,["sluice","lanterns","basket_day","melt","rotation_day"],["visited","initialized","photo"]):return false
+  if not GardenSaveFormat.fields(garden,["sluice","lanterns","basket_day","melt","rotation_day"],["visited","initialized","planting_initialized","photo","unlocked","furniture_initialized"]):return false
   if garden.has("sluice") and not GardenSaveFormat.integer(garden.sluice,0,2):return false
   if garden.has("lanterns") and not GardenSaveFormat.integer(garden.lanterns,0,2):return false
   for key in ["basket_day","rotation_day"]:
@@ -101,16 +102,21 @@ static func valid_save(saved: Dictionary) -> bool:
    if not garden.rotation is Dictionary or garden.rotation.size()>4:return false
    for value in garden.rotation.values():
     if not value is String:return false
+  if not garden.get("packed_beds",{}) is Dictionary or garden.get("packed_beds",{}).size()>8:return false
   if not garden.get("beds",{}) is Dictionary or garden.get("beds",{}).size()>8:return false
   var area=entries().filter(func(item):return item.kind==kind)[0]
-  for slot_key in garden.get("beds",{}):
+  var collections=garden.get("beds",{}).duplicate(true)
+  for slot_key in garden.get("packed_beds",{}):
+   if collections.has(slot_key):return false
+   collections[slot_key]=garden.packed_beds[slot_key]
+  for slot_key in collections:
    if not str(slot_key).is_valid_int() or int(slot_key)<0 or int(slot_key)>=area.slots.size():return false
-   var plant=garden.beds[slot_key]
+   var plant=collections[slot_key]
    if not plant is Dictionary or plant.get("species") not in data().specialties:return false
    if not GardenSaveFormat.fields(plant,["age","water","offset_day"]):return false
    if not GardenSaveFormat.number(plant.get("age")) or float(plant.age)<0 or float(plant.age)>1000000000:return false
    if not GardenSaveFormat.number(plant.get("water")) or float(plant.water)<0 or float(plant.water)>4:return false
    if plant.has("offset_day") and not GardenSaveFormat.integer(plant.offset_day):return false
-   var allowed={"reedwater":["lily","hawthorn","iris","reed","mint"],"fern_gully":["maidenhair","birdsnest","treefern"],"glasshouse":["orchid","cymbidium","hoya"],"alpine":["edelweiss","gentian","saxifrage"],"moon":["primrose","nicotiana","moonflower","nightphlox"]}
+   var allowed={"reedwater":["lily","hawthorn","iris","reed","mint"],"fern_gully":["maidenhair","birdsnest","treefern"],"glasshouse":["orchid","cymbidium","hoya","maidenhair"],"alpine":["edelweiss","gentian","saxifrage"],"moon":["primrose","nicotiana","moonflower","nightphlox"]}
    if plant.species not in allowed.get(kind,[]):return false
  return true

@@ -40,6 +40,8 @@ for path in sorted((ROOT/'assets/areas').rglob('*.glb')):
         for node in anchors:
             x,_,z=node.get('translation',[0,0,0])
             assert all(((x-rx)/rw)**2+((z-rz)/rd)**2>=1 for rx,rz,rw,rd in rocks), (path,'plant rooted inside stone',node['name'])
+    elif path.parent.name=='furniture':
+        assert count>50 and doc.get('images'),(path,'missing textured furniture')
     else:
         assert any(node['name'].startswith('Leaves') for node in doc['nodes']),path
         assert doc.get('images'), (path,'missing botanical PBR textures')
@@ -47,7 +49,7 @@ for path in sorted((ROOT/'assets/areas').rglob('*.glb')):
         assert any(m.get('normalTexture') for m in doc['materials']), (path,'missing leaf relief')
         assert any(node['name'].startswith('Flowers') for node in doc['nodes']),path
     triangles+=count
-assert len(hashes)==28 and triangles<1200000
+assert len(hashes)==31 and triangles<1200000
 with wave.open(str(ROOT/'assets/audio/alpine_chime.wav')) as audio:
     assert audio.getnchannels()==1 and audio.getsampwidth()==2 and audio.getframerate()==22050
     frames=audio.readframes(audio.getnframes());samples=struct.unpack('<'+'h'*(len(frames)//2),frames)

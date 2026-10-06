@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/areas/furniture/harvest_table.glb" id="1_sh65f"]
+
+[node name="Harvest Table" type="Node3D" unique_id=1686486730]
+
+[node name="Model" type="Node3D" parent="." unique_id=1665652452 instance=ExtResource("1_sh65f")]

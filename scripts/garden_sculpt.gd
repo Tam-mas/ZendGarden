@@ -112,7 +112,10 @@ static func chunks(g,node: MeshInstance3D) -> void:
     if tangents.size()>id*4+3:st.set_tangent(Plane(Vector3(tangents[id*4],tangents[id*4+1],tangents[id*4+2]),tangents[id*4+3]))
     st.add_vertex(verts[id])
   for key in tiles:
-   var st: SurfaceTool=tiles[key];st.index();st.set_material(node.mesh.surface_get_material(surface))
+   var st: SurfaceTool=tiles[key];st.index()
+   # The shared paving has a prepared stone finish on its surface override.
+   # Carry it into the chunks without changing other terrain material paths.
+   st.set_material(node.get_active_material(surface) if node.get_meta("fitted_paving",false) else node.mesh.surface_get_material(surface))
    var patch=MeshInstance3D.new();patch.name="GroundTile_%d_%d"%[key.x,key.y]
    patch.mesh=st.commit();patch.material_override=node.material_override
    if node.has_meta("area_bed_plot"):patch.set_meta("area_bed_plot",node.get_meta("area_bed_plot"))

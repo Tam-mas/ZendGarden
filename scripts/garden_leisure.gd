@@ -22,12 +22,15 @@ static func interact(g) -> void:
  if is_instance_valid(g.rest_object):leave(g);return
  if GardenWorkshop.interact(g):return
  var obj=target(g)
- if not obj.is_empty():rest(g,obj)
+ if not obj.is_empty():
+  if not GardenAreaProgression.allowed(g,obj.pos):GardenAreaAtlas.open(g,GardenAreaCatalogue.index_at(obj.pos))
+  else:rest(g,obj)
  elif GardenAreas.interact(g):return
  else:g.greet_pet()
 
 static func rest(g, obj: Dictionary) -> void:
  if not is_instance_valid(obj.get("node")) or obj.kind not in VERBS:return
+ if not GardenAreaProgression.allowed(g,obj.pos,true):return
  if g.player.position.distance_to(obj.pos)>3.5:return
  g.rest_return=g.player.position
  g.rest_object=obj.node
@@ -94,6 +97,9 @@ static func update(g) -> void:
   col.get_child(1).text="Use planter · E" if working.kind in GardenContainers.SPECS else "Use equipment · E"
   col.get_child(1).tooltip_text=GardenEquipment.name_of(g,working.kind)
  if area and not resting and obj.is_empty() and working.is_empty():col.get_child(1).text="Garden activities · E"
+ if area and not resting and not GardenAreaProgression.unlocked(g,GardenAreaCatalogue.index_at(g.player.position)):
+  col.get_child(1).text="Garden milestone · E"
+  col.get_child(1).tooltip_text=GardenAreaProgression.requirement(GardenAreaCatalogue.index_at(g.player.position))
  for i in range(2):
   col.get_child(i+2).visible=resting
   col.get_child(i+2).text="Invite "+g.companion_names[i]+" to settle"

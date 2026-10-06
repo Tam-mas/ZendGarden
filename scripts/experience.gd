@@ -88,6 +88,10 @@ static func journey(g) -> void:
  g.add_note("YOUR GARDEN’S NEXT CHAPTERS",15)
  for entry in [[3,"Better hand tools"],[7,"Willow water + bed care systems"],[18,"Fern hollow + master tools"],[36,"Sunrise terrace"]]:
   g.add_note(("Owned " if g.day>=entry[0] else "Day %d · " % entry[0])+entry[1])
+ g.add_note("TEN GARDEN REWARDS",15)
+ g.add_note("Visit every area from the start. Each milestone permanently opens planting, care and furniture changes, with no petal cost. Open Garden atlas to see live progress and visit a trail.")
+ for index in range(10):
+  g.add_note(GardenAreaCatalogue.entry(index).name+" · "+("Unlocked" if GardenAreaProgression.unlocked(g,index) else GardenAreaProgression.requirement(index)+" · "+GardenAreaProgression.progress(g,index)))
  g.add_note("After day 36, another bed opens every 12 days, with no final bed. A new seed every third day. Deliver 3, 8 and 15 requests for three extra seed discoveries each.")
 
 static func confirm_restart(g) -> void:

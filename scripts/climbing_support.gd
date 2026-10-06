@@ -50,12 +50,15 @@ static func grow(p: Dictionary, support: Dictionary, fraction: float) -> void:
  # World coordinates prevent the plant's random rotation/height from tilting
  # support stems into the air. The shoot follows the nearest actual post.
  vine.top_level=true
- vine.global_position=p.pos
+ vine.global_transform=Transform3D(Basis.IDENTITY,p.pos)
  var local=support.node.to_local(p.pos)
  # Match the preserved authored post positions, including the hexagonal gazebo
  # and all six trellis uprights (art_source/overhaul/structures.py).
  var posts=[]
- if support.kind=="gazebo":
+ if support.get("area_fixture","")=="moon:pergola":
+  for x in [-1.2,1.2]:
+   for z in [-2.75,2.75]:posts.append(Vector3(x,0,z))
+ elif support.kind=="gazebo":
   for j in range(6):posts.append(Vector3(cos(j*TAU/6)*1.65,0,sin(j*TAU/6)*1.65))
  elif support.kind=="trellis_screen":
   for x in [-1.15,-.41,-.37,.37,.41,1.15]:posts.append(Vector3(x,0,0))
@@ -68,6 +71,7 @@ static func grow(p: Dictionary, support: Dictionary, fraction: float) -> void:
   if Vector2(candidate.x-local.x,candidate.z-local.z).length_squared()<Vector2(post.x-local.x,post.z-local.z).length_squared():post=candidate
  var foot=support.node.to_global(post)-p.pos
  var height=1.85 if support.kind=="trellis_screen" else 2.45 if support.kind=="gazebo" else 2.55
+ if support.get("area_fixture","")=="moon:pergola":height=2.73
  height*=smoothstep(.35,.90,fraction)
  var colors={}
  palette(p.node.get_node("MatureFoliage"),colors)

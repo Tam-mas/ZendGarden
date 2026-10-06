@@ -39,6 +39,7 @@ static func capture(g,index: int,suffix: String="") -> void:
  g.ui.show();g.player.show();g.photo_mode=false
 
 static func demo(g) -> void:
+ GardenAreaProgression.unlock_review(g)
  # Mature example planting for review captures; this test uses its own save.
  for index in [0,1,6,8,9]:
   var s=GardenAreas.state(g,index)
@@ -67,6 +68,7 @@ static func demo(g) -> void:
  g.refresh_wildlife()
 
 static func run(g,failures: Array) -> void:
+ GardenAreaProgression.unlock_review(g)
  g.set_process(false);g.settings.intro_seen=true;g.settings.request_notifications=false
  if is_instance_valid(g.welcome):GardenExperience.finish(g)
  g.dismiss_request();g.side_panel.hide();g.settings.controls="keyboard";g.touch.configure()
@@ -96,6 +98,32 @@ static func run(g,failures: Array) -> void:
     ray.exclude=[g.player.get_rid()]
     var ground=g.get_world_3d().direct_space_state.intersect_ray(ray)
     check(not ground.is_empty() and ground.position.y> -1 and ground.normal.y>0,failures,"Missing ground collision in "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
+ # Verify ordinary gardening through the same tools players use, rather than
+ # assuming all ten habitats accept plants because demo helpers can add them.
+ for index in range(10):
+  var positions=[];var center=GardenAreaCatalogue.center(index)
+  for x in range(-17,18):
+   for z in range(-17,18):
+    var pos=GardenTerrain.point(center+Vector3(x*g.GRID,0,z*g.GRID))
+    if g.can_plant(0,pos,index+4).is_empty():positions.append(pos)
+    if positions.size()==2:break
+   if positions.size()==2:break
+  if positions.size()<2:
+   failures.append("No editable planting ground in "+GardenAreaCatalogue.entry(index).name);continue
+  var count=g.planted.size()
+  g.mode="plant";g.selected=0;g.hover_cell=positions[0];g.hover_plot=index+4
+  g.hover_valid=true;g.hover_target=-1;g.hover_object=null;g.action_cooldown=0
+  g.perform_action()
+  check(g.planted.size()==count+1,failures,"Plant tool failed in "+GardenAreaCatalogue.entry(index).name)
+  if g.planted.size()!=count+1:continue
+  g.mode="move";g.moved_index=count;g.moved_object=-1;g.hover_cell=positions[1];g.action_cooldown=0
+  g.perform_action()
+  check(g.planted[count].pos.is_equal_approx(positions[1]),failures,"Move tool failed in "+GardenAreaCatalogue.entry(index).name)
+  g.mode="remove";g.hover_cell=g.planted[count].pos;g.hover_target=count
+  g.hover_valid=true;g.hover_object=null;g.action_cooldown=0
+  g.perform_action()
+  check(g.planted.size()==count,failures,"Remove tool failed in "+GardenAreaCatalogue.entry(index).name)
+ g.mode="walk";g.moved_index=-1;g.hover_valid=false
  # Bed surfaces retain the precise soil footprint and save their choices.
  for plot in [8,9]:
   var soils=g.terrain_meshes.filter(func(e):return int(e.node.get_meta("area_bed_plot",-1))==plot)
@@ -130,6 +158,7 @@ static func run(g,failures: Array) -> void:
   await walker.cross(g,center+Vector3(a[0],0,a[1]),center+Vector3(b[0],0,b[1]),failures,"Trail "+GardenAreaCatalogue.entry(index).name)
  var trail_hit=g.get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(34.5,4,6),Vector3(34.5,-2,6)))
  check(not trail_hit.is_empty() and trail_hit.normal.y>.8 and absf(trail_hit.position.y-(GardenTerrain.point(Vector3(34.5,0,6)).y+.12))<.02,failures,"Eastern trail has a backward or mismatched walking surface")
+ await preload("res://tests/area_cohesion.gd").run(g,failures)
  # A restored terrain edit must move the collider along with the visible ground.
  var sculpt_ray=PhysicsRayQueryParameters3D.create(Vector3(82,12,-22),Vector3(82,-3,-22))
  sculpt_ray.exclude=[g.player.get_rid()]

@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/areas/furniture/wind_chime.glb" id="1_leag3"]
+
+[node name="Wind Chime" type="Node3D" unique_id=584970111]
+
+[node name="Model" type="Node3D" parent="." unique_id=1471029646 instance=ExtResource("1_leag3")]
