@@ -1,10 +1,21 @@
 extends RefCounted
 
+static func paving_material(node: Node,failures: Array,title: String) -> void:
+ if node is MeshInstance3D:
+  var mat=node.get_active_material(0)
+  if not mat is ShaderMaterial or mat.shader.resource_path!="res://shaders/habitat_surface.gdshader":
+   failures.append("Paving lost its stone finish in "+title)
+ for child in node.get_children():
+  if not child is StaticBody3D:paving_material(child,failures,title)
+
 static func run(g,failures: Array) -> void:
  var walker=preload("res://tests/walking.gd")
  # Traverse the new entrances with the player's real capsule, gravity and
  # step-up movement. Include the long kitchen and glasshouse door approaches.
  for index in range(10):
+  var paving=GardenAreas.find(g.area_roots[index],"Arrival path fitted network")
+  if paving:paving_material(paving,failures,GardenAreaCatalogue.entry(index).name)
+  else:failures.append("Missing fitted paving network in "+GardenAreaCatalogue.entry(index).name)
   var stops=[0.,.16,.32,.48,.64,.80,1.]
   var center=GardenAreaCatalogue.center(index)
   var outer=GardenAreaTransitions.approach(index,0.)
@@ -18,6 +29,19 @@ static func run(g,failures: Array) -> void:
   var join=GardenAreaTransitions.approach(index,1.)
   var inner=[Vector2(5.8,5.1),Vector2(sin(7.5*.42)+.30*sin(7.5*.83)+1.55,7.5),Vector2(6.5,5.3),Vector2(3*sin(2.),5.),Vector2(6.,5.2),Vector2(0,4.9),Vector2(0,4.4),Vector2(-2.4,3.),Vector2(2.4*sin(2.25),5.),Vector2(-2.5,4.5)][index]
   await walker.cross(g,center+Vector3(join.x,0,join.y),center+Vector3(inner.x,0,inner.y),failures,"Inner join "+GardenAreaCatalogue.entry(index).name)
+  await walker.cross(g,center+Vector3(inner.x,0,inner.y),center+Vector3(join.x,0,join.y),failures,"Inner join return "+GardenAreaCatalogue.entry(index).name)
+  if index in [5,6,9]:
+   # Probe both sides of the full threshold, before and beyond the edge.
+   # A height blend based on distance to the centre left the corners raised.
+   for side in [-.70,.70]:
+    for along in [-.04,.04]:
+     var pos=center+Vector3(join.x+side,0,join.y+along)
+     # Start below the entry arch; an overhead lintel is not the threshold.
+     var ray=PhysicsRayQueryParameters3D.create(GardenTerrain.point(pos)+Vector3.UP*.4,pos+Vector3.DOWN*3)
+     ray.exclude=[g.player.get_rid()]
+     var hit=g.get_world_3d().direct_space_state.intersect_ray(ray)
+     if hit.is_empty() or absf(hit.position.y-1.235)>.015:
+      failures.append("Raised courtyard threshold in "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
   for t in [0.,.5,1.]:
    var sample=GardenAreaTransitions.approach(index,t)
    var pos=center+Vector3(sample.x,0,sample.y)

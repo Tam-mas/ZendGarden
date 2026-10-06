@@ -1,6 +1,6 @@
 {
   "areas/alpine": {
-    "bytes": 3982776,
+    "bytes": 4213328,
     "clips": [],
     "dimensions": [
       24.0,
@@ -9,12 +9,12 @@
     ],
     "folder": "areas",
     "kind": "alpine",
-    "meshes": 37,
-    "triangles": 30580,
+    "meshes": 36,
+    "triangles": 33850,
     "variant": "new"
   },
   "areas/fern_gully": {
-    "bytes": 5188452,
+    "bytes": 5424876,
     "clips": [],
     "dimensions": [
       24.0,
@@ -23,12 +23,12 @@
     ],
     "folder": "areas",
     "kind": "fern_gully",
-    "meshes": 19,
-    "triangles": 28628,
+    "meshes": 18,
+    "triangles": 31976,
     "variant": "new"
   },
   "areas/glasshouse": {
-    "bytes": 3744236,
+    "bytes": 3847156,
     "clips": [],
     "dimensions": [
       24.0,
@@ -38,11 +38,11 @@
     "folder": "areas",
     "kind": "glasshouse",
     "meshes": 28,
-    "triangles": 30246,
+    "triangles": 31694,
     "variant": "new"
   },
   "areas/kitchen": {
-    "bytes": 3162320,
+    "bytes": 3246048,
     "clips": [],
     "dimensions": [
       24.0,
@@ -52,11 +52,11 @@
     "folder": "areas",
     "kind": "kitchen",
     "meshes": 14,
-    "triangles": 21382,
+    "triangles": 22594,
     "variant": "new"
   },
   "areas/limestone": {
-    "bytes": 2362952,
+    "bytes": 2402732,
     "clips": [],
     "dimensions": [
       24.0,
@@ -66,11 +66,11 @@
     "folder": "areas",
     "kind": "limestone",
     "meshes": 25,
-    "triangles": 26020,
+    "triangles": 26583,
     "variant": "new"
   },
   "areas/moon": {
-    "bytes": 2202232,
+    "bytes": 2272024,
     "clips": [],
     "dimensions": [
       24.0,
@@ -80,11 +80,11 @@
     "folder": "areas",
     "kind": "moon",
     "meshes": 18,
-    "triangles": 22392,
+    "triangles": 23363,
     "variant": "new"
   },
   "areas/orchard": {
-    "bytes": 2699808,
+    "bytes": 2746196,
     "clips": [],
     "dimensions": [
       24.0,
@@ -94,7 +94,7 @@
     "folder": "areas",
     "kind": "orchard",
     "meshes": 12,
-    "triangles": 23794,
+    "triangles": 24451,
     "variant": "new"
   },
   "areas/plants/birdsnest": {
@@ -350,7 +350,7 @@
     "variant": "new"
   },
   "areas/pollinator": {
-    "bytes": 2815500,
+    "bytes": 3026756,
     "clips": [],
     "dimensions": [
       24.0,
@@ -359,12 +359,12 @@
     ],
     "folder": "areas",
     "kind": "pollinator",
-    "meshes": 7,
-    "triangles": 21482,
+    "meshes": 6,
+    "triangles": 25210,
     "variant": "new"
   },
   "areas/reedwater": {
-    "bytes": 3499032,
+    "bytes": 3535372,
     "clips": [],
     "dimensions": [
       24.0,
@@ -374,11 +374,11 @@
     "folder": "areas",
     "kind": "reedwater",
     "meshes": 13,
-    "triangles": 21650,
+    "triangles": 22162,
     "variant": "new"
   },
   "areas/stream": {
-    "bytes": 4125140,
+    "bytes": 4195120,
     "clips": [],
     "dimensions": [
       24.0,
@@ -388,7 +388,7 @@
     "folder": "areas",
     "kind": "stream",
     "meshes": 63,
-    "triangles": 37238,
+    "triangles": 38242,
     "variant": "new"
   },
   "companions/cat": {

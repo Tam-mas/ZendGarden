@@ -11,6 +11,7 @@ python3 tests/check_botanical_additions.py
 python3 tests/check_low_grasses.py
 python3 tests/check_audio.py
 python3 tests/check_areas.py
+python3 tests/check_path_paving.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
 import_log="$(mktemp -t zend-garden-import)"

@@ -10,11 +10,13 @@ static func run(g) -> void:
  g.camera.fov=55;g.view_fov=55
  var directory="res://captures/garden-cohesion"
  var trail_only="--trail-review" in OS.get_cmdline_user_args()
+ var junction_only="--junction-review" in OS.get_cmdline_user_args()
  if trail_only:directory="res://captures/bluestone-trails"
+ if junction_only:directory="res://captures/fitted-path-junctions"
  if "--forward-review" in OS.get_cmdline_user_args():directory+="/forward-plus"
  DirAccess.make_dir_recursive_absolute(directory)
  var conditions=[["morning",.30,Vector3.ZERO],["midday",.48,Vector3.ZERO],["dusk",.735,Vector3.ZERO],["rain",.43,Vector3(1,1,.35)]]
- if trail_only:conditions=[]
+ if trail_only or junction_only:conditions=[]
  for condition in conditions:
   for index in range(10):
    var info=GardenAreaCatalogue.entry(index);var center=GardenAreaCatalogue.center(index)
@@ -51,10 +53,25 @@ static func run(g) -> void:
    var middle=GardenAreaTransitions.approach(index,.5)
    var side=1 if index%2==0 else -1
    views.append([GardenAreaCatalogue.entry(index).kind+"-join",center+Vector3(side*14,8,14),center+Vector3(middle.x,1.4,middle.y)])
+ if junction_only:
+  views=[
+   ["pollinator-junction",Vector3(79.6,2.95,-15.6),Vector3(83.,1.45,-19.4)],
+   ["glasshouse-threshold",Vector3(57.3,2.85,-63.6),Vector3(55.4,1.3,-67.4)],
+   ["pollinator-junction-above",Vector3(80,7.4,-13.8),Vector3(81.4,1.4,-17.6)]
+  ]
+  views.append(["stream-entrance-above",Vector3(73,7.8,-64),Vector3(75.5,1.4,-68.5)])
+  for index in range(10):
+   var center=GardenAreaCatalogue.center(index)
+   var eye=GardenAreaTransitions.approach(index,.77)
+   var end=GardenAreaTransitions.approach(index,1.)
+   var direction=(end-eye).normalized()
+   var camera=GardenTerrain.point(center+Vector3(eye.x,0,eye.y))+Vector3(0,1.8,0)
+   var focus=GardenTerrain.point(center+Vector3(end.x+direction.x*1.1,0,end.y+direction.y*1.1))
+   views.append([GardenAreaCatalogue.entry(index).kind+"-arrival-detail",camera,focus])
  for view in views:
   g.camera.global_position=view[1];g.camera.look_at(view[2]);g.update_lighting();g.climate.apply(g)
   for settling in range(4):await g.get_tree().process_frame
   await RenderingServer.frame_post_draw
   var image=g.get_viewport().get_texture().get_image();image.save_png(directory+"/"+view[0]+".png")
   image.resize(720,450,Image.INTERPOLATE_LANCZOS);image.save_webp(directory+"/"+view[0]+".webp",true,.56)
- print("COHESION_REVIEW_RESULT: ",views.size()," transition details", "" if trail_only else " and 40 light/weather views")
+ print("COHESION_REVIEW_RESULT: ",views.size()," transition details", "" if trail_only or junction_only else " and 40 light/weather views")

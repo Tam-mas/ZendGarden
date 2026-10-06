@@ -24,30 +24,39 @@ def curve(points):return resample([cubic(points,i/240) for i in range(241)])
 def data():
     creek=lambda z:math.sin(z*.42)+.30*math.sin(z*.83)
     curves={
-        0: [[11.15,7.9],[9.4,7.9],[8.4,5.1],[6.75,5.1]],
-        2: [[11.15,7.9],[9.0,7.9],[6.5,7.7],[6.5,6.15]],
+        0: [[11.15,7.9],[9.4,7.9],[8.4,5.1],[7.055,5.1]],
+        2: [[11.15,7.9],[9.0,7.9],[6.5,7.7],[6.5,6.35]],
         3: [[-11.15,7.9],[-7.5,7.9],[-2.0,6.0],[3*math.sin(2.4),6.0]],
         4: [[11.15,8.15],[8.8,8.15],[6.0,8.2],[6.0,6.1]],
-        6: [[11.15,8.25],[7.0,8.25],[0,8.25],[0,5.1]],
-        7: [[-11.15,7.9],[-2.8,8.0],[-3.75,5.5],[-3.4,3.0]],
+        6: [[11.15,8.25],[7.0,8.25],[0,8.25],[0,5.5]],
+        7: [[-11.15,7.9],[-8.7,7.9],[-8.7,3.0],[-3.385,3.0]],
         8: [[11.15,7.9],[8.0,7.9],[4.0,6.0],[2.4*math.sin(2.7),6.0]],
-        9: [[-11.15,7.9],[-7.0,7.9],[-4.0,6.3],[-2.5,5.6]],
+        9: [[-11.15,7.9],[-7.0,7.9],[-2.5,7.0],[-2.5,6.0]],
     }
     routes=[curve(curves[i]) if i in curves else [] for i in range(10)]
+    # Straight final courses square up to the destination edge, leaving room
+    # for a complete threshold slab rather than a thin, diagonally cut tile.
+    for i in [0,2,6,7,9]:
+        controls=[list(p) for p in curves[i]];end=controls[-1][:]
+        axis=0 if i in [0,7] else 1;direction=-1 if i==7 else 1
+        controls[-1][axis]+=direction*.60
+        route=[cubic(controls,j/240) for j in range(241)]
+        route.extend(tuple(controls[-1][k]+(end[k]-controls[-1][k])*j/20 for k in range(2)) for j in range(1,21))
+        routes[i]=resample(route)
     # Pass around the stream's head, above the end of its water mesh. The
     # narrow inner return fits the right-bank path without crossing the creek.
     fern=[]
     for controls in [
         [[-11.15,7.9],[-8.5,7.9],[-6,10.35],[-2,10.35]],
         [[-2,10.35],[-.5,10.35],[1.65,10.35],[1.65,9.5]],
-        [[1.65,9.5],[1.65,9.0],[creek(8.3)+1.55,8.8],[creek(8.3)+1.55,8.3]],
+        [[1.65,9.5],[1.65,9.0],[creek(8.3)+1.55+(.42*math.cos(8.3*.42)+.249*math.cos(8.3*.83))*.7,9.0],[creek(8.3)+1.55,8.3]],
     ]:
         fern.extend([cubic(controls,i/120) for i in range(120)])
     fern.append(tuple([creek(8.3)+1.55,8.3]));routes[1]=resample(fern)
     # A constant-radius kitchen turn fits through the centre of the arch.
-    kitchen=[(-11.15+i*10.0/100,8.25) for i in range(101)]
-    kitchen.extend((-1.15+1.15*math.sin(i*math.pi/200),7.1+1.15*math.cos(i*math.pi/200)) for i in range(1,101))
-    kitchen.extend((0,7.1-i*1.3/30) for i in range(1,31));routes[5]=resample(kitchen)
+    kitchen=[(-11.15+i*9.9/100,8.65) for i in range(101)]
+    kitchen.extend((-1.25+1.25*math.sin(i*math.pi/200),7.4+1.25*math.cos(i*math.pi/200)) for i in range(1,101))
+    kitchen.extend((0,7.4-i*.4/10) for i in range(1,11));routes[5]=resample(kitchen)
     # Link the original eastern approach to the shared trail around Reedwater.
     entry=[]
     for controls in [

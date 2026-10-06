@@ -91,11 +91,12 @@ static func build(g) -> void:
  build_trail(g)
  GardenAreaTransitions.build(g)
 
-static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed_plot: int=-1) -> void:
+static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed_plot: int=-1,paving: bool=false) -> void:
  var name=String(node.name)
  # Godot keeps glTF custom properties in extras. Blender also numbers repeated
  # pivot names across the library, so the first area's "Ground" is not enough.
  var extras: Dictionary=node.get_meta("extras",{})
+ paving=paving or extras.get("arrival_path",false) or extras.get("paving_network",false)
  if extras.get("terrain_anchor",false):node.set_meta("terrain_anchor",true)
  if extras.get("ground_detail",false):node.set_meta("ground_detail",true)
  ground=ground or name=="Ground" or node.get_meta("area_ground",false) or extras.get("ground",false) or extras.get("area_ground",false)
@@ -110,9 +111,10 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
   node.visibility_range_end=0 if ground else 80
   if ground:
    node.set_meta("editable_ground",true)
-   if bed_plot in [8,9] and (str(node.name).contains("potting loam") or bed_plot==8 and str(node.name).contains("Area grass")):
+   if paving:node.set_meta("fitted_paving",true)
+   if not paving and bed_plot in [8,9] and (str(node.name).contains("potting loam") or bed_plot==8 and str(node.name).contains("Area grass")):
     node.set_meta("area_bed_plot",bed_plot);node.material_override=GardenBedSurfaces.area_material(bed_plot,"soil")
-   if (bed_plot in [4,5,6,7,11,12,13] and not str(node.name).contains("limestone")) or bed_plot in [9,10] and str(node.name).contains("Area grass"):
+   if not paving and ((bed_plot in [4,5,6,7,11,12,13] and not str(node.name).contains("limestone")) or bed_plot in [9,10] and str(node.name).contains("Area grass")):
     var mat=ShaderMaterial.new();mat.shader=load("res://shaders/habitat_ground.gdshader")
     mat.set_shader_parameter("habitat_kind",bed_plot-4)
     var c=GardenAreaCatalogue.center(bed_plot-4);mat.set_shader_parameter("habitat_center",Vector2(c.x,c.z))
@@ -127,7 +129,7 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
    for body in node.get_children():
     if body is StaticBody3D:body.set_meta("area_obstacle",true)
  for child in node.get_children():
-  if child is Node3D and not child is StaticBody3D:prepare_meshes(child,ground,solid,bed_plot)
+  if child is Node3D and not child is StaticBody3D:prepare_meshes(child,ground,solid,bed_plot,paving)
 
 static func find(root: Node, prefix: String) -> Node3D:
  if String(root.name).begins_with(prefix) and root is Node3D and not root is MeshInstance3D:return root

@@ -4,8 +4,7 @@ Adds a third, reproducible construction pass without changing user scenes or
 collection pocket identities. Existing detailed botanical assets supply plants.
 """
 import bpy, math, random
-from mathutils import Vector
-import garden_routes
+import garden_routes, garden_paving
 
 garden_routes.write()
 
@@ -153,40 +152,9 @@ def install(b):
             if index in [1,4]:
                 points=[b.at(index,x+dx,z+dz,-.024) for dx,dz in [(-.22,.20),(-.04,.17),(.11,.21)]]
                 G.tube(detail,b.MATS['darkwood'],points,[.010,.007,.004],5)
-        # A shared family of fitted entrance stones joins the central trail.
-        path=b.pivot('Arrival path',root,ground=True,flat=True,arrival_path=True)
-        samples=garden_routes.ROUTES['approaches'][index]
-        length=sum(math.dist(a,b) for a,b in zip(samples,samples[1:]))
-        segments=max(22,math.ceil(length/.58))
-        grid=b.layout()[index]['heightmap']
-        def paving_height(x,z):
-            # Match the game's metre-grid interpolation at shared junctions,
-            # rather than crossing its blue stones with an analytic surface.
-            xx=max(0,min(24,x+12));zz=max(0,min(24,z+12))
-            ix=min(23,int(xx));iz=min(23,int(zz));tx=xx-ix;tz=zz-iz
-            a=grid[iz][ix]*(1-tx)+grid[iz][ix+1]*tx
-            c=grid[iz+1][ix]*(1-tx)+grid[iz+1][ix+1]*tx
-            return a*(1-tz)+c*tz
-        def path_normal(t):
-            d=(Vector(approach(index,min(1,t+.001)))-Vector(approach(index,max(0,t-.001)))).normalized()
-            return Vector((-d.y,d.x))
-        for k in range(segments):
-            t0=(k+.018)/segments;t1=(k+.982)/segments
-            a=Vector(approach(index,t0));c=Vector(approach(index,t1))
-            first_normal=path_normal(t0);last_normal=path_normal(t1)
-            for lane in range(3):
-                lo=(lane/3-.5)*1.8+.012;hi=((lane+1)/3-.5)*1.8-.012
-                points=[a+first_normal*lo,c+last_normal*lo,c+last_normal*hi,a+first_normal*hi]
-                heights=[]
-                for p,t in zip(points,[t0,t1,t1,t0]):
-                    lift=.035+.020*b.smooth(0,.15,t)
-                    if index==0:lift+=.185*b.smooth(.65,1,t)
-                    if index==7:
-                        end=approach(index,1)
-                        deck=1.40+.2*(1-(end[0]/3.6)**2)
-                        lift+=(deck-paving_height(*end)-.07-.055)*b.smooth(.65,1,t)
-                    heights.append((p.x,paving_height(p.x,p.y)+.07+lift,p.y))
-                G.poly(path,b.MATS['stone'],heights,[(0,3,2,1)])
+        # Intersections use one footprint and one joint pattern; entrances
+        # finish at fitted thresholds instead of overlaying the destination.
+        garden_paving.build(b,G,root,index)
         root['cohesion_version']=2
     b.borders=borders
 
