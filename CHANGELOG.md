@@ -1,3 +1,13 @@
+### [2026-10-06 13:48] Changed
+
+**Tech:** `area_cohesion.py`, `GardenAreaMaterials`, `GardenAreaTransitions`, `GardenWorldLighting` — shared surface standards and connected habitat scenery
+
+**Dev:** Add a reproducible third Blender pass across all ten landscapes with physical texture scale, directional timber grain, mixed detailed low-plant clusters and batched leaf litter, twigs and pebbles. Preserve imported pigment/normal/roughness maps in shared material profiles and retain editable bed finishes. Join habitats with a continuous sculptable gravel trail, paired signs and fitted approaches around orchard fencing and through the kitchen/glasshouse entrances; reserve planting and rock clearance. Fit a rounded kitchen approach with radial tile joints, use correctly facing trail geometry and subdivide its centre for terrain edits. Blend ground colours at boundaries and apply one neutral daylight/exposure baseline, warmer low sun, restrained contact shadows and smooth woodland/waterside atmosphere. Keep terrain grids, collection slots, catalogue IDs, player plants and saved progress compatible. Add player release 46, a forty-view isolated lighting review and actual player traversal/collision/sculpt checks for the new connections. All project test stages pass after the route corrections, including Compatibility and Forward+ area checks, all ten arrivals, 490 floor rays, forty real walks, sculpting, bed finishes, activities, save restoration and the full gameplay regression. Asset checks verify 28 area/collection models and 486,244 triangles; read-only Blender checks pass all 33 source libraries. Review morning, midday, dusk and rain in both renderers. The final local Web export verifies 397 models and 10,027 texture references and packages successfully. The review gallery includes 56 real photographs and works at 320 and 736 px.
+
+**Plain:** All ten gardens now share more natural materials, planted edges, connected entrances and gentler lighting.
+
+**Why:** Consistent finishes and thoughtful connections make the different gardens feel like parts of one place.
+
 ### [2026-10-06 09:53] Changed
 
 **Tech:** `GardenAreas`, `GardenAreaFlora`, `GardenBedSurfaces`, `area_refinement.py`, `area_botanicals.py` — refined habitats, detailed collection plants and grounded placement

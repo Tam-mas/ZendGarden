@@ -201,6 +201,7 @@ func _ready() -> void:
  if "--workshop-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://workshop-test-save.json"
  if "--areas-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-test-save.json"
  if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
+ if "--cohesion-review" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://cohesion-review-save.json"
  if not browser_save_check():
   save_load_blocked=true
   set_process(false)
@@ -259,6 +260,7 @@ func _ready() -> void:
  elif "--workshop-test" in OS.get_cmdline_user_args(): call_deferred("run_workshop_test")
  elif "--areas-test" in OS.get_cmdline_user_args():call_deferred("run_areas_test")
  elif "--areas-showcase" in OS.get_cmdline_user_args():call_deferred("show_area_collection")
+ elif "--cohesion-review" in OS.get_cmdline_user_args():call_deferred("run_cohesion_review")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
  elif tutorial_state.get("active",false):
@@ -324,6 +326,7 @@ func make_world() -> void:
  sun.light_angular_distance = 0.7
  sun.directional_shadow_max_distance = 90
  add_child(sun)
+ GardenWorldLighting.configure(self)
  GardenLandscape.build(self)
  GardenAreas.build(self)
  for row in range(2,int(GardenAreaCatalogue.legacy_plot_count(self)/2)): GardenExpansion.build_row(self,row)
@@ -1638,6 +1641,7 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
 func add_object(kind: String, pos: Vector3, price: int, fish: bool = false, orientation: float = 0.0, text: String = "My garden", color: Color = Color("f1e5c7"), saved: Dictionary={}) -> void:
  pos=GardenTerrain.point(GardenAreas.repair_starter_container(kind,pos,price))
  var n = Art.furnishing(kind)
+ if GardenAreaCatalogue.index_at(pos)>=0:GardenAreaMaterials.prepare(n)
  object_root.add_child(n)
  n.position=pos
  n.rotation.y=orientation
@@ -2027,6 +2031,10 @@ func run_areas_test() -> void:
  print("AREAS_RESULT: ",failures)
  get_tree().quit(1 if not failures.is_empty() else 0)
 
+func run_cohesion_review() -> void:
+ await preload("res://tests/area_cohesion_review.gd").run(self)
+ get_tree().quit()
+
 func animate_garden(delta: float, sample_time: float = -1.0) -> void:
  if sample_time<0:garden_animation_time+=maxf(0,delta)
  var t=garden_animation_time if sample_time<0 else sample_time
@@ -2074,27 +2082,7 @@ func animate_garden(delta: float, sample_time: float = -1.0) -> void:
      GardenAnimalMotion.advance(fish,"swim",delta)
 
 func update_lighting() -> void:
- var angle=(clock_time-.25)*TAU
- var sun_direction=Vector3(cos(angle)*.45,sin(angle),cos(angle)*.89).normalized()
- var daylight=clampf(smoothstep(-.12,.30,sun_direction.y),.025,1)
- var twilight=exp(-pow(sun_direction.y/.19,2))
- sun.light_energy=.025+daylight*.95
- sun.light_color=Color("ffae69").lerp(Color("ffedcd"),daylight)
- sun.quaternion=Quaternion(Vector3.FORWARD,-sun_direction)
- var horizon=Color("18213a").lerp(Color("bfd6cd"),daylight).lerp(Color("dd9467"),twilight*.45)
- environment.environment.background_color=horizon
- environment.environment.fog_light_color=horizon
- var sky_material=environment.environment.sky.sky_material
- sky_material.set_shader_parameter("daylight",daylight)
- sky_material.set_shader_parameter("sun_direction",sun_direction)
- sky_material.set_shader_parameter("day_phase",clock_time)
- sky_material.set_shader_parameter("sky_motion",float(day)+clock_time)
- sky_material.set_shader_parameter("twilight",twilight)
- environment.environment.ambient_light_color=Color("8196c5").lerp(Color("e4e7cc"),daylight)
- environment.environment.ambient_light_energy=.16+daylight*.38
- if is_instance_valid(ambient):
-  ambient.daylight=daylight
-  ambient.update_location(player.position,plots)
+ GardenWorldLighting.update(self)
 
 func greet_pet() -> void:
  var nearest=0

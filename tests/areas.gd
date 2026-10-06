@@ -130,6 +130,7 @@ static func run(g,failures: Array) -> void:
   await walker.cross(g,center+Vector3(a[0],0,a[1]),center+Vector3(b[0],0,b[1]),failures,"Trail "+GardenAreaCatalogue.entry(index).name)
  var trail_hit=g.get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(34.5,4,6),Vector3(34.5,-2,6)))
  check(not trail_hit.is_empty() and trail_hit.normal.y>.8 and absf(trail_hit.position.y-(GardenTerrain.point(Vector3(34.5,0,6)).y+.12))<.02,failures,"Eastern trail has a backward or mismatched walking surface")
+ await preload("res://tests/area_cohesion.gd").run(g,failures)
  # A restored terrain edit must move the collider along with the visible ground.
  var sculpt_ray=PhysicsRayQueryParameters3D.create(Vector3(82,12,-22),Vector3(82,-3,-22))
  sculpt_ray.exclude=[g.player.get_rid()]

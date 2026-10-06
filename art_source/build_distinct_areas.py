@@ -588,6 +588,8 @@ def build_specialties():
 
 import area_refinement
 area_refinement.install(sys.modules[__name__])
+import area_cohesion
+area_cohesion.install(sys.modules[__name__])
 
 if __name__=='__main__':
     args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []

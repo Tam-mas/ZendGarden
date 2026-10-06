@@ -49,6 +49,7 @@ static func build(g) -> void:
   g.world_root.add_child(root);root.position=GardenAreaCatalogue.center(index)
   var model=instantiate("res://assets/areas/"+info.kind+".glb")
   if model:root.add_child(model);prepare_meshes(model,false,false,index+4)
+  if model:GardenAreaMaterials.prepare(model)
   GardenAreaFlora.build(g,root)
   var collection=Node3D.new();collection.name="LivingCollection";root.add_child(collection)
   g.area_roots.append(root)
@@ -71,8 +72,9 @@ static func build(g) -> void:
    chime.stream=load("res://assets/audio/alpine_chime.wav");chime.max_distance=22;chime.unit_size=3
    root.set_meta("chime_timer",12.0)
   var sign=g.Art.furnishing("sign")
-  root.add_child(sign);sign.position=local_point(index,Vector3(7.8,0,7.8))
-  sign.rotation.y=-PI/4
+  root.add_child(sign);sign.position=local_point(index,Vector3(8.0 if index%2==0 else -8.0,0,8.7))
+  sign.rotation.y=-PI/4 if index%2==0 else PI/4
+  sign.set_meta("terrain_anchor",true);GardenAreaMaterials.prepare(sign)
   g.Art.set_sign_text(sign,info.name.to_upper()+"\nE · GARDEN ACTIVITY")
   if index==9:
    for j in range(3):
@@ -87,12 +89,15 @@ static func build(g) -> void:
      glow.emission=Color("ffb650");glow.emission_energy_multiplier=2;bulb.material_override=glow
   root.visible=true
  build_trail(g)
+ GardenAreaTransitions.build(g)
 
 static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed_plot: int=-1) -> void:
  var name=String(node.name)
  # Godot keeps glTF custom properties in extras. Blender also numbers repeated
  # pivot names across the library, so the first area's "Ground" is not enough.
  var extras: Dictionary=node.get_meta("extras",{})
+ if extras.get("terrain_anchor",false):node.set_meta("terrain_anchor",true)
+ if extras.get("ground_detail",false):node.set_meta("ground_detail",true)
  ground=ground or name=="Ground" or node.get_meta("area_ground",false) or extras.get("ground",false) or extras.get("area_ground",false)
  solid=solid or node.get_meta("area_collision",false) or extras.get("collision",false) or extras.get("area_collision",false) or SOLID_PIVOTS.any(func(part):return name.begins_with(part))
  if node is MeshInstance3D:
@@ -107,12 +112,13 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
    node.set_meta("editable_ground",true)
    if bed_plot in [8,9] and (str(node.name).contains("potting loam") or bed_plot==8 and str(node.name).contains("Area grass")):
     node.set_meta("area_bed_plot",bed_plot);node.material_override=GardenBedSurfaces.area_material(bed_plot,"soil")
-   if bed_plot in [4,5,6,7,11,12,13] and not str(node.name).contains("limestone"):
+   if (bed_plot in [4,5,6,7,11,12,13] and not str(node.name).contains("limestone")) or bed_plot in [9,10] and str(node.name).contains("Area grass"):
     var mat=ShaderMaterial.new();mat.shader=load("res://shaders/habitat_ground.gdshader")
     mat.set_shader_parameter("habitat_kind",bed_plot-4)
     var c=GardenAreaCatalogue.center(bed_plot-4);mat.set_shader_parameter("habitat_center",Vector2(c.x,c.z))
-    mat.set_shader_parameter("meadow",load("res://assets/textures/beds/sand.webp" if bed_plot==6 else "res://assets/textures/Meadow_earth.webp"))
-    mat.set_shader_parameter("meadow_normal",load("res://assets/textures/beds/sand_normal.webp" if bed_plot==6 else "res://assets/textures/Meadow_earth_normal.webp"))
+    mat.set_shader_parameter("meadow",load("res://assets/textures/Meadow_earth.webp"))
+    mat.set_shader_parameter("meadow_normal",load("res://assets/textures/Meadow_earth_normal.webp"))
+    if bed_plot==6:mat.set_shader_parameter("dry_floor",load("res://assets/textures/beds/sand.webp"))
     mat.set_shader_parameter("earth",load("res://assets/textures/beds/gravel.webp"))
     mat.set_shader_parameter("relief",load("res://assets/textures/beds/gravel_normal.webp"))
     node.material_override=mat
@@ -227,7 +233,9 @@ static func landmark_trees(g,root: Node3D,index: int) -> void:
  var layout={0:[[32,-8,-6],[32,8,-7]],1:[[29,-8,-7],[30,8,7]],2:[[93,-8,-8],[31,8,-8]],3:[[38,-8,7],[45,8,-8]],4:[[28,-8,8],[29,8,8]],5:[[34,-8,-8],[31,8,-8]],6:[[23,-7,-7],[29,8,7]],7:[[30,-7,-6],[30,7,6],[32,7,-7]],8:[[93,-8,6],[92,8,-6]],9:[[29,-8,-7],[33,8,-8]]}
  for item in layout[index]:
   var tree=g.Art.plant(g.catalogue[int(item[0])],true)
-  root.add_child(tree);tree.position=local_point(index,Vector3(item[1],0,item[2]))
+  var location=Vector3(item[1],0,item[2])
+  if GardenAreaTransitions.on_path(index,root.position+location):location.z+=1.6 if index==4 else -1.6
+  root.add_child(tree);tree.position=local_point(index,location)
   tree.set_meta("terrain_anchor",true)
   GardenLandscape.trunk_collision(tree,.16,2.0)
 
@@ -238,8 +246,9 @@ static func visit(g,index: int) -> void:
  GardenAreaAtlas.close(g)
  initialize(g,index)
  var s=state(g,index);s.visited=true
- g.player.position=GardenTerrain.point(GardenAreaCatalogue.center(index)+Vector3(7.5,0,7.5))+Vector3(0,.15,0)
- g.player.velocity=Vector3.ZERO;g.yaw=PI/4;g.pitch=.08
+ var arrival=GardenAreaCatalogue.entry(index).get("arrival",[7.5,7.5])
+ g.player.position=GardenTerrain.point(GardenAreaCatalogue.center(index)+Vector3(arrival[0],0,arrival[1]))+Vector3(0,.15,0)
+ g.player.velocity=Vector3.ZERO;g.yaw=PI/4 if index%2==0 else -PI/4;g.pitch=.08
  g.current_plot=index+4;g.set_mode("walk",false);g.side_panel.hide()
  g.dismiss_request();g.resume_controls();visual(g,index);g.refresh_wildlife();g.refresh_ui();g.save_game()
  g.toast(GardenAreaCatalogue.entry(index).name+" · E opens this garden’s activities. The atlas is in Guide.")
@@ -718,6 +727,7 @@ static func plantable(pos: Vector3) -> bool:
  var index=GardenAreaCatalogue.index_at(pos)
  if index<0:return true
  var p=pos-GardenAreaCatalogue.center(index)
+ if GardenAreaTransitions.on_path(index,pos):return false
  if absf(p.x)>8.1 or absf(p.z)>8.1:return false
  match index:
   0:return Vector2(p.x+1.4,p.z*1.1).length()>5.1 and absf(p.z-5.1)>1.0
