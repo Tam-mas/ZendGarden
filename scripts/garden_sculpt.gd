@@ -36,23 +36,25 @@ static func triangle(st: SurfaceTool,a: Vector3,b: Vector3,c: Vector3,ua: Vector
 static func split_meadow(g,node: MeshInstance3D) -> void:
  var outside=ArrayMesh.new()
  var editable=ArrayMesh.new()
+ var inverse=node.global_transform.affine_inverse()
  for surface in range(node.mesh.get_surface_count()):
   var arrays=node.mesh.surface_get_arrays(surface)
   var verts: PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
   var uv: PackedVector2Array=arrays[Mesh.ARRAY_TEX_UV]
   var indices: PackedInt32Array=arrays[Mesh.ARRAY_INDEX] if arrays[Mesh.ARRAY_INDEX]!=null else PackedInt32Array()
-  var kept=PackedInt32Array()
+  var outer=SurfaceTool.new();outer.begin(Mesh.PRIMITIVE_TRIANGLES)
   var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
   for i in range(0,indices.size(),3):
    var a=indices[i];var b=indices[i+1];var c=indices[i+2]
-   var center=node.global_transform*((verts[a]+verts[b]+verts[c])/3)
-   if center.x>=25 and center.x<=44 and center.z>=4.5 and center.z<=7.5:continue
-   if center.x>-12 and center.x<29 and center.z>-29 and center.z<12:
-    triangle(st,verts[a],verts[b],verts[c],uv[a],uv[b],uv[c],2)
-   else:kept.append_array([a,b,c])
-  arrays[Mesh.ARRAY_INDEX]=kept
-  outside.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
-  outside.surface_set_material(surface,node.mesh.surface_get_material(surface))
+   var fragments=GardenConnectedLand.outside_meadow([[node.global_transform*verts[a],uv[a]],[node.global_transform*verts[b],uv[b]],[node.global_transform*verts[c],uv[c]]])
+   for fragment in fragments:
+    for j in range(1,fragment.size()-1):
+     var p=fragment[0];var q=fragment[j];var r=fragment[j+1]
+     var center=(p[0]+q[0]+r[0])/3
+     var near=center.x>-12 and center.x<29 and center.z>-29 and center.z<12
+     triangle(st if near else outer,inverse*p[0],inverse*q[0],inverse*r[0],p[1],q[1],r[1],2 if near else 0)
+  outer.generate_normals();outer.generate_tangents();outer.index()
+  outer.set_material(node.mesh.surface_get_material(surface));outer.commit(outside)
   st.generate_normals();st.generate_tangents();st.index()
   st.set_material(node.mesh.surface_get_material(surface));st.commit(editable)
  node.mesh=outside
@@ -140,7 +142,8 @@ static func restore(g,saved: Dictionary) -> void:
   var x=int(parts[0]);var z=int(parts[1]);var value=float(saved[key])
   var legacy=x>= -10 and x<=27 and z<=11 and z>=-(GardenAreaCatalogue.legacy_plot_count(g)/2)*17-12
   var habitat=GardenAreaCatalogue.index_at(Vector3(x,0,z))>=0
-  if (not legacy and not habitat) or not is_finite(value):continue
+  var connection=GardenConnectedLand.contains(Vector3(x,0,z))
+  if (not legacy and not habitat and not connection) or not is_finite(value):continue
   GardenTerrain.offsets[str(key)]=clampf(value,maxf(-3.0,.08-GardenTerrain.base_rise(x,z)),3.0)
  if had_edits or not GardenTerrain.offsets.is_empty():rebuild(g)
 
@@ -217,7 +220,7 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
   for i in range(grass.multimesh.instance_count):
    var transform=grass.multimesh.get_instance_transform(i)
    if center.is_finite() and Vector2(transform.origin.x-center.x,transform.origin.z-center.z).length()>3:continue
-   transform.origin.y=GardenTerrain.point(transform.origin).y-.02
+   transform.origin.y=GardenConnectedLand.surface(transform.origin).y if GardenConnectedLand.contains(transform.origin) else GardenTerrain.point(transform.origin).y-.02
    grass.multimesh.set_instance_transform(i,transform)
  for key in g.clean_paths:
   var parts=key.split(":")

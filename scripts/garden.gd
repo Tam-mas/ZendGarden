@@ -201,6 +201,7 @@ func _ready() -> void:
  if "--workshop-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://workshop-test-save.json"
  if "--milestones-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://milestones-test-save.json"
  if "--areas-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-test-save.json"
+ if "--land-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://connected-land-test-save.json"
  if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
  if "--cohesion-review" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://cohesion-review-save.json"
  if not browser_save_check():
@@ -264,6 +265,7 @@ func _ready() -> void:
  elif "--workshop-test" in OS.get_cmdline_user_args(): call_deferred("run_workshop_test")
  elif "--milestones-test" in OS.get_cmdline_user_args():call_deferred("run_milestones_test")
  elif "--areas-test" in OS.get_cmdline_user_args():call_deferred("run_areas_test")
+ elif "--land-test" in OS.get_cmdline_user_args():call_deferred("run_land_test")
  elif "--areas-showcase" in OS.get_cmdline_user_args():call_deferred("show_area_collection")
  elif "--cohesion-review" in OS.get_cmdline_user_args():call_deferred("run_cohesion_review")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
@@ -334,6 +336,7 @@ func make_world() -> void:
  GardenWorldLighting.configure(self)
  GardenLandscape.build(self)
  GardenAreas.build(self)
+ GardenConnectedLand.build(self)
  for row in range(2,int(GardenAreaCatalogue.legacy_plot_count(self)/2)): GardenExpansion.build_row(self,row)
  for j in range(2):
   var pet = Art.companion(j==0)
@@ -1043,7 +1046,7 @@ func walk_motion(motion: Vector3) -> void:
 
 func accessible(pos: Vector3) -> bool:
  if GardenAreaCatalogue.index_at(pos)>=0:return GardenAreas.walkable(pos)
- if pos.x>=25.5 and pos.x<=44 and pos.z>=4.5 and pos.z<=7.5:return true
+ if GardenConnectedLand.contains(pos):return true
  var north=minf(-26,-(int(GardenAreaCatalogue.legacy_plot_count(self)/2)-1)*17-8)
  if pos.x < -8.5 or pos.x > 25.5 or pos.z > 9 or pos.z < north: return false
  if pos.x>6.6 and pos.x<10.4 and pos.z>-7 and pos.z<7:
@@ -1446,6 +1449,7 @@ func object_at(pos: Vector3) -> int:
 func plantable_ground(pos: Vector3) -> bool:
  if not accessible(pos): return false
  if GardenAreaCatalogue.index_at(pos)>=0:return GardenAreas.plantable(pos) and object_at(pos)<0 and not GardenAreas.prop_blocks(self,pos)
+ if GardenConnectedLand.on_trail(pos):return false
  if pos.x>6.3 and pos.x<10.7 and pos.z>-7.3 and pos.z<7.3: return false
  if pos.z>-10.3 and pos.z<-6.7 and pos.x>10 and pos.x<24: return false
  if absf(pos.x+7.4)<2 and absf(pos.z+18)<2: return false
@@ -2081,6 +2085,12 @@ func run_areas_test() -> void:
  await get_tree().process_frame
  await get_tree().process_frame
  print("AREAS_RESULT: ",failures)
+ get_tree().quit(1 if not failures.is_empty() else 0)
+
+func run_land_test() -> void:
+ get_tree().create_timer(150).timeout.connect(func():push_error("Connected land test timed out");get_tree().quit(1))
+ var failures=[]
+ await preload("res://tests/connected_land.gd").run(self,failures)
  get_tree().quit(1 if not failures.is_empty() else 0)
 
 func run_cohesion_review() -> void:

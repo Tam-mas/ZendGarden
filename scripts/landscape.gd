@@ -120,6 +120,7 @@ static func meadow(g) -> void:
  var positions: Array=[]
  for j in range(16000):
   var p=Vector3(r.randf_range(-13,30),.04,r.randf_range(-25.5,10))
+  if GardenConnectedLand.on_trail(p):continue
   if g.bed_at(p)>=0: continue
   if p.x>6.5 and p.x<10.5 and p.z>-7 and p.z<7: continue
   if p.z>-10 and p.z<-7 and p.x>10 and p.x<24: continue
@@ -127,8 +128,14 @@ static func meadow(g) -> void:
   for plot in g.plots:
    if abs(p.z-plot.center.z-6)<.72: path=true
   if abs(p.x+6)<.65: path=true
-  p.y=GardenTerrain.point(p).y-.02
+  p.y=GardenConnectedLand.surface(p).y if GardenConnectedLand.contains(p) else GardenTerrain.point(p).y-.02
   positions.append({"pos":p,"short":path})
+ # Low lawn tufts continue onto the joining ground; the stone trail stays clear.
+ for j in range(6400):
+  var p=Vector3(r.randf_range(25.7,43.8),0,r.randf_range(-107.8,9))
+  if GardenConnectedLand.on_trail(p):continue
+  p=GardenConnectedLand.surface(p)
+  positions.append({"pos":p,"short":true})
  var mm=MultiMesh.new()
  mm.transform_format=MultiMesh.TRANSFORM_3D
  mm.use_colors=true

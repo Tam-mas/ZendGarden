@@ -49,6 +49,7 @@ static func build_row(g, index: int) -> void:
  for side in [-8.5,25.5]:
   for z in range(17):
    var p=GardenTerrain.point(Vector3(side,0,center_z+z-8))
+   if side==25.5 and p.z>=GardenConnectedLand.NORTH and p.z<=GardenConnectedLand.SOUTH:continue
    g.Art.box(root,p-Vector3(0,50,0),Vector3(.8,100,1.05),Color("666b53"))
  for side in [-7.5,24.5]:
   var tree=g.Art.plant(g.catalogue[29 if index%2 else 31],true)
