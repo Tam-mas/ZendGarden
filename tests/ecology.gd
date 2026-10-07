@@ -7,15 +7,21 @@ static func run(g, failures: Array) -> void:
  var json_length=glb.get_32()
  glb.get_32()
  var document=JSON.parse_string(glb.get_buffer(json_length).get_string_from_utf8())
+ var source=load("res://assets/environment/lake_garden.glb").instantiate()
  for mesh in document.meshes:
   if mesh.name in ["AlpineLakeValley","ContourLake","ShorelineRocks","OuterMountainRidges"] or mesh.name.begins_with("ForestChunk_"):
    var expected=0
    for surface in mesh.primitives: expected+=int(document.accessors[int(surface.indices)].count)
    var node=g.world_root.find_child(mesh.name,true,false)
+   # Water is subdivided at runtime to bend in the wind. Keep the stale-import
+   # check against its authored mesh, then verify the refinement separately.
+   if mesh.name=="ContourLake":node=source.find_child(mesh.name,true,false)
    var actual=0
    if is_instance_valid(node):
     for i in range(node.mesh.get_surface_count()): actual+=node.mesh.surface_get_array_index_len(i)
    if actual!=expected: failures.append("Stale imported environment mesh: "+mesh.name)
+ check_lake_refinement(source.find_child("ContourLake",true,false),g.world_root.find_child("ContourLake",true,false),failures)
+ source.free()
  for id in range(GardenCatalogue.ROWS.size()):
   if not is_equal_approx(GardenCatalogue.saved_age(id, float(GardenCatalogue.ROWS[id][4])*.5,1),g.catalogue[id].days*.5): failures.append("Legacy growth migration changed maturity")
  var old_day=g.day
@@ -150,3 +156,22 @@ static func run(g, failures: Array) -> void:
  g.player.position=old_position
  g.yaw=old_yaw
  g.pitch=old_pitch
+
+static func check_lake_refinement(authored: MeshInstance3D,water: MeshInstance3D,failures: Array) -> void:
+ if not authored or not water:return
+ var original=authored.mesh.get_faces();var refined=water.mesh.get_faces()
+ if refined.size()<=original.size():failures.append("Lake lacks vertices for moving waves")
+ var old_bounds=authored.mesh.get_aabb();var new_bounds=water.mesh.get_aabb()
+ if old_bounds.position.distance_to(new_bounds.position)>.001 or old_bounds.end.distance_to(new_bounds.end)>.001:
+  failures.append("Moving lake changed the authored shoreline bounds")
+ var old_area=0.;var new_area=0.;var anchors={}
+ for k in range(0,original.size(),3):old_area+=(original[k+1]-original[k]).cross(original[k+2]-original[k]).length()*.5
+ for k in range(0,refined.size(),3):
+  new_area+=(refined[k+1]-refined[k]).cross(refined[k+2]-refined[k]).length()*.5
+  for edge in range(3):
+   anchors[refined[k+edge]]=true
+   if (water.global_basis*(refined[k+(edge+1)%3]-refined[k+edge])).length()>8.001:
+    failures.append("Lake wave mesh retains an oversized face");return
+ if absf(old_area-new_area)>old_area*.00001:failures.append("Moving lake changed the authored water footprint")
+ for vertex in original:
+  if not anchors.has(vertex):failures.append("Lake refinement moved an authored shore anchor");return

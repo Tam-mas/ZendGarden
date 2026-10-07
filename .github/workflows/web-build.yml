@@ -29,7 +29,11 @@ jobs:
       - name: Export and package for Cloudflare Pages
         run: python3 tools/build_web.py
       - name: Check garden path junctions
-        run: python3 tests/check_path_paving.py
+        run: |
+          python3 tests/check_path_paving.py
+          python3 tests/check_connecting_trail.py
+      - name: Test garden paths and moving water
+        run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --fixed-fps 60 --path . -- --trail-polish-test
       - name: Check imported audio quality
         run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/audio_compression.gd
       - name: Test garden milestones and removable displays

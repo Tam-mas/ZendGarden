@@ -36,8 +36,7 @@ static func path(g, center: Vector3, width: float = 1.0) -> MeshInstance3D:
    var b=GardenTerrain.point(Vector3(x,0,center.z-width*.46+(segment+1)*width*.184))+Vector3(0,.027,0)
    GardenArt.branch(patch,a,b,.008,Color("6c5137"))
  # Clear procedural blades from the newly raked earth, including on save reload.
- var lawn=g.world_root.get_node_or_null("MeadowGrass")
- if lawn:
+ for lawn in g.get_tree().get_nodes_in_group("meadow_grass"):
   var mm=lawn.multimesh
   for i in range(mm.instance_count):
    var t=mm.get_instance_transform(i)

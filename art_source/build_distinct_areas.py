@@ -299,7 +299,10 @@ def props_meadow(G,root,i):
         flower(G,root,at(i,x,z),['white','pink','purple','yellow','blue'][k%5],.45+(k%3)*.14,3,k)
         if k%3==0:grass(G,root,at(i,x+.3,z),.85,k,'sage')
     fence=pivot('Meadow fence',root,collision=True)
-    rail(G,fence,i,(-8,-8),(8,-8),.82)
+    # A real opening, including the rails and posts, follows the bank path.
+    opening=3*math.sin(-8*.4)
+    rail(G,fence,i,(-8,-8),(opening-1.25,-8),.82)
+    rail(G,fence,i,(opening+1.25,-8),(8,-8),.82)
     for x,z in [(-6,6),(6,-6),(7,5)]:rock(G,root,i,x,z,(1.4,.65,1),int(x+z),False)
     bench(G,root,i,6,5)
 

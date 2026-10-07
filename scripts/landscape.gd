@@ -93,6 +93,7 @@ static func water(g,position: Vector3,size: Vector2,lake: bool) -> void:
  var mesh=MeshInstance3D.new()
  var plane=PlaneMesh.new()
  plane.size=size
+ plane.subdivide_width=12;plane.subdivide_depth=40
  mesh.mesh=plane
  mesh.position=position
  var material=ShaderMaterial.new()
@@ -102,6 +103,9 @@ static func water(g,position: Vector3,size: Vector2,lake: bool) -> void:
   material.set_shader_parameter("edge_color",Color("91adb3"))
  mesh.material_override=material
  g.world_root.add_child(mesh)
+ material.set_shader_parameter("wave_height",.012)
+ mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+ GardenWater.register(mesh,{"kind":"plane","size":size})
 
 static func meadow(g) -> void:
  var r=RandomNumberGenerator.new()
@@ -130,16 +134,35 @@ static func meadow(g) -> void:
   if abs(p.x+6)<.65: path=true
   p.y=GardenConnectedLand.surface(p).y if GardenConnectedLand.contains(p) else GardenTerrain.point(p).y-.02
   positions.append({"pos":p,"short":path})
- # Low lawn tufts continue onto the joining ground; the stone trail stays clear.
- for j in range(6400):
+ var original=positions
+ positions=[]
+ # Match the meadow's density and mixed heights, without double-scattering
+ # over the part already covered by the original lawn.
+ for j in range(22000):
   var p=Vector3(r.randf_range(25.7,43.8),0,r.randf_range(-107.8,9))
+  if p.x<30 and p.z> -25.5:continue
   if GardenConnectedLand.on_trail(p):continue
   p=GardenConnectedLand.surface(p)
-  positions.append({"pos":p,"short":true})
+  positions.append({"pos":p,"short":false})
+ var blade_mesh=st.commit()
+ var mat=StandardMaterial3D.new()
+ mat.vertex_color_use_as_albedo=true;mat.cull_mode=BaseMaterial3D.CULL_DISABLED
+ mat.roughness=1;mat.diffuse_mode=BaseMaterial3D.DIFFUSE_LAMBERT_WRAP
+ grass_chunk(g,"MeadowGrass",original,blade_mesh,mat,r)
+ # Small culling cells keep the longer grass inexpensive as the land grows.
+ var chunks: Dictionary={}
+ for entry in positions:
+  var key=Vector2i(floori(entry.pos.x/8),floori(entry.pos.z/8))
+  if not chunks.has(key):chunks[key]=[]
+  chunks[key].append(entry)
+ for key in chunks:
+  grass_chunk(g,"JoiningGrass_%d_%d"%[key.x,key.y],chunks[key],blade_mesh,mat,r)
+
+static func grass_chunk(g,title: String,positions: Array,blade_mesh: Mesh,mat: Material,r: RandomNumberGenerator) -> void:
  var mm=MultiMesh.new()
  mm.transform_format=MultiMesh.TRANSFORM_3D
  mm.use_colors=true
- mm.mesh=st.commit()
+ mm.mesh=blade_mesh
  mm.instance_count=positions.size()
  for i in range(positions.size()):
   var entry=positions[i]
@@ -148,16 +171,13 @@ static func meadow(g) -> void:
   mm.set_instance_transform(i,Transform3D(Basis(Vector3.UP,r.randf()*TAU).scaled(Vector3(1,height_scale,1)),entry.pos))
   mm.set_instance_color(i,Color("4e6b30").lerp(Color("81954b"),r.randf()))
  var n=MultiMeshInstance3D.new()
- n.name="MeadowGrass"
+ n.name=title
  n.multimesh=mm
- var mat=StandardMaterial3D.new()
- mat.vertex_color_use_as_albedo=true
- mat.cull_mode=BaseMaterial3D.CULL_DISABLED
- mat.roughness=1
- mat.diffuse_mode=BaseMaterial3D.DIFFUSE_LAMBERT_WRAP
  n.material_override=mat
  n.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+ if title!="MeadowGrass":n.visibility_range_end=65
  g.world_root.add_child(n)
+ n.add_to_group("meadow_grass")
 
 static func recede_landscape(node: Node) -> void:
  if node is MeshInstance3D and str(node.name) in ["HilltopMeadow","PlantableLoam"]:
@@ -212,6 +232,8 @@ static func recede_landscape(node: Node) -> void:
   material.set_shader_parameter("edge_color",Color("91adb3"))
   node.material_override=material
   node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+  GardenWater.subdivide_lake(node)
+  GardenWater.register(node,{"kind":"lake"})
  if node is MeshInstance3D and str(node.name).begins_with("ForestChunk_"):
   node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
   # Small sections retain woodland coverage while reducing distant geometry.

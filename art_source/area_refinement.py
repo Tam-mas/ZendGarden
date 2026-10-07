@@ -78,6 +78,7 @@ def install(b):
    rock(G,root,i,x,z,(2.5,1.9,2.1),k)
    fern(G,root,b.at(i,x+(-1.8 if x<0 else 1.8),z+.8),1.05,k,True)
   for group,x in enumerate([-3.8,0,3.8]):
+   if group==1:x=-1.8 # Keep the mature trunks on the bank, clear of the water.
    canopy=b.pivot('Canopy%d'%group,root)
    for k in range(2):fern(G,canopy,b.at(i,x+(k-.5)*1.5,-5.2 if group!=1 else -8),.82,k+group*3,True)
   for k in range(38):

@@ -12,7 +12,8 @@ void fragment() {
  float row=floor(p.y);p.x+=mod(row,2.)*.5;
  vec2 cell=floor(p),f=fract(p);
  float edge=min(min(f.x,1.-f.x)*.62,min(f.y,1.-f.y)*.93);
- float joint=1.-smoothstep(.006,.018,edge);
+ float feather=max(.006,fwidth(edge)*.75);
+ float joint=1.-smoothstep(.012-feather,.012+feather,edge);
  float shade=slab_random(cell);
  vec3 pigment=texture(stone,world.xz*1.2+vec2(shade*.7)).rgb;
  float grain=dot(pigment,vec3(.299,.587,.114));

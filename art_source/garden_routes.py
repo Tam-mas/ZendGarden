@@ -61,9 +61,10 @@ def data():
     entry=[]
     for controls in [
         [[44,6],[46,6],[46,10.35],[49,10.35]],
-        [[49,10.35],[55,10.35],[62,10.35],[68,10.35]],
+        [[49,10.35],[53,10.35],[57,10.35],[62,10.35]],
+        [[62,10.35],[66,10.35],[68,10.35],[68,7.9]],
     ]:entry.extend([cubic(controls,i/120) for i in range(120)])
-    entry.append((68,10.35))
+    entry.append((68,7.9))
     return {"version":1,"approaches":routes,"eastern_link":resample(entry)}
 
 def point(index,t):

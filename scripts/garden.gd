@@ -202,6 +202,7 @@ func _ready() -> void:
  if "--milestones-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://milestones-test-save.json"
  if "--areas-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-test-save.json"
  if "--land-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://connected-land-test-save.json"
+ if "--trail-polish-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://trail-polish-test-save.json"
  if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
  if "--cohesion-review" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://cohesion-review-save.json"
  if not browser_save_check():
@@ -225,6 +226,7 @@ func _ready() -> void:
  climate=GardenClimate.new()
  add_child(climate)
  climate.restore(loaded_data.get("climate",{}))
+ GardenWater.setup(self)
  make_ui()
  save_files=GardenSaveFiles.new()
  add_child(save_files)
@@ -266,6 +268,7 @@ func _ready() -> void:
  elif "--milestones-test" in OS.get_cmdline_user_args():call_deferred("run_milestones_test")
  elif "--areas-test" in OS.get_cmdline_user_args():call_deferred("run_areas_test")
  elif "--land-test" in OS.get_cmdline_user_args():call_deferred("run_land_test")
+ elif "--trail-polish-test" in OS.get_cmdline_user_args():call_deferred("run_trail_polish_test")
  elif "--areas-showcase" in OS.get_cmdline_user_args():call_deferred("show_area_collection")
  elif "--cohesion-review" in OS.get_cmdline_user_args():call_deferred("run_cohesion_review")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
@@ -1974,6 +1977,7 @@ func make_fish(parent: Node3D) -> void:
   fish.name="Fish"+str(j)
 
 func care_effect(pos: Vector3, color: Color) -> void:
+ if mode=="water":GardenWater.disturb(self,pos,.8)
  for j in range(5):
   var mote=Art.ball(self,pos+Vector3(rng.randf_range(-0.4,0.4),1.3+j*0.07,rng.randf_range(-0.4,0.4)),Vector3.ONE*0.065,color)
   var t=create_tween()
@@ -2526,6 +2530,13 @@ func run_smoke_test() -> void:
  await preload("res://tests/garden_tools.gd").run(self,failures)
  await preload("res://tests/gathering.gd").run(self,failures)
  print("ZEND_GARDEN_TEST_RESULT: ","PASS" if failures.is_empty() else failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_trail_polish_test() -> void:
+ var failures: Array=[]
+ await preload("res://tests/trail_polish.gd").run(self,failures)
+ for frame in range(2):await get_tree().process_frame
+ print("TRAIL_POLISH_RESULT: ",failures)
  get_tree().quit(0 if failures.is_empty() else 1)
 
 

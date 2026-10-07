@@ -83,8 +83,9 @@ def terminal(index):
     if axis is None:return None
     center=garden_routes.point(index,1)
     w=end_width(index)*.5
+    depth=.64 if index==2 else .24
     if axis==0:return [(end,center[1]-w),(end+direction*.24,center[1]-w),(end+direction*.24,center[1]+w),(end,center[1]+w)]
-    return [(center[0]-w,end),(center[0]+w,end),(center[0]+w,end+direction*.24),(center[0]-w,end+direction*.24)]
+    return [(center[0]-w,end),(center[0]+w,end),(center[0]+w,end+direction*depth),(center[0]-w,end+direction*depth)]
 
 def footprints(index):
     pieces=[];native=native_path(index)
@@ -121,7 +122,7 @@ def footprints(index):
         # destination edge, replaces it; no paving projects into the court.
         axis=0 if index in [0,7] else 1
         end=slab[0][axis];direction=-1 if index==7 else 1
-        limit=end+direction*.24
+        limit=end+direction*(.64 if index==2 else .24)
         clipped=[]
         for poly in pieces:
             if axis==0:a,b=((limit,1),(limit,0)) if direction==1 else ((limit,0),(limit,1))
@@ -189,8 +190,10 @@ def build(b,G,root,index):
         if index in [0,2,5,6,7,9]:
             # The oval court's terrain continues underneath the flags. Leave
             # 15mm of reveal there; coincident faces flicker and expose wedges.
-            target=1.51 if index==0 else 1.40+.2*(1-(end[0]/3.6)**2) if index==7 else b.height(index,x,z)+(.155 if index==2 else .05 if index==9 else .035)
-            y+=(target-y)*(1-smooth(.22,1.1,distance))
+            # The first limestone tread is level across its full width. Using
+            # the sloping soil beneath the entry produced a lifted corner.
+            target=1.51 if index==0 else b.height(index,6.5,6.)+.155 if index==2 else 1.40+.2*(1-(end[0]/3.6)**2) if index==7 else b.height(index,x,z)+(.05 if index==9 else .035)
+            y+=(target-y)*(1-smooth(.66 if index==2 else .22,1.3 if index==2 else 1.1,distance))
         elif index==4:
             # A modest level landing meets the orchard turf without a raised
             # square lip; its final flags follow the existing route footprint.
