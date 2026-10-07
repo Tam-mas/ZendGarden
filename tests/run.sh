@@ -12,6 +12,7 @@ python3 tests/check_low_grasses.py
 python3 tests/check_audio.py
 python3 tests/check_areas.py
 python3 tests/check_path_paving.py
+python3 tests/check_connecting_trail.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
 import_log="$(mktemp -t zend-garden-import)"
@@ -22,6 +23,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
 fi
 economy_log="$(mktemp -t zend-garden-economy)"
 land_log="$(mktemp -t zend-garden-land)"
+trail_log="$(mktemp -t zend-garden-trail)"
+"$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --trail-polish-test > "$trail_log" 2>&1 || { cat "$trail_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$trail_log" || ! rg -Fq 'TRAIL_POLISH_RESULT: []' "$trail_log"; then
+  cat "$trail_log"
+  exit 1
+fi
 "$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --land-test > "$land_log" 2>&1 || { cat "$land_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$land_log" || ! rg -Fq 'CONNECTED_LAND_RESULT: []' "$land_log"; then
   cat "$land_log"

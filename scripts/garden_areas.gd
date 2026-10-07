@@ -16,6 +16,8 @@ const JOURNAL={
  "emperor gum moth":{"name":"Emperor gum moth","flowers":5,"types":4,"night":true,"gift":119}
 }
 const SOLID_PIVOTS=["Boardwalk","Sluice wheel","Fallen log","Stepping stones","Terrace masonry","Meadow fence","Orchard fence","Espalier wires","Harvest table","Kitchen walls","Entry arch","Kitchen bed edging","Kitchen espalier","Glasshouse frame","Stream bridge railing","Stream stepping stones","StreamGate","Lookout railing","Reflection pool rim","Moon pergola","MoonLantern"]
+# Beside each route, with enough room for the entire board and a walking lane.
+const ACTIVITY_SIGNS=[Vector2(6.3,8),Vector2(-8,5.8),Vector2(9.1,5.2),Vector2(-8,5.5),Vector2(9.1,5.6),Vector2(-8.5,6.2),Vector2(7.8,5.8),Vector2(-5.9,7.4),Vector2(8.4,9.7),Vector2(-8,5.4)]
 static var scenes: Dictionary={}
 
 static func initial_state() -> Dictionary:
@@ -75,8 +77,9 @@ static func build(g) -> void:
    chime.stream=load("res://assets/audio/alpine_chime.wav");chime.max_distance=22;chime.unit_size=3
    root.set_meta("chime_timer",12.0)
   var sign=g.Art.furnishing("sign")
-  root.add_child(sign);sign.position=local_point(index,Vector3(8.0 if index%2==0 else -8.0,0,8.7))
-  sign.rotation.y=-PI/4 if index%2==0 else PI/4
+  var sign_pos: Vector2=ACTIVITY_SIGNS[index]
+  root.add_child(sign);sign.position=local_point(index,Vector3(sign_pos.x,0,sign_pos.y))
+  sign.name="ActivitySign";sign.rotation.y=PI/2 if index in [2,4] else 0.
   sign.set_meta("terrain_anchor",true);GardenAreaMaterials.prepare(sign)
   g.Art.set_sign_text(sign,info.name.to_upper()+"\nE · GARDEN ACTIVITY")
   if index==9:
@@ -95,17 +98,21 @@ static func build(g) -> void:
  build_trail(g)
  GardenAreaTransitions.build(g)
 
-static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed_plot: int=-1,paving: bool=false) -> void:
+static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed_plot: int=-1,paving: bool=false,detail: bool=false) -> void:
  var name=String(node.name)
  # Godot keeps glTF custom properties in extras. Blender also numbers repeated
  # pivot names across the library, so the first area's "Ground" is not enough.
  var extras: Dictionary=node.get_meta("extras",{})
  paving=paving or extras.get("arrival_path",false) or extras.get("paving_network",false)
+ detail=detail or extras.get("ground_detail",false)
  if extras.get("terrain_anchor",false):node.set_meta("terrain_anchor",true)
  if extras.get("ground_detail",false):node.set_meta("ground_detail",true)
  ground=ground or name=="Ground" or node.get_meta("area_ground",false) or extras.get("ground",false) or extras.get("area_ground",false)
  solid=solid or node.get_meta("area_collision",false) or extras.get("collision",false) or extras.get("area_collision",false) or SOLID_PIVOTS.any(func(part):return name.begins_with(part))
  if node is MeshInstance3D:
+  # Leaves and grit sit millimetres above the soil. Their tiny shadow faces
+  # alias as the sun moves; they still receive the garden's larger shadows.
+  if detail:node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
   if ground and not paving and bed_plot>=4 and (bed_plot-4)%2==0:
    if not GardenConnectedLand.trim_habitat_bank(node):return
   if not ground and String(node.name).contains("mossrock"):solid=true
@@ -117,7 +124,9 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
   node.visibility_range_end=0 if ground else 80
   if ground:
    node.set_meta("editable_ground",true)
-   if paving:node.set_meta("fitted_paving",true)
+   if paving:
+    node.set_meta("fitted_paving",true)
+    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
    if not paving and bed_plot in [8,9] and (str(node.name).contains("potting loam") or bed_plot==8 and str(node.name).contains("Area grass")):
     node.set_meta("area_bed_plot",bed_plot);node.material_override=GardenBedSurfaces.area_material(bed_plot,"soil")
    if not paving and ((bed_plot in [4,5,6,7,11,12,13] and not str(node.name).contains("limestone")) or bed_plot in [9,10] and str(node.name).contains("Area grass")):
@@ -135,7 +144,7 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
    for body in node.get_children():
     if body is StaticBody3D:body.set_meta("area_obstacle",true)
  for child in node.get_children():
-  if child is Node3D and not child is StaticBody3D:prepare_meshes(child,ground,solid,bed_plot,paving)
+  if child is Node3D and not child is StaticBody3D:prepare_meshes(child,ground,solid,bed_plot,paving,detail)
 
 static func find(root: Node, prefix: String) -> Node3D:
  if String(root.name).begins_with(prefix) and root is Node3D and not root is MeshInstance3D:return root
@@ -149,20 +158,9 @@ static func local_point(index: int, local: Vector3) -> Vector3:
 
 static func build_trail(g) -> void:
  var root=Node3D.new();root.name="HabitatTrail";g.world_root.add_child(root)
- var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
- for j in range(38):
-  var x=25+j*.5
-  for k in range(6):
-   var a=Vector3(x,0,4.5+k*.5)
-   for p in [a,a+Vector3(.5,0,0),a+Vector3(.5,0,.5),a,a+Vector3(.5,0,.5),a+Vector3(0,0,.5)]:
-    st.set_uv(Vector2(p.x,p.z)*.4);st.add_vertex(GardenTerrain.point(p)+Vector3(0,.12,0))
- st.generate_normals();st.generate_tangents()
- var mesh=MeshInstance3D.new();mesh.name="Eastern trail";mesh.mesh=st.commit()
- mesh.set_meta("editable_ground",true)
- mesh.material_override=GardenAreaTransitions.bluestone();root.add_child(mesh);mesh.create_trimesh_collision()
  var sign=g.Art.furnishing("sign");root.add_child(sign)
  sign.set_meta("terrain_anchor",true)
- sign.position=GardenTerrain.point(Vector3(27,0,7.6))
+ sign.position=GardenTerrain.point(Vector3(27,0,8.6))
  g.Art.set_sign_text(sign,"TEN GARDEN TRAILS\nFollow the eastern path")
 
 static func walk_surfaces(root: Node3D,index: int) -> void:
@@ -185,15 +183,26 @@ static func walk_surfaces(root: Node3D,index: int) -> void:
 
 static func water_surface(g,root: Node3D,name: String,points: Array,height: float) -> MeshInstance3D:
  var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
- for k in range(1,points.size()-1):
-  for p in [points[0],points[k],points[k+1]]:
-   st.set_uv(Vector2(p.x,p.z)*.2);st.add_vertex(Vector3(p.x,height,p.z))
- st.generate_normals()
+ var origin=Vector3.ZERO
+ for p in points:origin+=p
+ origin/=points.size()
+ for ring in range(12):
+  for k in range(points.size()):
+   var a=origin.lerp(points[k],ring/12.);var b=origin.lerp(points[(k+1)%points.size()],ring/12.)
+   var c=origin.lerp(points[k],(ring+1)/12.);var d=origin.lerp(points[(k+1)%points.size()],(ring+1)/12.)
+   var vertices=[a,c,d] if ring==0 else [a,c,d,a,d,b]
+   for p in vertices:
+    st.set_uv(Vector2(p.x,p.z)*.2);st.add_vertex(Vector3(p.x,height,p.z))
+ st.generate_normals();st.generate_tangents()
  var n=MeshInstance3D.new();n.name=name;n.mesh=st.commit()
  var material=ShaderMaterial.new();material.shader=load("res://shaders/habitat_water.gdshader")
  material.set_shader_parameter("deep_color",Color("29454b"));material.set_shader_parameter("edge_color",Color("63847b"))
  n.material_override=material;n.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
- root.add_child(n);return n
+ root.add_child(n)
+ var bounds=n.mesh.get_aabb();var center=bounds.get_center()
+ material.set_shader_parameter("pond_shape",Vector4(root.position.x+center.x,root.position.z+center.z,bounds.size.x*.5,bounds.size.z*.5))
+ GardenWater.register(n,{"kind":"ellipse","x":center.x,"z":center.z,"rx":bounds.size.x*.5,"rz":bounds.size.z*.5})
+ return n
 
 static func circle_points(x: float,z: float,rx: float,rz: float) -> Array:
  var result=[]
@@ -202,6 +211,12 @@ static func circle_points(x: float,z: float,rx: float,rz: float) -> Array:
 
 static func ribbon(g,root: Node3D,name: String,points: Array,width: float,raised: float=0) -> Node3D:
  var node=Node3D.new();node.name=name;root.add_child(node)
+ var sampled=[]
+ for k in range(points.size()-1):
+  var a: Vector3=points[k];var b: Vector3=points[k+1]
+  var count=maxi(1,ceili(a.distance_to(b)/.16))
+  for j in range(count):sampled.append(a.lerp(b,float(j)/count))
+ sampled.append(points.back());points=sampled
  var index=GardenAreaCatalogue.index_at(root.position)
  var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
  var rows=[];var distance=0.0
@@ -214,13 +229,18 @@ static func ribbon(g,root: Node3D,name: String,points: Array,width: float,raised
   rows.append([Vector3(point.x-side.x,level,point.z-side.z),Vector3(point.x+side.x,level,point.z+side.z),distance])
  for k in range(rows.size()-1):
   var a=rows[k];var b=rows[k+1]
-  for v in [[a[0],Vector2(0,a[2])],[b[0],Vector2(0,b[2])],[a[1],Vector2(1,a[2])],[a[1],Vector2(1,a[2])],[b[0],Vector2(0,b[2])],[b[1],Vector2(1,b[2])]]:
-   st.set_uv(v[1]);st.add_vertex(v[0])
+  for lane in range(6):
+   var left=lane/6.;var right=(lane+1)/6.
+   for v in [[a[0].lerp(a[1],left),Vector2(left,a[2])],[b[0].lerp(b[1],left),Vector2(left,b[2])],[a[0].lerp(a[1],right),Vector2(right,a[2])],[a[0].lerp(a[1],right),Vector2(right,a[2])],[b[0].lerp(b[1],left),Vector2(left,b[2])],[b[0].lerp(b[1],right),Vector2(right,b[2])]]:
+    st.set_uv(v[1]);st.add_vertex(v[0])
  st.generate_normals();st.generate_tangents()
  var mesh=MeshInstance3D.new();mesh.name="ContinuousWater";mesh.mesh=st.commit()
  var material=ShaderMaterial.new();material.shader=load("res://shaders/habitat_water.gdshader")
  material.set_shader_parameter("flowing",true);mesh.material_override=material
+ material.set_shader_parameter("channel_width",width)
+ material.set_shader_parameter("flow_direction",-1. if name=="MainStream" else 1.)
  mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;node.add_child(mesh)
+ GardenWater.register(mesh,{"kind":"stream","width":width,"points":points})
  return node
 
 static func water_features(g,root: Node3D,index: int) -> void:
@@ -442,6 +462,11 @@ static func visual(g,index: int) -> void:
   7:
    for j in range(2):
     visible_node(root,"Flow%d"%j,s.gates[j])
+    var current=root.get_node("Flow%d/ContinuousWater"%j)
+    current.material_override.set_shader_parameter("flow_speed",.42 if s.gates[j] else 0.)
+    if current.has_meta("gate_open") and current.get_meta("gate_open")!=s.gates[j] and s.gates[j]:
+     GardenWater.disturb(g,root.position+Vector3(-3 if j==0 else 3,1,-.7),1.2)
+    current.set_meta("gate_open",s.gates[j])
     var gate=find(root,"StreamGate%d"%j)
     if gate:gate.position.y=local_point(index,Vector3(-3 if j==0 else 3,0,-.5)).y+(.34 if s.gates[j] else 0)
    var voice=root.get_node_or_null("StreamVoice")

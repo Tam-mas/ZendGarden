@@ -14,7 +14,7 @@
     "variant": "new"
   },
   "areas/fern_gully": {
-    "bytes": 5384972,
+    "bytes": 5385256,
     "clips": [],
     "dimensions": [
       24.0,
@@ -98,7 +98,7 @@
     "variant": "new"
   },
   "areas/limestone": {
-    "bytes": 2402732,
+    "bytes": 2392796,
     "clips": [],
     "dimensions": [
       24.0,
@@ -108,7 +108,7 @@
     "folder": "areas",
     "kind": "limestone",
     "meshes": 25,
-    "triangles": 26583,
+    "triangles": 26449,
     "variant": "new"
   },
   "areas/moon": {
@@ -392,17 +392,17 @@
     "variant": "new"
   },
   "areas/pollinator": {
-    "bytes": 3026756,
+    "bytes": 3042636,
     "clips": [],
     "dimensions": [
       24.0,
-      4.1942298412323,
+      4.194369792938232,
       24.0
     ],
     "folder": "areas",
     "kind": "pollinator",
     "meshes": 6,
-    "triangles": 25210,
+    "triangles": 25734,
     "variant": "new"
   },
   "areas/reedwater": {

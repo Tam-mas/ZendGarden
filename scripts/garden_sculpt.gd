@@ -120,6 +120,8 @@ static func chunks(g,node: MeshInstance3D) -> void:
    st.set_material(node.get_active_material(surface) if node.get_meta("fitted_paving",false) else node.mesh.surface_get_material(surface))
    var patch=MeshInstance3D.new();patch.name="GroundTile_%d_%d"%[key.x,key.y]
    patch.mesh=st.commit();patch.material_override=node.material_override
+   patch.cast_shadow=node.cast_shadow
+   if node.get_meta("fitted_paving",false):patch.set_meta("fitted_paving",true)
    if node.has_meta("area_bed_plot"):patch.set_meta("area_bed_plot",node.get_meta("area_bed_plot"))
    node.get_parent().add_child(patch);patch.transform=node.transform
    register(g,patch,false)
@@ -215,8 +217,7 @@ static func rebuild(g,center: Vector3=Vector3.INF) -> void:
   if GardenContainers.is_contained(plant):continue
   if center.is_finite() and Vector2(plant.pos.x-center.x,plant.pos.z-center.z).length()>3:continue
   plant.pos=GardenTerrain.point(plant.pos);plant.node.position=plant.pos;plant.marker.position=plant.pos
- var grass=g.world_root.get_node_or_null("MeadowGrass")
- if grass:
+ for grass in g.get_tree().get_nodes_in_group("meadow_grass"):
   for i in range(grass.multimesh.instance_count):
    var transform=grass.multimesh.get_instance_transform(i)
    if center.is_finite() and Vector2(transform.origin.x-center.x,transform.origin.z-center.z).length()>3:continue

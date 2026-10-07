@@ -27,7 +27,7 @@ def overlap(a,b):
         poly=out
     return abs(sum(p[0]*q[1]-q[0]*p[1] for p,q in zip(poly,poly[1:]+poly[:1]))*.5)
 
-def read(path,baseline):
+def read(path,baseline,prefixes=('Arrival path','Fitted garden path')):
     raw=path.read_bytes()
     if baseline:
         pointer=subprocess.check_output(['git','show','HEAD:'+str(path.relative_to(ROOT))],cwd=ROOT,text=True)
@@ -42,7 +42,7 @@ def read(path,baseline):
         return [struct.unpack_from(fmt,binary,start+j*stride) for j in range(a['count'])]
     triangles=[];points=[]
     for node in doc['nodes']:
-        if 'mesh' not in node or not node['name'].startswith(('Arrival path','Fitted garden path')):continue
+        if 'mesh' not in node or not node['name'].startswith(prefixes):continue
         assert not any(k in node for k in ['matrix','translation','rotation','scale']),('path coordinates unexpectedly transformed',path)
         for primitive in doc['meshes'][node['mesh']]['primitives']:
             vertices=values(primitive['attributes']['POSITION']);ids=values(primitive['indices']);points.extend(vertices)
@@ -74,6 +74,16 @@ def audit(index,baseline):
             edge={5:7.,6:5.5}[index]
             ends=[p for p in points if abs(p[2]-edge)<1e-5]
             assert len(ends)>=2 and all(abs(p[1]-1.235)<1e-5 for p in ends),(KINDS[index],'raised courtyard threshold',ends)
+        if index==2:
+            # Compare the finished entry with the actual exported stair, rather
+            # than assuming that the soil query equals the tread's height.
+            _,treads=read(path,False,('Terrace steps',))
+            edge=[p for p in treads if abs(p[2]-6.35)<1e-5]
+            assert edge,('missing first terrace tread',path)
+            top=max(p[1] for p in edge)
+            ends=[p for p in points if abs(p[2]-6.35)<1e-5]
+            assert len(ends)>=2 and all(abs(p[1]-top)<1e-5 for p in ends),('terrace threshold differs from first tread',top,ends)
+            assert abs(min(p[0] for p in ends)-min(p[0] for p in edge))<1e-5 and abs(max(p[0] for p in ends)-max(p[0] for p in edge))<1e-5,('terrace landing misses a corner',ends)
         if index==9:
             # The Moon court is oval, so a constant-Z bound cannot detect
             # the long sideways strip or fit both sides of its entrance.

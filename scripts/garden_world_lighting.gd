@@ -14,6 +14,13 @@ static func configure(g) -> void:
  env.ssao_enabled=true;env.ssao_radius=.45;env.ssao_intensity=.70
  env.ssao_light_affect=.08
  g.sun.light_angular_distance=1.1
+ # Retain the garden's cascade coverage and blend its borders. Stationary
+ # camera comparisons favour the higher sample filter over tighter cascades.
+ g.sun.directional_shadow_max_distance=90
+ g.sun.directional_shadow_split_1=.1;g.sun.directional_shadow_split_2=.2;g.sun.directional_shadow_split_3=.5
+ g.sun.directional_shadow_blend_splits=true
+ g.sun.shadow_blur=1.;g.sun.shadow_normal_bias=2.
+ RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_LOW if OS.has_feature("mobile") else RenderingServer.SHADOW_QUALITY_SOFT_HIGH)
 
 static func atmosphere(position: Vector3) -> Vector2:
  var result=Vector2.ZERO;var total=0.
