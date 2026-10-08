@@ -144,7 +144,9 @@
     "name": "Rose",
     "family": "compound",
     "height": 1.1111,
-    "triangles": 7728
+    "triangles": 8152,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 21,
@@ -214,7 +216,9 @@
     "name": "Japanese maple",
     "family": "broad",
     "height": 2.9892,
-    "triangles": 1504
+    "triangles": 7444,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 31,
@@ -767,7 +771,9 @@
     "name": "Golden forest grass",
     "family": "strap",
     "height": 0.389,
-    "triangles": 6288
+    "triangles": 3312,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 110,
@@ -872,7 +878,9 @@
     "name": "Mexican snowball",
     "family": "succulent",
     "height": 0.2266,
-    "triangles": 4880
+    "triangles": 9600,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 125,
@@ -1040,16 +1048,18 @@
     "name": "Cattleya orchid",
     "family": "strap",
     "height": 0.5,
-    "triangles": 1072,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 2640,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 149,
     "name": "Slipper orchid",
     "family": "strap",
     "height": 0.3,
-    "triangles": 1024,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 984,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 150,
@@ -1120,8 +1130,9 @@
     "name": "Cornflower",
     "family": "alternate",
     "height": 0.75,
-    "triangles": 2098,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 5532,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 159,
@@ -1248,8 +1259,9 @@
     "name": "Snowdrop",
     "family": "strap",
     "height": 0.18,
-    "triangles": 1276,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1340,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 175,
@@ -1440,8 +1452,9 @@
     "name": "Tropical hibiscus",
     "family": "woody",
     "height": 2.0,
-    "triangles": 2622,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 3986,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 199,
@@ -1552,8 +1565,9 @@
     "name": "Hardy fuchsia",
     "family": "woody",
     "height": 1.6,
-    "triangles": 8462,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 11858,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 213,

@@ -164,10 +164,12 @@
   {
     "id": 20,
     "name": "Rose",
-    "vertices": 115862,
+    "vertices": 56693,
     "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_20.glb",
     "morphology_version": 3,
-    "triangles": 175370
+    "triangles": 77042,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 21,
@@ -244,10 +246,12 @@
   {
     "id": 30,
     "name": "Japanese maple",
-    "vertices": 56940,
+    "vertices": 50090,
     "path": "/Users/tam/Documents/Zend Garden/assets/plants/plant_30.glb",
     "morphology_version": 3,
-    "triangles": 80456
+    "triangles": 51966,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 31,
@@ -925,11 +929,12 @@
   {
     "id": 109,
     "name": "Golden forest grass",
-    "vertices": 9994,
-    "triangles": 13176,
+    "vertices": 6064,
+    "triangles": 8016,
     "path": "assets/plants/plant_109.glb",
     "morphology_version": 3,
-    "source": "art_source/botanical_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 110,
@@ -1060,11 +1065,12 @@
   {
     "id": 124,
     "name": "Mexican snowball",
-    "vertices": 7754,
-    "triangles": 15180,
+    "vertices": 16332,
+    "triangles": 29456,
     "path": "assets/plants/plant_124.glb",
     "morphology_version": 3,
-    "source": "art_source/botanical_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 125,
@@ -1276,20 +1282,22 @@
   {
     "id": 148,
     "name": "Cattleya orchid",
-    "vertices": 3111,
-    "triangles": 5152,
+    "vertices": 5217,
+    "triangles": 8532,
     "path": "assets/plants/plant_148.glb",
     "morphology_version": 3,
-    "source": "art_source/flower_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 149,
     "name": "Slipper orchid",
-    "vertices": 1650,
-    "triangles": 2612,
+    "vertices": 2578,
+    "triangles": 4324,
     "path": "assets/plants/plant_149.glb",
     "morphology_version": 3,
-    "source": "art_source/flower_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 150,
@@ -1366,11 +1374,12 @@
   {
     "id": 158,
     "name": "Cornflower",
-    "vertices": 9474,
-    "triangles": 13056,
+    "vertices": 14300,
+    "triangles": 20616,
     "path": "assets/plants/plant_158.glb",
     "morphology_version": 3,
-    "source": "art_source/flower_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 159,
@@ -1510,11 +1519,12 @@
   {
     "id": 174,
     "name": "Snowdrop",
-    "vertices": 1206,
-    "triangles": 1600,
+    "vertices": 3080,
+    "triangles": 4790,
     "path": "assets/plants/plant_174.glb",
     "morphology_version": 3,
-    "source": "art_source/flower_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 175,
@@ -1726,11 +1736,12 @@
   {
     "id": 198,
     "name": "Tropical hibiscus",
-    "vertices": 33761,
-    "triangles": 43608,
+    "vertices": 30828,
+    "triangles": 40632,
     "path": "assets/plants/plant_198.glb",
     "morphology_version": 4,
-    "source": "art_source/flower_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 199,
@@ -1852,11 +1863,12 @@
   {
     "id": 212,
     "name": "Hardy fuchsia",
-    "vertices": 110272,
-    "triangles": 142524,
+    "vertices": 72992,
+    "triangles": 97504,
     "path": "assets/plants/plant_212.glb",
     "morphology_version": 4,
-    "source": "art_source/flower_additions.blend"
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 213,

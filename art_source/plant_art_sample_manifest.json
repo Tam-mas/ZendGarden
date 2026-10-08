@@ -1,0 +1,122 @@
+[
+  {
+    "id": 20,
+    "name": "Rose",
+    "height": 1.17762148,
+    "mature_triangles": 77042,
+    "growth_triangles": 8152,
+    "normalization": [
+      1.1832640045655334,
+      1.1832640045655334,
+      1.1832640045655334
+    ]
+  },
+  {
+    "id": 30,
+    "name": "Japanese maple",
+    "height": 2.98917317,
+    "mature_triangles": 51966,
+    "growth_triangles": 7444,
+    "normalization": [
+      3.1025261339401946,
+      3.1025261339401946,
+      3.141937890408132
+    ]
+  },
+  {
+    "id": 109,
+    "name": "Golden forest grass",
+    "height": 0.44289336,
+    "mature_triangles": 8016,
+    "growth_triangles": 3312,
+    "normalization": [
+      0.9326637343199721,
+      0.9326637343199721,
+      0.8814518631130331
+    ]
+  },
+  {
+    "id": 124,
+    "name": "Mexican snowball",
+    "height": 0.30299997,
+    "mature_triangles": 29456,
+    "growth_triangles": 9600,
+    "normalization": [
+      0.9265893900068654,
+      0.9265893900068654,
+      0.9265893900068654
+    ]
+  },
+  {
+    "id": 148,
+    "name": "Cattleya orchid",
+    "height": 0.5,
+    "mature_triangles": 8532,
+    "growth_triangles": 2640,
+    "normalization": [
+      1.1090986693430702,
+      1.1090986693430702,
+      1.0012156225580875
+    ]
+  },
+  {
+    "id": 149,
+    "name": "Slipper orchid",
+    "height": 0.3,
+    "mature_triangles": 4324,
+    "growth_triangles": 984,
+    "normalization": [
+      1.021931271128798,
+      1.021931271128798,
+      1.021931271128798
+    ]
+  },
+  {
+    "id": 158,
+    "name": "Cornflower",
+    "height": 0.75,
+    "mature_triangles": 20616,
+    "growth_triangles": 5532,
+    "normalization": [
+      1.031873070606099,
+      1.031873070606099,
+      1.031873070606099
+    ]
+  },
+  {
+    "id": 174,
+    "name": "Snowdrop",
+    "height": 0.18,
+    "mature_triangles": 4790,
+    "growth_triangles": 1340,
+    "normalization": [
+      1.0169491463781464,
+      1.0169491463781464,
+      1.0169491463781464
+    ]
+  },
+  {
+    "id": 198,
+    "name": "Tropical hibiscus",
+    "height": 2.0,
+    "mature_triangles": 40632,
+    "growth_triangles": 3986,
+    "normalization": [
+      2.2532758504908874,
+      2.2532758504908874,
+      2.2532758504908874
+    ]
+  },
+  {
+    "id": 212,
+    "name": "Hardy fuchsia",
+    "height": 1.6,
+    "mature_triangles": 97504,
+    "growth_triangles": 11858,
+    "normalization": [
+      1.8699819212515578,
+      1.8699819212515578,
+      1.8699819212515578
+    ]
+  }
+]

@@ -23,14 +23,14 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
-for check in flower_collection flower_additions; do
+for check in flower_collection flower_additions plant_art_sample; do
   flower_log="$(mktemp -t zend-garden-flower)"
   "$GODOT_BIN" --headless --path "$PWD" --script "tests/${check}.gd" > "$flower_log" 2>&1 || { cat "$flower_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[[^]]' "$flower_log"; then
     cat "$flower_log"
     exit 1
   fi
-  rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]' "$flower_log"
+  rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]|PLANT_ART_SAMPLE_RESULT:.*"failures":\[\]' "$flower_log"
 done
 breeding_log="$(mktemp -t zend-garden-breeding)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/plant_breeding.gd > "$breeding_log" 2>&1 || { cat "$breeding_log"; exit 1; }
