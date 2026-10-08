@@ -1,0 +1,532 @@
+{
+  "scope": "50 low plants; IDs109 and124 remain the approved representative-sample artwork",
+  "source": "art_source/plant_full_low.py",
+  "art_direction": "Botanical silhouettes, curved individual foliage, closed fleshy organs, readable species-specific flower structures and independently proportioned growth stages. Existing animation, lighting and performance configuration are unchanged.",
+  "geometry_conventions": {
+    "coordinates": "metres, Blender Z up; caller preserves existing maximum height and planting footprint",
+    "growth": "Seedlings have few primary organs; juveniles add crowns, branches, pads or offsets with proportionally broader young foliage. Buds use mature attachment positions.",
+    "anchors": "Every mature reproductive/tip vertex and every bud vertex has a fruit_anchors entry; mature and bud attachment sets match.",
+    "succulents": "All foliage mesh components are closed; all material palette wind flags are False; young tissues use the label youngflesh.",
+    "textures": "Uses existing materials and authored sample tissue textures via caller. No reference photographs are copied into assets."
+  },
+  "validation": {
+    "method": "Pure geometry generation for all three ages, using a small mathutils Vector stand-in. Blender export and visual checks performed by the parent workflow.",
+    "checks": [
+      "50 IDs exactly",
+      "valid finite coordinates and indices",
+      "palette indices valid",
+      "complete matching anchor sets",
+      "rigid succulent palettes",
+      "two incident faces per succulent foliage edge",
+      "mature under200000 triangles per species",
+      "seedling+juvenile+buds under18000 triangles per species"
+    ],
+    "mature_triangles_total": 501074,
+    "prior_mature_triangles_total": 930266,
+    "combined_growth_triangles_total": 118612,
+    "max_mature_triangles": 29828,
+    "max_combined_growth_triangles": 10926
+  },
+  "plants": [
+    {
+      "id": 12,
+      "name": "Creeping thyme",
+      "taxon": "Thymus serpyllum",
+      "geometry": "Connected creeping runners with short upright lateral shoots, opposite cupped leaf pairs and attached compact terminal flower clusters.",
+      "reference": "https://plants.ces.ncsu.edu/plants/thymus-serpyllum/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 17540,
+      "combined_growth_triangles": 3686
+    },
+    {
+      "id": 13,
+      "name": "Moss carpet",
+      "taxon": "Representative garden form; catalogue uses a common name",
+      "geometry": "Dense colony of separate leafy moss shoots with helically inserted narrow leaves; selected stalks end in spore capsules rather than flowers.",
+      "reference": "https://www.anbg.gov.au/bryophyte/what-is-moss.html",
+      "reference_status": "Consulted for this pass",
+      "mature_triangles": 8220,
+      "combined_growth_triangles": 1498
+    },
+    {
+      "id": 14,
+      "name": "Blue fescue",
+      "taxon": "Representative garden form; catalogue uses a common name",
+      "geometry": "Rounded blue-grey tuft of visibly folded fine blades; sparse elevated branched flower stems with fine terminal awns.",
+      "reference": "https://plants.ces.ncsu.edu/plants/festuca-glauca/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8348,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 15,
+      "name": "Feather grass",
+      "taxon": "Representative garden form; catalogue uses a common name",
+      "geometry": "Looser fountain-like fine grass blades with delicate branched panicles and elongated awns; outer leaves reach and droop farther.",
+      "reference": "https://www.botanic.cam.ac.uk/the-garden/plant-list/nassella-tenuissima/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 9260,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 16,
+      "name": "Sedge",
+      "taxon": "Representative garden form; catalogue uses a common name",
+      "geometry": "Broad folded strap leaves on multiple clump crowns with compact bracted spikelets on elevated culms.",
+      "reference": "https://plants.ces.ncsu.edu/plants/carex/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7856,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 17,
+      "name": "Fountain grass",
+      "taxon": "Representative garden form; catalogue uses a common name",
+      "geometry": "Arching fountain-shaped leaves and bristly bottlebrush inflorescences composed of a tapered stem and radial bristles.",
+      "reference": "https://plantfacts.osu.edu/tmi/Plantlist/pe_oides.html",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 10032,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 18,
+      "name": "Dichondra",
+      "taxon": "Representative garden form; catalogue uses a common name",
+      "geometry": "Connected creeping stolons with upright petioles supporting kidney-shaped cupped leaves with actual basal notches; tiny ground-level flowers.",
+      "reference": "https://ipm.ucanr.edu/weeds-identification-gallery/kidneyweed-dichondra/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 3864,
+      "combined_growth_triangles": 1994
+    },
+    {
+      "id": 19,
+      "name": "Chamomile",
+      "taxon": "Matricaria chamomilla",
+      "geometry": "Fine twice-divided foliage carried on multiple jointed stems, with white ray petals and raised golden conical flower discs.",
+      "reference": "https://plants.ces.ncsu.edu/plants/matricaria-chamomilla/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 26208,
+      "combined_growth_triangles": 10510
+    },
+    {
+      "id": 44,
+      "name": "Lomandra",
+      "taxon": "Lomandra longifolia",
+      "geometry": "Broad arching strap leaves with deeper folds and clustered pale flowers on compact lateral inflorescences.",
+      "reference": "https://www.anbg.gov.au/gnp/interns-2007/lomandra-longifolia.html",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7704,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 96,
+      "name": "Gymea lily",
+      "taxon": "Doryanthes excelsa",
+      "geometry": "Large sword-leaf rosette and thick upright bracted flowering stem, ending in a compact crown of scarlet trumpet-like flowers with projecting stamens.",
+      "reference": "https://anbg.gov.au/gnp/gnp12/doryanthes-excelsa.html",
+      "reference_status": "Consulted for this pass",
+      "mature_triangles": 11032,
+      "combined_growth_triangles": 1840
+    },
+    {
+      "id": 106,
+      "name": "Zebra grass",
+      "taxon": "Miscanthus sinensis 'Zebrinus'",
+      "geometry": "Curved arching blades with transverse pale bands and tall branched panicles, distributed across separate crown nodes.",
+      "reference": "https://plants.ces.ncsu.edu/plants/miscanthus-sinensis/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8868,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 107,
+      "name": "Feather reed grass",
+      "taxon": "Calamagrostis × acutiflora 'Karl Foerster'",
+      "geometry": "Narrow upright blades below stiff elevated culms and densely packed tawny flowering spikes.",
+      "reference": "https://plants.ces.ncsu.edu/plants/calamagrostis-x-acutiflora/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8008,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 108,
+      "name": "Blue switchgrass",
+      "taxon": "Panicum virgatum 'Heavy Metal'",
+      "geometry": "Glaucous blades around several crown nodes; upright stems support spreading, visibly branched airy panicles.",
+      "reference": "https://plants.ces.ncsu.edu/plants/panicum-virgatum/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8432,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 110,
+      "name": "Japanese blood grass",
+      "taxon": "Imperata cylindrica 'Red Baron'",
+      "geometry": "Green-based upright folded blades with red upper halves. Small emerging tips replace a fabricated flowering plume.",
+      "reference": "https://plants.ces.ncsu.edu/plants/imperata-cylindrica/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 2388,
+      "combined_growth_triangles": 760
+    },
+    {
+      "id": 111,
+      "name": "Purple moor grass",
+      "taxon": "Molinia caerulea subsp. arundinacea 'Transparent'",
+      "geometry": "Low arching fine-leaf clump with unusually tall bare stems and open upper panicles.",
+      "reference": "https://plants.ces.ncsu.edu/plants/molinia-caerulea/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8584,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 112,
+      "name": "Tufted hair grass",
+      "taxon": "Deschampsia cespitosa",
+      "geometry": "Dark green folded basal blades and elevated fine branched panicles that spread into an airy cloud.",
+      "reference": "https://plants.ces.ncsu.edu/plants/deschampsia-cespitosa/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 11000,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 113,
+      "name": "Quaking grass",
+      "taxon": "Briza media",
+      "geometry": "Slender stems divide into fine pendant branches ending in flattened oval spikelets with individual overlapping scale ridges.",
+      "reference": "https://plants.ces.ncsu.edu/plants/briza-media/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 16932,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 114,
+      "name": "Autumn moor grass",
+      "taxon": "Sesleria autumnalis",
+      "geometry": "Short yellow-green tufts of wider flat blades and compact pale spikelets above the leaves.",
+      "reference": "https://plants.ces.ncsu.edu/plants/sesleria-autumnalis/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8388,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 115,
+      "name": "Pink muhly grass",
+      "taxon": "Muhlenbergia capillaris",
+      "geometry": "Fine wiry foliage supports many wide, multiply branched pink panicles with tiny terminal flowers.",
+      "reference": "https://plants.ces.ncsu.edu/plants/muhlenbergia-capillaris/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 14430,
+      "combined_growth_triangles": 976
+    },
+    {
+      "id": 116,
+      "name": "Golden barrel cactus",
+      "taxon": "Echinocactus grusonii",
+      "geometry": "Closed globose barrel with 24 deeply modelled ribs, regular pale areoles with radial spine stars, and small flowers around the crown.",
+      "reference": "https://plants.ces.ncsu.edu/plants/echinocactus-grusonii/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 19040,
+      "combined_growth_triangles": 10926
+    },
+    {
+      "id": 117,
+      "name": "Bunny ears cactus",
+      "taxon": "Opuntia microdasys",
+      "geometry": "Joined flattened paddle segments in branching tiers, dotted with dense pale glochid tufts on both actual pad surfaces.",
+      "reference": "https://plants.ces.ncsu.edu/plants/opuntia-microdasys/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 9136,
+      "combined_growth_triangles": 3404
+    },
+    {
+      "id": 118,
+      "name": "Prickly pear",
+      "taxon": "Opuntia ficus-indica",
+      "geometry": "Larger branching flat oval pads attached at narrow joints, with spaced areoles, longer spines and layered flowers at upper pad tips.",
+      "reference": "https://plants.ces.ncsu.edu/plants/opuntia-ficus-indica/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 11856,
+      "combined_growth_triangles": 4300
+    },
+    {
+      "id": 119,
+      "name": "Mexican fencepost cactus",
+      "taxon": "Pachycereus marginatus",
+      "geometry": "Unequal basal cluster of upright six-ribbed columns, continuous rib crests and pale areoles bearing restrained short spines.",
+      "reference": "https://www.rhs.org.uk/plants/141267/pachycereus-marginatus/details",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 11808,
+      "combined_growth_triangles": 2826
+    },
+    {
+      "id": 120,
+      "name": "Old man cactus",
+      "taxon": "Cephalocereus senilis",
+      "geometry": "Ribbed upright column with sparse underlying radial spines and numerous individually curved pale hair-like spines.",
+      "reference": "https://plants.ces.ncsu.edu/plants/cephalocereus-senilis/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 17896,
+      "combined_growth_triangles": 9446
+    },
+    {
+      "id": 121,
+      "name": "Ladyfinger cactus",
+      "taxon": "Mammillaria elongata",
+      "geometry": "Unequal clustering fingers with helically arranged protruding tubercles and radial short spine stars; flowers on selected upper crowns.",
+      "reference": "https://plants.ces.ncsu.edu/plants/mammillaria-elongata/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 21296,
+      "combined_growth_triangles": 3930
+    },
+    {
+      "id": 122,
+      "name": "Star cactus",
+      "taxon": "Astrophytum asterias",
+      "geometry": "Low broad eight-ribbed spineless body, woolly areoles and small white skin flecks; one central layered yellow flower.",
+      "reference": "https://www.rhs.org.uk/plants/1876/astrophytum-asterias/details",
+      "reference_status": "Consulted for this pass",
+      "mature_triangles": 4088,
+      "combined_growth_triangles": 2774
+    },
+    {
+      "id": 123,
+      "name": "Holiday cactus",
+      "taxon": "Schlumbergera truncata",
+      "geometry": "Closed flattened toothed stem segments in arching pendent chains, with layered projecting asymmetric tubular terminal flowers and stamens.",
+      "reference": "https://www.rhs.org.uk/plants/141323/schlumbergera-truncata/details",
+      "reference_status": "Consulted for this pass",
+      "mature_triangles": 9824,
+      "combined_growth_triangles": 1972
+    },
+    {
+      "id": 125,
+      "name": "Lipstick echeveria",
+      "taxon": "Echeveria agavoides 'Lipstick'",
+      "geometry": "Thick pointed slightly cupped rosette leaves with red terminal portions and narrow red margins; attached arching flowering stalk.",
+      "reference": "https://www.rhs.org.uk/plants/325633/echeveria-agavoides-lipstick/details",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 3998,
+      "combined_growth_triangles": 1998
+    },
+    {
+      "id": 126,
+      "name": "Hens and chicks",
+      "taxon": "Sempervivum tectorum",
+      "geometry": "Low pointed maternal rosette with connected offset rosettes and red margins; separate upright stalk bears many-parted pink stars.",
+      "reference": "https://plants.ces.ncsu.edu/plants/sempervivum-tectorum/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 11538,
+      "combined_growth_triangles": 2106
+    },
+    {
+      "id": 127,
+      "name": "Aloe vera",
+      "taxon": "Aloe vera",
+      "geometry": "Thick tapered leaves with a modelled upper channel and individually attached marginal teeth; a tall stalk bears pendant tubular flowers.",
+      "reference": "https://plants.ces.ncsu.edu/plants/aloe-vera/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 6474,
+      "combined_growth_triangles": 3816
+    },
+    {
+      "id": 128,
+      "name": "Century plant",
+      "taxon": "Agave americana",
+      "geometry": "Large glaucous deeply channelled pointed leaves with marginal teeth and dark terminal spines; a central emerging spear, without an oversized flowering pole.",
+      "reference": "https://plants.ces.ncsu.edu/plants/agave-americana/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 5148,
+      "combined_growth_triangles": 3438
+    },
+    {
+      "id": 129,
+      "name": "Zebra haworthia",
+      "taxon": "Haworthiopsis attenuata",
+      "geometry": "Stiff triangular rosette with raised ivory tubercles following each curved leaf surface; slender stem with minute pale pendant flowers.",
+      "reference": "https://plants.ces.ncsu.edu/plants/haworthiopsis-attenuata/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7982,
+      "combined_growth_triangles": 3726
+    },
+    {
+      "id": 130,
+      "name": "Window haworthia",
+      "taxon": "Haworthia cooperi",
+      "geometry": "Clustered thick rounded leaves with opaque pale optical window surfaces and restrained fine dark window veins; minute flowers on a slender stalk.",
+      "reference": "https://www.rhs.org.uk/plants/haworthia",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 5102,
+      "combined_growth_triangles": 3030
+    },
+    {
+      "id": 131,
+      "name": "Jade plant",
+      "taxon": "Crassula ovata",
+      "geometry": "Crooked woody trunk and branching canopy of opposite thick oval leaves, with connected terminal cymes of pale star flowers.",
+      "reference": "https://plants.ces.ncsu.edu/plants/crassula-ovata/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8108,
+      "combined_growth_triangles": 3976
+    },
+    {
+      "id": 132,
+      "name": "Gollum jade",
+      "taxon": "Crassula ovata 'Gollum'",
+      "geometry": "Branched woody stems carry opposite tubular fleshy leaves ending in recessed cups with red rims; attached small pale flower cymes.",
+      "reference": "https://plants.ces.ncsu.edu/plants/crassula-ovata/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7676,
+      "combined_growth_triangles": 3712
+    },
+    {
+      "id": 133,
+      "name": "Black rose aeonium",
+      "taxon": "Aeonium 'Zwartkop'",
+      "geometry": "Unequal branching woody stems terminate in dark burgundy spoon-leaf rosettes with greener young centres and small emerging tips.",
+      "reference": "https://www.rhs.org.uk/plants/trials-awards/plant-trial-results/aeonium",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 29828,
+      "combined_growth_triangles": 4572
+    },
+    {
+      "id": 134,
+      "name": "Jelly bean sedum",
+      "taxon": "Sedum × rubrotinctum",
+      "geometry": "Branched upright stems carry helically arranged thick bean-shaped leaves with red tips and small yellow terminal stars.",
+      "reference": "https://www.rhs.org.uk/plants/types/houseplants/cacti-and-succulents",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 10626,
+      "combined_growth_triangles": 3170
+    },
+    {
+      "id": 135,
+      "name": "Living stones",
+      "taxon": "Lithops aucampiae",
+      "geometry": "Clusters of two closed fleshy pebble-like lobes with a real central fissure, flattened marked tops and yellow flowers emerging from selected fissures.",
+      "reference": "https://www.rhs.org.uk/plants/10357/lithops-aucampiae/details",
+      "reference_status": "Consulted for this pass",
+      "mature_triangles": 4720,
+      "combined_growth_triangles": 1236
+    },
+    {
+      "id": 136,
+      "name": "Dwarf mondo grass",
+      "taxon": "Ophiopogon japonicus 'Nana'",
+      "geometry": "Compact low dark-green clump of broadened curved strap leaves with little pale six-part flowers held within the foliage.",
+      "reference": "https://plants.ces.ncsu.edu/plants/ophiopogon-japonicus-nana/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7662,
+      "combined_growth_triangles": 868
+    },
+    {
+      "id": 137,
+      "name": "Black mondo grass",
+      "taxon": "Ophiopogon planiscapus 'Nigrescens'",
+      "geometry": "Longer deep purple-black arching strap leaves and little pale violet flowers below the leaf tips.",
+      "reference": "https://plants.ces.ncsu.edu/plants/ophiopogon-planiscapus-nigrescens/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7662,
+      "combined_growth_triangles": 868
+    },
+    {
+      "id": 138,
+      "name": "Velvet zoysia",
+      "taxon": "Zoysia tenuifolia",
+      "geometry": "Low mounded carpet of fine short blades across many tufts connected by visible stolons, with restrained reproductive stems.",
+      "reference": "https://plants.ces.ncsu.edu/plants/zoysia-tenuifolia/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8820,
+      "combined_growth_triangles": 934
+    },
+    {
+      "id": 139,
+      "name": "Buffalo grass",
+      "taxon": "Bouteloua dactyloides",
+      "geometry": "Low spreading stolon-connected blue-green tufts with broader softly arching blades and compact seed spikes.",
+      "reference": "https://plants.ces.ncsu.edu/plants/bouteloua-dactyloides/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 9268,
+      "combined_growth_triangles": 934
+    },
+    {
+      "id": 140,
+      "name": "Creeping bentgrass",
+      "taxon": "Agrostis stolonifera",
+      "geometry": "Surface stolons link low tufts of fine curved blades with small open flowering panicles.",
+      "reference": "https://plants.ces.ncsu.edu/plants/agrostis-stolonifera/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8820,
+      "combined_growth_triangles": 934
+    },
+    {
+      "id": 141,
+      "name": "Creeping red fescue",
+      "taxon": "Festuca rubra",
+      "geometry": "Connected creeping tufts with slender arching leaf blades and small branched seed heads.",
+      "reference": "https://plants.ces.ncsu.edu/plants/festuca-rubra/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8820,
+      "combined_growth_triangles": 934
+    },
+    {
+      "id": 142,
+      "name": "Sheep's fescue",
+      "taxon": "Festuca ovina",
+      "geometry": "Rounded dense tussock of short fine stiff arching blades, with restrained elevated seed panicles.",
+      "reference": "https://www.rhs.org.uk/plants/7185/festuca-ovina/details",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 6952,
+      "combined_growth_triangles": 868
+    },
+    {
+      "id": 143,
+      "name": "Bearskin fescue",
+      "taxon": "Festuca gautieri",
+      "geometry": "Tight bright-green hemispherical cushion of fine leaves rising from several closely packed crown nodes.",
+      "reference": "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A972850-1/general-information",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 6952,
+      "combined_growth_triangles": 868
+    },
+    {
+      "id": 144,
+      "name": "Blue moor grass",
+      "taxon": "Sesleria caerulea",
+      "geometry": "Low blue-green folded blades in dense tufts with compact pale terminal flowering heads.",
+      "reference": "https://plants.ces.ncsu.edu/plants/sesleria-caerulea/",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7512,
+      "combined_growth_triangles": 868
+    },
+    {
+      "id": 145,
+      "name": "Evergold sedge",
+      "taxon": "Carex oshimensis 'Evergold'",
+      "geometry": "Arching strap-leaf clump with cream centres and green margins authored as continuous longitudinal geometry bands.",
+      "reference": "https://www.rhs.org.uk/plants/types/grasses/ornamental/selection",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8928,
+      "combined_growth_triangles": 1167
+    },
+    {
+      "id": 146,
+      "name": "Snowline sedge",
+      "taxon": "Carex conica 'Snowline'",
+      "geometry": "Shorter arching green strap leaves with thin pale margins authored along each whole blade.",
+      "reference": "https://www.rhs.org.uk/plants/80433/carex-conica-snowline-v/details",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 8928,
+      "combined_growth_triangles": 1167
+    },
+    {
+      "id": 147,
+      "name": "Dwarf golden sweet flag",
+      "taxon": "Acorus gramineus 'Minimus Aureus'",
+      "geometry": "Low yellow-green flattened leaf fans with alternating blade orientations and small compact inflorescences.",
+      "reference": "https://www.rhs.org.uk/plants/166439/acorus-gramineus-minimus-aureus/details",
+      "reference_status": "Existing collection reference or taxon profile; see botanical_references.md, botanical_additions_references.md and low_grasses_references.md",
+      "mature_triangles": 7512,
+      "combined_growth_triangles": 868
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "scope": "Original flowers, climbers and kitchen crops; garden-scale interpretations preserving catalogue placement envelopes",
+  "date": "2026-10-08",
+  "ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    36,
+    37,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "references": [
+    {
+      "url": "https://www.rhs.org.uk/plants/5862/digitalis-purpurea/details",
+      "features": "Basal foliage rosette and one-sided pendant foxglove racemes with spotted throats."
+    },
+    {
+      "url": "https://www.rhs.org.uk/plants/pdfs/plant-trials-and-awards/plant-bulletins/bearded-iris.pdf",
+      "features": "Three upright standards and three drooping bearded falls, basal sword leaves."
+    },
+    {
+      "url": "https://www.rhs.org.uk/plants/peony",
+      "features": "Broad cupped overlapping petals on leafy herbaceous stems."
+    },
+    {
+      "url": "https://www.anbg.gov.au/gnp/gnp14/anigozanthos-dwarfdelight.html",
+      "features": "Strap leaves and tall branched stalks with curved tubular paw flowers."
+    },
+    {
+      "url": "https://www.rhs.org.uk/vegetables/tomatoes/grow-your-own",
+      "features": "Branching leafy habit and hanging fruit trusses."
+    },
+    {
+      "url": "https://www.rhs.org.uk/vegetables/crop-rotation",
+      "features": "Related crop families share organ construction but retain distinct leaf and harvest forms."
+    }
+  ],
+  "source_context": [
+    "botanical_references.md",
+    "botanical_expansion_references.md"
+  ],
+  "art_decisions": [
+    "Independent young rosettes, fans and reduced branched stems before flowering.",
+    "Curved leaf surfaces with tissue UVs and species-specific compound, palmate, peltate or strap anatomy.",
+    "Every flower, bud and harvest mesh stores its own attachment; biological proportions adjusted to existing game dimensions.",
+    "Fine structures use sparse opaque geometry; shader and quality settings remain unchanged.",
+    "Winter jasmine retains sparse trifoliate foliage on arching stems and solitary six-lobed flowers.",
+    "Queen of Night tulips have two alternating whorls of three tepals.",
+    "Maize ears carry wrapping husks and silk; brassicas retain their stalks and attached harvest organs."
+  ]
+}

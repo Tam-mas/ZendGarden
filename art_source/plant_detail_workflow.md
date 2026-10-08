@@ -1,5 +1,30 @@
 # Detailed botanical library
 
+## Current full botanical art pass
+
+The current catalogue has **218 plants**. `plant_art_sample.blend` preserves the
+approved ten studies. `plant_full_00.blend` through `plant_full_17.blend` contain
+the other 208 mature plants and their seedling, juvenile and attached-bud meshes.
+The source manifest maps each plant to its packed editable library. Historical
+builders described below must be followed by the sample and full art exporters.
+
+Run `build_full_plant_art.build(batch)` in isolated Blender MCP background mode,
+with batch numbers 0–17 **sequentially**. The CLI supports `-- --batch N`.
+`rebuild.sh` includes these final overrides. The generators preserve the active
+scene, approved sample exports, catalogue IDs, measured heights and placement
+envelopes. Family generators and reference JSONs use the `plant_full_` prefix.
+Generated tissue maps stay as WebP sources; GLBs embed 256px pigment maps and
+existing normal/roughness maps. No runtime rendering settings are changed.
+
+After import, run `tests/check_plant_art_full.py`, the existing plant/growth,
+fruit, flower and bush asset checks, and `tests/plant_art_full.gd`. Render selection
+portraits with `render_plant_cards.gd -- --ids=...`, excluding the approved ten.
+`review_plant_full.gd -- --before` stores matched frames before replacement;
+run it again after import, or add `-- --stages --ids=...` for growth stages.
+These tools use ignored captures and never load a personal garden save.
+
+The remaining sections document the earlier construction passes.
+
 ## Ten-plant art sample (release 59)
 
 The current overrides are Rose (20), Japanese maple (30), Golden forest grass

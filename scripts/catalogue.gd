@@ -595,8 +595,8 @@ static func plants() -> Array:
   result.append({"id": i, "name": r[0], "category": r[1], "color": Color(r[2]), "layer": r[3], "days": GROWTH_DAYS[i], "seasons": SEASONAL.get(i,[]), "condition": r[5], "animal": r[6], "capacity": [1, 2, 4, 7][r[3]], "price": 8 + r[3] * 12 + (i % 4) * 3, "value": 7 + r[3] * 5, "climber": r[0] in ["Sweet pea", "Clematis", "Pea", "Cucumber", "Common jasmine", "Pink jasmine"]})
   result.back()["botanical_name"]=BOTANICAL_NAMES.get(i,"")
   result.back()["height"]=GardenPlantProfiles.HEIGHTS[i]
-  # The art sample supplies attachment channels for these older plants too.
-  if i in [20,30,109,124]:result.back()["attached_bloom"]=true
+  # All authored flowers, fruit and buds grow from their own attachments.
+  result.back()["attached_bloom"]=true
   result.back()["collection_group"]={"Flowers":"Cottage flowers","Shrubs":"Flowering bushes","Grasses":"Grasses & groundcovers","Trees":"Trees","Natives":"Australian natives","Produce":"Fruit & vegetables","Cacti & succulents":"Cacti & succulents"}.get(r[1],"Cottage flowers")
   if i in [0,2,7]:result.back()["collection_group"]="Wildflowers"
   if FLOWER_METADATA.has(str(i)):

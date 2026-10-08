@@ -4,7 +4,7 @@
 
 [**Enter the garden →**](https://zend.garden)
 
-**Current source release: 59 — Ten plants in finer detail.** See the [player update history](scripts/player_updates.gd).
+**Current source release: 60 — A whole garden in finer detail.** See the [player update history](scripts/player_updates.gd).
 
 Zend Garden is a cosy, first-person gardening game beside a mountain lake. Start with a small patch of soil, wander among the flowers, and gradually turn your corner of the valley into somewhere you want to spend time.
 
@@ -22,7 +22,7 @@ There is no need to keep up. Plants do not die from neglect, requests have no de
 - **Explore ten new garden trails.** Cross the stone bridges and follow the eastern trail, or open Garden atlas to discover wetland, fern, limestone, meadow, orchard, kitchen, glasshouse, stream, alpine and moon gardens. Visit every area from the start, then earn its free milestone reward to plant, tend and arrange it. Guide and Garden atlas show all ten targets and live progress. Each has different scenery, growing benefits and activities, with eighteen additional collection plants to discover.
 - **Cross the mountain stream.** Three arched stone bridges connect the original garden to the ten new areas across a rocky ravine. Follow the bank paths beside flowing pools, cascades and the outlet waterfall. Low stone walls frame the gardens, with clear bridge openings, fitted landings and rocky outer banks.
 - **Build a working garden.** Turn spare harvest into compost, castings, mulch and starter mix; collect rain, adjust shade and seasonal shelter, and feed visiting birds. Plant individual pockets in eight kinds of container, including hanging baskets, vertical walls and tiered displays. Move entire planted containers or store their plants safely when packing them away.
-- **Build layers of planting.** Combine low plants, flowers, shrubs and trees in the same space. Ten plants now have a finer botanical treatment, including roses, two orchids, cornflowers, snowdrops, hibiscus, fuchsia, Japanese maple, golden forest grass and Mexican snowball. Their distinctive leaves, petals and young growth give each part of the garden its own character.
+- **Build layers of planting.** Combine low plants, flowers, shrubs and trees in the same space. All 218 plants now share a finer botanical treatment, from layered flower petals and varied tree crowns to ribbed cacti, fleshy rosettes and arching grasses. Distinctive leaves, branches, fruit and young growth give each part of the garden its own character.
 - **Tend it your way.** Hold left click and sweep to water the soil for a temporary 20% growth boost. Prune, move and rearrange plants as your ideas change. Upgrade your tools, adjust the pruning square, or hold Gather and sweep across an area to collect all the plants that are ready—even when they share a square.
 - **Shape the landscape.** Use the hoe to raise or lower ground and ease a hillside into a flatter planting space. Rake paths through the lawn and connect your favourite corners.
 - **Add places to linger.** Choose benches, lanterns, pots, ponds, bird baths, beehives, arbors, pergolas and a greenhouse. Write your own garden signs and make the place feel personal.
