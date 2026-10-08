@@ -19,7 +19,7 @@ static func capture(g,index: int,suffix: String="") -> void:
  var info=GardenAreaCatalogue.entry(index);var center=GardenAreaCatalogue.center(index)
  g.photo_mode=true;g.view_fov=55
  g.camera.global_position=center+Vector3(info.camera[0],info.camera[1],info.camera[2])
- if index==9:g.clock_time=.77
+ if index==9:g.clock_time=.761
  else:g.clock_time=.43
  g.camera.fov=55;g.camera.look_at(center+Vector3(info.focus[0],info.focus[1],info.focus[2]))
  g.update_lighting();g.climate.current=Vector3.ZERO;g.climate.snow=0;g.climate.apply(g)

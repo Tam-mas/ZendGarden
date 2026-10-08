@@ -1,3 +1,13 @@
+### [2026-10-08] Changed
+
+**Tech:** Ten-habitat composition pass, stream refinement, planted-ground profiles and activity navigation
+
+**Dev:** Rebuild all ten area GLBs and packed Blender libraries through an isolated Blender 5.2 MCP scene. Replace loose decorative scatter with 1,102 botanical anchors in deliberate drifts, using the existing catalogue and texture palette. Add grounded soil profiles from exported planting guides, muted wet-bank mineral tones, terrace scree and graduated alpine outcrops. Fit the Moon Garden pergola beside its reflection pool. Recompose the dividing stream with bedded granite, shingle fans, graded riverbank flora, four cascade shelves and finished bridge piers with buried rock footings on steep banks; use calmer flow, downhill surface normals and downstream foam. Stream geometry falls from 192,098 to 89,446 triangles. Preserve terrain grids, routes, pocket/fixture identities, progression and save formats. Group atlas destinations by physical trail pairs, label directions, retain activity scroll/focus, expose basket and collection readiness, handle occupied glasshouse pots and travel before Moon Garden photography. Add release 61, refreshed atlas previews and composition/rebuild documentation. Extend exported-asset and lightweight atlas coverage; all area, paving, trail and ravine audits, Blender source/image checks, headless habitat/bridge traversal, atlas, save and player-update checks pass. Some headless Dummy-audio runs report cleanup warnings at exit despite passing all gameplay assertions; the verbose land diagnostic identifies only WAV playback and ambient/music resources. Rendered reviews exit cleanly. Visual review uses isolated saves in Compatibility (software rendering) and Forward+ on an NVIDIA RTX 5070 Ti; mobile performance is not measured.
+
+**Plain:** All ten trails have fuller, more coherent planting, softer edges and clearer directions. The mountain stream has natural rock shelves, gentler pools and finished crossings. Garden activities keep your place and explain what is ready to tend or gather.
+
+**Why:** Make the new gardens and their stream feel like a connected extension of the original valley, while keeping growing spaces useful and existing gardens intact.
+
 ### [2026-10-08 21:24] Changed
 
 **Tech:** Full botanical art pass, attachment metadata, editable Blender libraries and collection regression coverage

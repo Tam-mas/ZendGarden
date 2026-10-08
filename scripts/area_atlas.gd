@@ -4,16 +4,42 @@ extends RefCounted
 static func note(g,column: Control,text: String,size: int=15) -> void:
  GardenWorkshop.note(g,column,text,size)
 
-static func action(g,column: Control,text: String,callback: Callable,enabled: bool=true) -> Button:
+static func action(g,column: Control,text: String,callback: Callable,enabled: bool=true,changes: bool=true) -> Button:
  var button=g.button(text,func():
-  if g.area_atlas_index>=0 and text.begins_with("Visit ")==false and not GardenAreaProgression.unlocked(g,g.area_atlas_index):
+  if changes and g.area_atlas_index>=0 and not GardenAreaProgression.unlocked(g,g.area_atlas_index):
    g.toast(GardenAreaProgression.message(g,g.area_atlas_index));return
+  var previous_scroll=g.welcome.find_child("AtlasScroll",true,false) as ScrollContainer
+  var scroll_position=previous_scroll.scroll_vertical if previous_scroll else 0
+  var focused=g.get_viewport().gui_get_focus_owner()
+  var focus_key=action_key(focused) if focused is Button else ""
+  var focus_occurrence=matching_buttons(g.welcome,focus_key).find(focused) if not focus_key.is_empty() else -1
   g.area_notice="";callback.call()
-  if g.area_atlas_open:
+  if changes and g.area_atlas_open:
    if g.area_atlas_index>=0:GardenAreas.visual(g,g.area_atlas_index)
-   g.refresh_wildlife();g.refresh_ui();g.save_game();open(g,g.area_atlas_index),Vector2(0,48))
+   g.refresh_wildlife();g.refresh_ui();g.save_game();open(g,g.area_atlas_index)
+   restore_scroll(g,scroll_position,focus_key,focus_occurrence),Vector2(0,48))
  button.disabled=not enabled;button.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  column.add_child(button);return button
+
+static func link(g,column: Control,text: String,callback: Callable) -> Button:
+ return action(g,column,text,callback,true,false)
+
+static func action_key(button: Button) -> String:
+ return button.text.trim_suffix(" · On").trim_suffix(" · Off")
+
+static func matching_buttons(panel: Control,key: String) -> Array:
+ return panel.find_children("*","Button",true,false).filter(func(button):return action_key(button)==key)
+
+static func restore_scroll(g,position: int,focus_key: String,focus_occurrence: int) -> void:
+ var panel: Control=g.welcome
+ # Containers finish measuring wrapped labels on the next frame.
+ await g.get_tree().process_frame
+ if not is_instance_valid(panel) or panel!=g.welcome:return
+ if focus_occurrence>=0:
+  var matches=matching_buttons(panel,focus_key)
+  if focus_occurrence<matches.size() and not matches[focus_occurrence].disabled:matches[focus_occurrence].grab_focus()
+ var scroll=panel.find_child("AtlasScroll",true,false) as ScrollContainer
+ if scroll:scroll.scroll_vertical=position
 
 static func toggle(g,column: Control,text: String,values: Array,index: int) -> void:
  action(g,column,text+" · "+("On" if values[index] else "Off"),func():values[index]=not values[index])
@@ -44,33 +70,36 @@ static func open(g,index: int=-1) -> void:
  g.welcome.name="GardenAtlas";g.welcome.z_index=30
  var frame=VBoxContainer.new();frame.add_theme_constant_override("separation",10);g.welcome.add_child(frame)
  note(g,frame,"Garden atlas" if index<0 else GardenAreaCatalogue.entry(index).name,23)
+ if not g.area_notice.is_empty():note(g,frame,g.area_notice,16)
  var scroll=ScrollContainer.new();scroll.name="AtlasScroll";scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;frame.add_child(scroll)
  var col=VBoxContainer.new();col.name="AtlasContent";col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  col.add_theme_constant_override("separation",10);scroll.add_child(col)
- if not g.area_notice.is_empty():note(g,col,g.area_notice,16)
  if index<0:
-  note(g,col,"Explore all ten trails from the beginning. Earn each garden’s milestone to plant, tend and rearrange it. Rewards are free, permanent and independent: you can unlock several together. New plantings include containers; starter plants and moving stored plants do not count.")
+  note(g,col,"Cross the stream from the original garden and follow the shared stone trail. These five pairs appear in walking order, with a garden on either side. Visit any of them from the beginning.")
+  note(g,col,"Earn each garden’s milestone to plant, tend and rearrange it. Rewards are free, permanent and independent. New plantings include containers; starter plants and moving stored plants do not count.",14)
   for j in range(10):
    var selected=j;var info=GardenAreaCatalogue.entry(j)
-   action(g,col,info.name+" · "+("Unlocked" if GardenAreaProgression.unlocked(g,j) else "Growing towards unlock"),func():open(g,selected))
+   if j%2==0:note(g,col,["WATERSIDE & WOODLAND","SUN & WILDFLOWERS","FRUIT & KITCHEN GARDENS","GLASS & RUNNING WATER","LOOKOUT & MOONLIGHT"][j/2],17)
+   link(g,col,info.name+" · "+("Unlocked" if GardenAreaProgression.unlocked(g,j) else "Growing towards unlock"),func():open(g,selected))
    note(g,col,GardenAreaProgression.requirement(j)+" · "+GardenAreaProgression.progress(g,j),15)
    note(g,col,info.description,14)
-  action(g,col,"Return to the beginning",func():
+  link(g,col,"Return to the beginning",func():
    close(g);g.player.position=GardenTerrain.point(Vector3(0,0,6))+Vector3(0,.15,0)
    g.player.velocity=Vector3.ZERO;g.yaw=0;g.pitch=.1;g.current_plot=0;g.side_panel.hide();g.resume_controls())
  else:
-  var info=GardenAreaCatalogue.entry(index);var s=GardenAreas.state(g,index)
+  var info=GardenAreaCatalogue.entry(index)
   preview(g,col,index);note(g,col,info.description,16)
-  action(g,col,"Visit "+info.name,func():GardenAreas.visit(g,index))
+  note(g,col,("West" if index%2==0 else "East")+" of the shared trail · opposite "+GardenAreaCatalogue.entry(index+1 if index%2==0 else index-1).name,14)
+  link(g,col,"Visit "+info.name,func():GardenAreas.visit(g,index))
   note(g,col,GardenAreaProgression.requirement(index)+" · "+GardenAreaProgression.progress(g,index),17)
   if not GardenAreaProgression.unlocked(g,index):
    note(g,col,"Explore this garden now. Planting, care, furniture changes and Activities become available when you earn this milestone. Your saved plants and arrangements stay safely in place.")
   else:
    note(g,col,"Make this garden your own: use Seeds and Plant on clear ground, and Move or Remove for your ordinary plants and starter equipment. Keep water, paths, rocks and buildings clear. Specialist collection plants use the planting and clearing buttons in Activities; the surrounding landscape planting stays in place.",14)
-   action(g,col,"Restore starter furniture",func():GardenAreaFurnishings.restore_missing(g,index))
    activities(g,col,index)
- if index>=0:frame.add_child(g.button("All ten garden trails",func():open(g),Vector2(0,48)))
+   action(g,col,"Restore starter furniture",func():GardenAreaFurnishings.restore_missing(g,index))
+ if index>=0:link(g,frame,"All ten garden trails",func():open(g))
  frame.add_child(g.button("Back to garden" if g.area_atlas_return else "Done",func():close(g),Vector2(0,48)))
  fit(g)
 
@@ -111,9 +140,13 @@ static func activities(g,column: Control,index: int) -> void:
    for p in g.planted:
     if int(p.plot)!=6 or g.catalogue[int(p.id)].category!="Cacti & succulents":continue
     var plant=p;found=true
-    action(g,column,"Lift offset · "+g.catalogue[int(p.id)].name,func():GardenAreas.offsets(g,plant),float(p.age)>=float(g.catalogue[int(p.id)].days) and int(p.get("area_offset_day",0))<=g.day)
+    var mature=float(p.age)>=float(g.catalogue[int(p.id)].days)
+    var remaining=maxi(0,int(p.get("area_offset_day",0))-g.day)
+    var readiness="Ready for an offset" if mature and remaining==0 else "Growing to maturity" if not mature else "Resting · %d more mornings"%remaining
+    note(g,column,g.catalogue[int(p.id)].name+" · "+readiness,14)
+    action(g,column,"Lift offset · "+g.catalogue[int(p.id)].name,func():GardenAreas.offsets(g,plant),mature and remaining==0)
    if not found:note(g,column,"Plant succulents from Seeds, then return when they are mature.")
-   action(g,column,"Equipment & stored plants",func():close(g);GardenWorkshop.open(g))
+   link(g,column,"Equipment & stored plants",func():close(g);GardenWorkshop.open(g))
   3:
    note(g,column,"LIVING HABITAT JOURNAL · %d / %d"%[s.journal.size(),GardenAreas.JOURNAL.size()],17)
    note(g,column,"Visits depend on your own mature flowers and native plants. Mix varieties, include natives and return after dusk. Each first sighting gives a permanent seed gift.")
@@ -142,18 +175,28 @@ static func activities(g,column: Control,index: int) -> void:
       action(g,column,"Graft "+g.catalogue[chosen].name+" · 2 spare fruit",func():GardenAreas.graft(g,plant,chosen),float(p.age)>=float(g.catalogue[int(p.id)].days)*.78 and GardenEquipment.spare_count_for(g,chosen)>=2)
    note(g,column,"SEASONAL ORCHARD BASKET",17)
    note(g,column,"Three different spare fruit items become petals and two compost portions. One basket per morning; neighbour request items are kept aside.")
-   action(g,column,"Prepare orchard basket",func():GardenAreas.orchard_basket(g),int(s.basket_day)!=g.day)
+   var fruit_varieties=0
+   for id in GardenPlantGrowth.FRUIT_TREES:
+    if GardenEquipment.spare_count_for(g,id)>0:fruit_varieties+=1
+   note(g,column,"Basket prepared today · return tomorrow" if int(s.basket_day)==g.day else "%d / 3 spare fruit varieties gathered"%mini(3,fruit_varieties),14)
+   action(g,column,"Prepare orchard basket",func():GardenAreas.orchard_basket(g),int(s.basket_day)!=g.day and fruit_varieties>=3)
   5:
    note(g,column,"COMPANIONS & CROP ROTATION",17)
    note(g,column,"Flowers or herbs within 1.8 metres help produce grow 15% faster. After harvest, sow another crop family in that quarter for a further 10% growth. Container pockets support vertical growing along the wall.")
    for j in range(4):note(g,column,"Bed %d · previous harvest: %s"%[j+1,str(s.rotation.get(str(j),"Fresh soil"))],14)
    note(g,column,"KITCHEN BASKETS",17)
    note(g,column,"Use one of each listed ingredient. Prepare one basket per morning for petals and two useful supply portions; reserved neighbour items are kept aside.")
+   if int(s.basket_day)==g.day:note(g,column,"Basket prepared today · return tomorrow",14)
    for key in GardenAreas.KITCHEN_RECIPES:
     var recipe=GardenAreas.KITCHEN_RECIPES[key];var chosen=key
-    note(g,column,recipe.name+" · "+", ".join(recipe.items.map(func(id):return g.catalogue[int(id)].name)),14)
-    action(g,column,"Prepare "+recipe.name,func():GardenAreas.kitchen_basket(g,chosen),int(s.basket_day)!=g.day)
-   action(g,column,"Vertical containers & equipment",func():close(g);GardenWorkshop.open(g))
+    var ingredients=[];var ready=true
+    for id in recipe.items:
+     var count=GardenEquipment.spare_count_for(g,int(id))
+     ingredients.append(g.catalogue[int(id)].name+" · %d spare"%count)
+     if count<1:ready=false
+    note(g,column,recipe.name+"\n"+", ".join(ingredients),14)
+    action(g,column,"Prepare "+recipe.name,func():GardenAreas.kitchen_basket(g,chosen),int(s.basket_day)!=g.day and ready)
+   link(g,column,"Vertical containers & equipment",func():close(g);GardenWorkshop.open(g))
   6:
    note(g,column,"RESTORE THE CONSERVATORY",17)
    note(g,column,"Each repaired bay costs 30 petals and becomes a year-round growing zone. Mist and shade favour moth orchids and wax flowers; open vents and clear light favour cymbidiums. Small plants outside their preferred conditions still grow gently.")
@@ -182,7 +225,10 @@ static func activities(g,column: Control,index: int) -> void:
    action(g,column,"Rest until twilight",func():
     g.clock_time=.77;g.update_lighting();g.climate.apply(g);g.toast("Twilight settles over the Moon Garden."),not GardenAreas.dusk(g))
    note(g,column,"Moon Garden memory · "+("Collected" if s.photo else "Awaiting a night photo with three mature dusk flowers"),14)
-   action(g,column,"Compose a night photograph",func():close(g);g.toggle_photo())
+   link(g,column,"Compose a night photograph",func():
+    if GardenAreaCatalogue.index_at(g.player.position)!=index:GardenAreas.visit(g,index)
+    else:close(g)
+    g.toggle_photo())
    collection(g,column,index)
 
 static func collection(g,column: Control,index: int) -> void:
@@ -193,14 +239,19 @@ static func collection(g,column: Control,index: int) -> void:
  for slot in range(info.slots.size()):
   var chosen=slot;var spec=info.slots[slot];var key=str(slot)
   var band=" · "+str(spec.depth).capitalize() if spec.has("depth") else " · Bay %d"%(int(spec.bay)+1) if spec.has("bay") else ""
+  var pos: Vector3=GardenAreas.slot_position(g,index,slot)
+  var location=("north" if pos.z< -1 else "south" if pos.z>1 else "")+("west" if pos.x< -1 else "east" if pos.x>1 else "")
+  band+=" · "+("central" if location.is_empty() else location)
   if s.beds.has(key):
    var p: Dictionary=s.beds[key];var species=GardenAreaCatalogue.data().specialties[p.species]
-   note(g,column,"Pocket %d%s · %s\n%d%% grown · %s · %.0f%% growing rate"%[slot+1,band,species.name,roundi(float(p.age)/float(species.days)*100),"Watered" if float(p.water)>0 else "Thirsty",GardenAreas.pocket_rate(g,index,slot,p)*100],15)
-   action(g,column,"Water pocket %d"%(slot+1),func():s.beds[str(chosen)].water=4.0;g.toast("A drink for pocket %d."%(chosen+1)),index!=0 and float(p.water)<4)
+   note(g,column,"Pocket %d%s · %s\n%d%% grown · %s · %.0f%% growing rate"%[slot+1,band,species.name,clampi(roundi(float(p.age)/float(species.days)*100),0,100),"Watered by inlet" if index==0 else "Watered" if float(p.water)>0 else "Thirsty",GardenAreas.pocket_rate(g,index,slot,p)*100],15)
+   if index!=0:action(g,column,"Water pocket %d"%(slot+1),func():s.beds[str(chosen)].water=4.0;g.toast("A drink for pocket %d."%(chosen+1)),float(p.water)<4)
    action(g,column,"Clear pocket %d"%(slot+1),func():s.beds.erase(str(chosen));g.toast("The pocket is ready for another plant."))
   else:
    if index==6 and GardenAreaFurnishings.object(g,"glasshouse:pot%d"%slot).is_empty():
     note(g,column,"Pocket %d · pot packed away. Restore starter furniture to recover its collection, or arrange ordinary planters from the shop."%(slot+1),14);continue
+   if index==6 and GardenContainers.occupant(g,GardenAreaFurnishings.object(g,"glasshouse:pot%d"%slot),0)>=0:
+    note(g,column,"Pocket %d%s · growing an ordinary plant. Use your regular tools to tend it, or clear the pot before planting a collection here."%[slot+1,band],14);continue
    note(g,column,"Pocket %d%s · ready to plant"%[slot+1,band],15)
    var choices=GardenAreas.choices(g,index,slot)
    if choices.is_empty():note(g,column,"Restore this bay to open its collection pocket.",14);continue

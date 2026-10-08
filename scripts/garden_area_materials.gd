@@ -4,6 +4,29 @@ extends RefCounted
 # Shared profiles retain imported albedo, normal and roughness maps. UV metres
 # are authored in Blender; gentle foot staining remains local to each mesh.
 static var cache: Dictionary={}
+static var planted_margins: Dictionary={}
+
+static func register_margins(root: Node,index: int) -> void:
+ var profiles: Array[Vector4]=[]
+ collect_margins(root,profiles)
+ planted_margins[index]=profiles
+
+static func collect_margins(node: Node,profiles: Array[Vector4]) -> void:
+ var bed=node.get_meta("extras",{}).get("composition_bed",[])
+ if bed is Array and bed.size()==4 and int(node.get_meta("extras",{}).get("composition_count",0))>0 and profiles.size()<16:
+  profiles.append(Vector4(float(bed[0]),float(bed[1]),float(bed[2]),float(bed[3])))
+ for child in node.get_children():collect_margins(child,profiles)
+
+static func ground_margins(material: ShaderMaterial,index: int) -> void:
+ # The soil belongs to the authored planting drifts. World-space sampling
+ # keeps it attached when the ground is divided or reshaped by the hoe.
+ var profiles: Array[Vector4]=[]
+ profiles.assign(planted_margins.get(index,[]))
+ material.set_shader_parameter("margin_count",profiles.size())
+ profiles.resize(16)
+ material.set_shader_parameter("planted_margins",profiles)
+ material.set_shader_parameter("margin_soil",load("res://assets/textures/Garden_loam.webp"))
+ material.set_shader_parameter("margin_normal",load("res://assets/textures/Garden_loam_normal.webp"))
 
 static func family(name: String) -> int:
  var n=name.to_lower()

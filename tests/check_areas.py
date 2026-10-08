@@ -37,9 +37,30 @@ for path in sorted((ROOT/'assets/areas').rglob('*.glb')):
         assert doc.get('images'), (path,'missing surface textures')
         rocks=[node['extras']['footprint'] for node in doc['nodes'] if 'footprint' in node.get('extras',{})]
         anchors=[node for node in doc['nodes'] if 'area_species' in node.get('extras',{})]
+        margins=[node['extras'] for node in doc['nodes'] if 'composition_bed' in node.get('extras',{})]
+        assert 1<=len(margins)<=16,(path,'missing or excessive planted margins')
+        assert all(len(m['composition_bed'])==4 and m['composition_bed'][2]>0 and m['composition_bed'][3]>0 for m in margins),(path,'invalid margin footprint')
+        composed=[node for node in anchors if node.get('extras',{}).get('composed_planting')]
+        assert len(composed)==sum(m['composition_count'] for m in margins),(path,'planting/soil metadata drift')
+        assert 60<=len(composed)<=160,(path,'decorative planting budget')
         for node in anchors:
             x,_,z=node.get('translation',[0,0,0])
             assert all(((x-rx)/rw)**2+((z-rz)/rd)**2>=1 for rx,rz,rw,rd in rocks), (path,'plant rooted inside stone',node['name'])
+        if path.stem=='moon':
+            # Pergola feet must stand on the court, outside the pool coping.
+            # Check exported mesh corners, not just the source's post centres.
+            fixture=next(node for node in doc['nodes'] if node.get('extras',{}).get('fixture_id')=='moon:pergola')
+            tx,_,tz=fixture['translation'];feet=[]
+            for child in fixture['children']:
+                for primitive in doc['meshes'][doc['nodes'][child]['mesh']]['primitives']:
+                    accessor=doc['accessors'][primitive['attributes']['POSITION']]
+                    view=doc['bufferViews'][accessor['bufferView']]
+                    start=view.get('byteOffset',0)+accessor.get('byteOffset',0)
+                    for j in range(accessor['count']):
+                        x,y,z=struct.unpack_from('<fff',binary,start+j*view.get('byteStride',12))
+                        if y<.10:feet.append((x+tx,z+tz))
+            assert len(feet)>=16,(path,'missing pergola feet')
+            assert all(math.hypot(x+1,z)>3.35 for x,z in feet),(path,'pergola foot intersects reflecting pool coping')
     elif path.parent.name=='furniture':
         assert count>50 and doc.get('images'),(path,'missing textured furniture')
     else:

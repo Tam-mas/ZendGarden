@@ -441,10 +441,12 @@ def props_moon(G,root,i):
     ps=[(-1+3.12*math.cos(k*math.tau/64),1.12,3.12*math.sin(k*math.tau/64)) for k in range(65)]
     G.tube(rim,MATS['cream'],ps,[.18]*65,10)
     pergola=pivot('Moon pergola',root,at(i,-4.7,-1.75),collision=True,flat=True,fixture_id='moon:pergola',fixture_kind='pergola')
-    for x in [-5.9,-3.5]:
+    # Keep the pool-side feet outside the 3.30 m coping. The fixture origin
+    # stays unchanged so saved positions and player arrangements still match.
+    for x in [-5.9,-4.35]:
         for z in [-4.5,1]:G.box(pergola,MATS['cream'],(x+4.7,1.35,z+1.75),(.15,2.7,.15))
-    for x in [-6,-3.4]:G.box(pergola,MATS['cream'],(x+4.7,2.73,0),(.16,.18,6.0))
-    for k in range(10):G.box(pergola,MATS['cream'],(0,2.88,-3.05+k*.64),(3.2,.09,.14))
+    for x in [-6,-4.25]:G.box(pergola,MATS['cream'],(x+4.7,2.73,0),(.16,.18,6.0))
+    for k in range(10):G.box(pergola,MATS['cream'],(-.425,2.88,-3.05+k*.64),(2.35,.09,.14))
     blooms=pivot('DuskFlowers',root)
     for k in range(28):
         x=(-1 if k%2 else 1)*(3.8+(k%3)*.55);z=-6+(k//2)*.9
@@ -615,6 +617,8 @@ import area_cohesion
 area_cohesion.install(sys.modules[__name__])
 import area_realism
 area_realism.install(sys.modules[__name__])
+import area_composition
+area_composition.install(sys.modules[__name__])
 
 if __name__=='__main__':
     args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []

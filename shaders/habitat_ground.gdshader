@@ -8,6 +8,10 @@ uniform vec4 tint : source_color = vec4(1.);
 uniform float texture_scale = .72;
 uniform vec2 habitat_center;
 uniform int habitat_kind = 1;
+uniform sampler2D margin_soil : source_color,filter_linear_mipmap,repeat_enable;
+uniform sampler2D margin_normal : hint_normal,filter_linear_mipmap,repeat_enable;
+uniform int margin_count=0;
+uniform vec4 planted_margins[16];
 varying vec3 world;
 void vertex(){world=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
 void fragment(){
@@ -34,7 +38,7 @@ void fragment(){
  }else if(habitat_kind==0){
   float r=length((p+vec2(1.4,0.))/vec2(4.25,3.8));
   mask=1.-smoothstep(.97,1.30,r+irregular*.3);
-  gravel*=vec3(.72,.78,.67);
+  gravel*=vec3(.36,.43,.34);
  }else if(habitat_kind==2){
   mask=(1.-smoothstep(5.9,6.25,abs(p.x)))*(1.-smoothstep(6.8,7.2,abs(p.y)));
  }else if(habitat_kind==9){
@@ -44,11 +48,23 @@ void fragment(){
   float center=habitat_kind==1?1.0*sin(p.y*.42)+.30*sin(p.y*.83):1.5*sin(p.y*.4);
   float distance=abs(p.x-center);
   mask=1.-smoothstep(.57,.99,distance+irregular);
-  gravel*=vec3(.66,.69,.60);
+  gravel*=vec3(.40,.46,.37);
   grass*=habitat_kind==1?vec3(.86,.91,.81):vec3(1.);
  }
  float border=smoothstep(9.1,11.8,max(abs(p.x),abs(p.y)));
- ALBEDO=mix(mix(grass,gravel,mask),common_lawn,border);ROUGHNESS=.97;SPECULAR=.18;
- NORMAL_MAP=mix(mix(texture(meadow_normal,world.xz*.6).rgb,texture(relief,world.xz*texture_scale).rgb,mask),texture(meadow_normal,world.xz*.6).rgb,border);
+ float margin=0.;
+ for(int i=0;i<margin_count;i++){
+  vec4 bed=planted_margins[i];
+  float radius=length((p-bed.xy)/max(bed.zw,vec2(.1)));
+  float edge=radius+sin(p.x*3.2+sin(p.y*2.1))*.06+sin(p.y*5.3)*.025;
+  margin=max(margin,1.-smoothstep(.58,1.08,edge));
+ }
+ // A broken, feathered soil edge leaves the common meadow at every seam.
+ margin*=1.-smoothstep(10.7,11.8,max(abs(p.x),abs(p.y)));
+ margin*=mix(.68,.88,broad);
+ vec3 soil=texture(margin_soil,world.xz*.72).rgb*vec3(.78,.82,.69);
+ if(habitat_kind==2 || habitat_kind==8)soil=mix(soil,gravel,.30);
+ ALBEDO=mix(mix(mix(grass,gravel,mask),common_lawn,border),soil,margin);ROUGHNESS=.97;SPECULAR=.18;
+ NORMAL_MAP=mix(mix(mix(texture(meadow_normal,world.xz*.6).rgb,texture(relief,world.xz*texture_scale).rgb,mask),texture(meadow_normal,world.xz*.6).rgb,border),texture(margin_normal,world.xz*.72).rgb,margin);
  NORMAL_MAP_DEPTH=.5;
 }
