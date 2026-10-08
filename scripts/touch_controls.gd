@@ -522,12 +522,12 @@ func undo_remove() -> void:
  if old.plant:
   if old.has("container_uid"):
    var planter=GardenContainers.object(g,str(old.container_uid))
-   if planter.is_empty() or not GardenContainers.can_plant(g,planter,int(old.container_slot),int(old.id)).is_empty():g.toast("Make room in that pocket before undoing.");return
+   if planter.is_empty() or not GardenContainers.can_plant(g,planter,int(old.container_slot),int(old.id),-1,str(old.get("form_uid",""))).is_empty():g.toast("Make room in that pocket before undoing.");return
    GardenContainers.restore_record(g,old)
    removed.clear();g.refresh_ui();g.toast("Back in its planting pocket.");return
   if not g.can_plant(old.id,old.pos,old.plot).is_empty(): g.toast("Make room in that spot before undoing."); return
-  var p=g.add_plant(old.id,old.pos,old.plot,old.age,old.height_factor,float(old.get("orientation",0)),int(old.get("shape_seed",0)))
-  for key in ["water","stress","pruned","prune_cuts","treatments","watered_until"]:
+  var p=g.add_plant(old.id,old.pos,old.plot,old.age,old.height_factor,float(old.get("orientation",0)),int(old.get("shape_seed",0)),str(old.get("form_uid","")))
+  for key in ["water","stress","pruned","prune_cuts","treatments","watered_until","breeding_checked"]:
    if old.has(key):p[key]=old[key]
   g.refresh_plant(p)
  else:

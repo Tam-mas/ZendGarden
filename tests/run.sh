@@ -32,6 +32,17 @@ for check in flower_collection flower_additions; do
   fi
   rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]' "$flower_log"
 done
+breeding_log="$(mktemp -t zend-garden-breeding)"
+"$GODOT_BIN" --headless --path "$PWD" --script tests/plant_breeding.gd > "$breeding_log" 2>&1 || { cat "$breeding_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$breeding_log" || ! rg -Fq 'PLANT_BREEDING_RESULT: []' "$breeding_log"; then
+  cat "$breeding_log"
+  exit 1
+fi
+"$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --breeding-test > "$breeding_log" 2>&1 || { cat "$breeding_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$breeding_log" || ! rg -Fq 'BREEDING_IN_GAME_RESULT: []' "$breeding_log"; then
+  cat "$breeding_log"
+  exit 1
+fi
 economy_log="$(mktemp -t zend-garden-economy)"
 land_log="$(mktemp -t zend-garden-land)"
 trail_log="$(mktemp -t zend-garden-trail)"

@@ -31,7 +31,7 @@ const {chromium, webkit} = require(process.env.PLAYWRIGHT_MODULE || 'playwright'
         assert.equal(await page.locator('input[type=file]').count(),0,'Picker must clean up after selection');
         return page.evaluate(() => window.result);
       };
-      for (const version of [1,2]) {
+      for (const version of [1,2,3]) {
         const text=JSON.stringify({version,day:17,plants:[],extension:{kept:true}});
         assert.deepEqual(await select(Buffer.from(text),`garden-v${version}.json`),{text,name:`garden-v${version}.json`,error:''});
       }
@@ -45,7 +45,7 @@ const {chromium, webkit} = require(process.env.PLAYWRIGHT_MODULE || 'playwright'
       assert.equal((await page.evaluate(() => window.result)).error,'cancelled');
       assert.equal(await page.locator('input[type=file]').count(),0);
       assert.deepEqual(errors,[]);
-      console.log(`SAVE_FILES_BROWSER_RESULT ${name}: PASS — v1/v2 selection, exact text, limits, UTF-8 errors, cancellation and strict CSP`);
+      console.log(`SAVE_FILES_BROWSER_RESULT ${name}: PASS — v1/v2/v3 selection, exact text, limits, UTF-8 errors, cancellation and strict CSP`);
     } finally { await browser.close(); }
   }
 })().catch(error => { console.error(error); process.exitCode=1; });

@@ -8,6 +8,7 @@ uniform bool has_roughness_map=false;
 uniform vec4 leaf_color : source_color = vec4(1.0);
 #include "res://shaders/plant_shape.gdshaderinc"
 #include "res://shaders/fruit_growth.gdshaderinc"
+#include "res://shaders/cultivar.gdshaderinc"
 uniform bool has_color_map=true;
 uniform float wind_strength=1.0;
 uniform float surface_roughness=.82;
@@ -28,6 +29,7 @@ void vertex(){
 }
 void fragment(){
  ALBEDO=(has_color_map ? texture(leaf_texture,UV).rgb : vec3(1.0))*leaf_color.rgb;
+ ALBEDO=cultivar_colour(ALBEDO,UV);
  ROUGHNESS=has_roughness_map ? texture(leaf_roughness,UV).g : surface_roughness;
  if(has_normal_map) { NORMAL_MAP=texture(leaf_normal,UV).rgb; NORMAL_MAP_DEPTH=.55; }
  BACKLIGHT=ALBEDO*surface_backlight;

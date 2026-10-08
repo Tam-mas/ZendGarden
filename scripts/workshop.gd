@@ -53,6 +53,7 @@ static func open(g, uid: String="") -> void:
  if is_instance_valid(g.welcome):g.welcome.queue_free()
  if is_instance_valid(g.welcome_backdrop):g.welcome_backdrop.queue_free()
  g.workshop_open=true;g.workshop_uid=uid
+ if not uid.is_empty():g.breeding_library_open=false
  if is_instance_valid(g.touch):g.touch.reset_gestures()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  g.welcome_backdrop=ColorRect.new()
@@ -74,7 +75,8 @@ static func open(g, uid: String="") -> void:
  column.size_flags_horizontal=Control.SIZE_EXPAND_FILL;column.add_theme_constant_override("separation",10)
  scroll.add_child(column)
  if not g.workshop_notice.is_empty():note(g,column,g.workshop_notice,16)
- if obj.is_empty():overview(g,column)
+ if obj.is_empty() and g.breeding_library_open:GardenBreedingUI.build(g,column,{})
+ elif obj.is_empty():overview(g,column)
  elif not GardenAreaProgression.allowed(g,obj.pos):note(g,column,GardenAreaProgression.message(g,GardenAreaCatalogue.index_at(obj.pos)),16)
  elif obj.kind in GardenContainers.SPECS:planter(g,column,obj)
  else:equipment(g,column,obj)
@@ -93,7 +95,7 @@ static func close(g) -> void:
  if not g.workshop_open:return
  if is_instance_valid(g.welcome):g.welcome.queue_free()
  if is_instance_valid(g.welcome_backdrop):g.welcome_backdrop.queue_free()
- g.welcome=null;g.welcome_backdrop=null;g.workshop_open=false;g.workshop_uid=""
+ g.welcome=null;g.welcome_backdrop=null;g.workshop_open=false;g.workshop_uid="";g.breeding_library_open=false
  if g.workshop_return_to_game:g.resume_controls()
 
 static func supplies(g, column: Control) -> void:
@@ -108,6 +110,7 @@ static func supplies(g, column: Control) -> void:
  column.add_child(starter)
 
 static func overview(g, column: Control) -> void:
+ column.add_child(g.button("Cultivars & propagation nursery",func():GardenBreedingUI.open_library(g),Vector2(0,48)))
  note(g,column,"Make useful supplies, tend container displays and keep lifted plants in the nursery. In Wander, face equipment or a planter and press E, or use Interact on touch.",15)
  supplies(g,column)
  note(g,column,"TEND "+g.plots[g.current_plot].name.to_upper(),16)
@@ -135,12 +138,13 @@ static func overview(g, column: Control) -> void:
  note(g,column,"Packing a planted container keeps its plants here, with their growth and care. Replant into a suitable pocket or choose a new spot on open ground.",14)
  for i in range(g.workshop_state.nursery.size()):
   var index=i;var saved=g.workshop_state.nursery[i]
-  action(g,column,"Place %s · %d%% grown"%[g.catalogue[int(saved.id)].name,roundi(float(saved.age)/float(g.catalogue[int(saved.id)].days)*100)],func():
-   close(g);g.selected=int(saved.id);g.selected_layer=g.catalogue[g.selected].layer
+  action(g,column,"Place %s · %d%% grown"%[GardenPlantBreeding.title(g,GardenPlantBreeding.form(g,str(saved.get("form_uid","")))) if saved.has("form_uid") else g.catalogue[int(saved.id)].name,roundi(float(saved.age)/float(g.catalogue[int(saved.id)].days)*100)],func():
+   close(g);g.selected_cultivar="";g.selected=int(saved.id);g.selected_layer=g.catalogue[g.selected].layer
    g.set_mode("plant");g.nursery_placing=index;g.side_panel.hide();g.resume_controls()
    g.toast("Choose open soil, or a suitable container pocket, for your stored plant."))
 
 static func equipment(g, column: Control, obj: Dictionary) -> void:
+ if obj.kind=="potting_bench":GardenBreedingUI.build(g,column,obj);return
  note(g,column,GardenEquipment.status(g,obj),16)
  var recipe_key=GardenEquipment.recipe_for(obj.kind)
  if not recipe_key.is_empty():
@@ -199,17 +203,20 @@ static func planter(g, column: Control, obj: Dictionary) -> void:
    var choices=[]
    for id in g.unlocked_plants:
     if GardenContainers.can_plant(g,obj,slot,int(id)).is_empty():
-     choice.add_item(g.catalogue[int(id)].name);choices.append({"id":int(id),"nursery":-1})
+     choice.add_item(g.catalogue[int(id)].name);choices.append({"id":int(id),"nursery":-1,"form_uid":""})
+   for f in g.breeding_state.forms.values():
+    if f.registered and not f.archived and GardenContainers.can_plant(g,obj,slot,int(f.species),-1,f.uid).is_empty():
+     choice.add_item(GardenPlantBreeding.title(g,f));choices.append({"id":int(f.species),"nursery":-1,"form_uid":f.uid})
    for i in range(g.workshop_state.nursery.size()):
     var saved=g.workshop_state.nursery[i]
-    if GardenContainers.can_plant(g,obj,slot,int(saved.id)).is_empty():
-     choice.add_item("Stored · "+g.catalogue[int(saved.id)].name);choices.append({"id":int(saved.id),"nursery":i})
+    if GardenContainers.can_plant(g,obj,slot,int(saved.id),-1,str(saved.get("form_uid",""))).is_empty():
+     choice.add_item("Stored · "+g.catalogue[int(saved.id)].name);choices.append({"id":int(saved.id),"nursery":i,"form_uid":str(saved.get("form_uid",""))})
    if choices.is_empty():choice.add_item("Unlock a compact plant in Seeds");choice.disabled=true
    column.add_child(choice)
    action(g,column,"Plant in pocket %d"%(slot+1),func():
     var selected=choices[choice.selected]
     if int(selected.nursery)>=0:GardenContainers.replant(g,int(selected.nursery),obj,pocket)
-    else:GardenContainers.plant(g,obj,pocket,int(selected.id))
+    else:GardenContainers.plant(g,obj,pocket,int(selected.id),str(selected.form_uid))
     g.refresh_wildlife();g.toast("A little planting takes its place."),not choices.is_empty())
  supplies(g,column)
 

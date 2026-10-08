@@ -27,11 +27,11 @@ func run() -> void:
  var original={"version":2,"day":17,"coins":231,"plants":[{"id":147,"plot":0,"pos":[1,-2],"age":3,"water":2,"stress":0}],"bed_surfaces":{"0":"sand"},"owned_surfaces":["soil","sand"],"settings":{"intro_seen":true,"updates_seen":32},"custom_extension":{"keep":"all bytes"}}
  game.original=JSON.stringify(original).to_utf8_buffer()
  if not GardenSaveFiles.write_atomic(game.SAVE_PATH,game.original):failures.append("Fixture write failed")
- for version in [1,2]:
+ for version in [1,2,3]:
   var data=original.duplicate(true)
   data.version=version
   if GardenSaveFormat.read(JSON.stringify(data).to_utf8_buffer(),count,kinds).has("error"):failures.append("Valid v%d save rejected"%version)
- var malformed=[{},[],{"version":3,"plants":[]},{"version":2,"plants":[],"settings":{"music_volume":"loud"}},{"version":2,"plants":[],"unlocked_plots":99999999},{"version":2,"plants":[],"climate":{"values":[0]}},{"version":2,"plants":[],"tutorial":{"pos":false}},{"version":2,"plants":[],"automation":{"9999water":true}},{"version":2,"plants":[],"objects":[{"kind":"missing","pos":[0,0],"price":0,"fish":false}]},{"version":2,"plants":[],"upgrades":{"can":-1}}]
+ var malformed=[{},[],{"version":4,"plants":[]},{"version":2,"plants":[],"settings":{"music_volume":"loud"}},{"version":2,"plants":[],"unlocked_plots":99999999},{"version":2,"plants":[],"climate":{"values":[0]}},{"version":2,"plants":[],"tutorial":{"pos":false}},{"version":2,"plants":[],"automation":{"9999water":true}},{"version":2,"plants":[],"objects":[{"kind":"missing","pos":[0,0],"price":0,"fish":false}]},{"version":2,"plants":[],"upgrades":{"can":-1}}]
  for field in ["id","plot","pos","age","water","stress"]:
   var data=original.duplicate(true)
   data.plants[0][field]="bad"

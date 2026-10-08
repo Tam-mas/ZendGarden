@@ -60,6 +60,7 @@ func _process(delta: float) -> void:
    p.node.set_meta("batch_shape",true)
    GardenArt.add_leaf_wind(p.node)
    GardenPlantGrowth.variation(p.node,int(p.shape_seed),float(garden.catalogue[p.id].height),.15 if garden.catalogue[p.id].category=="Cacti & succulents" else 1.0)
+   GardenCultivarAppearance.apply(garden,p.node,GardenPlantBreeding.of_plant(garden,p))
   dirty=true
   if is_instance_valid(garden.touch):garden.touch.apply_graphics()
  if not active: return
@@ -115,6 +116,7 @@ func rebuild() -> void:
  if is_instance_valid(selected):
   GardenPlantInspector.highlight(selected,false)
   GardenArt.add_leaf_wind(selected)
+  update_appearance(selected)
  # Restore flags before examining stage visibility; never batch dormant organs.
  for p in garden.planted:
   restore(p.node)
@@ -199,11 +201,18 @@ func select(node: Node3D) -> void:
  var old=selected
  selected=node
  show_selected(old,false)
- if is_instance_valid(old):GardenArt.add_leaf_wind(old)
+ if is_instance_valid(old):GardenArt.add_leaf_wind(old);update_appearance(old)
  if is_instance_valid(node):individual_shape(node)
  show_selected(node,true)
 
 func individual_shape(node: Node3D) -> void:
  node.set_meta("batch_shape",false)
  GardenPlantGrowth.set_shape(node,node.get_meta("plant_shape",Vector4.ZERO),float(node.get_meta("plant_height",1.0)))
+ update_appearance(node)
  node.set_meta("batch_shape",true)
+
+func update_appearance(node: Node3D) -> void:
+ for p in garden.planted:
+  if p.node==node:
+   GardenCultivarAppearance.apply(garden,node,GardenPlantBreeding.of_plant(garden,p))
+   return

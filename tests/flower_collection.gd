@@ -14,6 +14,10 @@ class CollectionGarden:
  var unlocked_plants=[]
  var day=1
  var selected=0
+ var selected_cultivar=""
+ var nursery_placing=-1
+ var breeding_state=GardenPlantBreeding.initial_state()
+ var workshop_state=GardenWorkshop.initial_state()
  var touch=false
  var side_title=Label.new()
  var list_box=VBoxContainer.new()

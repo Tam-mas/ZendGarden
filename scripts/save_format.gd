@@ -22,7 +22,7 @@ static func fields(data: Dictionary, numeric: Array=[], booleans: Array=[], stri
  return true
 
 # Validate every shape read by restoration before allowing an external file to
-# replace a garden. Keep v1/v2 bytes intact, including unknown extension fields.
+# replace a garden. Keep v1/v2/v3 bytes intact, including unknown extension fields.
 static func read(bytes: PackedByteArray, plant_count: int, kinds: Array) -> Dictionary:
  if bytes.is_empty() or bytes.size()>MAX_BYTES:
   return {"error":"Choose a complete garden JSON file smaller than 4 MB."}
@@ -38,7 +38,7 @@ static func read(bytes: PackedByteArray, plant_count: int, kinds: Array) -> Dict
  return {"data":data}
 
 static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
- if not integer(data.get("version"),1,2) or not data.get("plants") is Array:return false
+ if not integer(data.get("version"),1,3) or not data.get("plants") is Array:return false
  for key in ["objects","orders","clean_paths","unlocked_plants","names","favourite_plants","recent_plants","owned_surfaces"]:
   if data.has(key) and not data[key] is Array:return false
  for key in ["settings","terrain","watered_ground","wild_collection","wild_pruning","inventory","upgrades","automation","expansions","path_widths","climate","tutorial","bed_surfaces"]:
@@ -103,4 +103,4 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
   if not value is String:return false
  for value in data.get("bed_surfaces",{}).values():
   if not value is String:return false
- return GardenAreaCatalogue.valid_save(data) and GardenWorkshop.valid_save(data,plant_count)
+ return GardenAreaCatalogue.valid_save(data) and GardenWorkshop.valid_save(data,plant_count) and GardenPlantBreeding.valid_save(data)

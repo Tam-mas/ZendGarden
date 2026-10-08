@@ -37,6 +37,11 @@ static func lines(g, p: Dictionary) -> Array:
  var data: Dictionary=g.catalogue[p.id]
  var fraction=clampf(p.age/float(data.days),0,1)
  var text=[data.name+" · "+["Groundcover","Flowers","Shrubs","Canopy"][data.layer],"%s · %d%% grown"%[GardenPlantGrowth.stage(fraction,data),roundi(fraction*100)]]
+ var cultivar=GardenPlantBreeding.of_plant(g,p)
+ if not cultivar.is_empty():
+  text[0]=GardenPlantBreeding.title(g,cultivar)
+  text.insert(2,GardenPlantBreeding.traits(cultivar,fraction>=.78))
+  if not cultivar.registered:text.insert(3,"Preserve this selection at the potting bench" if cultivar.observed else "Grow to flowering, then preserve this selection")
  if GardenContainers.is_contained(p):text.append("Container pocket %d"%(int(p.container_slot)+1))
  text.append("Thirsty · watering helps" if p.water<=0 else "Watered")
  var care=growth_context(g,p)

@@ -179,6 +179,14 @@ var workshop_notice=""
 var workshop_uid=""
 var workshop_return_to_game=false
 var nursery_placing=-1
+var breeding_state=GardenPlantBreeding.initial_state()
+var selected_cultivar=""
+var breeding_tab="Propagate"
+var breeding_library_open=false
+var breeding_selected=""
+var breeding_query=""
+var breeding_show_archived=false
+var breeding_page=0
 var hover_container_uid=""
 var hover_container_slot=-1
 var climate: GardenClimate
@@ -199,6 +207,7 @@ func _ready() -> void:
  if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--economy-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://economy-test-save.json"
  if "--workshop-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://workshop-test-save.json"
+ if "--breeding-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://breeding-in-game-test.json"
  if "--milestones-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://milestones-test-save.json"
  if "--areas-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-test-save.json"
  if "--land-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://connected-land-test-save.json"
@@ -265,6 +274,7 @@ func _ready() -> void:
  elif "--experience-test" in OS.get_cmdline_user_args(): call_deferred("run_experience_test")
  elif "--economy-test" in OS.get_cmdline_user_args(): call_deferred("run_economy_test")
  elif "--workshop-test" in OS.get_cmdline_user_args(): call_deferred("run_workshop_test")
+ elif "--breeding-test" in OS.get_cmdline_user_args():call_deferred("run_breeding_test")
  elif "--milestones-test" in OS.get_cmdline_user_args():call_deferred("run_milestones_test")
  elif "--areas-test" in OS.get_cmdline_user_args():call_deferred("run_areas_test")
  elif "--land-test" in OS.get_cmdline_user_args():call_deferred("run_land_test")
@@ -1257,6 +1267,7 @@ func rotate_structure(direction: int) -> void:
 
 func choose_plant(id: int) -> void:
  nursery_placing=-1
+ selected_cultivar=""
  if id not in unlocked_plants:
   if coins<catalogue[id].price:
    toast("Unlock %s for %d petals; you have %d. Seasons do not stop planting." % [catalogue[id].name,catalogue[id].price,coins])
@@ -1385,6 +1396,16 @@ func update_placement_preview(pid: String) -> void:
   var original=planted[moved_index]
   if original.has("age"):
    GardenPlantGrowth.apply(preview,catalogue[original.id],clampf(original.age/float(catalogue[original.id].days),0,1),int(original.get("shape_seed",0)),source.scale)
+ if pid.begins_with("m"):
+  GardenCultivarAppearance.apply(self,preview,GardenPlantBreeding.of_plant(self,planted[moved_index]))
+ if pid.begins_with("p") and changed:
+  var f=GardenPlantBreeding.selected_form(self)
+  if not f.is_empty():
+   var fraction=1.0
+   if nursery_placing>=0:fraction=clampf(float(workshop_state.nursery[nursery_placing].age)/float(catalogue[selected].days),0,1)
+   preview.scale=Vector3(1,GardenPlantBreeding.height_factor(f),1)
+   GardenPlantGrowth.apply(preview,catalogue[selected],fraction,int(f.seed),preview.scale)
+   GardenCultivarAppearance.apply(self,preview,f)
  if pid.begins_with("f") or pid.begins_with("o"): preview.rotation.y=structure_rotation
  preview.show()
  var error=can_plant(selected,hover_cell,hover_plot) if mode=="plant" else ""
@@ -1414,7 +1435,7 @@ func ghost_material(node: Node, tint: Color = Color(0.82,0.95,0.66,0.4)) -> void
    if original is ShaderMaterial and original.shader.resource_path.ends_with("leaf_wind.gdshader"):
     material=ShaderMaterial.new()
     material.shader=load("res://shaders/leaf_preview.gdshader")
-    for parameter in ["leaf_texture","leaf_color","leaf_normal","leaf_roughness","has_color_map","has_normal_map","has_roughness_map","wind_strength","surface_backlight","surface_roughness","fruit_anchors","fruit_growth"]:
+    for parameter in ["leaf_texture","leaf_color","leaf_normal","leaf_roughness","has_color_map","has_normal_map","has_roughness_map","wind_strength","surface_backlight","surface_roughness","fruit_anchors","fruit_growth"]+GardenCultivarAppearance.PARAMETERS:
      material.set_shader_parameter(parameter,original.get_shader_parameter(parameter))
     if RenderingServer.get_current_rendering_method()=="gl_compatibility":
      material.set_shader_parameter("plant_shape",original.get_shader_parameter("plant_shape"))
@@ -1464,7 +1485,8 @@ func can_plant(id: int, pos: Vector3, plot: int, excluding: int = -1) -> String:
  if not hover_container_uid.is_empty():
   var planter=GardenContainers.object(self,hover_container_uid)
   if not planter.is_empty() and GardenContainers.position(planter,hover_container_slot).distance_to(pos)<.01:
-   return GardenContainers.can_plant(self,planter,hover_container_slot,id,excluding)
+   var f=GardenPlantBreeding.of_plant(self,planted[excluding]) if excluding>=0 else GardenPlantBreeding.selected_form(self)
+   return GardenContainers.can_plant(self,planter,hover_container_slot,id,excluding,str(f.get("uid","")))
  if not GardenAreaProgression.allowed(self,pos):return GardenAreaProgression.message(self,GardenAreaCatalogue.index_at(pos))
  if not GardenAreaCatalogue.plot_open(self,plot): return "Choose an unlocked garden area."
  var bed=bed_at(pos)
@@ -1533,16 +1555,17 @@ func perform_action(repeating: bool=false) -> void:
      GardenContainers.restore_record(self,stored)
      workshop_state.nursery.remove_at(nursery_placing)
     nursery_placing=-1
-   elif not planter.is_empty():GardenContainers.plant(self,planter,hover_container_slot,selected)
+   elif not planter.is_empty():GardenContainers.plant(self,planter,hover_container_slot,selected,selected_cultivar)
    else:
     add_plant(selected,hover_cell,hover_plot,0.0,0.0,orientation)
     GardenEquipment.starter(self,planted.back())
+   if new_seed:GardenPlantBreeding.apply_selection(self,planted.back())
    preview_id="" # Give the next seed its own orientation.
    if planter.is_empty() and new_seed:planted_total+=1
    GardenSeedCollection.record_planting(self,selected)
    GardenTutorial.event(self,"plant",planted.back())
    action_cooldown=0.55/(1.0+int(upgrades.trowel))
-   toast(catalogue[selected].name+" planted."+(" Resting until "+Catalogue.growing_seasons(selected)+"; a greenhouse allows year-round growth." if growth_conditions(planted.back())==0 else " A little beginning."))
+   toast((GardenPlantBreeding.title(self,GardenPlantBreeding.of_plant(self,planted.back())) if planted.back().has("form_uid") else catalogue[selected].name)+" planted."+(" Resting until "+Catalogue.growing_seasons(selected)+"; a greenhouse allows year-round growth." if growth_conditions(planted.back())==0 else " A little beginning."))
   "hoe":
    GardenSculpt.apply_hoe(self)
   "water", "prune":
@@ -1657,7 +1680,7 @@ func perform_action(repeating: bool=false) -> void:
  refresh_wildlife()
  if mode in ["plant","prune","move","remove","build","hoe"]:GardenClimbingSupport.refresh(self)
 
-func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0, orientation: float = NAN, shape_seed: int = -1) -> Dictionary:
+func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor: float = 0.0, orientation: float = NAN, shape_seed: int = -1, form_uid: String = "") -> Dictionary:
  pos=GardenTerrain.point(pos)
  var n = Art.plant(catalogue[id])
  n.set_meta("batch_groundcover",int(catalogue[id].layer)==0)
@@ -1675,6 +1698,7 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  plant_root.add_child(marker)
  var mature_height=clampf(height_factor,0.8,1.2) if height_factor>0.0 else rng.randf_range(0.8,1.2)
  var p = {"shape_seed":rng.randi_range(0,2147483646) if shape_seed<0 else shape_seed,"orientation":n.rotation.y,"prune_cuts":0,"height_factor":mature_height,"marker":marker,"id":id,"pos":pos,"plot":plot,"age":age,"water":2.0,"stress":0.0,"pruned":0.0,"node":n}
+ if not form_uid.is_empty():p["form_uid"]=form_uid;p["breeding_checked"]=true
  n.scale=plant_scale(p)
  planted.append(p)
  refresh_plant(p)
@@ -1718,7 +1742,7 @@ func plant_scale(p: Dictionary) -> Vector3:
  var height=lerpf(1.0,float(p.get("height_factor",1.0)),fraction)*(1.0-trim*.30)
  var outside_trim=1.0-minf(2,int(p.get("prune_cuts",0)))*.2
  var training={"open":Vector3(1.15,.9,1.15),"fan":Vector3(1.2,.9,.65),"espalier":Vector3(1.35,.8,.38)}.get(str(p.get("area_training","")),Vector3.ONE)
- return Vector3(width,height,width)*amount*outside_trim*training
+ return Vector3(width,height*GardenPlantBreeding.height_factor(GardenPlantBreeding.of_plant(self,p)),width)*amount*outside_trim*training
 
 func legacy_height_factor(p: Dictionary) -> float:
  # Old saves acquire a repeatable value, even before their first new save.
@@ -1747,6 +1771,7 @@ func refresh_plant(p: Dictionary, animate: bool=true) -> void:
  if highlighted: GardenPlantInspector.highlight(p.node,false)
  GardenPlantGrowth.apply(p.node,catalogue[p.id],fraction,int(p.shape_seed),plant_scale(p))
  GardenAreas.apply_tree(self,p)
+ GardenCultivarAppearance.apply(self,p.node,GardenPlantBreeding.of_plant(self,p))
  if highlighted: GardenPlantInspector.highlight(p.node,true)
 
 func starter_garden() -> void:
@@ -1809,6 +1834,7 @@ func advance_growth() -> void:
   p.stress=minf(1,p.stress+GardenAreas.stress_gain(self,p,GardenEquipment.stress_gain(self,p)))
   refresh_plant(p)
  day+=1
+ GardenPlantBreeding.morning(self)
  GardenAreaProgression.refresh(self)
  GardenAreas.after_morning(self)
  for obj in objects:GardenEquipment.visual(self,obj)
@@ -2219,7 +2245,8 @@ func save_game() -> bool:
   for key in ["area_fixture","elevation","starter_id","starter_orientation_version"]:
    if obj.has(key):saved[key]=obj[key]
   os.append(saved)
- var data={"petal_remainder":petal_remainder,"bed_surfaces":bed_surfaces,"owned_surfaces":owned_surfaces,"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":2,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
+ var data={"petal_remainder":petal_remainder,"bed_surfaces":bed_surfaces,"owned_surfaces":owned_surfaces,"tutorial":tutorial_state,"favourite_plants":favourite_plants,"recent_plants":recent_plants,"terrain":GardenTerrain.offsets,"watered_ground":watered_ground,"prune_width":GardenTools.prune_width(self),"hoe_raise":hoe_raise,"wild_collection":wild_collection,"wild_pruning":wild_pruning,"settings":settings,"request_unread":request_unread,"rake_petals":rake_petals,"version":3,"climate":climate.save_state(),"plants":ps,"objects":os,"coins":coins,"day":day,"clock":clock_time,"unlocked_plants":unlocked_plants,"unlocked_plots":unlocked_plots,"inventory":inventory,"upgrades":upgrades,"automation":automation,"expansions":expansions,"orders":orders,"fulfilled":fulfilled,"planted_total":planted_total,"clean_paths":clean_paths,"path_widths":path_widths,"names":companion_names,"player":[player.position.x if rest_kind.is_empty() else rest_return.x,player.position.z if rest_kind.is_empty() else rest_return.z]}
+ data["breeding"]=breeding_state
  data["workshop"]=workshop_state
  data["areas"]=areas_state
  return GardenSaveFiles.write_atomic(SAVE_PATH,JSON.stringify(data).to_utf8_buffer())
@@ -2243,7 +2270,7 @@ func browser_save_check() -> bool:
  if expected=="empty": return not FileAccess.file_exists(SAVE_PATH)
  if not FileAccess.file_exists(SAVE_PATH) or FileAccess.get_sha256(SAVE_PATH)!=expected: return false
  var data=JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
- if not data is Dictionary or int(data.get("version",0)) not in [1,2] or not data.get("plants") is Array: return false
+ if not data is Dictionary or int(data.get("version",0)) not in [1,2,3] or not data.get("plants") is Array: return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
  if plot_count%2: plot_count+=1
  if data.has("areas"):plot_count+=10
@@ -2271,7 +2298,7 @@ func valid_plant_ids(values) -> Array:
 func load_game() -> void:
  if smoke or not FileAccess.file_exists(SAVE_PATH): return
  var parsed=JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
- if not parsed is Dictionary or int(parsed.get("version",0)) not in [1,2]: return
+ if not parsed is Dictionary or int(parsed.get("version",0)) not in [1,2,3]: return
  if int(parsed.get("version",0))==1 and not FileAccess.file_exists(SAVE_PATH+".v1-backup"):
   var backup=FileAccess.open(SAVE_PATH+".v1-backup",FileAccess.WRITE)
   if backup:
@@ -2280,6 +2307,7 @@ func load_game() -> void:
  parsed=GardenAreaCatalogue.migrate(parsed)
  loaded_data=parsed
  GardenWorkshop.restore(self,parsed)
+ GardenPlantBreeding.restore(self,parsed)
  favourite_plants=valid_plant_ids(parsed.get("favourite_plants",[]))
  recent_plants=valid_plant_ids(parsed.get("recent_plants",[])).slice(0,20)
  wild_collection=parsed.get("wild_collection",{})
@@ -2323,7 +2351,8 @@ func restore_garden() -> void:
  for obj in loaded_data.get("objects",[]): add_object(obj.kind,Vector3(obj.pos[0],0,obj.pos[1]),int(obj.price),bool(obj.fish),float(obj.get("rotation",0.0)),str(obj.get("text","My garden")),Color.from_string(str(obj.get("text_color","f1e5c7")),Color("f1e5c7")),obj)
  for p in loaded_data.get("plants",[]):
   var age=Catalogue.saved_age(int(p.id),float(p.age),int(loaded_data.get("version",1)))
-  var plant=add_plant(int(p.id),Vector3(p.pos[0],0,p.pos[1]),int(p.plot),age,float(p.get("height_factor",legacy_height_factor(p))),float(p.get("orientation",legacy_orientation(p))),int(p.get("shape_seed",legacy_shape_seed(p))))
+  var plant=add_plant(int(p.id),Vector3(p.pos[0],0,p.pos[1]),int(p.plot),age,float(p.get("height_factor",legacy_height_factor(p))),float(p.get("orientation",legacy_orientation(p))),int(p.get("shape_seed",legacy_shape_seed(p))),str(p.get("form_uid","")))
+  if p.has("breeding_checked"):plant["breeding_checked"]=p.breeding_checked
   plant.water=float(p.water)
   plant.stress=float(p.stress)
   plant.pruned=float(p.get("pruned",0.0))
@@ -2654,4 +2683,12 @@ func run_view_water_test() -> void:
  var failures=[]
  await preload("res://tests/view_and_watering.gd").run(self,failures)
  print("VIEW_WATER_RESULT: ",JSON.stringify(failures))
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+
+func run_breeding_test() -> void:
+ get_tree().create_timer(180).timeout.connect(func():push_error("Cultivar gameplay test timed out");get_tree().quit(1))
+ var failures: Array=[]
+ await preload("res://tests/breeding_in_game.gd").run(self,failures)
+ print("BREEDING_IN_GAME_RESULT: ",JSON.stringify(failures))
  get_tree().quit(0 if failures.is_empty() else 1)
