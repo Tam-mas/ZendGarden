@@ -26,15 +26,26 @@ def data():
     curves={
         0: [[11.15,7.9],[9.4,7.9],[8.4,5.1],[7.055,5.1]],
         2: [[11.15,7.9],[9.0,7.9],[6.5,7.7],[6.5,6.35]],
-        3: [[-11.15,7.9],[-7.5,7.9],[-2.0,6.0],[3*math.sin(2.4),6.0]],
+        3: [[-11.15,7.9],[-7.5,7.9],[3*math.sin(2.4)+2.4*math.cos(2.4),8.0],[3*math.sin(2.4),6.0]],
         4: [[11.15,8.15],[8.8,8.15],[6.0,8.2],[6.0,6.1]],
         6: [[11.15,8.25],[7.0,8.25],[0,8.25],[0,5.5]],
         7: [[-11.15,7.9],[-8.7,7.9],[-8.7,3.0],[-3.385,3.0]],
-        8: [[11.15,7.9],[8.0,7.9],[4.0,6.0],[2.4*math.sin(2.7),6.0]],
+        8: [[11.15,7.9],[8.0,9.0],[2.4*math.sin(2.7)+2.16*math.cos(2.7),8.0],[2.4*math.sin(2.7),6.0]],
         # Arrive normal to the oval gravel court, with room for a broad bend.
         9: [[-11.15,7.9],[-7.2,7.9],[-2.95,7.85],[-2.5,6.3*math.sqrt(.98**2-(1.5/6.5)**2)]],
     }
     routes=[curve(curves[i]) if i in curves else [] for i in range(10)]
+    # Approach the alpine bank with a broad, tangent return. A single cubic
+    # reverses too tightly when the hill path turns back toward the entrance.
+    end=(2.4*math.sin(2.7),6.)
+    derivative=1.08*math.cos(2.7)
+    angle=math.atan2(derivative,-1.)+math.tau
+    radius=2.0
+    center=(end[0]-radius*math.cos(angle),end[1]-radius*math.sin(angle))
+    start=(center[0],center[1]+radius)
+    alpine=[cubic([(11.15,7.9),(8.5,7.9),(6.,start[1]),start],j/160) for j in range(160)]
+    alpine.extend((center[0]+radius*math.cos(math.pi/2+(angle-math.pi/2)*j/180),center[1]+radius*math.sin(math.pi/2+(angle-math.pi/2)*j/180)) for j in range(181))
+    routes[8]=resample(alpine)
     # Straight final courses square up to the destination edge, leaving room
     # for a complete threshold slab rather than a thin, diagonally cut tile.
     for i in [0,2,6,7]:
@@ -65,7 +76,22 @@ def data():
         [[62,10.35],[66,10.35],[68,10.35],[68,7.9]],
     ]:entry.extend([cubic(controls,i/120) for i in range(120)])
     entry.append((68,7.9))
-    return {"version":1,"approaches":routes,"eastern_link":resample(entry)}
+    # Two additional bridge approaches stay in the outer planting margins.
+    middle=[]
+    for controls in [
+        [[44,-48],[46,-48],[45.6,-51],[45.6,-54]],
+        [[45.6,-54],[45.6,-58],[45.6,-60],[49,-60]],
+        [[49,-60],[55,-60],[62,-60],[68,-60]],
+    ]:middle.extend([cubic(controls,i/120) for i in range(120)])
+    middle.append((68,-60))
+    north=[]
+    for controls in [
+        [[44,-102],[46,-102],[45.6,-106],[49,-106]],
+        [[49,-106],[55,-106],[60,-106],[64,-106]],
+        [[64,-106],[67,-106],[68,-106],[68,-103.5]],
+    ]:north.extend([cubic(controls,i/120) for i in range(120)])
+    north.append((68,-103.5))
+    return {"version":2,"approaches":routes,"eastern_link":resample(entry),"bridge_links":[resample(entry),resample(middle),resample(north)]}
 
 def point(index,t):
     points=ROUTES['approaches'][index];f=max(0,min(1,t))*(len(points)-1);i=min(len(points)-2,int(f))

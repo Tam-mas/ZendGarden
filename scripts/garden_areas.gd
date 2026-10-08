@@ -17,7 +17,7 @@ const JOURNAL={
 }
 const SOLID_PIVOTS=["Boardwalk","Sluice wheel","Fallen log","Stepping stones","Terrace masonry","Meadow fence","Orchard fence","Espalier wires","Harvest table","Kitchen walls","Entry arch","Kitchen bed edging","Kitchen espalier","Glasshouse frame","Stream bridge railing","Stream stepping stones","StreamGate","Lookout railing","Reflection pool rim","Moon pergola","MoonLantern"]
 # Beside each route, with enough room for the entire board and a walking lane.
-const ACTIVITY_SIGNS=[Vector2(6.3,8),Vector2(-8,5.8),Vector2(9.1,5.2),Vector2(-8,5.5),Vector2(9.1,5.6),Vector2(-8.5,6.2),Vector2(7.8,5.8),Vector2(-5.9,7.4),Vector2(8.4,9.7),Vector2(-8,5.4)]
+const ACTIVITY_SIGNS=[Vector2(6.3,8),Vector2(-8,5.8),Vector2(9.1,5.2),Vector2(-8,5.5),Vector2(9.1,5.6),Vector2(-8.5,6.2),Vector2(7.8,5.8),Vector2(-5.9,7.4),Vector2(9.3,5.9),Vector2(-8,5.4)]
 static var scenes: Dictionary={}
 
 static func initial_state() -> Dictionary:
@@ -113,7 +113,7 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
   # Leaves and grit sit millimetres above the soil. Their tiny shadow faces
   # alias as the sun moves; they still receive the garden's larger shadows.
   if detail:node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-  if ground and not paving and bed_plot>=4 and (bed_plot-4)%2==0:
+  if ground and not paving and bed_plot>=4:
    if not GardenConnectedLand.trim_habitat_bank(node):return
   if not ground and String(node.name).contains("mossrock"):solid=true
   if not ground and str(node.name).contains("weathered bark"):

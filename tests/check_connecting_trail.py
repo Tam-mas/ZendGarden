@@ -25,12 +25,17 @@ def covered(point):
 
 assert max(p[1] for tri in triangles for p in tri)<11.5,'trail runs to the cliff edge'
 assert not covered((68,11.5)),'unused northern path stub'
-routes=json.loads((ROOT/'assets/areas/routes.json').read_text())['eastern_link']
-for a,b,c in zip(routes[::3],routes[3::3],routes[6::3]):
-    length=math.dist(a,c);normal=(-(c[1]-a[1])/length,(c[0]-a[0])/length)
-    for side in [-.70,0,.70]:assert covered((b[0]+normal[0]*side,b[1]+normal[1]*side)),('missing bluestone bend lane',b,side)
+routes=json.loads((ROOT/'assets/areas/routes.json').read_text())['bridge_links']
+for route in routes:
+    for a,b,c in zip(route[::3],route[3::3],route[6::3]):
+        length=math.dist(a,c);normal=(-(c[1]-a[1])/length,(c[0]-a[0])/length)
+        for side in [-.70,0,.70]:assert covered((b[0]+normal[0]*side,b[1]+normal[1]*side)),('missing bridge approach lane',b,side)
 for z in range(-105,8):
     for x in [67.3,68.,68.7]:assert covered((x,z)),('gap in shared trail',x,z)
-for x in range(26,45):
-    for z in [5.3,6.,6.7]:assert covered((x,z)),('gap in original connector',x,z)
-print(f'CONNECTING_TRAIL_RESULT: PASS — {len(triangles)} disjoint triangles, connected lanes and no cliff spur')
+for z in range(-101,6):
+    on_bridge=any(abs(z-b)<1.4 for b in [6,-48,-102])
+    if not on_bridge:
+        for x in [26.4,27.,27.6]:assert covered((x,z)),('gap in bank trail',x,z)
+for z in [6,-48,-102]:
+    for x in [28,34,41]:assert not covered((x,z)),('trail descends beneath arch',x,z)
+print(f'CONNECTING_TRAIL_RESULT: PASS — {len(triangles)} disjoint triangles, three bridge approaches and continuous bank trail')

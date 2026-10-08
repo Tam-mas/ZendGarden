@@ -6,22 +6,29 @@ extends RefCounted
 static var offsets: Dictionary={}
 
 static func offset_at(x: float,z: float) -> float:
- if offsets.is_empty():return 0.0
+ if offsets.is_empty() or GardenConnectedLand.contains(Vector3(x,0,z)):return 0.0
  var ix=floori(x);var iz=floori(z)
  var tx=x-ix;var tz=z-iz
  var a=float(offsets.get("%d:%d"%[ix,iz],0.0))
  var b=float(offsets.get("%d:%d"%[ix+1,iz],0.0))
  var c=float(offsets.get("%d:%d"%[ix,iz+1],0.0))
  var d=float(offsets.get("%d:%d"%[ix+1,iz+1],0.0))
- return lerpf(lerpf(a,b,tx),lerpf(c,d,tx),tz)
+ var value=lerpf(lerpf(a,b,tx),lerpf(c,d,tx),tz)
+ # Keep the outer rock foundation sealed when adjacent soil is shaped. Raw
+ # saved offsets are retained; only their influence tapers at the fixed rim.
+ if x>=44. and x<=93. and z>=-109. and z<=13.:
+  value*=smoothstep(0.,1.25,minf(minf(x-44.,92.-x),minf(z+108.,12.-z)))
+ # Saved terrain remains stored, with a graded apron into fixed bridge ends.
+ if x>23. and x<25.5 and absf(z-6.)<3.5:
+  value*=lerpf(1.,1.-smoothstep(23.,25.5,x),1.-smoothstep(1.4,3.5,absf(z-6.)))
+ return value
 
 # Shared with the Blender landscape generator. Existing x/z coordinates remain valid.
 static func base_rise(x: float, z: float) -> float:
  var habitat=GardenAreaCatalogue.height_at(Vector3(x,0,z))
  if is_finite(habitat):return habitat
  if GardenConnectedLand.contains(Vector3(x,0,z)):
-  var east=GardenAreaCatalogue.height_at(Vector3(GardenConnectedLand.EAST,0,z))
-  return lerpf(original_rise(GardenConnectedLand.WEST,z),east,smoothstep(GardenConnectedLand.WEST,GardenConnectedLand.EAST,x))
+  return GardenRavine.ground(x,z)-.07
  return original_rise(x,z)
 
 static func original_rise(x: float,z: float) -> float:

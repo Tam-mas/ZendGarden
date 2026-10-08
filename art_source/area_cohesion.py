@@ -19,6 +19,9 @@ def approach(index,t):
 
 def on_route(index,x,z,margin=.98):
     if abs(x-(12 if index%2==0 else -12))<1.02:return True
+    for route in garden_routes.ROUTES.get('bridge_links',[]):
+        cx=56+(index%2)*24;cz=-(index//2)*24
+        if any(math.hypot(x+cx-a,z+cz-c)<margin for a,c in route):return True
     points=garden_routes.ROUTES['approaches'][index]
     if index==0:points=points+[[a-56,b] for a,b in garden_routes.ROUTES['eastern_link']]
     for a,b in points:

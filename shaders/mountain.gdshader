@@ -3,6 +3,7 @@ render_mode diffuse_burley, specular_disabled;
 
 uniform sampler2D strata : source_color, repeat_enable, filter_linear_mipmap;
 uniform sampler2D rock_normal : hint_normal, repeat_enable, filter_linear_mipmap;
+uniform float rock_scale = .065;
 varying vec3 world;
 varying vec3 slope_normal;
 
@@ -27,9 +28,9 @@ void vertex() {
 void fragment() {
  vec3 normal=normalize(slope_normal);
  vec3 weights=pow(abs(normal),vec3(5.0)); weights/=max(dot(weights,vec3(1.0)),.001);
- vec3 grain=texture(strata,world.yz*.065).rgb*weights.x
-           +texture(strata,world.xz*.065).rgb*weights.y
-           +texture(strata,world.xy*.065).rgb*weights.z;
+ vec3 grain=texture(strata,world.yz*rock_scale).rgb*weights.x
+           +texture(strata,world.xz*rock_scale).rgb*weights.y
+           +texture(strata,world.xy*rock_scale).rgb*weights.z;
  float broad=fbm(world.xz*.0035);
  float patch=fbm(world.xz*.025+vec2(broad*3.0,world.y*.007));
  float elevation=world.y+(broad-.5)*100.0;
@@ -57,9 +58,9 @@ void fragment() {
  ALBEDO=mix(base,mix(vec3(.57,.64,.68),vec3(.82,.85,.83),patch),snow);
  ROUGHNESS=mix(.97,.83,snow);
  // World-aligned normal detail remains continuous across all terrain grid seams.
- vec3 nx=unpack_normal(texture(rock_normal,world.yz*.065).rgb);
- vec3 ny=unpack_normal(texture(rock_normal,world.xz*.065).rgb);
- vec3 nz=unpack_normal(texture(rock_normal,world.xy*.065).rgb);
+ vec3 nx=unpack_normal(texture(rock_normal,world.yz*rock_scale).rgb);
+ vec3 ny=unpack_normal(texture(rock_normal,world.xz*rock_scale).rgb);
+ vec3 nz=unpack_normal(texture(rock_normal,world.xy*rock_scale).rgb);
  vec3 detail=normalize(vec3(nx.z*sign(normal.x),nx.x,nx.y)*weights.x
                       +vec3(ny.x,ny.z*sign(normal.y),ny.y)*weights.y
                       +vec3(nz.x,nz.y,nz.z*sign(normal.z))*weights.z);

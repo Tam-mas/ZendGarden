@@ -15,6 +15,7 @@ uniform float relief_depth=.45;
 uniform float base_height=0.;
 uniform float stain_height=.22;
 uniform int family=1;
+uniform bool is_flagstone=false;
 varying vec3 point;
 varying vec3 world;
 float random2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
@@ -27,11 +28,27 @@ void fragment(){
  vec3 color=(has_pigment?texture(pigment,UV).rgb:vec3(1.))*tint.rgb;
  float patch=patina(world.xz*3.1+vec2(world.y*.8));
  float foot=(1.-smoothstep(base_height+.01,base_height+stain_height,point.y))*smoothstep(.18,.80,patch);
+ if(is_flagstone)foot=0.;
  float grain=patina(UV*18.);
  vec3 dirt=vec3(.17,.13,.085);
- if(family==0){color=mix(color,color*.78+vec3(.04,.045,.038),patch*.10);}
+ if(family==0){
+  float timber=dot(color,vec3(.3,.59,.11));
+  color=mix(color,vec3(timber)*vec3(.94,.96,.90),.30+patch*.12)*.88;
+ }
  if(family==1){dirt=vec3(.16,.18,.105);}
  color=mix(color,dirt,foot*(family==2?.22:family==1?.11:.15));
+ if(is_flagstone){
+  float row=floor(world.z/.48),course=mod(row,3.);
+  float pitch=course<.5?.60:course<1.5?.90:1.20;
+  float shift=course<.5?0.:course<1.5?.30:.45;
+  float col=floor((world.x-shift)/pitch);
+  float variation=random2(vec2(col,row));
+  color*=mix(.77,1.03,variation);
+  color*=mix(vec3(.95,.99,1.02),vec3(1.04,1.0,.92),variation);
+  vec2 f=fract(vec2((world.x-shift)/pitch,world.z/.48));
+  float edge=min(min(f.x,1.-f.x)*pitch,min(f.y,1.-f.y)*.48);
+  color*=mix(.88,1.,smoothstep(.004,.013,edge));
+ }
  ALBEDO=color*mix(.98,1.02,grain);
  float rough=has_finish?texture(finish_map,UV).g*finish_factor:finish_factor;
  ROUGHNESS=clamp(rough+foot*.06,roughness_min,roughness_max);

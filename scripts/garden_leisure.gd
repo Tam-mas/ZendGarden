@@ -49,7 +49,7 @@ static func rest(g, obj: Dictionary) -> void:
 
 static func leave(g) -> void:
  if g.rest_kind.is_empty():return
- g.player.position=GardenTerrain.point(g.rest_return)+Vector3(0,.1,0)
+ g.player.position=GardenRavine.safe_player(g.rest_return)+Vector3(0,.1,0)
  g.player.velocity=Vector3.ZERO
  g.rest_object=null;g.rest_kind=""
  for pet in g.pets:
@@ -63,7 +63,7 @@ static func call_pet(g, index: int, settle: bool=false) -> void:
  if settle and is_instance_valid(g.rest_object):
   point=g.rest_object.to_global(Vector3(-1.65 if index==0 else 1.65,0,-.8))
  if not g.accessible(point):point=g.rest_return if not g.rest_kind.is_empty() else g.player.position
- g.pets[index].invite(GardenTerrain.point(point),settle)
+ g.pets[index].invite(GardenRavine.safe_player(point),settle)
  g.toast(g.companion_names[index]+(" is coming to settle nearby." if settle else " is coming over. Walk nearby to pet them."))
 
 static func build(g) -> void:

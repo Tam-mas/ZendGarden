@@ -9,7 +9,7 @@ static func land(g) -> void:
   if g.player.is_on_floor():break
 
 static func cross(g, start: Vector3, finish: Vector3, failures: Array, title: String) -> void:
- g.player.position=GardenTerrain.point(start)+Vector3(0,.65,0)
+ g.player.position=GardenRavine.safe_player(start)+Vector3(0,.65,0)
  g.player.velocity=Vector3.ZERO
  # Land on the actual surface, which may be a deck above planting terrain.
  await land(g)

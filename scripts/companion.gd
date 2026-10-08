@@ -95,7 +95,7 @@ func animate(g, delta: float, index: int) -> void:
    movement_speed=step/maxf(delta,.00001)
    rotation.y=lerp_angle(rotation.y,atan2(-direction.x,-direction.z),minf(1,delta*6))
    moving=true
- position.y=GardenTerrain.point(position).y
+ position.y=GardenRavine.walk_point(position).y if GardenConnectedLand.contains(position) else GardenTerrain.point(position).y
  if absf(position.x-8.5)<2.25 and absf(position.z-5.9)<.92: position.y=.155
  if absf(position.x-17)<.92 and absf(position.z+8.5)<2.25: position.y=.155
  idle=0.0 if moving else idle+delta

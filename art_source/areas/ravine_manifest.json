@@ -1,0 +1,14 @@
+{
+  "kind": "alpine_ravine",
+  "folder": "environment",
+  "triangles": 192098,
+  "meshes": 104,
+  "bytes": 8419272,
+  "dimensions": [
+    96.77678108215332,
+    69.41639423370361,
+    153.6120204925537
+  ],
+  "clips": [],
+  "variant": "new"
+}

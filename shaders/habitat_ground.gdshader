@@ -18,9 +18,12 @@ void fragment(){
  vec3 common_lawn=grass;
  float broad=texture(meadow,world.xz*.091+vec2(.28,.39)).g;
  grass*=mix(.93,1.06,broad);
- if(habitat_kind==2)grass=texture(dry_floor,world.xz*.6).rgb*vec3(.90,.88,.83);
+ if(habitat_kind==2)grass=texture(dry_floor,world.xz*.9).rgb*vec3(.46,.43,.35);
  if(habitat_kind==1)grass*=vec3(.98,.95,.87);
  vec3 gravel=texture(earth,world.xz*texture_scale).rgb*tint.rgb;
+ // Crushed local stone reads as a garden surface rather than a white sheet.
+ if(habitat_kind==2)gravel*=vec3(.55,.51,.41);
+ if(habitat_kind==9)gravel*=vec3(.55,.56,.50);
  float irregular=sin(p.x*9.+sin(p.y*4.))*sin(p.y*11.)*.035;
  float mask=0.;
  if(habitat_kind==4){

@@ -96,6 +96,7 @@ static func chunks(g,node: MeshInstance3D) -> void:
   var arrays=node.mesh.surface_get_arrays(surface)
   var verts: PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
   var normals: PackedVector3Array=arrays[Mesh.ARRAY_NORMAL]
+  var colors: PackedColorArray=arrays[Mesh.ARRAY_COLOR] if arrays[Mesh.ARRAY_COLOR]!=null else PackedColorArray()
   var uv: PackedVector2Array=arrays[Mesh.ARRAY_TEX_UV]
   var tangents: PackedFloat32Array=arrays[Mesh.ARRAY_TANGENT]
   var indices: PackedInt32Array=arrays[Mesh.ARRAY_INDEX] if arrays[Mesh.ARRAY_INDEX]!=null else PackedInt32Array()
@@ -111,6 +112,7 @@ static func chunks(g,node: MeshInstance3D) -> void:
    for j in range(3):
     var id=indices[i+j]
     st.set_normal(normals[id]);st.set_uv(uv[id])
+    if colors.size()>id:st.set_color(colors[id])
     if tangents.size()>id*4+3:st.set_tangent(Plane(Vector3(tangents[id*4],tangents[id*4+1],tangents[id*4+2]),tangents[id*4+3]))
     st.add_vertex(verts[id])
   for key in tiles:
@@ -146,7 +148,7 @@ static func restore(g,saved: Dictionary) -> void:
   var habitat=GardenAreaCatalogue.index_at(Vector3(x,0,z))>=0
   var connection=GardenConnectedLand.contains(Vector3(x,0,z))
   if (not legacy and not habitat and not connection) or not is_finite(value):continue
-  GardenTerrain.offsets[str(key)]=clampf(value,maxf(-3.0,.08-GardenTerrain.base_rise(x,z)),3.0)
+  GardenTerrain.offsets[str(key)]=clampf(value,-3.0 if connection else maxf(-3.0,.08-GardenTerrain.base_rise(x,z)),3.0)
  if had_edits or not GardenTerrain.offsets.is_empty():rebuild(g)
 
 static func allowed(g,p: Vector3) -> bool:
