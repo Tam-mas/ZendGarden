@@ -9,6 +9,8 @@ python3 tests/check_plant_growth.py
 python3 tests/check_fruit_trees.py
 python3 tests/check_botanical_additions.py
 python3 tests/check_low_grasses.py
+python3 tests/check_flower_additions.py
+python3 tests/check_bush_variation.py
 python3 tests/check_audio.py
 python3 tests/check_areas.py
 python3 tests/check_path_paving.py
@@ -21,6 +23,15 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+for check in flower_collection flower_additions; do
+  flower_log="$(mktemp -t zend-garden-flower)"
+  "$GODOT_BIN" --headless --path "$PWD" --script "tests/${check}.gd" > "$flower_log" 2>&1 || { cat "$flower_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[[^]]' "$flower_log"; then
+    cat "$flower_log"
+    exit 1
+  fi
+  rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]' "$flower_log"
+done
 economy_log="$(mktemp -t zend-garden-economy)"
 land_log="$(mktemp -t zend-garden-land)"
 trail_log="$(mktemp -t zend-garden-trail)"

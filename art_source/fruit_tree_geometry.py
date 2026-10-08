@@ -91,6 +91,9 @@ def add_anchor_channels(mesh, geometry):
         return
     uv = mesh.uv_layers.new(name='Fruit anchors')
     colors = mesh.color_attributes.new(name='Fruit anchor depth', type='FLOAT_COLOR', domain='CORNER')
+    # Adding a custom-data layer can invalidate earlier RNA layer handles (4.0).
+    uv = mesh.uv_layers['Fruit anchors']
+    colors = mesh.color_attributes['Fruit anchor depth']
     for loop in mesh.loops:
         x, y, z = anchors[loop.vertex_index]
         uv.data[loop.index].uv = (x, z)  # Blender Z-up -> game Y-up.

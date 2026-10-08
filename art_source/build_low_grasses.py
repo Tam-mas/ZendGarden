@@ -91,8 +91,10 @@ def build():
             tex.save(quality=92)
             tex.pack()
             return m
-        mature=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())[:136]
-        growth=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())[:136]
+        all_mature=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())
+        mature=all_mature[:136]
+        all_growth=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())
+        growth=all_growth[:136]
         for idx,(name,botanical,color,light,height,form) in enumerate(LOW_GRASSES,136):
             random.seed(idx*179)
             body='487443' if form in ['evergold','snowline'] else '24222e' if form=='black' else color
@@ -135,6 +137,7 @@ def build():
         # Pigments are reproducible and packed into both exports and the source
         # library. Avoid accumulating intermediate PNG/JPEG files on each rebuild.
         for path in intermediates:path.unlink(missing_ok=True)
+        mature.extend(all_mature[148:]);growth.extend(all_growth[148:])
         (ROOT/'art_source/botanical_manifest.json').write_text(json.dumps(mature,indent=2)+'\n')
         (ROOT/'art_source/plant_growth_manifest.json').write_text(json.dumps(growth,indent=2)+'\n')
         (ROOT/'scripts/plant_profiles.gd').write_text('class_name GardenPlantProfiles\nextends RefCounted\n\n# Generated from the authored mature foliage, in garden metres.\nconst HEIGHTS='+json.dumps([r['height'] for r in growth])+'\n')

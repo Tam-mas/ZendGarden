@@ -13,8 +13,10 @@ static func colour_group(color: Color) -> String:
 static func matching(g) -> Array:
  var found: Array=[]
  var filters: Dictionary=g.collection_filters
+ var group=str(filters.get("group","All collections"))
  for p in g.catalogue:
   if g.category!="All" and p.category!=g.category: continue
+  if group!="All collections" and group in GardenCatalogue.COLLECTION_GROUPS and p.get("collection_group","")!=group: continue
   if not g.collection_query.strip_edges().is_empty() and not (p.name+" "+p.get("botanical_name","")).to_lower().contains(g.collection_query.strip_edges().to_lower()): continue
   if filters.view=="Favourites" and p.id not in g.favourite_plants: continue
   if filters.view=="Recently planted" and p.id not in g.recent_plants: continue
@@ -29,16 +31,26 @@ static func matching(g) -> Array:
   if filters.colour!="Any colour" and colour_group(p.color)!=filters.colour: continue
   if filters.wildlife!="Any wildlife" and p.animal!=filters.wildlife.to_lower(): continue
   found.append(p)
- if filters.view=="Recently planted": found.sort_custom(func(a,b): return g.recent_plants.find(a.id)<g.recent_plants.find(b.id))
- elif filters.sort=="Name": found.sort_custom(func(a,b): return a.name.naturalnocasecmp_to(b.name)<0)
- elif filters.sort=="Height": found.sort_custom(func(a,b): return float(a.get("height",1))<float(b.get("height",1)))
- elif filters.sort=="Growing days": found.sort_custom(func(a,b): return a.days<b.days)
+ var order=str(filters.get("sort","Catalogue"))
+ if order=="Name": found.sort_custom(name_before)
+ elif order in ["Height","Height: low to high","Height: high to low"]:
+  found.sort_custom(func(a,b):
+   var left=float(a.get("height",1))
+   var right=float(b.get("height",1))
+   if left==right:return name_before(a,b)
+   return left>right if order=="Height: high to low" else left<right)
+ elif order=="Growing days": found.sort_custom(func(a,b):return name_before(a,b) if a.days==b.days else a.days<b.days)
+ elif filters.view=="Recently planted": found.sort_custom(func(a,b): return g.recent_plants.find(a.id)<g.recent_plants.find(b.id))
  return found
 
-static func selector(g, parent: Node, key: String, options: Array) -> void:
+static func name_before(a, b) -> bool:
+ var comparison=a.name.naturalnocasecmp_to(b.name)
+ return int(a.id)<int(b.id) if comparison==0 else comparison<0
+
+static func selector(g, parent: Node, key: String, options: Array, caption: String="") -> void:
  var row=HBoxContainer.new()
  parent.add_child(row)
- row.add_child(g.label(key.capitalize(),13))
+ row.add_child(g.label(key.capitalize() if caption.is_empty() else caption,13))
  var choices=OptionButton.new()
  choices.name="Filter"+key.capitalize()
  choices.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -46,9 +58,12 @@ static func selector(g, parent: Node, key: String, options: Array) -> void:
  choices.clip_text=true
  choices.custom_minimum_size.y=42 if g.touch_active() else 32
  for option in options: choices.add_item(option)
- choices.select(maxi(0,options.find(g.collection_filters[key])))
+ choices.select(maxi(0,options.find(g.collection_filters.get(key,options[0]))))
  choices.item_selected.connect(func(index):
   g.collection_filters[key]=options[index]
+  if key=="group":
+   g.category="All"
+   update_categories(g)
   update_cards(g))
  row.add_child(choices)
 
@@ -62,11 +77,14 @@ static func build(g) -> void:
  search.custom_minimum_size.y=44 if g.touch_active() else 36
  search.text_changed.connect(func(value):
   g.collection_query=value
-  if not value.is_empty(): g.category="All"
+  if not value.is_empty():
+   g.category="All"
+   g.collection_filters.group="All collections"
+   g.list_box.get_node("CollectionNavigation").find_child("FilterGroup",true,false).select(0)
   update_categories(g)
   update_cards(g))
  g.list_box.add_child(search)
- if g.get_viewport().get_visible_rect().size.y<700:
+ if g.touch_active() or g.get_viewport().get_visible_rect().size.y<700:
   var picker=g.button("Category: "+g.category+" ▾",func():
    var categories=g.list_box.get_node("SeedCategories")
    categories.visible=not categories.visible
@@ -76,18 +94,35 @@ static func build(g) -> void:
  var cats=GridContainer.new()
  cats.name="SeedCategories"
  cats.columns=3
- cats.visible=g.get_viewport().get_visible_rect().size.y>=700
+ cats.visible=not g.touch_active() and g.get_viewport().get_visible_rect().size.y>=700
  g.list_box.add_child(cats)
  for category in ["All"]+GardenCatalogue.CATEGORIES:
   var chosen=category
   var caption="Cacti &\nsucculents" if category=="Cacti & succulents" else category
-  var b=g.button(caption,func(): g.category=chosen; update_categories(g); update_cards(g),Vector2(81,44 if category=="Cacti & succulents" else 40 if g.touch_active() else 30))
+  var b=g.button(caption,func():
+   g.category=chosen
+   g.collection_filters.group="All collections"
+   var navigation=g.list_box.get_node_or_null("CollectionNavigation")
+   if navigation:navigation.find_child("FilterGroup",true,false).select(0)
+   update_categories(g)
+   update_cards(g),Vector2(81,44 if category=="Cacti & succulents" else 40 if g.touch_active() else 30))
   b.set_meta("category",category)
   b.tooltip_text=category
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   b.add_theme_font_size_override("font_size",14)
   cats.add_child(b)
  update_categories(g)
+ # Browsing sections and ordering remain available when detailed filters are closed.
+ var navigation=VBoxContainer.new()
+ navigation.name="CollectionNavigation"
+ g.list_box.add_child(navigation)
+ var group_options=["All collections"]+GardenCatalogue.COLLECTION_GROUPS
+ if g.collection_filters.get("group","All collections") not in group_options:g.collection_filters.group="All collections"
+ if g.collection_filters.get("sort","Catalogue")=="Height":g.collection_filters.sort="Height: low to high"
+ var sort_options=["Catalogue","Name","Height: low to high","Height: high to low","Growing days"]
+ if g.collection_filters.get("sort","Catalogue") not in sort_options:g.collection_filters.sort="Catalogue"
+ selector(g,navigation,"group",group_options,"Collection")
+ selector(g,navigation,"sort",sort_options)
  var browse=HBoxContainer.new()
  g.list_box.add_child(browse)
  var views=OptionButton.new()
@@ -117,7 +152,6 @@ static func build(g) -> void:
  selector(g,filters,"height",["Any height","Low (under 0.6 m)","Medium (0.6–2 m)","Tall (2 m+)"])
  selector(g,filters,"colour",["Any colour","Cream / white","Red / pink","Yellow / orange","Green","Blue","Purple / pink","Dark"])
  selector(g,filters,"wildlife",["Any wildlife","Bees","Butterflies","Birds","Native birds","Frogs","Fireflies","Moths"])
- selector(g,filters,"sort",["Catalogue","Name","Height","Growing days"])
  filters.add_child(g.button("Clear filters",func():
   g.collection_query=""
   g.category="All"
@@ -151,7 +185,7 @@ static func update_cards(g) -> void:
  var plants=matching(g)
  g.list_box.get_node("SeedResults").text="%d varieties · ★ to save a favourite" % plants.size()
  if plants.is_empty():
-  var empty=g.label("No plants match. Try another category or clear your filters.",15)
+  var empty=g.label("No plants match. Try another collection, category or clear your filters.",15)
   empty.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
   empty.custom_minimum_size.x=240
   cards.add_child(empty)
@@ -162,7 +196,7 @@ static func update_cards(g) -> void:
   var b=g.button("",func(): g.choose_plant(id),Vector2(120,300 if g.touch_active() else 210))
   b.name="PlantCard%02d" % id
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-  b.tooltip_text="%s · %.1f m mature model · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
+  b.tooltip_text="%s · %.1f m at maturity · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
   if not p.get("botanical_name","").is_empty():b.tooltip_text=p.botanical_name+"\n"+b.tooltip_text
   if p.climber: b.tooltip_text+="\nClimbs nearby arbors and pergolas."
   GardenTheme.choose(b,id==g.selected)

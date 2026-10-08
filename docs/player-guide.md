@@ -8,9 +8,14 @@ Choose **Start the welcome walk** for a short lesson in your garden: plant a flo
 
 Press **Tab** to open the menus and choose a plant from the seed selection. Aim down at a garden plot and click to plant where the preview appears. Switch to the watering tool to tend it, then keep exploring or press **G** to move on to the next morning. The in-game guide explains the tools and garden systems in more detail.
 
+Choose **Collection** in **Seeds** to browse Orchids, Wildflowers, Cottage flowers,
+Flowering bushes and the other plant groups. Choose **Sort → Height: low to high**
+or **Height: high to low** to arrange both new and existing plants by their mature
+height, helping you choose low edging, a middle layer and a tall backdrop.
+
 Search all plants in **Seeds**, or use **Filters** to choose a season, light,
 height, colour or visiting wildlife. The star on each card saves a favourite;
-the collection menu also shows recently planted choices. On short screens,
+the collection menu also shows recently planted choices. On phones and short screens,
 **Category** opens the category buttons. Scroll the collection to see more
 cards. Point at a planted specimen for its care information and growth stage;
 use **L**, or the touch **Layer** button, to inspect plants sharing a spot.
@@ -126,7 +131,7 @@ Mobile layouts and simultaneous touch input are covered by automated tests and b
 
 ## Ten new garden trails
 
-Open **Garden atlas · milestones & trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas or follow the eastern path and walk between them. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
+Open **Garden atlas · milestones & trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas, or cross one of the three arched stone bridges over the mountain stream and follow the eastern garden trail. The bridges sit at the ends and centre of the ravine; bank paths connect their landings. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
 
 | Garden | Milestone |
 | --- | --- |

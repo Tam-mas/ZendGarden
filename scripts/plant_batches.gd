@@ -39,8 +39,8 @@ func changing(p: Dictionary) -> void:
  if previous<0 or stage_key(previous)!=stage_key(next):
   restore(p.node)
   dirty=true
- elif int(p.id) in GardenPlantGrowth.FRUIT_TREES and fruit_size_key(previous)!=fruit_size_key(next):
-  # Local fruit growth selects a shared size material; refresh its batch group.
+ elif (int(p.id) in GardenPlantGrowth.FRUIT_TREES or bool(garden.catalogue[p.id].get("attached_bloom",false))) and fruit_size_key(previous)!=fruit_size_key(next):
+  # Attached fruit and flower growth selects a size material; refresh its batch group.
   restore(p.node)
   dirty=true
  tweening[p.node.get_instance_id()]=p

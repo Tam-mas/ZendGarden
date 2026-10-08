@@ -1,3 +1,33 @@
+### [2026-10-08 14:22] Changed
+
+**Tech:** `GardenUpdates`, `README`, integration with the current main branch
+
+**Dev:** Integrate the flower collection and varied bushes with the upstream landscape releases. Preserve main's shipped release numbers 54–56 and publish the complete flower work as release 57. Keep both source-library checks, including the flower collection and alpine ravine. Update the README and player guide to describe the 218-plant collection, growth, mature-height ordering, distinct bushes and three stream crossings. The merged assets pass the complete plant, growth, bush, habitat, audio, paving and trail audits. Headless import, flower collection and growth, player history, plant improvement/model/preview and save-file checks pass.
+
+**Plain:** Seventy new flowering plants and varied bushes join the latest garden landscape, with an up-to-date guide to the collection and bridge paths.
+
+**Why:** Publish the additions without losing the recent landscape improvements or changing existing save and update history.
+
+### [2026-10-08 14:10] Changed
+
+**Tech:** `flower_bush_geometry`, `build_flower_additions`, `GardenUpdates` — distinct flowering-bush habits and foliage
+
+**Dev:** Replace the shared upright shrub framework for IDs 198–217 with species-specific woody habits: dense low crowns, layered evergreens, broad lobed-leaf crowns, arching canes, cascading spirea, thorned quince and fine native twigs. Model simple, opposite, crossing-paired, ternate and pinnate leaves with different dimensions, densities and pigments; give pieris coppery young tips and keep forsythia/quince sparsely leafed during blossom. Place branch-bound bouquets, hanging urn chains, complete hebe racemes, sterile viburnum heads, fuchsia pendants, rusty abelia calyces and flowers along older wood. Keep compound bud silhouettes and local bloom-opening anchors. Extend leafy growth along arching canes; use simpler tiny organs and petioles to retain existing geometry limits. Re-export twenty mature and twenty growth GLBs through Blender MCP, retain the complete seventy-plant packed source library, and refresh twenty WebP selection portraits. Add a shrub-only source rebuild that preserves the fifty other families, source notes, player release 55 and exported botanical-contrast checks in local/browser workflows. All 218 mature/growth assets pass height, PBR, attachment and geometry-budget checks; verify the other 594 model/portrait files and all non-bush records and authored heights are unchanged. The complete source retains 350 editable meshes and 638 packed images. Focused collection, growth, save, player-update and plant-model regressions pass. Review all twenty shrubs and all five stages in Compatibility. Ten representative shrubs and all their stages also pass native Forward+ rendering with no shader or script errors.
+
+**Plain:** The twenty flowering bushes now have their own shapes, foliage and flower displays, from cascading spirea and bare yellow canes to coppery pieris tips, dense hebe leaves and grey-green correa.
+
+**Why:** Distinct botanical habits give players more ways to build varied, layered gardens.
+
+### [2026-10-08 12:42] Added
+
+**Tech:** `GardenCatalogue`, `GardenSeedCollection`, `GardenPlantGrowth` — seventy flowering plants, collection navigation and mature-height ordering
+
+**Dev:** Append IDs 148–217: ten orchids, fifteen wildflowers, twenty-five cottage flowers and twenty flowering bushes. Record botanical identities, source photographs and stage traits; generate 140 self-contained GLBs through Blender MCP and retain 350 editable organ meshes in a compressed, packed Blender library. Author independent seedlings, juvenile foliage and buds, with flowers opening around their own attachments. Correct Blender 4.0 custom-data handle invalidation when adding anchor UV and colour layers; keep original exports and all 148 legacy records and heights unchanged. Generate three imagegen tissue maps with recorded prompts, store the source maps and seventy model portraits as WebP, and keep imported textures embedded without extracted duplicates. Add nine collection sections and both height-sort directions across all 218 selectable plants, including stable ties, recent choices and legacy Height preferences. Keep navigation outside the detailed filters and collapse phone categories for more card space. Refresh dense-garden batches when attached buds or flowers change size. Add player release 54, guide notes, rebuild preservation and focused asset/runtime coverage to the local and browser workflows. All 218 mature/growth exports pass geometry and PBR checks; the new collection passes identity, height, anchor precision, stage, batch, sorting and save restoration checks. Existing plant-model, preview, improvement, player-update and save-file checks pass. Review all seventy plants and five stages in Compatibility, plus eight representative plants and stages in Forward+. The new source library passes read-only Blender validation with all images packed. Full interactive gameplay regression could not complete within practical time under software rendering; headless gameplay input checks require captured mouse support and are not treated as passes.
+
+**Plain:** Choose seventy more flowering plants, browse orchids, wildflowers, cottage flowers and bushes, and sort the whole seed collection by height to plan layered planting.
+
+**Why:** More recognisable botanical forms and clearer browsing make it easier to build varied flower gardens.
+
 ### [2026-10-08 11:30] Fixed
 
 **Tech:** `GardenBoundary`, `GardenAreaTransitions`, `build_ravine.py` — complete garden perimeters, supported terrain sides and fitted bridge landings

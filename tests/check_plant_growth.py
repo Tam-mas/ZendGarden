@@ -3,7 +3,7 @@ import json, struct, math
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 report=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())
-assert [p['id'] for p in report]==list(range(148))
+assert [p['id'] for p in report]==list(range(218))
 triangles=0
 for entry in report:
     path=ROOT/'assets/plants/growth'/f"growth_{entry['id']:02d}.glb"
@@ -26,5 +26,7 @@ for entry in report:
         assert 'normalTexture' in m and 'baseColorTexture' in m['pbrMetallicRoughness'] and 'metallicRoughnessTexture' in m['pbrMetallicRoughness'],(path,m['name'])
     assert 0<count<=18000,(path,count)
     triangles+=count
-assert triangles<900000
+assert sum(p['triangles'] for p in report[:148])<900000
+assert sum(p['triangles'] for p in report[148:])<800000
+assert triangles<1700000
 print('PLANT_GROWTH_ASSETS: PASS',len(report),'species,',triangles,'triangles')

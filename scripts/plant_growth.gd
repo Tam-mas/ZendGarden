@@ -7,7 +7,7 @@ const FRUIT_TREES=[31,34,35,82,83,84,85,86,87,88,89,90,91]
 static func fruit_growth(node: Node, amount: float) -> void:
  # Shared materials at 32 size steps preserve batching across ripening trees.
  var size=roundf(amount*32.0)/32.0
- if node is MeshInstance3D and (str(node.name).begins_with("BloomFruit") or str(node.name).begins_with("BudsFruit")):
+ if node is MeshInstance3D and (str(node.name).begins_with("BloomFruit") or str(node.name).begins_with("BudsFruit") or str(node.name).begins_with("BloomFlower") or str(node.name).begins_with("BudsFlower")):
   if not is_equal_approx(float(node.get_meta("fruit_growth",-1.0)),size):
    node.set_meta("fruit_growth",size)
    GardenArt.add_leaf_wind(node)
@@ -43,9 +43,10 @@ static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: i
  var bloom=node.get_node("Bloom")
  bloom.visible=fraction>=.78
  var fruit_tree=int(data.id) in FRUIT_TREES
+ var attached_bloom=fruit_tree or bool(data.get("attached_bloom",false))
  var ripening=lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1))
- bloom.scale=Vector3.ONE if fruit_tree else Vector3.ONE*ripening
- if fruit_tree:fruit_growth(bloom,ripening)
+ bloom.scale=Vector3.ONE if attached_bloom else Vector3.ONE*ripening
+ if attached_bloom:fruit_growth(bloom,ripening)
  var stages=node.get_node_or_null("GrowthStages")
  if fraction<.78: stages=ensure_stages(node,int(data.id))
  if stages:
@@ -59,8 +60,8 @@ static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: i
   var early=lerpf(.70,1.15,fraction/.20) if fraction<.20 else lerpf(.65,1.25,clampf((fraction-.20)/.32,0,1))
   for organ in [seedling,juvenile]: organ.scale=Vector3.ONE*early/root_scale
   var budding=lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1))
-  buds.scale=Vector3.ONE if fruit_tree else Vector3.ONE*budding
-  if fruit_tree:fruit_growth(buds,budding)
+  buds.scale=Vector3.ONE if attached_bloom else Vector3.ONE*budding
+  if attached_bloom:fruit_growth(buds,budding)
  node.set_meta("growth_fraction",fraction)
  node.set_meta("shape_seed",shape_seed)
  variation(node,shape_seed,float(data.get("height",1.0)),.15 if data.category=="Cacti & succulents" else 1.0)

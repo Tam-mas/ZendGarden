@@ -145,7 +145,13 @@ The preview writes `captures/mountains/after-{west,north,east,south}.png` withou
 
 ### Detailed plant models and comparisons
 
-All 136 catalogue plants use detailed botanical models, with curved leaves, refined branching, layered petals, flower centres, fruit details and embedded colour/normal/roughness textures. Editable sources are `art_source/botanical_library.blend` (original 60) and `art_source/botanical_expansion.blend` (46 additions) and `art_source/botanical_additions.blend` (30 grasses/cacti/succulents plus revised Sweet pea/Clematis). See [the plant detail workflow](../art_source/plant_detail_workflow.md) for rebuilding, matched before-and-after renders and asset/runtime validation. Catalogue IDs and existing growth, pruning and harvesting behaviour are retained.
+All 218 catalogue plants use detailed botanical models, with curved leaves, refined branching, layered petals, flower centres, fruit details and embedded colour/normal/roughness textures. Editable sources are `art_source/botanical_library.blend` (original 60) and `art_source/botanical_expansion.blend` (46 additions) and `art_source/botanical_additions.blend` (30 grasses/cacti/succulents plus revised Sweet pea/Clematis). See [the plant detail workflow](../art_source/plant_detail_workflow.md) for rebuilding, matched before-and-after renders and asset/runtime validation. Catalogue IDs and existing growth, pruning and harvesting behaviour are retained.
+
+### Flower collection
+
+`art_source/flower_additions.blend` contains the mature, seedling, juvenile and bud meshes for IDs 148–217. Build it with `build_flower_additions.build()` through Blender MCP background mode or with the Blender CLI. The generator preserves the active scene and only writes this source library and its new exports. For shrub changes, `build_flower_additions.build(bushes_only=True)` reloads the complete source, replaces IDs 198–217 and retains the fifty other plant families and exports. Shrub habits, leaf forms and inflorescences live in `flower_bush_geometry.py`. See [botanical references](../art_source/flower_additions_references.md) for the chosen species, visual traits, stages and source photographs. Three imagegen surface maps are committed as WebP, with exact prompts in `flower_additions_texture_prompts.json`; GLBs embed standard glTF-compatible PBR textures.
+
+Model heights, including new flower heads, feed both directions of height sorting. Flowers and buds carry local attachment channels so opening flowers remain on their stems. Original IDs, heights and saved gardens remain compatible. Run `tests/check_flower_additions.py`, `tests/check_bush_variation.py`, `tests/flower_collection.gd` and `tests/flower_additions.gd` after import and portrait rendering.
 
 ### Reviewing background woodland
 
