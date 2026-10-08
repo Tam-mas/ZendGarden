@@ -1,0 +1,58 @@
+{
+  "created": "2026-10-08",
+  "tool": "built-in image_gen__imagegen",
+  "use_case": "photorealistic-natural",
+  "purpose": "Neutral tintable tissue source textures for the representative ten-plant art sample. Source-only WebP images are excluded from direct Godot import; the Blender generator embeds the material maps in exported GLB assets.",
+  "conversion": {
+    "operation": "RGB conversion and Lanczos resize only; no painting or compositing",
+    "dimensions": [
+      512,
+      512
+    ],
+    "format": "WebP",
+    "quality": 92,
+    "method": 6
+  },
+  "textures": [
+    {
+      "asset": "assets/textures/plant_sample/petal_tissue.webp",
+      "prompt": "Use case: photorealistic-natural\nAsset type: botanical petal tissue albedo / base-colour source texture for a 3D garden game.\nPrimary request: create one square 1024 x 1024 full-bleed image of very pale neutral ivory flower petal tissue. It is a flat unlit material texture, with extremely subtle natural longitudinal striations that gently fan radially from the bottom middle towards the top. Broad smooth fine tissue between the hair-fine veins, restrained organic variation. This should be reusable for tinting rose and orchid petals.\nComposition: the entire square is petal tissue edge to edge; no visible outer petal shape, no object silhouette and no background. Bottom is petal attachment end; top is petal tip direction.\nColour: approximately RGB 235-250 neutral warm ivory throughout, very low contrast; hair-fine vein texture only a little darker than surrounding tissue. Smooth and delicate, not chalky or gritty.\nLighting: perfectly uniform diffuse albedo, no directional shading, no highlights, no shadows.\nAvoid: flowers, flower shapes, leaves, collage, borders, vignetting, dark lower corners, text, labels, watermark, wrinkles resembling cloth, perspective, specular reflections, normals encoded as purple. Opaque texture.",
+      "source_image": "/home/biggie/.codex/generated_images/01a11acb-ab31-73d0-be08-a61f849e2633/exec-1021b7e4-3efa-4052-bc7f-d28f17124259.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "orientation": "Bottom center is petal attachment; fine striations fan towards top edge.",
+      "palette": "Very pale warm ivory, mean source RGB [241.77,237.73,222.80].",
+      "inspection": "Full square tissue without silhouette, text, or dark border. Subtle albedo striations; no directional cast shadow. Intended as multiply tint source, not a coloured flower photo."
+    },
+    {
+      "asset": "assets/textures/plant_sample/leaf_tissue.webp",
+      "prompt": "Use case: photorealistic-natural\nAsset type: neutral leaf tissue albedo / base-colour source texture for tintable 3D garden plants.\nPrimary request: one square 1024 x 1024 full-bleed opaque texture map of flat leaf tissue. A single delicate narrow central midrib runs vertically from bottom middle to top middle. Fine gently arching secondary veins branch upward from both sides of the midrib with tiny connecting tertiary veins. The full surface is leaf tissue continuing beyond all four image edges. Subtle botanical microtexture, smoothly controlled low contrast.\nComposition: perfectly flat orthographic image. Bottom is leaf base, top is leaf tip direction. Only tissue: do not show a leaf shape or any background.\nColour palette: very pale neutral desaturated grey sage, approximately RGB 222, 228, 214. Veins only slightly brighter than surrounding tissue, minimal contrast and nearly no colour variation. This is a multiply tinting base for many plant colours, so preserve a light almost neutral value everywhere.\nLighting: unlit albedo, perfectly uniform diffuse illumination. No shading gradient, no shadows, no reflections, no glossy highlights or baked directional light.\nAvoid: leaf silhouette, margins, serrations, stems, dew, dirt, holes, spots, patches of green, dark corners, borders, text, watermark, collage, perspective, purple normal map.",
+      "source_image": "/home/biggie/.codex/generated_images/01a11acb-ab31-73d0-be08-a61f849e2633/exec-d73eca44-76af-4e97-b300-5b47af7b7181.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "orientation": "Single central midrib bottom to top; secondary veins arch upward from center towards sides.",
+      "palette": "Pale desaturated grey sage, mean source RGB [205.79,211.85,196.49].",
+      "inspection": "Full square tissue with faint botanical secondary/tertiary veins, no leaf outline, text or border. The generated image is slightly darker/more sage than the requested neutral, so final pigment tint should account for the base colour."
+    }
+  ],
+  "botanical_references": [
+    {
+      "id": 109,
+      "name": "Golden forest grass",
+      "taxon": "Hakonechloa macra 'Aureola'",
+      "url": "https://www.rhs.org.uk/plants/91600/hakonechloa-macra-aureola/details",
+      "notes": "Compact clumping grass with slender curved stems and narrow cascading blades. Bright yellow leaves carry fine green stripes. Flower panicles are visually secondary."
+    },
+    {
+      "id": 124,
+      "name": "Mexican snowball",
+      "taxon": "Echeveria elegans",
+      "url": "https://www.rhs.org.uk/plants/6226/echeveria-elegans/details",
+      "notes": "Low, evergreen clusters of tight rosettes with thick spoon-like whitish-green leaves. Inflorescences bear pendant pink lantern-like flowers with yellow tips, arranged on one side of the stem."
+    }
+  ]
+}

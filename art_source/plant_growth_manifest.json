@@ -4,1595 +4,1961 @@
     "name": "Cosmos",
     "family": "herb",
     "height": 1.0489,
-    "triangles": 6448
+    "triangles": 6390,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 1,
     "name": "Lavender",
     "family": "herb",
     "height": 0.787,
-    "triangles": 6448
+    "triangles": 11372,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 2,
     "name": "Daisy",
     "family": "herb",
     "height": 0.4948,
-    "triangles": 6448
+    "triangles": 1100,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 3,
     "name": "Sunflower",
     "family": "herb",
     "height": 1.8788,
-    "triangles": 5712
+    "triangles": 682,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 4,
     "name": "Foxglove",
     "family": "herb",
     "height": 1.6135,
-    "triangles": 3408
+    "triangles": 2146,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 5,
     "name": "Hydrangea",
     "family": "herb",
     "height": 1.171,
-    "triangles": 6488
+    "triangles": 14152,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 6,
     "name": "Peony",
     "family": "herb",
     "height": 0.7265,
-    "triangles": 6448
+    "triangles": 1464,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 7,
     "name": "Poppy",
     "family": "herb",
     "height": 0.7615,
-    "triangles": 6448
+    "triangles": 1482,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 8,
     "name": "Iris",
     "family": "strap",
     "height": 0.8822,
-    "triangles": 5952
+    "triangles": 742,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 9,
     "name": "Sweet pea",
     "family": "herb",
     "height": 1.4636,
-    "triangles": 4848
+    "triangles": 3564,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 10,
     "name": "Clematis",
     "family": "herb",
     "height": 1.401,
-    "triangles": 6552
+    "triangles": 2080,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 11,
     "name": "Nasturtium",
     "family": "broad",
     "height": 0.1613,
-    "triangles": 6856
+    "triangles": 5658,
+    "source": "art_source/plant_full_00.blend",
+    "full_art_revision": 1
   },
   {
     "id": 12,
     "name": "Creeping thyme",
     "family": "mat",
     "height": 0.0837,
-    "triangles": 6384
+    "triangles": 3686,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 13,
     "name": "Moss carpet",
     "family": "mat",
     "height": 0.068,
-    "triangles": 1200
+    "triangles": 1498,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 14,
     "name": "Blue fescue",
     "family": "strap",
     "height": 0.4228,
-    "triangles": 6096
+    "triangles": 976,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 15,
     "name": "Feather grass",
     "family": "strap",
     "height": 0.8056,
-    "triangles": 6096
+    "triangles": 976,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 16,
     "name": "Sedge",
     "family": "strap",
     "height": 0.7481,
-    "triangles": 6096
+    "triangles": 976,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 17,
     "name": "Fountain grass",
     "family": "strap",
     "height": 0.978,
-    "triangles": 6096
+    "triangles": 976,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 18,
     "name": "Dichondra",
     "family": "mat",
     "height": 0.0621,
-    "triangles": 1200
+    "triangles": 1994,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 19,
     "name": "Chamomile",
     "family": "herb",
     "height": 0.3153,
-    "triangles": 6336
+    "triangles": 10510,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 20,
     "name": "Rose",
     "family": "compound",
     "height": 1.1111,
-    "triangles": 7728
+    "triangles": 8152,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 21,
     "name": "Azalea",
     "family": "herb",
     "height": 0.811,
-    "triangles": 6448
+    "triangles": 9726,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 22,
     "name": "Rosemary",
     "family": "herb",
     "height": 1.0522,
-    "triangles": 6448
+    "triangles": 6246,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 23,
     "name": "Camellia",
     "family": "herb",
     "height": 1.3818,
-    "triangles": 6552
+    "triangles": 3142,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 24,
     "name": "Lilac",
     "family": "herb",
     "height": 1.6626,
-    "triangles": 6576
+    "triangles": 4382,
+    "source": "art_source/plant_full_01.blend",
+    "full_art_revision": 1
   },
   {
     "id": 25,
     "name": "Boxwood",
     "family": "herb",
     "height": 0.9426,
-    "triangles": 1264
+    "triangles": 4154,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 26,
     "name": "Gardenia",
     "family": "herb",
     "height": 1.0292,
-    "triangles": 6448
+    "triangles": 5102,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 27,
     "name": "Blueberry",
     "family": "herb",
     "height": 1.3525,
-    "triangles": 6552
+    "triangles": 4762,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 28,
     "name": "Cherry blossom",
     "family": "sapling",
     "height": 4.2618,
-    "triangles": 8784
+    "triangles": 10912,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 29,
     "name": "Silver birch",
     "family": "sapling",
     "height": 5.8631,
-    "triangles": 3600
+    "triangles": 2956,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 30,
     "name": "Japanese maple",
     "family": "broad",
     "height": 2.9892,
-    "triangles": 1504
+    "triangles": 7444,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 31,
     "name": "Olive",
     "family": "sapling",
     "height": 3.8556,
-    "triangles": 12800
+    "triangles": 4784,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 32,
     "name": "Willow",
     "family": "sapling",
     "height": 4.811,
-    "triangles": 3600
+    "triangles": 2328,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 33,
     "name": "Magnolia",
     "family": "sapling",
     "height": 4.0254,
-    "triangles": 8784
+    "triangles": 3824,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 34,
     "name": "Lemon",
     "family": "sapling",
     "height": 3.1557,
-    "triangles": 6384
+    "triangles": 3824,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 35,
     "name": "Apple",
     "family": "sapling",
     "height": 3.8737,
-    "triangles": 11760
+    "triangles": 4384,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 36,
     "name": "Kangaroo paw",
     "family": "strap",
     "height": 1.433,
-    "triangles": 6096
+    "triangles": 1942,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 37,
     "name": "Billy buttons",
     "family": "herb",
     "height": 0.6779,
-    "triangles": 1984
+    "triangles": 1070,
+    "source": "art_source/plant_full_02.blend",
+    "full_art_revision": 1
   },
   {
     "id": 38,
     "name": "Wattle",
     "family": "herb",
     "height": 1.8021,
-    "triangles": 6576
+    "triangles": 12634,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 39,
     "name": "Bottlebrush",
     "family": "herb",
     "height": 1.5492,
-    "triangles": 6576
+    "triangles": 3482,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 40,
     "name": "Grevillea",
     "family": "herb",
     "height": 1.2618,
-    "triangles": 6528
+    "triangles": 9186,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 41,
     "name": "Banksia",
     "family": "herb",
     "height": 1.7032,
-    "triangles": 6576
+    "triangles": 5130,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 42,
     "name": "Lilly pilly",
     "family": "herb",
     "height": 1.5672,
-    "triangles": 6576
+    "triangles": 4722,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 43,
     "name": "Waxflower",
     "family": "herb",
     "height": 1.0704,
-    "triangles": 6448
+    "triangles": 8354,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 44,
     "name": "Lomandra",
     "family": "strap",
     "height": 0.863,
-    "triangles": 6096
+    "triangles": 976,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 45,
     "name": "Eucalyptus",
     "family": "sapling",
     "height": 6.8461,
-    "triangles": 3600
+    "triangles": 2888,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 46,
     "name": "Carrot",
     "family": "compound",
     "height": 0.4815,
-    "triangles": 1784
+    "triangles": 3570,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 47,
     "name": "Tomato",
     "family": "compound",
     "height": 1.0369,
-    "triangles": 7472
+    "triangles": 1788,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 48,
     "name": "Lettuce",
     "family": "rosette",
     "height": 0.4309,
-    "triangles": 1392
+    "triangles": 1110,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 49,
     "name": "Pumpkin",
     "family": "broad",
     "height": 0.2506,
-    "triangles": 2248
+    "triangles": 3792,
+    "source": "art_source/plant_full_03.blend",
+    "full_art_revision": 1
   },
   {
     "id": 50,
     "name": "Strawberry",
     "family": "herb",
     "height": 0.3618,
-    "triangles": 3888
+    "triangles": 1360,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 51,
     "name": "Radish",
     "family": "rosette",
     "height": 0.3611,
-    "triangles": 960
+    "triangles": 630,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 52,
     "name": "Pea",
     "family": "compound",
     "height": 1.0004,
-    "triangles": 3400
+    "triangles": 1432,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 53,
     "name": "Aubergine",
     "family": "herb",
     "height": 0.8198,
-    "triangles": 1696
+    "triangles": 1032,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 54,
     "name": "Basil",
     "family": "herb",
     "height": 0.3863,
-    "triangles": 1152
+    "triangles": 1608,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 55,
     "name": "Corn",
     "family": "strap",
     "height": 2.035,
-    "triangles": 1488
+    "triangles": 2188,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 56,
     "name": "Cucumber",
     "family": "herb",
     "height": 0.2438,
-    "triangles": 1728
+    "triangles": 3792,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 57,
     "name": "Chilli",
     "family": "herb",
     "height": 0.718,
-    "triangles": 1696
+    "triangles": 1032,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 58,
     "name": "Beetroot",
     "family": "rosette",
     "height": 0.3672,
-    "triangles": 960
+    "triangles": 630,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 59,
     "name": "Melon",
     "family": "broad",
     "height": 0.2438,
-    "triangles": 2248
+    "triangles": 3792,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 60,
     "name": "Common jasmine",
     "family": "herb",
     "height": 1.43,
-    "triangles": 6576
+    "triangles": 5730,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 61,
     "name": "Pink jasmine",
     "family": "herb",
     "height": 1.5236,
-    "triangles": 6576
+    "triangles": 5730,
+    "source": "art_source/plant_full_04.blend",
+    "full_art_revision": 1
   },
   {
     "id": 62,
     "name": "Winter jasmine",
     "family": "herb",
     "height": 1.2558,
-    "triangles": 6528
+    "triangles": 2166,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 63,
     "name": "Dahlia 'Caf\u00e9 au Lait'",
     "family": "herb",
     "height": 1.3829,
-    "triangles": 6552
+    "triangles": 976,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 64,
     "name": "Tulip 'Queen of Night'",
     "family": "herb",
     "height": 0.8282,
-    "triangles": 5440
+    "triangles": 870,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 65,
     "name": "Blue delphinium",
     "family": "herb",
     "height": 1.657,
-    "triangles": 6576
+    "triangles": 4528,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 66,
     "name": "Purple lupin",
     "family": "herb",
     "height": 1.8006,
-    "triangles": 6576
+    "triangles": 8896,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 67,
     "name": "Burgundy hollyhock",
     "family": "herb",
     "height": 1.8103,
-    "triangles": 6576
+    "triangles": 3424,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 68,
     "name": "Slender weaver's bamboo",
     "family": "bamboo",
     "height": 3.5571,
-    "triangles": 1144
+    "triangles": 4508,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 69,
     "name": "Golden bamboo",
     "family": "bamboo",
     "height": 3.3406,
-    "triangles": 1144
+    "triangles": 4508,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 70,
     "name": "Black bamboo",
     "family": "bamboo",
     "height": 3.4989,
-    "triangles": 1144
+    "triangles": 4508,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 71,
     "name": "Himalayan blue bamboo",
     "family": "bamboo",
     "height": 3.4964,
-    "triangles": 1144
+    "triangles": 4508,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 72,
     "name": "Red bamboo 'Jiuzhaigou'",
     "family": "bamboo",
     "height": 2.69,
-    "triangles": 1144
+    "triangles": 4508,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 73,
     "name": "Rose 'Mister Lincoln'",
     "family": "compound",
     "height": 1.374,
-    "triangles": 8576
+    "triangles": 4062,
+    "source": "art_source/plant_full_05.blend",
+    "full_art_revision": 1
   },
   {
     "id": 74,
     "name": "Rose 'Iceberg'",
     "family": "compound",
     "height": 1.5323,
-    "triangles": 9056
+    "triangles": 6986,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 75,
     "name": "Rose 'Golden Celebration'",
     "family": "compound",
     "height": 1.3143,
-    "triangles": 8480
+    "triangles": 4742,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 76,
     "name": "Rose 'Just Joey'",
     "family": "compound",
     "height": 0.8693,
-    "triangles": 7152
+    "triangles": 4742,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 77,
     "name": "Rose 'Scentimental'",
     "family": "compound",
     "height": 1.3842,
-    "triangles": 8624
+    "triangles": 4742,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 78,
     "name": "Giant redwood",
     "family": "conifer",
     "height": 10.0012,
-    "triangles": 3732
+    "triangles": 9796,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 79,
     "name": "Coast redwood",
     "family": "conifer",
     "height": 11.5006,
-    "triangles": 3732
+    "triangles": 7492,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 80,
     "name": "Giant bamboo",
     "family": "bamboo",
     "height": 8.132,
-    "triangles": 1144
+    "triangles": 4624,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 81,
     "name": "Ginkgo",
     "family": "broad",
     "height": 4.1079,
-    "triangles": 2464
+    "triangles": 7832,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 82,
     "name": "Fig",
     "family": "broad",
     "height": 4.0723,
-    "triangles": 5712
+    "triangles": 3902,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 83,
     "name": "Pear",
     "family": "sapling",
     "height": 3.8486,
-    "triangles": 8224
+    "triangles": 4384,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 84,
     "name": "Peach",
     "family": "sapling",
     "height": 3.9468,
-    "triangles": 8432
+    "triangles": 4384,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 85,
     "name": "Plum",
     "family": "sapling",
     "height": 3.7076,
-    "triangles": 5232
+    "triangles": 4384,
+    "source": "art_source/plant_full_06.blend",
+    "full_art_revision": 1
   },
   {
     "id": 86,
     "name": "Apricot",
     "family": "sapling",
     "height": 3.7978,
-    "triangles": 8640
+    "triangles": 4384,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 87,
     "name": "Nectarine",
     "family": "sapling",
     "height": 3.7407,
-    "triangles": 5616
+    "triangles": 4384,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 88,
     "name": "Orange",
     "family": "sapling",
     "height": 3.7838,
-    "triangles": 8224
+    "triangles": 3960,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 89,
     "name": "Mandarin",
     "family": "sapling",
     "height": 3.422,
-    "triangles": 5232
+    "triangles": 3824,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 90,
     "name": "Lime",
     "family": "sapling",
     "height": 4.0671,
-    "triangles": 8432
+    "triangles": 3960,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 91,
     "name": "Avocado",
     "family": "sapling",
     "height": 4.2069,
-    "triangles": 8432
+    "triangles": 3688,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 92,
     "name": "Snow gum",
     "family": "sapling",
     "height": 4.2465,
-    "triangles": 4896
+    "triangles": 3568,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 93,
     "name": "Alpine snow gum",
     "family": "sapling",
     "height": 3.5868,
-    "triangles": 6192
+    "triangles": 3568,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 94,
     "name": "Red flowering gum",
     "family": "sapling",
     "height": 4.6744,
-    "triangles": 8784
+    "triangles": 3552,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 95,
     "name": "Waratah",
     "family": "herb",
     "height": 1.4418,
-    "triangles": 6576
+    "triangles": 2890,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 96,
     "name": "Gymea lily",
     "family": "strap",
     "height": 3.1009,
-    "triangles": 1200
+    "triangles": 1840,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 97,
     "name": "Globe artichoke",
     "family": "rosette",
     "height": 0.9521,
-    "triangles": 6576
+    "triangles": 568,
+    "source": "art_source/plant_full_07.blend",
+    "full_art_revision": 1
   },
   {
     "id": 98,
     "name": "Rhubarb",
     "family": "broad",
     "height": 0.6213,
-    "triangles": 2824
+    "triangles": 1074,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 99,
     "name": "Asparagus",
     "family": "herb",
     "height": 1.3348,
-    "triangles": 5112
+    "triangles": 2366,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 100,
     "name": "Broccoli",
     "family": "rosette",
     "height": 0.4627,
-    "triangles": 6576
+    "triangles": 910,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 101,
     "name": "Cauliflower",
     "family": "rosette",
     "height": 0.58,
-    "triangles": 6576
+    "triangles": 910,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 102,
     "name": "Capsicum",
     "family": "herb",
     "height": 0.729,
-    "triangles": 5152
+    "triangles": 1032,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 103,
     "name": "Brussels sprouts",
     "family": "herb",
     "height": 1.2701,
-    "triangles": 4080
+    "triangles": 1698,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 104,
     "name": "Leek",
     "family": "strap",
     "height": 0.7484,
-    "triangles": 480
+    "triangles": 1582,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 105,
     "name": "Hemp",
     "family": "compound",
     "height": 1.85,
-    "triangles": 8400
+    "triangles": 2992,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 106,
     "name": "Zebra grass",
     "family": "strap",
     "height": 1.6671,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 107,
     "name": "Feather reed grass",
     "family": "strap",
     "height": 1.5523,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 108,
     "name": "Blue switchgrass",
     "family": "strap",
     "height": 1.2406,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 109,
     "name": "Golden forest grass",
     "family": "strap",
     "height": 0.389,
-    "triangles": 6288
+    "triangles": 3312,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 110,
     "name": "Japanese blood grass",
     "family": "strap",
     "height": 0.5653,
-    "triangles": 4704
+    "triangles": 760,
+    "source": "art_source/plant_full_08.blend",
+    "full_art_revision": 1
   },
   {
     "id": 111,
     "name": "Purple moor grass",
     "family": "strap",
     "height": 1.7673,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 112,
     "name": "Tufted hair grass",
     "family": "strap",
     "height": 0.9856,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 113,
     "name": "Quaking grass",
     "family": "strap",
     "height": 0.663,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 114,
     "name": "Autumn moor grass",
     "family": "strap",
     "height": 0.4645,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 115,
     "name": "Pink muhly grass",
     "family": "strap",
     "height": 0.9856,
-    "triangles": 6288
+    "triangles": 976,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 116,
     "name": "Golden barrel cactus",
     "family": "succulent",
     "height": 0.6,
-    "triangles": 10512
+    "triangles": 10926,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 117,
     "name": "Bunny ears cactus",
     "family": "succulent",
     "height": 0.644,
-    "triangles": 13992
+    "triangles": 3404,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 118,
     "name": "Prickly pear",
     "family": "succulent",
     "height": 1.425,
-    "triangles": 13704
+    "triangles": 4300,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 119,
     "name": "Mexican fencepost cactus",
     "family": "succulent",
     "height": 1.85,
-    "triangles": 2736
+    "triangles": 2826,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 120,
     "name": "Old man cactus",
     "family": "succulent",
     "height": 0.95,
-    "triangles": 10160
+    "triangles": 9446,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 121,
     "name": "Ladyfinger cactus",
     "family": "succulent",
     "height": 0.3,
-    "triangles": 4400
+    "triangles": 3930,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 122,
     "name": "Star cactus",
     "family": "succulent",
     "height": 0.13,
-    "triangles": 7248
+    "triangles": 2774,
+    "source": "art_source/plant_full_09.blend",
+    "full_art_revision": 1
   },
   {
     "id": 123,
     "name": "Holiday cactus",
     "family": "succulent",
     "height": 0.2872,
-    "triangles": 5424
+    "triangles": 1972,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 124,
     "name": "Mexican snowball",
     "family": "succulent",
     "height": 0.2266,
-    "triangles": 4880
+    "triangles": 9600,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 125,
     "name": "Lipstick echeveria",
     "family": "succulent",
     "height": 0.2797,
-    "triangles": 4240
+    "triangles": 1998,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 126,
     "name": "Hens and chicks",
     "family": "succulent",
     "height": 0.2,
-    "triangles": 3664
+    "triangles": 2106,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 127,
     "name": "Aloe vera",
     "family": "succulent",
     "height": 0.6408,
-    "triangles": 6928
+    "triangles": 3816,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 128,
     "name": "Century plant",
     "family": "succulent",
     "height": 1.089,
-    "triangles": 6608
+    "triangles": 3438,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 129,
     "name": "Zebra haworthia",
     "family": "succulent",
     "height": 0.1876,
-    "triangles": 8272
+    "triangles": 3726,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 130,
     "name": "Window haworthia",
     "family": "succulent",
     "height": 0.064,
-    "triangles": 8928
+    "triangles": 3030,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 131,
     "name": "Jade plant",
     "family": "succulent",
     "height": 0.6549,
-    "triangles": 11304
+    "triangles": 3976,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 132,
     "name": "Gollum jade",
     "family": "succulent",
     "height": 0.5115,
-    "triangles": 5760
+    "triangles": 3712,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 133,
     "name": "Black rose aeonium",
     "family": "succulent",
     "height": 0.6668,
-    "triangles": 4432
+    "triangles": 4572,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 134,
     "name": "Jelly bean sedum",
     "family": "succulent",
     "height": 0.2117,
-    "triangles": 13968
+    "triangles": 3170,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 135,
     "name": "Living stones",
     "family": "succulent",
     "height": 0.0429,
-    "triangles": 2368
+    "triangles": 1236,
+    "source": "art_source/plant_full_10.blend",
+    "full_art_revision": 1
   },
   {
     "id": 136,
     "name": "Dwarf mondo grass",
     "family": "low_grass",
     "height": 0.1051,
-    "triangles": 5470
+    "triangles": 868,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 137,
     "name": "Black mondo grass",
     "family": "low_grass",
     "height": 0.2105,
-    "triangles": 5470
+    "triangles": 868,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 138,
     "name": "Velvet zoysia",
     "family": "low_grass",
     "height": 0.1121,
-    "triangles": 5598
+    "triangles": 934,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 139,
     "name": "Buffalo grass",
     "family": "low_grass",
     "height": 0.1566,
-    "triangles": 5598
+    "triangles": 934,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 140,
     "name": "Creeping bentgrass",
     "family": "low_grass",
     "height": 0.1342,
-    "triangles": 5598
+    "triangles": 934,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 141,
     "name": "Creeping red fescue",
     "family": "low_grass",
     "height": 0.2012,
-    "triangles": 5598
+    "triangles": 934,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 142,
     "name": "Sheep's fescue",
     "family": "low_grass",
     "height": 0.2801,
-    "triangles": 5470
+    "triangles": 868,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 143,
     "name": "Bearskin fescue",
     "family": "low_grass",
     "height": 0.2229,
-    "triangles": 5470
+    "triangles": 868,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 144,
     "name": "Blue moor grass",
     "family": "low_grass",
     "height": 0.3156,
-    "triangles": 5470
+    "triangles": 868,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 145,
     "name": "Evergold sedge",
     "family": "low_grass",
     "height": 0.3136,
-    "triangles": 8550
+    "triangles": 1167,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 146,
     "name": "Snowline sedge",
     "family": "low_grass",
     "height": 0.1579,
-    "triangles": 8550
+    "triangles": 1167,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 147,
     "name": "Dwarf golden sweet flag",
     "family": "low_grass",
     "height": 0.1263,
-    "triangles": 5470
+    "triangles": 868,
+    "source": "art_source/plant_full_11.blend",
+    "full_art_revision": 1
   },
   {
     "id": 148,
     "name": "Cattleya orchid",
     "family": "strap",
     "height": 0.5,
-    "triangles": 1072,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 2640,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 149,
     "name": "Slipper orchid",
     "family": "strap",
     "height": 0.3,
-    "triangles": 1024,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 984,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 150,
     "name": "Dancing-lady orchid",
     "family": "strap",
     "height": 1.0,
-    "triangles": 5232,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1720,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 151,
     "name": "Pansy orchid",
     "family": "strap",
     "height": 0.45,
-    "triangles": 2032,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 820,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 152,
     "name": "Blue Vanda orchid",
     "family": "strap",
     "height": 1.2,
-    "triangles": 2104,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1184,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 153,
     "name": "Zygopetalum orchid",
     "family": "strap",
     "height": 0.6,
-    "triangles": 2032,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 856,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 154,
     "name": "Spider orchid",
     "family": "strap",
     "height": 0.6,
-    "triangles": 2288,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 892,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 155,
     "name": "Australian rock orchid",
     "family": "strap",
     "height": 0.75,
-    "triangles": 6832,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 2424,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 156,
     "name": "Bee orchid",
     "family": "rosette",
     "height": 0.35,
-    "triangles": 1264,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 276,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 157,
     "name": "Early purple orchid",
     "family": "rosette",
     "height": 0.4,
-    "triangles": 4560,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1176,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 158,
     "name": "Cornflower",
     "family": "alternate",
     "height": 0.75,
-    "triangles": 2098,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 5532,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 159,
     "name": "Corncockle",
     "family": "opposite",
     "height": 0.9,
-    "triangles": 1810,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 872,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 160,
     "name": "Red campion",
     "family": "opposite",
     "height": 0.7,
-    "triangles": 2738,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1160,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 161,
     "name": "Ragged robin",
     "family": "opposite",
     "height": 0.6,
-    "triangles": 2482,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1088,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 162,
     "name": "Meadow cranesbill",
     "family": "lobed",
     "height": 0.75,
-    "triangles": 5810,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1216,
+    "source": "art_source/plant_full_12.blend",
+    "full_art_revision": 1
   },
   {
     "id": 163,
     "name": "Field scabious",
     "family": "lobed",
     "height": 0.8,
-    "triangles": 5426,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1772,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 164,
     "name": "Yarrow",
     "family": "fern",
     "height": 0.65,
-    "triangles": 3826,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 10044,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 165,
     "name": "Purple coneflower",
     "family": "alternate",
     "height": 1.0,
-    "triangles": 2034,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 748,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 166,
     "name": "Black-eyed Susan",
     "family": "alternate",
     "height": 0.8,
-    "triangles": 1970,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 784,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 167,
     "name": "Blanket flower",
     "family": "alternate",
     "height": 0.6,
-    "triangles": 2098,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 820,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 168,
     "name": "Flannel flower",
     "family": "lobed",
     "height": 0.6,
-    "triangles": 5298,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1576,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 169,
     "name": "Strawflower",
     "family": "alternate",
     "height": 0.75,
-    "triangles": 2226,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 856,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 170,
     "name": "Australian blue pincushion",
     "family": "rosette",
     "height": 0.3,
-    "triangles": 1276,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1192,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 171,
     "name": "Chocolate lily",
     "family": "strap",
     "height": 0.7,
-    "triangles": 2444,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 856,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 172,
     "name": "Fringed lily",
     "family": "strap",
     "height": 0.5,
-    "triangles": 1932,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 712,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 173,
     "name": "Daffodil",
     "family": "strap",
     "height": 0.4,
-    "triangles": 1292,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 532,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 174,
     "name": "Snowdrop",
     "family": "strap",
     "height": 0.18,
-    "triangles": 1276,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1340,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 175,
     "name": "Crocus",
     "family": "strap",
     "height": 0.1,
-    "triangles": 1404,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 604,
+    "source": "art_source/plant_full_13.blend",
+    "full_art_revision": 1
   },
   {
     "id": 176,
     "name": "Hyacinth",
     "family": "strap",
     "height": 0.3,
-    "triangles": 5260,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1648,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 177,
     "name": "English bluebell",
     "family": "strap",
     "height": 0.4,
-    "triangles": 3212,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1072,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 178,
     "name": "Giant ornamental allium",
     "family": "strap",
     "height": 1.5,
-    "triangles": 1036,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1072,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 179,
     "name": "Lily of the valley",
     "family": "strap",
     "height": 0.25,
-    "triangles": 2908,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1000,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 180,
     "name": "Ranunculus",
     "family": "lobed",
     "height": 0.4,
-    "triangles": 3724,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 964,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 181,
     "name": "Windflower",
     "family": "lobed",
     "height": 0.35,
-    "triangles": 3628,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 964,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 182,
     "name": "Snapdragon",
     "family": "opposite",
     "height": 0.8,
-    "triangles": 3506,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1376,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 183,
     "name": "Sweet William",
     "family": "opposite",
     "height": 0.45,
-    "triangles": 1586,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1356,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 184,
     "name": "Stock",
     "family": "alternate",
     "height": 0.6,
-    "triangles": 4018,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1360,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 185,
     "name": "Love-in-a-mist",
     "family": "fern",
     "height": 0.45,
-    "triangles": 4082,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 3052,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 186,
     "name": "Calendula",
     "family": "alternate",
     "height": 0.45,
-    "triangles": 2226,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 856,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 187,
     "name": "Zinnia",
     "family": "opposite",
     "height": 0.75,
-    "triangles": 2098,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 980,
+    "source": "art_source/plant_full_14.blend",
+    "full_art_revision": 1
   },
   {
     "id": 188,
     "name": "Columbine",
     "family": "compound",
     "height": 0.7,
-    "triangles": 2866,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 2032,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 189,
     "name": "Bleeding heart",
     "family": "compound",
     "height": 0.8,
-    "triangles": 5490,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 2428,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 190,
     "name": "Hellebore",
     "family": "compound",
     "height": 0.45,
-    "triangles": 4572,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1576,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 191,
     "name": "Astilbe",
     "family": "compound",
     "height": 0.75,
-    "triangles": 3826,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 6832,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 192,
     "name": "Penstemon",
     "family": "opposite",
     "height": 0.9,
-    "triangles": 3858,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1448,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 193,
     "name": "Tall garden phlox",
     "family": "opposite",
     "height": 1.0,
-    "triangles": 5746,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1952,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 194,
     "name": "Canterbury bells",
     "family": "alternate",
     "height": 0.85,
-    "triangles": 3090,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1088,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 195,
     "name": "Oriental lily",
     "family": "alternate",
     "height": 0.9,
-    "triangles": 1682,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 524,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 196,
     "name": "Sweet violet",
     "family": "heart",
     "height": 0.15,
-    "triangles": 1660,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 820,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 197,
     "name": "Lady's mantle",
     "family": "lobed",
     "height": 0.45,
-    "triangles": 1516,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 1828,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 198,
     "name": "Tropical hibiscus",
     "family": "woody",
     "height": 2.0,
-    "triangles": 2622,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 3986,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 199,
     "name": "Daphne",
     "family": "woody",
     "height": 1.4,
-    "triangles": 11574,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 7944,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 200,
     "name": "Japanese pieris",
     "family": "woody",
     "height": 2.0,
-    "triangles": 12774,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 8664,
+    "source": "art_source/plant_full_15.blend",
+    "full_art_revision": 1
   },
   {
     "id": 201,
     "name": "Snowball viburnum",
     "family": "woody",
     "height": 2.5,
-    "triangles": 10062,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 7884,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 202,
     "name": "Mock orange",
     "family": "woody",
     "height": 2.4,
-    "triangles": 8126,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 6032,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 203,
     "name": "Weigela",
     "family": "woody",
     "height": 2.0,
-    "triangles": 10046,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 7184,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 204,
     "name": "Deutzia",
     "family": "woody",
     "height": 1.2,
-    "triangles": 10502,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 7616,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 205,
     "name": "Forsythia",
     "family": "woody",
     "height": 2.2,
-    "triangles": 16502,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 11216,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 206,
     "name": "Flowering quince",
     "family": "woody",
     "height": 2.2,
-    "triangles": 7050,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 4992,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 207,
     "name": "Spirea",
     "family": "woody",
     "height": 2.0,
-    "triangles": 6938,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 13684,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 208,
     "name": "Abelia",
     "family": "woody",
     "height": 1.6,
-    "triangles": 7862,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 6032,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 209,
     "name": "Escallonia",
     "family": "woody",
     "height": 2.0,
-    "triangles": 10050,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 6792,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 210,
     "name": "Hebe",
     "family": "woody",
     "height": 1.2,
-    "triangles": 10734,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 9744,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 211,
     "name": "Ceanothus",
     "family": "woody",
     "height": 2.2,
-    "triangles": 3930,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 8112,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 212,
     "name": "Hardy fuchsia",
     "family": "woody",
     "height": 1.6,
-    "triangles": 8462,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 11858,
+    "source": "art_source/plant_art_sample.blend",
+    "art_sample_revision": 1
   },
   {
     "id": 213,
     "name": "Mexican orange blossom",
     "family": "woody",
     "height": 1.8,
-    "triangles": 11586,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 8796,
+    "source": "art_source/plant_full_16.blend",
+    "full_art_revision": 1
   },
   {
     "id": 214,
     "name": "Correa",
     "family": "woody",
     "height": 1.2,
-    "triangles": 5610,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 4524,
+    "source": "art_source/plant_full_17.blend",
+    "full_art_revision": 1
   },
   {
     "id": 215,
     "name": "Pink boronia",
     "family": "woody",
     "height": 1.5,
-    "triangles": 14070,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 10392,
+    "source": "art_source/plant_full_17.blend",
+    "full_art_revision": 1
   },
   {
     "id": 216,
     "name": "Flowering tea-tree",
     "family": "woody",
     "height": 2.0,
-    "triangles": 10650,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 7152,
+    "source": "art_source/plant_full_17.blend",
+    "full_art_revision": 1
   },
   {
     "id": 217,
     "name": "Spotted emu bush",
     "family": "woody",
     "height": 1.5,
-    "triangles": 6150,
-    "source": "art_source/flower_additions.blend"
+    "triangles": 4452,
+    "source": "art_source/plant_full_17.blend",
+    "full_art_revision": 1
   }
 ]

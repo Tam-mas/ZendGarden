@@ -1,0 +1,58 @@
+{
+  "reviewed": "2026-10-08",
+  "purpose": "Reference-led geometry study for four of the ten sampled plants. Institutional botanical descriptions guide anatomy; source imagery is not included in exported texture maps.",
+  "plants": [
+    {
+      "id": 148,
+      "name": "Cattleya orchid",
+      "scientific": "Cattleya labiata",
+      "references": [
+        "https://www.rhs.org.uk/plants/119482/cattleya-labiata/details",
+        "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A622132-1/general-information"
+      ],
+      "geometry": "Elongated club-shaped pseudobulbs, one firm oblong leaf per growth, exposed velamen roots, terminal flower sheaths, three slim sepals, two broad waved petals, and a projecting rolled labellum with an expanded frilled lip.",
+      "stages": "A single rooted young growth becomes a three-growth clump before the mature five-growth plant develops two terminal flower sprays. Closed buds share the open flowers' exact attachment positions.",
+      "mature_triangles": 8532,
+      "growth_triangles": 2640
+    },
+    {
+      "id": 149,
+      "name": "Slipper orchid",
+      "scientific": "Paphiopedilum insigne",
+      "references": [
+        "https://www.rhs.org.uk/plants/12265/paphiopedilum-insigne/details",
+        "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A649780-1/general-information"
+      ],
+      "geometry": "Two shallow fans of arching strap leaves without pseudobulbs, each bearing one flower on a bare stalk. A tall white-edged dorsal sepal, undulating lateral petals, rear synsepal, staminodal shield, and open inflated pouch create a bilateral flower.",
+      "stages": "Three-leaf plantlet, five-leaf juvenile fan, then two six-leaf mature fans. The flower pouch is open at its rim and closed below.",
+      "mature_triangles": 4324,
+      "growth_triangles": 984
+    },
+    {
+      "id": 158,
+      "name": "Cornflower",
+      "scientific": "Centaurea cyanus",
+      "references": [
+        "https://www.rhs.org.uk/plants/46174/centaurea-cyanus/details",
+        "https://plants.ces.ncsu.edu/plants/centaurea-cyanus/"
+      ],
+      "geometry": "Curved stems with axillary branches, broader lightly divided basal leaves, narrow alternate upper leaves, and nine individual composite flower heads. Each head contains enlarged fringed tubular outer florets, a compact inner disc, and a layered green involucre.",
+      "stages": "Low leafy rosette, two developing leafy stems, then branched mature stems with bracted heads and individual attached buds.",
+      "mature_triangles": 20616,
+      "growth_triangles": 5532
+    },
+    {
+      "id": 174,
+      "name": "Snowdrop",
+      "scientific": "Galanthus nivalis",
+      "references": [
+        "https://www.kew.org/plants/common-snowdrop",
+        "https://www.rhs.org.uk/plants/snowdrops"
+      ],
+      "geometry": "Five small shoots, each with paired basal blades and one leafless flowering scape, a spathe and recurved pedicel. Nodding flowers have three long bowed white outer tepals and three shorter notched inner tepals with green apical markings.",
+      "stages": "Paired emerging leaves, a three-shoot juvenile clump, then the five flowering shoots. Pendent white buds attach to the same hanging neck as each flower.",
+      "mature_triangles": 4790,
+      "growth_triangles": 1340
+    }
+  ]
+}

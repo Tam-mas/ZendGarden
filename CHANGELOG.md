@@ -1,3 +1,23 @@
+### [2026-10-08 21:24] Changed
+
+**Tech:** Full botanical art pass, attachment metadata, editable Blender libraries and collection regression coverage
+
+**Dev:** Extend the approved ten-plant direction to the other 208 catalogue plants, preserving the ten study assets byte-for-byte. Rebuild species-specific foliage, branches, petals, fruit and three supplementary growth organs across flowers, trees, natives, produce, grasses and succulents. Use 18 isolated Blender MCP source libraries with packed images and deterministic family generators; reuse generated WebP tissue sources in portable PBR exports. Preserve measured mature heights and planting envelopes, the 218 IDs, sorting profiles, saves and cultivar definitions. Enable the existing local bloom/bud attachment path throughout the catalogue. Keep rendering quality, batching code, LOD settings, wind shaders, lighting and resolution unchanged. Mature geometry falls from 9,279,946 to 7,775,744 triangles; supplementary growth totals 761,444. Add release 60, refresh the 208 selection portraits, document final rebuild order with export failure handling, and add whole-library provenance, attachment, growth and cultivar regression coverage. Blender checks open all 18 new libraries and find 1,033 meshes with no missing images. Physical mobile FPS has not been measured.
+
+**Plain:** The whole plant collection has more natural leaves, flowers, branches and young growth, from orchid lips and layered blossoms to varied tree crowns, kitchen crops, curved grasses and fleshy succulents.
+
+**Why:** Carry the approved botanical style through every plant while preserving players' gardens and the existing rendering settings.
+
+### [2026-10-08 20:40] Changed
+
+**Tech:** Ten-plant botanical art sample, editable Blender source and existing attached-bloom integration
+
+**Dev:** Reauthor IDs 20, 30, 109, 124, 148, 149, 158, 174, 198 and 212 with species-specific branching, leaves, flowers, seedlings, juveniles and buds. Retain a separate packed Blender library and repeatable generators, botanical references and two ImageGen tissue maps stored as 512px WebP sources. Export twenty self-contained GLBs through Blender MCP and refresh the ten selection portraits. Mature geometry falls from 492,734 to 342,878 triangles; early-stage geometry totals 54,848 triangles. Preserve existing placement envelopes, catalogue identities, sorting heights, save formats and the other 208 species. Use the existing attachment metadata for the four older sample plants; preserve cultivar roles on orchid lips and secondary petals and rigid succulent materials. Keep rendering quality, batching, LOD, wind shaders, lighting and resolution settings unchanged. Add release 59, rebuild documentation and focused sample coverage in local and browser CI checks. Validate all 218 plant/growth assets, flower attachment and shrub contrasts, plus plant loading, previews, collection, breeding, save and update regressions. The focused sample test covers 50 growth stages and 20 cultivar reload stages. Compare matched Compatibility renders at two distances and across all five stages. Physical mobile FPS has not been measured.
+
+**Plain:** Ten familiar plants have more natural shapes, clearer flowers and carefully shaped young growth, from orchid lips and rose petals to hanging fuchsias and fleshy succulent rosettes.
+
+**Why:** A varied sample establishes a consistent botanical direction before extending the art pass to the rest of the collection.
+
 ### [2026-10-08 14:22] Changed
 
 **Tech:** `GardenUpdates`, `README`, integration with the current main branch

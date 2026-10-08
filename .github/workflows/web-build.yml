@@ -38,8 +38,13 @@ jobs:
         run: |
           python3 tests/check_flower_additions.py
           python3 tests/check_bush_variation.py
+          python3 tests/check_plants.py
+          python3 tests/check_plant_growth.py
+          python3 tests/check_plant_art_full.py --enforce-baseline-budget
           .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/flower_collection.gd
           .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/flower_additions.gd
+          .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/plant_art_sample.gd
+          .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/plant_art_full.gd
       - name: Test plant breeding and cultivar saves
         run: |
           .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/plant_breeding.gd

@@ -1,0 +1,952 @@
+{
+  "reviewed": "2026-10-08",
+  "module": "plant_full_flowers.py",
+  "coverage": [
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    175,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    213,
+    214,
+    215,
+    216,
+    217
+  ],
+  "approved_samples_untouched": [
+    148,
+    149,
+    158,
+    174,
+    198,
+    212
+  ],
+  "method": "Institutional botanical descriptions and existing per-species reference notes guide organ shapes. No reference imagery is copied into textures. Deterministic geometry reuses pure mesh primitives and established shrub habit/count data; all build and palette functions are scene-independent.",
+  "newly_consulted": [
+    "https://plants.ces.ncsu.edu/plants/lamprocapnos-spectabilis/",
+    "https://www.anbg.gov.au/gnp/gnp4/boronia-pinnata.html",
+    "https://www.rhs.org.uk/plants/105261/hebe-speciosa/details",
+    "https://anbg.gov.au/gnp/gnp7/correa-reflexa.html",
+    "https://www.aos.org/explore/zygopetalum"
+  ],
+  "texture_suggestions": {
+    "151": "orchid_petal subtle central markings",
+    "153": "orchid_sepal brown blotches; orchid_petal purple labellum veining",
+    "154": "orchid_sepal small basal blotches",
+    "175": "narrow pale stripe along leaf midrib",
+    "195": "orchid_petal crimson speckling and pale margins",
+    "217": "small dark spots on pale lower throat"
+  },
+  "geometry_validation": {
+    "method": "Pure Python Vector-compatible geometry audit; Blender export and in-game render verification belong to the integration pipeline.",
+    "mature_triangles": 2614982,
+    "baseline_mature_triangles": 2651974,
+    "maximum_combined_seedling_juvenile_bud_triangles": 13684,
+    "all_mature_bloom_and_bud_vertices_anchored": true,
+    "max_species_triangles": 179244,
+    "shrub_morphology_contracts": "Viburnum21 heads, Hebe30 racemes, Pieris180 urns, Forsythia240 flowers, tea-tree160 flowers; wide Spirea/Hebe and narrow Boronia/tea-tree retained."
+  },
+  "plants": [
+    {
+      "id": 150,
+      "name": "Dancing-lady orchid",
+      "scientific": "Oncidium sphacelatum",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/oncidium-sphacelatum/"
+      ],
+      "geometry_changes": "Flattened growths with arching leaves, branched sprays and broad dancing skirts with paired callus ridges.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 10268,
+      "growth_triangles": 1720,
+      "flower_attachments": 32
+    },
+    {
+      "id": 151,
+      "name": "Pansy orchid",
+      "scientific": "Miltoniopsis vexillaria",
+      "references": [
+        "https://www.aos.org/explore/miltoniopsis",
+        "https://www.orchids.org/grexes/miltoniopsis-vexillaria"
+      ],
+      "geometry_changes": "Firm fans, arching short racemes and expanded pale labellum beneath broad lateral petals.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 4948,
+      "growth_triangles": 820,
+      "flower_attachments": 7
+    },
+    {
+      "id": 152,
+      "name": "Blue Vanda orchid",
+      "scientific": "Vanda coerulea",
+      "references": [
+        "https://www.rhs.org.uk/plants/409682/vanda-coerulea/details",
+        "https://www.kew.org/read-and-watch/vanda-ful-vandas"
+      ],
+      "geometry_changes": "Upright monopodial stem, alternating strap leaves and aerial roots with outward flower faces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 5062,
+      "growth_triangles": 1184,
+      "flower_attachments": 9
+    },
+    {
+      "id": 153,
+      "name": "Zygopetalum orchid",
+      "scientific": "Zygopetalum maculatum",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/zygopetalum/",
+        "https://www.si.edu/object/zygopetalum-maculatum%3Aofeo-sg_2013-0564B",
+        "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A661743-1/general-information"
+      ],
+      "geometry_changes": "Clustered pseudobulbs, broad pleated blades and separate violet labellum with callus ridges.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 5036,
+      "growth_triangles": 856,
+      "flower_attachments": 8
+    },
+    {
+      "id": 154,
+      "name": "Spider orchid",
+      "scientific": "Brassia verrucosa",
+      "references": [
+        "https://www.aos.org/explore/brassia"
+      ],
+      "geometry_changes": "Arching epiphytic growth and long narrow sepal blades around a projecting pale lip.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 5516,
+      "growth_triangles": 892,
+      "flower_attachments": 9
+    },
+    {
+      "id": 155,
+      "name": "Australian rock orchid",
+      "scientific": "Dendrobium speciosum",
+      "references": [
+        "https://www.anbg.gov.au/gnp/interns-2003/thelychiton-speciosum.html"
+      ],
+      "geometry_changes": "Stout leafy canes support bent multi-flower sprays with small distinct lips and columns.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 13056,
+      "growth_triangles": 2424,
+      "flower_attachments": 48
+    },
+    {
+      "id": 156,
+      "name": "Bee orchid",
+      "scientific": "Ophrys apifera",
+      "references": [
+        "https://www.wildlifetrusts.org/wildlife-explorer/wildflowers/bee-orchid"
+      ],
+      "geometry_changes": "Terrestrial leaf rosette and sparse spike; pink sepals enclose a swollen brown lip with paired gold marks.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 1656,
+      "growth_triangles": 276,
+      "flower_attachments": 5
+    },
+    {
+      "id": 157,
+      "name": "Early purple orchid",
+      "scientific": "Orchis mascula",
+      "references": [
+        "https://www.rhs.org.uk/plants/11905/orchis-mascula/details"
+      ],
+      "geometry_changes": "Basal leaf rosette and bracted spike; hooded flowers have a divided lower lip and rear spur.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 5076,
+      "growth_triangles": 1176,
+      "flower_attachments": 30
+    },
+    {
+      "id": 159,
+      "name": "Corncockle",
+      "scientific": "Agrostemma githago",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/agrostemma-githago/"
+      ],
+      "geometry_changes": "Opposite narrow leaves, branched stalks, broad notched petals and conspicuously long pointed calyx.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 4672,
+      "growth_triangles": 872,
+      "flower_attachments": 6
+    },
+    {
+      "id": 160,
+      "name": "Red campion",
+      "scientific": "Silene dioica",
+      "references": [
+        "https://www.rhs.org.uk/plants/17328/silene-dioica/details"
+      ],
+      "geometry_changes": "Opposite broad blades and forked floral stems carrying notched pink flowers with separate calyces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 6376,
+      "growth_triangles": 1160,
+      "flower_attachments": 14
+    },
+    {
+      "id": 161,
+      "name": "Ragged robin",
+      "scientific": "Silene flos-cuculi",
+      "references": [
+        "https://www.wildlifetrusts.org/wildlife-explorer/wildflowers/ragged-robin"
+      ],
+      "geometry_changes": "Narrow foliage, open branch windows and five deeply split petals with independent fine lobes.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 7456,
+      "growth_triangles": 1088,
+      "flower_attachments": 12
+    },
+    {
+      "id": 162,
+      "name": "Meadow cranesbill",
+      "scientific": "Geranium pratense",
+      "references": [
+        "https://www.wildlifetrusts.org/wildlife-explorer/wildflowers/meadow-cranes-bill"
+      ],
+      "geometry_changes": "Connected deeply palmate leaves on alternating stalks and cupped violet flower faces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 7376,
+      "growth_triangles": 1216,
+      "flower_attachments": 12
+    },
+    {
+      "id": 163,
+      "name": "Field scabious",
+      "scientific": "Knautia arvensis",
+      "references": [
+        "https://collections.rhs.org.uk/view/93005/knautia-arvensis",
+        "https://doi.org/10.1111/1365-2745.13938"
+      ],
+      "geometry_changes": "Leafy basal crown, irregular peduncles and domed compound heads assembled from individual florets.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 14072,
+      "growth_triangles": 1772,
+      "flower_attachments": 9
+    },
+    {
+      "id": 164,
+      "name": "Yarrow",
+      "scientific": "Achillea millefolium",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/achillea-millefolium/"
+      ],
+      "geometry_changes": "Twice-divided feathery leaf geometry and flat-topped compound white flower tables.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 23672,
+      "growth_triangles": 10044,
+      "flower_attachments": 7
+    },
+    {
+      "id": 165,
+      "name": "Purple coneflower",
+      "scientific": "Echinacea purpurea",
+      "references": [
+        "https://www.rhs.org.uk/plants/72079/rudbeckia-echinacea-purpurea/details",
+        "https://plants.ces.ncsu.edu/plants/echinacea-purpurea/"
+      ],
+      "geometry_changes": "Broad basal and alternate upper leaves; reflexed pink rays beneath a textured copper cone.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 15154,
+      "growth_triangles": 748,
+      "flower_attachments": 7
+    },
+    {
+      "id": 166,
+      "name": "Black-eyed Susan",
+      "scientific": "Rudbeckia hirta",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/rudbeckia-hirta/"
+      ],
+      "geometry_changes": "Broad rough-looking leaf blades and golden rays around a low dark seed disc.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 16416,
+      "growth_triangles": 784,
+      "flower_attachments": 8
+    },
+    {
+      "id": 167,
+      "name": "Blanket flower",
+      "scientific": "Gaillardia aristata",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/gaillardia-aristata/"
+      ],
+      "geometry_changes": "Branched coarse foliage, contrasting ray tips and compact disc above overlapping bracts.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 19214,
+      "growth_triangles": 820,
+      "flower_attachments": 9
+    },
+    {
+      "id": 168,
+      "name": "Flannel flower",
+      "scientific": "Actinotus helianthi",
+      "references": [
+        "https://test.anbg.gov.au/gnp/interns-2002/actinotus-helianthi.html"
+      ],
+      "geometry_changes": "Divided grey foliage and broad white curved bracts enclosing a small floral centre.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 9232,
+      "growth_triangles": 1576,
+      "flower_attachments": 8
+    },
+    {
+      "id": 169,
+      "name": "Strawflower",
+      "scientific": "Xerochrysum bracteatum",
+      "references": [
+        "https://www.anbg.gov.au/gallery/xerochrysum-bracteatum-adam-forster.html",
+        "https://australianbg.gardenexplorer.org/taxon-8075.aspx"
+      ],
+      "geometry_changes": "Alternate lanceolate leaves; pointed papery bracts overlap in four offset rows.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 20624,
+      "growth_triangles": 856,
+      "flower_attachments": 10
+    },
+    {
+      "id": 170,
+      "name": "Australian blue pincushion",
+      "scientific": "Brunonia australis",
+      "references": [
+        "https://plantselector.botanicgardens.sa.gov.au/Plants/Details/37",
+        "https://www.anbg.gov.au/images/photo_cd/brunoniaceae/"
+      ],
+      "geometry_changes": "Low leaf rosette below branching stalks and rounded blue heads made of separate florets.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 10488,
+      "growth_triangles": 1192,
+      "flower_attachments": 6
+    },
+    {
+      "id": 171,
+      "name": "Chocolate lily",
+      "scientific": "Arthropodium strictum",
+      "references": [
+        "https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?lvl=sp&name=Arthropodium~strictum&page=nswfl",
+        "https://spapps.environment.sa.gov.au/SeedsOfSA/speciesinformation.html?rid=475"
+      ],
+      "geometry_changes": "Fine upright basal straps below airy peduncle branches and six-part mauve flower faces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 5524,
+      "growth_triangles": 856,
+      "flower_attachments": 14
+    },
+    {
+      "id": 172,
+      "name": "Fringed lily",
+      "scientific": "Thysanotus tuberosus",
+      "references": [
+        "https://www.anbg.gov.au/apu/plants/thystube.html",
+        "https://www.anbg.gov.au/stamps/stamp-thysan-tuberosus-05.html"
+      ],
+      "geometry_changes": "Fine basal blades, wiry branches and three visibly fringed inner tepals alternating with plain outer ones.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 10564,
+      "growth_triangles": 712,
+      "flower_attachments": 10
+    },
+    {
+      "id": 173,
+      "name": "Daffodil",
+      "scientific": "Narcissus pseudonarcissus",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/narcissus-pseudonarcissus/"
+      ],
+      "geometry_changes": "Blue-green basal straps and solitary outward-facing flowers with extended fused trumpets.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 3560,
+      "growth_triangles": 532,
+      "flower_attachments": 5
+    },
+    {
+      "id": 175,
+      "name": "Crocus",
+      "scientific": "Crocus vernus 'Remembrance'",
+      "references": [
+        "https://www.rhs.org.uk/plants/92662/crocus-vernus-remembrance/details",
+        "https://plants.ces.ncsu.edu/plants/crocus/"
+      ],
+      "geometry_changes": "Low corm-like tufts, narrow basal blades and six overlapping upright goblet tepals.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 3696,
+      "growth_triangles": 604,
+      "flower_attachments": 7
+    },
+    {
+      "id": 176,
+      "name": "Hyacinth",
+      "scientific": "Hyacinthus orientalis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/hyacinthus-orientalis/"
+      ],
+      "geometry_changes": "Stout leafless flower stalks with dense cylindrical racemes of short fused tubes and recurved lobes.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 16576,
+      "growth_triangles": 1648,
+      "flower_attachments": 36
+    },
+    {
+      "id": 177,
+      "name": "English bluebell",
+      "scientific": "Hyacinthoides non-scripta",
+      "references": [
+        "https://www.rhs.org.uk/plants/8890/hyacinthoides-non-scripta/details",
+        "https://www.kew.org/plants/bluebell"
+      ],
+      "geometry_changes": "Arched scapes with one-sided rows of hanging narrow bells, curled tips and cream anthers.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 9472,
+      "growth_triangles": 1072,
+      "flower_attachments": 20
+    },
+    {
+      "id": 178,
+      "name": "Giant ornamental allium",
+      "scientific": "Allium giganteum",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/allium-giganteum/"
+      ],
+      "geometry_changes": "Broad basal straps and tall leafless scapes; spherical umbels have visible radial pedicels and star florets.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 19744,
+      "growth_triangles": 1072,
+      "flower_attachments": 3
+    },
+    {
+      "id": 179,
+      "name": "Lily of the valley",
+      "scientific": "Convallaria majalis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/convallaria-majalis/"
+      ],
+      "geometry_changes": "Broad paired-looking basal blades and curved flowering stalks with one-sided hollow rounded bells.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 6096,
+      "growth_triangles": 1000,
+      "flower_attachments": 18
+    },
+    {
+      "id": 180,
+      "name": "Ranunculus",
+      "scientific": "Ranunculus asiaticus (double garden form)",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/ranunculus-asiaticus/"
+      ],
+      "geometry_changes": "Expanded divided basal foliage beneath slim stems and spiralling layers of rounded cupped petals.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 13256,
+      "growth_triangles": 964,
+      "flower_attachments": 6
+    },
+    {
+      "id": 181,
+      "name": "Windflower",
+      "scientific": "Anemone coronaria",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/anemone-coronaria/"
+      ],
+      "geometry_changes": "Divided basal leaves, sub-floral leaf whorls and coloured sepal cups around dark centres.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 6344,
+      "growth_triangles": 964,
+      "flower_attachments": 6
+    },
+    {
+      "id": 182,
+      "name": "Snapdragon",
+      "scientific": "Antirrhinum majus",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/antirrhinum-majus/"
+      ],
+      "geometry_changes": "Paired lower leaves and tall floral racemes with inflated tubes, upper lip and swollen lower palate.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 8864,
+      "growth_triangles": 1376,
+      "flower_attachments": 20
+    },
+    {
+      "id": 183,
+      "name": "Sweet William",
+      "scientific": "Dianthus barbatus",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/dianthus-barbatus/"
+      ],
+      "geometry_changes": "Opposite lance leaves and compact terminal groups of individual small five-petal flowers.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 9784,
+      "growth_triangles": 1356,
+      "flower_attachments": 5
+    },
+    {
+      "id": 184,
+      "name": "Stock",
+      "scientific": "Matthiola incana (single-flowered form)",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/matthiola-incana/"
+      ],
+      "geometry_changes": "Narrow upright leaf arrangement and racemes of separate four-petal flower faces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 8908,
+      "growth_triangles": 1360,
+      "flower_attachments": 24
+    },
+    {
+      "id": 185,
+      "name": "Love-in-a-mist",
+      "scientific": "Nigella damascena",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/nigella-damascena/"
+      ],
+      "geometry_changes": "Thread-like divided leaves and lacy involucral bracts surrounding star-like blue sepals.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 8024,
+      "growth_triangles": 3052,
+      "flower_attachments": 9
+    },
+    {
+      "id": 186,
+      "name": "Calendula",
+      "scientific": "Calendula officinalis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/calendula-officinalis/"
+      ],
+      "geometry_changes": "Alternate broad soft leaves and orange composite heads with distinct overlapping green bracts.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 20764,
+      "growth_triangles": 856,
+      "flower_attachments": 10
+    },
+    {
+      "id": 187,
+      "name": "Zinnia",
+      "scientific": "Zinnia elegans (double garden form)",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/zinnia-elegans/"
+      ],
+      "geometry_changes": "Opposite broad sessile-style leaves and layered double flower heads with broad outer rays.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 34030,
+      "growth_triangles": 980,
+      "flower_attachments": 9
+    },
+    {
+      "id": 188,
+      "name": "Columbine",
+      "scientific": "Aquilegia vulgaris",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/aquilegia/",
+        "https://www.rhs.org.uk/plants/aquilegia"
+      ],
+      "geometry_changes": "Divided rounded leaflets and nodding flowers with five true curved and hooked nectar spurs.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 12476,
+      "growth_triangles": 2032,
+      "flower_attachments": 9
+    },
+    {
+      "id": 189,
+      "name": "Bleeding heart",
+      "scientific": "Lamprocapnos spectabilis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/lamprocapnos-spectabilis/"
+      ],
+      "geometry_changes": "Divided lower foliage and curved one-sided flower racemes carrying hanging heart forms.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 19896,
+      "growth_triangles": 2428,
+      "flower_attachments": 20
+    },
+    {
+      "id": 190,
+      "name": "Hellebore",
+      "scientific": "Helleborus orientalis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/helleborus-orientalis/"
+      ],
+      "geometry_changes": "Long-stalked palmate serrated leaflets and nodding cups with a ring of tubular nectaries.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 15428,
+      "growth_triangles": 1576,
+      "flower_attachments": 7
+    },
+    {
+      "id": 191,
+      "name": "Astilbe",
+      "scientific": "Astilbe chinensis",
+      "references": [
+        "https://www.rhs.org.uk/plants/astilbe/growing-guide"
+      ],
+      "geometry_changes": "Divided serrated foliage under tapered branching plumes of many small individual flowers.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 34196,
+      "growth_triangles": 6832,
+      "flower_attachments": 7
+    },
+    {
+      "id": 192,
+      "name": "Penstemon",
+      "scientific": "Penstemon digitalis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/penstemon-digitalis/"
+      ],
+      "geometry_changes": "Opposite upper leaves and branched racemes with a two/three-lobed mouth and central sterile stamen.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 10152,
+      "growth_triangles": 1448,
+      "flower_attachments": 22
+    },
+    {
+      "id": 193,
+      "name": "Tall garden phlox",
+      "scientific": "Phlox paniculata",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/phlox-paniculata/"
+      ],
+      "geometry_changes": "Opposite pointed leaves and compact domed terminal panicles; flat faces join to narrow floral tubes.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 13600,
+      "growth_triangles": 1952,
+      "flower_attachments": 36
+    },
+    {
+      "id": 194,
+      "name": "Canterbury bells",
+      "scientific": "Campanula medium",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/campanula-medium/"
+      ],
+      "geometry_changes": "Basal leaf rosette, leafy upper stalk and hollow inflated bells with lobed mouths and calyces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 9140,
+      "growth_triangles": 1088,
+      "flower_attachments": 16
+    },
+    {
+      "id": 195,
+      "name": "Oriental lily",
+      "scientific": "Lilium 'Star Gazer' (Oriental hybrid)",
+      "references": [
+        "https://www.rhs.org.uk/plants/articles/graham-rice/perennials-and-bulbs/get-growing-lilies",
+        "https://www.rhs.org.uk/plants/pdfs/plant-register-supplements/lilies/lily-register-and-checklist.pdf"
+      ],
+      "geometry_changes": "A single strong leafy stem carries six reflexing tepals, six long filaments and individually elongated anthers.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 4796,
+      "growth_triangles": 524,
+      "flower_attachments": 5
+    },
+    {
+      "id": 196,
+      "name": "Sweet violet",
+      "scientific": "Viola odorata",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/viola-odorata/"
+      ],
+      "geometry_changes": "Low rounded folded leaves and separate small bilateral flowers with a white-marked lower petal and rear spur.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 2318,
+      "growth_triangles": 820,
+      "flower_attachments": 9
+    },
+    {
+      "id": 197,
+      "name": "Lady's mantle",
+      "scientific": "Alchemilla mollis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/alchemilla-mollis/"
+      ],
+      "geometry_changes": "Connected scalloped leaf fans with radiating folds support airy lime-coloured compound flower sprays.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 13632,
+      "growth_triangles": 1828,
+      "flower_attachments": 9
+    },
+    {
+      "id": 199,
+      "name": "Daphne",
+      "scientific": "Daphne odora",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/daphne-odora/"
+      ],
+      "geometry_changes": "Retained dense terminal foliage with curved blades and two-tone four-lobed waxy tubular flowers.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 120204,
+      "growth_triangles": 7944,
+      "flower_attachments": 160
+    },
+    {
+      "id": 200,
+      "name": "Japanese pieris",
+      "scientific": "Pieris japonica",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/pieris-japonica/"
+      ],
+      "geometry_changes": "Tiered woody framework, folded terminal leaves, bronze tips and180 independently attached constricted urns.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 88104,
+      "growth_triangles": 8664,
+      "flower_attachments": 180
+    },
+    {
+      "id": 201,
+      "name": "Snowball viburnum",
+      "scientific": "Viburnum opulus 'Roseum'",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/viburnum-opulus-roseum/"
+      ],
+      "geometry_changes": "Opposite connected three-lobed leaves and21 spherical heads composed of separate sterile florets.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 127360,
+      "growth_triangles": 7884,
+      "flower_attachments": 21
+    },
+    {
+      "id": 202,
+      "name": "Mock orange",
+      "scientific": "Philadelphus coronarius",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/philadelphus-coronarius/"
+      ],
+      "geometry_changes": "Curved deciduous branches with opposite toothed leaves; four broad white petals and numerous yellow stamens.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 110506,
+      "growth_triangles": 6032,
+      "flower_attachments": 96
+    },
+    {
+      "id": 203,
+      "name": "Weigela",
+      "scientific": "Weigela florida",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/weigela-florida/"
+      ],
+      "geometry_changes": "Arching branches with folded opposite leaves and grouped fused trumpet corollas with separate mouths.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 118998,
+      "growth_triangles": 7184,
+      "flower_attachments": 128
+    },
+    {
+      "id": 204,
+      "name": "Deutzia",
+      "scientific": "Deutzia gracilis",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/deutzia-gracilis/"
+      ],
+      "geometry_changes": "Low arching wood and opposite pointed blades with many separate stars on short racemes.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 109726,
+      "growth_triangles": 7616,
+      "flower_attachments": 140
+    },
+    {
+      "id": 205,
+      "name": "Forsythia",
+      "scientific": "Forsythia x intermedia",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/forsythia-x-intermedia/"
+      ],
+      "geometry_changes": "Nearly bare fountain canes carry240 flowers, each with four narrow lobes and two stamens.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 71220,
+      "growth_triangles": 11216,
+      "flower_attachments": 240
+    },
+    {
+      "id": 206,
+      "name": "Flowering quince",
+      "scientific": "Chaenomeles speciosa",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/chaenomeles-speciosa/"
+      ],
+      "geometry_changes": "Tangled thorned wood with sparse emerging leaves and five cupped red petals around yellow stamens.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 81680,
+      "growth_triangles": 4992,
+      "flower_attachments": 100
+    },
+    {
+      "id": 207,
+      "name": "Spirea",
+      "scientific": "Spiraea x vanhouttei",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/spiraea-x-vanhouttei/"
+      ],
+      "geometry_changes": "Wide cascading branch framework with small folded leaves and85 compound flower clusters along older wood.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 177230,
+      "growth_triangles": 13684,
+      "flower_attachments": 85
+    },
+    {
+      "id": 208,
+      "name": "Abelia",
+      "scientific": "Abelia x grandiflora",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/abelia-x-grandiflora/"
+      ],
+      "geometry_changes": "Airy red-brown curved twigs with opposite leaves and pale tubular corollas above persistent reddish calyces.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 117244,
+      "growth_triangles": 6032,
+      "flower_attachments": 96
+    },
+    {
+      "id": 209,
+      "name": "Escallonia",
+      "scientific": "Escallonia rubra",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/escallonia-rubra/"
+      ],
+      "geometry_changes": "Dense small-leaved crown and compact terminal groups of narrow fused pink corollas.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 108816,
+      "growth_triangles": 6792,
+      "flower_attachments": 150
+    },
+    {
+      "id": 210,
+      "name": "Hebe",
+      "scientific": "Veronica speciosa (syn. Hebe speciosa)",
+      "references": [
+        "https://www.rhs.org.uk/plants/105261/hebe-speciosa/details"
+      ],
+      "geometry_changes": "Broad cushion with crossing fleshy leaf pairs and30 full racemes of four-lobed flowers and projecting stamens.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 179244,
+      "growth_triangles": 9744,
+      "flower_attachments": 30
+    },
+    {
+      "id": 211,
+      "name": "Ceanothus",
+      "scientific": "Ceanothus thyrsiflorus",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/ceanothus-thyrsiflorus/"
+      ],
+      "geometry_changes": "Billowing evergreen crown of small folded blades and separate fine blue compound clusters.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 117864,
+      "growth_triangles": 8112,
+      "flower_attachments": 48
+    },
+    {
+      "id": 213,
+      "name": "Mexican orange blossom",
+      "scientific": "Choisya ternata",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/choisya-ternata/"
+      ],
+      "geometry_changes": "Three distinct curved oblong leaflets per leaf above a rounded branched crown and white flower groups.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 133668,
+      "growth_triangles": 8796,
+      "flower_attachments": 125
+    },
+    {
+      "id": 214,
+      "name": "Correa",
+      "scientific": "Correa reflexa",
+      "references": [
+        "https://anbg.gov.au/gnp/gnp7/correa-reflexa.html"
+      ],
+      "geometry_changes": "Spreading softly rounded leaf blades and hanging long tubes with contrasting terminal lobes and stamens.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 94336,
+      "growth_triangles": 4524,
+      "flower_attachments": 65
+    },
+    {
+      "id": 215,
+      "name": "Pink boronia",
+      "scientific": "Boronia pinnata",
+      "references": [
+        "https://www.anbg.gov.au/gnp/gnp4/boronia-pinnata.html"
+      ],
+      "geometry_changes": "Slender arching wood with three pairs of fine leaflets and waxy four-petal flowers with eight stamens.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 166972,
+      "growth_triangles": 10392,
+      "flower_attachments": 140
+    },
+    {
+      "id": 216,
+      "name": "Flowering tea-tree",
+      "scientific": "Leptospermum scoparium",
+      "references": [
+        "https://www.anbg.gov.au/leptospermum/leptospermum-scoparium.html"
+      ],
+      "geometry_changes": "Narrow upright twig framework with folded pointed leaves and160 separately attached flowers along wood.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 86860,
+      "growth_triangles": 7152,
+      "flower_attachments": 160
+    },
+    {
+      "id": 217,
+      "name": "Spotted emu bush",
+      "scientific": "Eremophila maculata",
+      "references": [
+        "https://anpsa.org.au/plant_profiles/eremophila-maculata/",
+        "https://anbg.gov.au/photo/apii/id/a/30785"
+      ],
+      "geometry_changes": "Dense lance-leaved crown with bent fused tubes and distinct two/three-lobed pale mouths.",
+      "growth": "Independent leafy seedling and juvenile architecture; closed buds occupy the open flowers exact attachment positions.",
+      "mature_triangles": 78740,
+      "growth_triangles": 4452,
+      "flower_attachments": 85
+    }
+  ]
+}

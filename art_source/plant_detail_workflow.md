@@ -1,5 +1,67 @@
 # Detailed botanical library
 
+## Current full botanical art pass
+
+The current catalogue has **218 plants**. `plant_art_sample.blend` preserves the
+approved ten studies. `plant_full_00.blend` through `plant_full_17.blend` contain
+the other 208 mature plants and their seedling, juvenile and attached-bud meshes.
+The source manifest maps each plant to its packed editable library. Historical
+builders described below must be followed by the sample and full art exporters.
+
+Run `build_full_plant_art.build(batch)` in isolated Blender MCP background mode,
+with batch numbers 0–17 **sequentially**. The CLI supports `-- --batch N`.
+`rebuild.sh` includes these final overrides. The generators preserve the active
+scene, approved sample exports, catalogue IDs, measured heights and placement
+envelopes. Family generators and reference JSONs use the `plant_full_` prefix.
+Generated tissue maps stay as WebP sources; GLBs embed 256px pigment maps and
+existing normal/roughness maps. No runtime rendering settings are changed.
+
+After import, run `tests/check_plant_art_full.py`, the existing plant/growth,
+fruit, flower and bush asset checks, and `tests/plant_art_full.gd`. Render selection
+portraits with `render_plant_cards.gd -- --ids=...`, excluding the approved ten.
+`review_plant_full.gd -- --before` stores matched frames before replacement;
+run it again after import, or add `-- --stages --ids=...` for growth stages.
+These tools use ignored captures and never load a personal garden save.
+
+The remaining sections document the earlier construction passes.
+
+## Ten-plant art sample (release 59)
+
+The current overrides are Rose (20), Japanese maple (30), Golden forest grass
+(109), Mexican snowball (124), Cattleya orchid (148), Slipper orchid (149),
+Cornflower (158), Snowdrop (174), Tropical hibiscus (198) and Hardy fuchsia (212).
+`build_plant_art_sample.py` builds their mature foliage, flowers, seedlings,
+juveniles and attached buds into `plant_art_sample.blend`. Its three geometry
+modules have no scene or file side effects on import. Botanical references and
+ImageGen prompts are recorded alongside them. The two 512px tissue sources are
+WebP; exported GLBs embed their maps using the existing compressed-image imports.
+
+**Run this builder last**, after the older libraries and growth generators, so
+their original exports do not replace the sample. In a separate Blender MCP
+process, add `art_source` to `sys.path`, import `build_plant_art_sample`, then call
+`build_plant_art_sample.build()`. It creates an isolated scene, restores the
+previous scene and writes only the sample's source, twenty GLBs and ten entries
+in each manifest. Older source libraries, catalogue IDs, authored sorting heights
+and save formats are preserved. The source is deliberately uncompressed for
+compatibility with the installed Blender MCP's background reader.
+
+The four older sample IDs use the existing attached-bloom metadata so their
+flowers and growing tips open around their own stems. Leaf/petal material names
+retain cultivar colouring, and succulent materials retain rigid tissue. No
+quality presets, batching, LOD, wind shaders, lighting or resolution settings are
+changed by this pass.
+
+Before replacing assets, run `art_source/review_plant_sample.gd -- --before` in
+Godot. Afterwards run it without `--before` for matched mature, distant and
+five-stage captures under `captures/plant-sample/`. Refresh the ten selection
+portraits with `art_source/render_plant_cards.gd -- --ids=20,30,109,124,148,149,158,174,198,212`.
+Run the existing exported-asset checks plus `tests/plant_art_sample.gd`; the
+focused test covers attachment channels, 50 growth-stage transitions, rigid
+succulents and cultivar colours after save restoration. Physical mobile FPS has
+not been measured.
+
+## Original libraries and earlier expansions
+
 All 60 catalogue plants use the editable meshes in `botanical_library.blend` and the exported `assets/plants/plant_00.glb` through `plant_59.glb` files. Plant IDs, mature placement envelopes, height variation, wind, growth and harvest groups are preserved.
 
 `botanical_forms.py` defines species silhouettes and branching. `botanical_detail.py` supplies curved, UV-mapped blades, cupped petals/leaves, finer stems and fruit surfaces. It is a separate subclass so plant detail changes do not modify the shared geometry used by other generators. The exporter packs the source textures and embeds colour, normal and roughness maps in each GLB. Godot keeps embedded maps compressed; obsolete per-plant extracted PNG copies are removed. `GardenArt.add_leaf_wind` passes these maps to the wind shader.

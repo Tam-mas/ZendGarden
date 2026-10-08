@@ -1,0 +1,487 @@
+{
+  "scope": "49 woody plants excluding approved sample IDs20 and30",
+  "method": "Original deterministic Blender meshes, based on the existing institutional reference corpus and refreshed primary botanical pages. No reference photograph pixels are redistributed. Common names denote representative garden forms. Game mature heights and planting footprints remain controlled by the saved baseline.",
+  "source_corpus": [
+    "art_source/botanical_references.md",
+    "art_source/botanical_expansion_references.md"
+  ],
+  "refreshed_sources": [
+    "https://www.rhs.org.uk/plants/lilac",
+    "https://www.nps.gov/seki/learn/nature/bigtrees.htm",
+    "https://www.rhs.org.uk/plants/7990/ginkgo-biloba/details",
+    "https://www.rhs.org.uk/plants/94618/rosa-mister-lincoln-ht/details",
+    "https://plants.ces.ncsu.edu/plants/ficus-carica/",
+    "https://plants.ces.ncsu.edu/plants/pyrus-communis/",
+    "https://plants.ces.ncsu.edu/plants/prunus-persica/",
+    "https://plants.ces.ncsu.edu/plants/prunus-domestica/",
+    "https://plants.ces.ncsu.edu/plants/prunus-armeniaca/",
+    "https://plants.ces.ncsu.edu/plants/persea-americana/",
+    "https://plants.ces.ncsu.edu/plants/salix-babylonica/",
+    "https://www.rhs.org.uk/fruit/citrus/grow-your-own",
+    "https://anbg.gov.au/gnp/interns-2011/telopea-speciosissima.html"
+  ],
+  "integration": {
+    "phases": [
+      "seedling",
+      "juvenile",
+      "mature"
+    ],
+    "all_mature_organs_and_buds": "Complete exact vertex attachment maps; matching site sets.",
+    "fruit_families": "13 existing fruit families use the established hanging_fruit profiles, with at least15 sites, varying sizes, and 1\u20136m normalized canopy anchors.",
+    "materials": "Nine foliage slots and seven bloom slots; petals, flower lip and fruit labels retain runtime classification.",
+    "runtime_changes": "None.",
+    "geometry_audit": {
+      "species": 49,
+      "new_mature_triangles": 3115990,
+      "baseline_mature_triangles": 4417772,
+      "growth_triangles_total": 249312,
+      "largest_mature_triangles": 140876,
+      "largest_growth_triangles": 12634,
+      "status": "Final exported geometry totals; all species pass asset budgets and attachment checks."
+    }
+  },
+  "plants": [
+    {
+      "id": 21,
+      "name": "Azalea",
+      "botanical_interpretation": "Rhododendron, evergreen azalea garden form",
+      "geometry_decisions": "Compact branching with small alternating leaves; terminal trusses of five-petalled flowers.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/rhododendron/"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Rosemary",
+      "botanical_interpretation": "Salvia rosmarinus",
+      "geometry_decisions": "Woody upright shoots, narrow opposing leaves and small violet bilabiate flowers along the upper shoots.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/salvia-rosmarinus/"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Camellia",
+      "botanical_interpretation": "Camellia japonica",
+      "geometry_decisions": "Glossy broad toothed leaves on alternating petioles, layered pink flowers and rounded buds.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/camellia-japonica/"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Lilac",
+      "botanical_interpretation": "Syringa vulgaris",
+      "geometry_decisions": "Opposite heart-shaped leaves and branched tapering panicles assembled from individual four-lobed florets.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/syringa-vulgaris/"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Boxwood",
+      "botanical_interpretation": "Buxus sempervirens",
+      "geometry_decisions": "Low rounded crown, dense small opposite leaves and small soft growing tips.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/buxus-sempervirens/"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Gardenia",
+      "botanical_interpretation": "Gardenia jasminoides",
+      "geometry_decisions": "Broad glossy opposite or whorled leaves surrounding cream cupped flowers.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/gardenia-jasminoides/"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Blueberry",
+      "botanical_interpretation": "Vaccinium corymbosum",
+      "geometry_decisions": "Upright branching with small alternating oval leaves; blue berry clusters have a retained terminal crown.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/vaccinium-corymbosum/"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Cherry blossom",
+      "botanical_interpretation": "Prunus serrulata",
+      "geometry_decisions": "Spreading crown and fine twig forks, with exposed clusters of five-petalled pink blossom and sparse spring foliage.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/prunus-serrulata/"
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Silver birch",
+      "botanical_interpretation": "Betula pendula",
+      "geometry_decisions": "Light crown, fine twig forks, small toothed triangular leaves and pale trunk with contrasting short bark marks.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/birch/how-to-grow-birch"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Olive",
+      "botanical_interpretation": "Olea europaea",
+      "geometry_decisions": "Spreading woody framework, opposite narrow silver-green leaves and small differently sized hanging olive fruits.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/olea-europaea/"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Willow",
+      "botanical_interpretation": "Salix babylonica",
+      "geometry_decisions": "Arching upper boughs feed descending fine shoots with narrow hanging leaves.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/salix-babylonica/"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Magnolia",
+      "botanical_interpretation": "Magnolia, representative garden form",
+      "geometry_decisions": "Spreading branches, broad leathery leaves and large nine-tepalled cupped flowers.",
+      "sources": [
+        "https://www.rhs.org.uk/garden-inspiration/plants-we-love/magnolias-garden"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Lemon",
+      "botanical_interpretation": "Citrus x limon",
+      "geometry_decisions": "Rounded evergreen crown, broad entire leaves and differently sized elongated yellow lemons on outer branch attachments.",
+      "sources": [
+        "https://www.rhs.org.uk/fruit/citrus/grow-your-own"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "Apple",
+      "botanical_interpretation": "Malus domestica",
+      "geometry_decisions": "Open forked framework and toothed foliage; apples retain rounded shoulder profiles, stalks, colour and size variation.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/malus-domestica/"
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Wattle",
+      "botanical_interpretation": "Acacia, bipinnate-leaved garden form",
+      "geometry_decisions": "Airy woody crown with twice-divided foliage and branched clusters of golden globular flower heads.",
+      "sources": [
+        "https://www.anbg.gov.au/gardens/living/horticulture/index.html"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Bottlebrush",
+      "botanical_interpretation": "Callistemon, bottlebrush garden form",
+      "geometry_decisions": "Lance foliage and cylindrical brushes built from radial red stamens with separate tips.",
+      "sources": [
+        "https://www.anbg.gov.au/gnp/gnp5/cal-brac.html"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Grevillea",
+      "botanical_interpretation": "Grevillea, divided-leaved garden form",
+      "geometry_decisions": "Spreading habit, narrow divided foliage and one-sided inflorescences with recurved projecting styles.",
+      "sources": [
+        "https://visit.anbg.gov.au/static/4a717de3dcec62b894383246b00628de/anbg-document-aus_plant_families.pdf"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Banksia",
+      "botanical_interpretation": "Banksia, serrate-leaved garden form",
+      "geometry_decisions": "Stout upright shoots, strongly serrate leathery leaves and thick cylindrical heads with closely placed florets.",
+      "sources": [
+        "https://www.anbg.gov.au/banksia/"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Lilly pilly",
+      "botanical_interpretation": "Syzygium smithii",
+      "geometry_decisions": "Opposite oval leaves, copper young foliage and small pink-purple fruits in branched clusters.",
+      "sources": [
+        "https://www.anbg.gov.au/stamps/stamp-syzygium-smithii-2002.html"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Waxflower",
+      "botanical_interpretation": "Chamelaucium uncinatum",
+      "geometry_decisions": "Fine opposite needle leaves on airy branching, with separate small five-petalled waxy flowers.",
+      "sources": [
+        "https://hortflora.rbg.vic.gov.au/taxon/ad9995a6-5340-11e7-b82b-005056b0018f"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Eucalyptus",
+      "botanical_interpretation": "Eucalyptus, smooth-barked garden form",
+      "geometry_decisions": "Open irregular crown, pale trunk with peeling strips and elongated pendulous adult foliage; young plants have broader leaves.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/eucalyptus/growing-guide"
+      ]
+    },
+    {
+      "id": 68,
+      "name": "Slender weaver's bamboo",
+      "botanical_interpretation": "Bambusa textilis var. gracilis",
+      "geometry_decisions": "Narrow upright clump; slender green segmented culms and fine lance-leaf branch fans at nodes.",
+      "sources": [
+        "https://www.bambooland.com.au/bambusa-textilis-var-gracilis"
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Golden bamboo",
+      "botanical_interpretation": "Phyllostachys aurea",
+      "geometry_decisions": "Golden mature culms, green young shoots and foliage, prominent node collars and shortened lower internodes.",
+      "sources": [
+        "https://www.rhs.org.uk/Advice/Profile?PID=210&cID=1741"
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Black bamboo",
+      "botanical_interpretation": "Phyllostachys nigra",
+      "geometry_decisions": "Dark mature culms interspersed with green juvenile culms, raised nodes and narrow green leaf fans.",
+      "sources": [
+        "https://www.rhs.org.uk/Advice/Profile?PID=210&cID=1741"
+      ]
+    },
+    {
+      "id": 71,
+      "name": "Himalayan blue bamboo",
+      "botanical_interpretation": "Himalayacalamus hookerianus",
+      "geometry_decisions": "Blue-grey waxy mature culms with pale node collars, green young shoots and arching leaf fans.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/103090/himalayacalamus-hookerianus-blue-bamboo/details"
+      ]
+    },
+    {
+      "id": 72,
+      "name": "Red bamboo 'Jiuzhaigou'",
+      "botanical_interpretation": "Fargesia Jiuzhaigou garden form",
+      "geometry_decisions": "Many finer red mature culms and airy sprays of small narrow leaves.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/524636/fargesia-jiuzhaigou-red-dragon/details"
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Rose 'Mister Lincoln'",
+      "botanical_interpretation": "Rosa 'Mister Lincoln'",
+      "geometry_decisions": "Vigorous upright canes, reddish new leaves, long-stemmed high-centred crimson blooms and conical buds.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/94618/rosa-mister-lincoln-ht/details"
+      ]
+    },
+    {
+      "id": 74,
+      "name": "Rose 'Iceberg'",
+      "botanical_interpretation": "Rosa 'Iceberg'",
+      "geometry_decisions": "Lax multi-cane shrub, smaller white flowers in clusters and more exposed stamens.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/rosa-iceberg/"
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Rose 'Golden Celebration'",
+      "botanical_interpretation": "Rosa 'Golden Celebration'",
+      "geometry_decisions": "Arching framework, large densely cupped golden flowers and pinnate toothed leaves.",
+      "sources": [
+        "https://www.davidaustinroses.com/products/golden-celebration"
+      ]
+    },
+    {
+      "id": 76,
+      "name": "Rose 'Just Joey'",
+      "botanical_interpretation": "Rosa 'Just Joey'",
+      "geometry_decisions": "Lower spreading rose with broad ruffled apricot petals and compound leaves.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/119725/rosa-just-joey-(ht)/details"
+      ]
+    },
+    {
+      "id": 77,
+      "name": "Rose 'Scentimental'",
+      "botanical_interpretation": "Rosa 'Scentimental'",
+      "geometry_decisions": "Upright branching, cupped red blooms and irregular longitudinal cream markings; retain texture stripes during export.",
+      "sources": [
+        "https://www.weeksroses.com/varieties/p/scentimental"
+      ]
+    },
+    {
+      "id": 78,
+      "name": "Giant redwood",
+      "botanical_interpretation": "Sequoiadendron giganteum",
+      "geometry_decisions": "Broad buttressed reddish trunk, tapered crown, three-dimensional short awl-leaf sprays and small scaled cones.",
+      "sources": [
+        "https://www.nps.gov/seki/learn/nature/bigtrees.htm"
+      ]
+    },
+    {
+      "id": 79,
+      "name": "Coast redwood",
+      "botanical_interpretation": "Sequoia sempervirens",
+      "geometry_decisions": "Slender tall reddish trunk, narrower crown and flattened two-ranked needle sprays, with smaller cones.",
+      "sources": [
+        "https://www.fs.usda.gov/sites/nfs/files/r05/sequoia/publication/All%20about%20the%20Redwoods%202024.pdf"
+      ]
+    },
+    {
+      "id": 80,
+      "name": "Giant bamboo",
+      "botanical_interpretation": "Dendrocalamus giganteus",
+      "geometry_decisions": "Few thick tall culms with pronounced nodes and sheath scars, upper leaf fans and basal unopened shoots.",
+      "sources": [
+        "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A397880-1/general-information"
+      ]
+    },
+    {
+      "id": 81,
+      "name": "Ginkgo",
+      "botanical_interpretation": "Ginkgo biloba",
+      "geometry_decisions": "Irregular tiered framework with petiolate notched fan blades and radial folds; young trees are simpler.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/7990/ginkgo-biloba/details"
+      ]
+    },
+    {
+      "id": 82,
+      "name": "Fig",
+      "botanical_interpretation": "Ficus carica",
+      "geometry_decisions": "Broad spreading framework, connected deeply lobed leaves and necked purple figs on young outer wood.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/ficus-carica/"
+      ]
+    },
+    {
+      "id": 83,
+      "name": "Pear",
+      "botanical_interpretation": "Pyrus communis",
+      "geometry_decisions": "More upright crown, broad toothed leaves and green-gold fruits with narrowed necks.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/pyrus-communis/"
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Peach",
+      "botanical_interpretation": "Prunus persica",
+      "geometry_decisions": "Open crown, long narrow toothed leaves and hanging peach fruits with a longitudinal crease.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/prunus-persica/"
+      ]
+    },
+    {
+      "id": 85,
+      "name": "Plum",
+      "botanical_interpretation": "Prunus domestica",
+      "geometry_decisions": "Rounded crown, toothed oval foliage and differently sized purple fruits with a subtle seam.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/prunus-domestica/"
+      ]
+    },
+    {
+      "id": 86,
+      "name": "Apricot",
+      "botanical_interpretation": "Prunus armeniaca",
+      "geometry_decisions": "Rounded broad leaves and orange fruits on exposed outer twig attachments.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/prunus-armeniaca/"
+      ]
+    },
+    {
+      "id": 87,
+      "name": "Nectarine",
+      "botanical_interpretation": "Prunus persica, nectarine form",
+      "geometry_decisions": "Open branching with long narrow serrated leaves and smooth red-gold fruits retaining a seam.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/prunus-persica/"
+      ]
+    },
+    {
+      "id": 88,
+      "name": "Orange",
+      "botanical_interpretation": "Citrus x sinensis",
+      "geometry_decisions": "Rounded evergreen crown, broad entire leaves and hanging orange fruits of varied sizes and pigment.",
+      "sources": [
+        "https://www.rhs.org.uk/fruit/citrus/grow-your-own"
+      ]
+    },
+    {
+      "id": 89,
+      "name": "Mandarin",
+      "botanical_interpretation": "Citrus reticulata",
+      "geometry_decisions": "Compact crown and smaller entire leaves; orange fruits are distinctly flattened.",
+      "sources": [
+        "https://www.rhs.org.uk/fruit/citrus/grow-your-own"
+      ]
+    },
+    {
+      "id": 90,
+      "name": "Lime",
+      "botanical_interpretation": "Citrus x aurantiifolia",
+      "geometry_decisions": "Compact glossy evergreen foliage and small green fruit with subtly elongated ends.",
+      "sources": [
+        "https://www.rhs.org.uk/fruit/citrus/grow-your-own"
+      ]
+    },
+    {
+      "id": 91,
+      "name": "Avocado",
+      "botanical_interpretation": "Persea americana",
+      "geometry_decisions": "Spreading crown, larger entire leaves and dark pear-shaped hanging fruits.",
+      "sources": [
+        "https://plants.ces.ncsu.edu/plants/persea-americana/"
+      ]
+    },
+    {
+      "id": 92,
+      "name": "Snow gum",
+      "botanical_interpretation": "Eucalyptus pauciflora subsp. pauciflora",
+      "geometry_decisions": "Multiple smooth trunks, hanging adult lance leaves, broader juvenile leaves and small terminal bud groups.",
+      "sources": [
+        "https://test.anbg.gov.au/gnp/interns-2003/eucalyptus-pauciflora.html"
+      ]
+    },
+    {
+      "id": 93,
+      "name": "Alpine snow gum",
+      "botanical_interpretation": "Eucalyptus pauciflora subsp. niphophila",
+      "geometry_decisions": "Lower, more broadly spreading multi-stemmed snow-gum form with smooth mottled bark and glaucous foliage.",
+      "sources": [
+        "https://www.anbg.gov.au/gnp/eucalypts-cold-climates.html"
+      ]
+    },
+    {
+      "id": 94,
+      "name": "Red flowering gum",
+      "botanical_interpretation": "Corymbia ficifolia",
+      "geometry_decisions": "Rounded crown, broad leaves, terminal red staminal clusters and separate woody capsules with open rims.",
+      "sources": [
+        "https://www.rhs.org.uk/plants/324337/corymbia-ficifolia/details",
+        "https://www.anbg.gov.au/stamps/stamp.842C.html"
+      ]
+    },
+    {
+      "id": 95,
+      "name": "Waratah",
+      "botanical_interpretation": "Telopea speciosissima",
+      "geometry_decisions": "Straight woody stems with toothed leathery leaves; terminal red heads comprise many tubular flowers surrounded by coloured bracts.",
+      "sources": [
+        "https://anbg.gov.au/gnp/interns-2011/telopea-speciosissima.html"
+      ]
+    }
+  ]
+}

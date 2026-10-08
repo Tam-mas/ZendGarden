@@ -1,0 +1,72 @@
+{
+  "reviewed": "2026-10-08",
+  "method": "Reference-led procedural organ meshes. Botanical sources guide architecture and organ proportions; reference photographs are not redistributed as game textures.",
+  "plants": [
+    {
+      "id": 20,
+      "name": "Rose",
+      "botanical_name": "Rosa, double shrub rose form",
+      "model_decisions": [
+        "Seven irregular, tapered basal canes with outward lateral shoots retain an open shrub framework.",
+        "Five toothed leaflets share one pinnate rachis; small prickles occur on selected mature canes.",
+        "Twenty-eight flower sites have five green sepals and staggered, cupped petal whorls closing into a raised spiral heart.",
+        "Seedlings carry cotyledons and initial compound leaves; juvenile plants develop a smaller three-cane framework. Closed buds use mature flower attachments."
+      ],
+      "sources": [
+        {"title": "RHS shrub roses", "url": "https://www.rhs.org.uk/plants/roses/shrub", "evidence": "Open spreading habit, arching prickly branches, and double flowers."},
+        {"title": "RHS roses", "url": "https://www.rhs.org.uk/plants/roses/", "evidence": "Glossy green leaves and cupped, rounded or rosette flower forms."},
+        {"title": "RHS Rosa dumosa botanical details", "url": "https://www.rhs.org.uk/plants/304217/rosa-dumosa/details", "evidence": "Rosa genus bears compound pinnate leaves; toothed leaflet margins inform the organ mesh."},
+        {"title": "David Austin The Mayflower", "url": "https://www.davidaustinroses.com/products/the-mayflower", "evidence": "Breeder reference for pink double blooms held above dark foliage; the game model remains a generic shrub rose, not this named cultivar."}
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Japanese maple",
+      "botanical_name": "Acer palmatum",
+      "model_decisions": [
+        "Tapered, gently sinuous trunk supports an irregular layered framework with fine opposite leafy shoots.",
+        "Each blade is one connected seven-lobed mesh with deep sinuses, shorter basal lobes and toothed margins.",
+        "Opposite paired leaves vary in angle, size and droop; open branch windows separate the canopy layers.",
+        "Seedling cotyledons precede true palmate leaves. Juvenile branching is authored separately, and the growth-bud display uses small unfurling leaf tips."
+      ],
+      "sources": [
+        {"title": "NC State Extension Acer palmatum", "url": "https://plants.ces.ncsu.edu/plants/acer-palmatum/", "evidence": "Palmate, deeply divided leaves with five to seven toothed lobes and varied small-tree forms."},
+        {"title": "International Dendrology Society Acer palmatum", "url": "https://www.treesandshrubsonline.org/articles/acer/acer-palmatum/", "evidence": "Five to seven leaf lobes, divisions extending two-thirds to three-quarters toward the base, and double-serrate margins."},
+        {"title": "RHS seven-lobed Japanese maple herbarium specimen", "url": "https://collections.rhs.org.uk/view/163852/acer-palmatum-var-heptalobum?limit=12&offset=745&q=must%2Cmetadata.Genus.en.keyword%2Cterm%2CAcer&sort=_score", "evidence": "RHS herbarium reference for a seven-lobed Acer palmatum form."}
+      ]
+    },
+    {
+      "id": 198,
+      "name": "Tropical hibiscus",
+      "botanical_name": "Hibiscus rosa-sinensis",
+      "model_decisions": [
+        "Upright woody leaders carry broad, alternating, toothed leaves on actual petioles and secondary leafy twigs.",
+        "Twenty-four solitary flower sites preserve the existing catalogue's attachment count.",
+        "Each flower has five broad overlapping petals, a long staminal column, clustered anthers and five terminal stigma lobes.",
+        "Small leaf shoots and a compact branching juvenile precede pointed green buds at the mature flower attachments."
+      ],
+      "sources": [
+        {"title": "RHS tropical hibiscus growing guide", "url": "https://www.rhs.org.uk/plants/hibiscus/growing-guide", "evidence": "Woody tropical shrub with large showy flowers; the model retains the game's two-metre mature height."},
+        {"title": "Singapore NParks Hibiscus rosa-sinensis Hi Fever", "url": "https://www.nparks.gov.sg/florafaunaweb/flora/5/9/5928", "evidence": "Woody shrub, toothed petiolate leaves and solitary five-petalled trumpet flowers; anatomy informs the generic coral form."},
+        {"title": "NC State Extension Hibiscus rosa-sinensis", "url": "https://plants.ces.ncsu.edu/plants/hibiscus-rosa-sinensis/", "evidence": "Existing catalogue species reference retained for botanical identity and flower anatomy."}
+      ]
+    },
+    {
+      "id": 212,
+      "name": "Hardy fuchsia",
+      "botanical_name": "Fuchsia magellanica",
+      "model_decisions": [
+        "Arching fine canes support paired, finely toothed leaves and lateral leafy twigs, retaining spaces through the crown.",
+        "Ninety-six pendent flowers hang clear of mature foliage from outer leaf axils and fine descending terminal pedicels.",
+        "Every flower has a bent pedicel, ovary, scarlet calyx tube, four reflexed sepals, four shorter purple petals and eight projecting stamens.",
+        "Flower size respects the game's existing attachment envelope. Closed elongated buds reuse precisely the same flower sites; early stages have independently authored shoot structures."
+      ],
+      "sources": [
+        {"title": "RHS Fuchsia magellanica", "url": "https://www.rhs.org.uk/plants/7494/fuchsia-magellanica/details", "evidence": "Scarlet sepals with purple corolla, opposite or whorled leaves, tubular calyx, four spreading sepals and four erect petals."},
+        {"title": "Oxford University Plants 400 Fuchsia magellanica", "url": "https://herbaria.plants.ox.ac.uk/bol/plants400/Profiles/EF/Fuchsia", "evidence": "Upright semi-climbing shrub with pendent crimson flowers and violet-purple inner petals."},
+        {"title": "Oregon State University Fuchsia magellanica photographs", "url": "https://landscapeplants.oregonstate.edu/plants/fuchsia-magellanica", "evidence": "Reference photographs and botanical description of red-brown stems, opposite leaves and pendent flowers."},
+        {"title": "RHS Fuchsia magellanica var. gracilis reference photograph", "url": "https://www.rhs.org.uk/plants/60777/i-fuchsia-magellanica-i-var-i-gracilis-i/details", "evidence": "Visible relationship between arching slender branches, leaf pairs and hanging crimson-and-purple flowers."}
+      ]
+    }
+  ]
+}

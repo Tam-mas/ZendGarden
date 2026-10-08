@@ -113,7 +113,10 @@ func verify() -> void:
   check(matched,"Fruit missing from dense-garden batches")
  var flower=GardenArt.plant(catalogue[0]);root.add_child(flower)
  GardenPlantGrowth.apply(flower,catalogue[0],.9,41,Vector3.ONE)
- check(is_equal_approx(flower.get_node("Bloom").scale.x,lerpf(.48,1.0,(.9-.78)/.22)),"Fruit correction changed flower growth")
+ check(flower.get_node("Bloom").scale.is_equal_approx(Vector3.ONE),"Authored flowers scaled away from their stem attachments")
+ var flower_mesh=flower.find_child("BloomFlower*",true,false) as MeshInstance3D
+ check(flower_mesh!=null,"Authored Cosmos flowers missing")
+ if flower_mesh:check_materials(flower_mesh,lerpf(.48,1.0,(.9-.78)/.22))
  flower.free();g.free()
  await process_frame
  print("FRUIT_TREES_RESULT: ",JSON.stringify(failures)," (",attachment_count," attachments)")

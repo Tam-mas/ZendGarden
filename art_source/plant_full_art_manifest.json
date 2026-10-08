@@ -1,0 +1,2706 @@
+[
+  {
+    "id": 0,
+    "name": "Cosmos",
+    "height": 1.0749011039733887,
+    "mature_triangles": 35252,
+    "growth_triangles": 6390,
+    "normalization": [
+      1.0304869923491666,
+      1.0304869923491666,
+      1.0304869923491666
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 1,
+    "name": "Lavender",
+    "height": 0.9078986048698425,
+    "mature_triangles": 116940,
+    "growth_triangles": 11372,
+    "normalization": [
+      1.0336859073803981,
+      1.0336859073803981,
+      1.0336859073803981
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 2,
+    "name": "Daisy",
+    "height": 0.5147386789321899,
+    "mature_triangles": 24944,
+    "growth_triangles": 1100,
+    "normalization": [
+      1.1351415972446546,
+      1.1351415972446546,
+      1.1351415972446546
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 3,
+    "name": "Sunflower",
+    "height": 2.1211488246917725,
+    "mature_triangles": 15612,
+    "growth_triangles": 682,
+    "normalization": [
+      1.0602432683273533,
+      1.0602432683273533,
+      1.0602432683273533
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 4,
+    "name": "Foxglove",
+    "height": 1.6151930093765259,
+    "mature_triangles": 27568,
+    "growth_triangles": 2146,
+    "normalization": [
+      1.1031236799397879,
+      1.1031236799397879,
+      1.1524140294359626
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 5,
+    "name": "Hydrangea",
+    "height": 1.3979814052581787,
+    "mature_triangles": 117600,
+    "growth_triangles": 14152,
+    "normalization": [
+      1.265517651079564,
+      1.265517651079564,
+      1.265517651079564
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 6,
+    "name": "Peony",
+    "height": 0.8081597089767456,
+    "mature_triangles": 39504,
+    "growth_triangles": 1464,
+    "normalization": [
+      1.0338840704012962,
+      1.0338840704012962,
+      1.0338840704012962
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 7,
+    "name": "Poppy",
+    "height": 0.8459867835044861,
+    "mature_triangles": 13680,
+    "growth_triangles": 1482,
+    "normalization": [
+      1.115812549380314,
+      1.115812549380314,
+      1.115812549380314
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 8,
+    "name": "Iris",
+    "height": 1.0592306852340698,
+    "mature_triangles": 4424,
+    "growth_triangles": 742,
+    "normalization": [
+      1.092713787005032,
+      1.092713787005032,
+      1.092713787005032
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 9,
+    "name": "Sweet pea",
+    "height": 1.4636662006378174,
+    "mature_triangles": 16320,
+    "growth_triangles": 3564,
+    "normalization": [
+      0.9811569081893824,
+      0.9811569081893824,
+      0.9811569081893824
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 10,
+    "name": "Clematis",
+    "height": 1.4984593391418457,
+    "mature_triangles": 39080,
+    "growth_triangles": 2080,
+    "normalization": [
+      1.143429598917807,
+      1.143429598917807,
+      1.143429598917807
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 11,
+    "name": "Nasturtium",
+    "height": 0.21514999866485596,
+    "mature_triangles": 18372,
+    "growth_triangles": 5658,
+    "normalization": [
+      1.0229063888468732,
+      1.0229063888468732,
+      1.0229063888468732
+    ],
+    "source": "art_source/plant_full_00.blend"
+  },
+  {
+    "id": 12,
+    "name": "Creeping thyme",
+    "height": 0.0998816266655922,
+    "mature_triangles": 17540,
+    "growth_triangles": 3686,
+    "normalization": [
+      1.6199353372084104,
+      1.6199353372084104,
+      1.9127597981982578
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 13,
+    "name": "Moss carpet",
+    "height": 0.06800000369548798,
+    "mature_triangles": 8220,
+    "growth_triangles": 1498,
+    "normalization": [
+      0.8612931789358335,
+      0.8612931789358335,
+      0.8612931789358335
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 14,
+    "name": "Blue fescue",
+    "height": 0.45750001072883606,
+    "mature_triangles": 8348,
+    "growth_triangles": 976,
+    "normalization": [
+      1.1803253654269594,
+      1.1803253654269594,
+      1.1517969346195376
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 15,
+    "name": "Feather grass",
+    "height": 0.85999995470047,
+    "mature_triangles": 9260,
+    "growth_triangles": 976,
+    "normalization": [
+      0.9727234507818312,
+      0.9727234507818312,
+      0.9727234507818312
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 16,
+    "name": "Sedge",
+    "height": 0.8024999499320984,
+    "mature_triangles": 7856,
+    "growth_triangles": 976,
+    "normalization": [
+      0.9132037190582313,
+      0.9132037190582313,
+      1.1704811854033108
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 17,
+    "name": "Fountain grass",
+    "height": 1.1303602457046509,
+    "mature_triangles": 10032,
+    "growth_triangles": 976,
+    "normalization": [
+      0.8043296452657462,
+      0.8043296452657462,
+      1.1443030064815867
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 18,
+    "name": "Dichondra",
+    "height": 0.06210000067949295,
+    "mature_triangles": 3864,
+    "growth_triangles": 1994,
+    "normalization": [
+      1.049000029827878,
+      1.049000029827878,
+      1.049000029827878
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 19,
+    "name": "Chamomile",
+    "height": 0.33299264311790466,
+    "mature_triangles": 26208,
+    "growth_triangles": 10510,
+    "normalization": [
+      1.307921406106532,
+      1.307921406106532,
+      1.307921406106532
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 21,
+    "name": "Azalea",
+    "height": 0.8334327340126038,
+    "mature_triangles": 107134,
+    "growth_triangles": 9726,
+    "normalization": [
+      1.0716891556884938,
+      1.0716891556884938,
+      1.0716891556884938
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 22,
+    "name": "Rosemary",
+    "height": 1.0831429958343506,
+    "mature_triangles": 102154,
+    "growth_triangles": 6246,
+    "normalization": [
+      1.0311699227286073,
+      1.0311699227286073,
+      1.0311699227286073
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 23,
+    "name": "Camellia",
+    "height": 1.453176498413086,
+    "mature_triangles": 81234,
+    "growth_triangles": 3142,
+    "normalization": [
+      1.449469973991859,
+      1.449469973991859,
+      1.449469973991859
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 24,
+    "name": "Lilac",
+    "height": 1.986613392829895,
+    "mature_triangles": 114814,
+    "growth_triangles": 4382,
+    "normalization": [
+      1.7633534581255268,
+      1.7633534581255268,
+      1.7633534581255268
+    ],
+    "source": "art_source/plant_full_01.blend"
+  },
+  {
+    "id": 25,
+    "name": "Boxwood",
+    "height": 0.9425631165504456,
+    "mature_triangles": 128648,
+    "growth_triangles": 4154,
+    "normalization": [
+      1.2878199173123288,
+      1.2878199173123288,
+      1.4557411411859253
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 26,
+    "name": "Gardenia",
+    "height": 1.1008886098861694,
+    "mature_triangles": 93414,
+    "growth_triangles": 5102,
+    "normalization": [
+      1.3117022404799845,
+      1.3117022404799845,
+      1.3266453664207816
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 27,
+    "name": "Blueberry",
+    "height": 1.3525422811508179,
+    "mature_triangles": 87860,
+    "growth_triangles": 4762,
+    "normalization": [
+      1.4428411106087977,
+      1.4428411106087977,
+      1.4428411106087977
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 28,
+    "name": "Cherry blossom",
+    "height": 4.297840595245361,
+    "mature_triangles": 80044,
+    "growth_triangles": 10912,
+    "normalization": [
+      4.39291152116571,
+      4.39291152116571,
+      4.828097077254253
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 29,
+    "name": "Silver birch",
+    "height": 5.863064289093018,
+    "mature_triangles": 38078,
+    "growth_triangles": 2956,
+    "normalization": [
+      5.688554944076171,
+      5.688554944076171,
+      6.586434031369126
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 31,
+    "name": "Olive",
+    "height": 3.8556365966796875,
+    "mature_triangles": 57836,
+    "growth_triangles": 4784,
+    "normalization": [
+      3.8576036644327636,
+      3.8576036644327636,
+      4.331335090458606
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 32,
+    "name": "Willow",
+    "height": 4.8109869956970215,
+    "mature_triangles": 24988,
+    "growth_triangles": 2328,
+    "normalization": [
+      5.342484398942888,
+      5.342484398942888,
+      5.404554156412807
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 33,
+    "name": "Magnolia",
+    "height": 4.075402736663818,
+    "mature_triangles": 38804,
+    "growth_triangles": 3824,
+    "normalization": [
+      4.343532548294556,
+      4.343532548294556,
+      4.578215409684652
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 34,
+    "name": "Lemon",
+    "height": 3.1556975841522217,
+    "mature_triangles": 39404,
+    "growth_triangles": 3824,
+    "normalization": [
+      3.418129823086518,
+      3.418129823086518,
+      3.5450394087670523
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 35,
+    "name": "Apple",
+    "height": 3.8737008571624756,
+    "mature_triangles": 50796,
+    "growth_triangles": 4384,
+    "normalization": [
+      3.6227300915429748,
+      3.6227300915429748,
+      4.351628072784706
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 36,
+    "name": "Kangaroo paw",
+    "height": 1.562578797340393,
+    "mature_triangles": 30404,
+    "growth_triangles": 1942,
+    "normalization": [
+      1.0979132391414073,
+      1.0979132391414073,
+      1.0979132391414073
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 37,
+    "name": "Billy buttons",
+    "height": 0.7225177884101868,
+    "mature_triangles": 21022,
+    "growth_triangles": 1070,
+    "normalization": [
+      1.0710884665406708,
+      1.0710884665406708,
+      1.0710884665406708
+    ],
+    "source": "art_source/plant_full_02.blend"
+  },
+  {
+    "id": 38,
+    "name": "Wattle",
+    "height": 1.9627028703689575,
+    "mature_triangles": 102120,
+    "growth_triangles": 12634,
+    "normalization": [
+      2.2047605707510574,
+      2.2047605707510574,
+      2.2047605707510574
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 39,
+    "name": "Bottlebrush",
+    "height": 1.8064179420471191,
+    "mature_triangles": 89964,
+    "growth_triangles": 3482,
+    "normalization": [
+      1.3727802113371628,
+      1.3727802113371628,
+      2.0906679926267384
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 40,
+    "name": "Grevillea",
+    "height": 1.422645092010498,
+    "mature_triangles": 95284,
+    "growth_triangles": 9186,
+    "normalization": [
+      1.3322551599115873,
+      1.3322551599115873,
+      1.6900862957138214
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 41,
+    "name": "Banksia",
+    "height": 2.041123867034912,
+    "mature_triangles": 81336,
+    "growth_triangles": 5130,
+    "normalization": [
+      1.5432808270993197,
+      1.5432808270993197,
+      2.312223441356097
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 42,
+    "name": "Lilly pilly",
+    "height": 1.5671762228012085,
+    "mature_triangles": 43988,
+    "growth_triangles": 4722,
+    "normalization": [
+      1.8246418722277251,
+      1.8246418722277251,
+      1.8246418722277251
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 43,
+    "name": "Waxflower",
+    "height": 1.1560033559799194,
+    "mature_triangles": 75360,
+    "growth_triangles": 8354,
+    "normalization": [
+      1.3723249347129993,
+      1.3723249347129993,
+      1.3723249347129993
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 44,
+    "name": "Lomandra",
+    "height": 0.9174999594688416,
+    "mature_triangles": 7704,
+    "growth_triangles": 976,
+    "normalization": [
+      0.7719508002424704,
+      0.7719508002424704,
+      1.1374178992250856
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 45,
+    "name": "Eucalyptus",
+    "height": 6.846139907836914,
+    "mature_triangles": 23812,
+    "growth_triangles": 2888,
+    "normalization": [
+      6.5919319843176085,
+      6.5919319843176085,
+      7.690798983114469
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 46,
+    "name": "Carrot",
+    "height": 0.48148325085639954,
+    "mature_triangles": 7640,
+    "growth_triangles": 3570,
+    "normalization": [
+      1.075798351443608,
+      1.075798351443608,
+      1.151484709160591
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 47,
+    "name": "Tomato",
+    "height": 1.0368753671646118,
+    "mature_triangles": 38532,
+    "growth_triangles": 1788,
+    "normalization": [
+      0.9831935831771249,
+      0.9831935831771249,
+      0.9831935831771249
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 48,
+    "name": "Lettuce",
+    "height": 0.4308975040912628,
+    "mature_triangles": 2400,
+    "growth_triangles": 1110,
+    "normalization": [
+      1.1314264320863103,
+      1.1314264320863103,
+      1.3934704316961948
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 49,
+    "name": "Pumpkin",
+    "height": 0.36400726437568665,
+    "mature_triangles": 11800,
+    "growth_triangles": 3792,
+    "normalization": [
+      1.157411886089207,
+      1.157411886089207,
+      1.257907016861787
+    ],
+    "source": "art_source/plant_full_03.blend"
+  },
+  {
+    "id": 50,
+    "name": "Strawberry",
+    "height": 0.36184877157211304,
+    "mature_triangles": 8488,
+    "growth_triangles": 1360,
+    "normalization": [
+      1.0909555037965366,
+      1.0909555037965366,
+      1.0909555037965366
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 51,
+    "name": "Radish",
+    "height": 0.36106544733047485,
+    "mature_triangles": 2142,
+    "growth_triangles": 630,
+    "normalization": [
+      1.0713188845443917,
+      1.0713188845443917,
+      1.0713188845443917
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 52,
+    "name": "Pea",
+    "height": 1.0004297494888306,
+    "mature_triangles": 17152,
+    "growth_triangles": 1432,
+    "normalization": [
+      0.8814986819870443,
+      0.8814986819870443,
+      0.8814986819870443
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 53,
+    "name": "Aubergine",
+    "height": 0.8198099136352539,
+    "mature_triangles": 8508,
+    "growth_triangles": 1032,
+    "normalization": [
+      1.0183302929564022,
+      1.0183302929564022,
+      1.0183302929564022
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 54,
+    "name": "Basil",
+    "height": 0.38630178570747375,
+    "mature_triangles": 5160,
+    "growth_triangles": 1608,
+    "normalization": [
+      0.9437534151724851,
+      0.9437534151724851,
+      0.9437534151724851
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 55,
+    "name": "Corn",
+    "height": 2.1404216289520264,
+    "mature_triangles": 8780,
+    "growth_triangles": 2188,
+    "normalization": [
+      1.0568424792869089,
+      1.0568424792869089,
+      0.9907409164948772
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 56,
+    "name": "Cucumber",
+    "height": 0.36400726437568665,
+    "mature_triangles": 11800,
+    "growth_triangles": 3792,
+    "normalization": [
+      1.1179640228825105,
+      1.1179640228825105,
+      1.205746191907224
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 57,
+    "name": "Chilli",
+    "height": 0.7179639935493469,
+    "mature_triangles": 5388,
+    "growth_triangles": 1032,
+    "normalization": [
+      1.0511822993780753,
+      1.0511822993780753,
+      1.0511822993780753
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 58,
+    "name": "Beetroot",
+    "height": 0.36716508865356445,
+    "mature_triangles": 2142,
+    "growth_triangles": 630,
+    "normalization": [
+      1.092405116492618,
+      1.092405116492618,
+      1.092405116492618
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 59,
+    "name": "Melon",
+    "height": 0.36400726437568665,
+    "mature_triangles": 11800,
+    "growth_triangles": 3792,
+    "normalization": [
+      1.170372496056998,
+      1.170372496056998,
+      1.2646720270535423
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 60,
+    "name": "Common jasmine",
+    "height": 1.4300132989883423,
+    "mature_triangles": 62286,
+    "growth_triangles": 5730,
+    "normalization": [
+      1.2680422767356678,
+      1.2680422767356678,
+      0.9992210024795145
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 61,
+    "name": "Pink jasmine",
+    "height": 1.5236129760742188,
+    "mature_triangles": 62286,
+    "growth_triangles": 5730,
+    "normalization": [
+      1.2451717591174432,
+      1.2451717591174432,
+      1.062078665667382
+    ],
+    "source": "art_source/plant_full_04.blend"
+  },
+  {
+    "id": 62,
+    "name": "Winter jasmine",
+    "height": 1.2557799816131592,
+    "mature_triangles": 13622,
+    "growth_triangles": 2166,
+    "normalization": [
+      0.8945771328020289,
+      0.8945771328020289,
+      0.8945771328020289
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 63,
+    "name": "Dahlia 'Caf\u00e9 au Lait'",
+    "height": 1.5173801183700562,
+    "mature_triangles": 36320,
+    "growth_triangles": 976,
+    "normalization": [
+      1.0705483101406699,
+      1.0705483101406699,
+      1.0705483101406699
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 64,
+    "name": "Tulip 'Queen of Night'",
+    "height": 0.9754310250282288,
+    "mature_triangles": 5152,
+    "growth_triangles": 870,
+    "normalization": [
+      1.236115487887818,
+      1.236115487887818,
+      1.236115487887818
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 65,
+    "name": "Blue delphinium",
+    "height": 1.7467143535614014,
+    "mature_triangles": 41056,
+    "growth_triangles": 4528,
+    "normalization": [
+      1.0535582112672794,
+      1.0535582112672794,
+      1.0535582112672794
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 66,
+    "name": "Purple lupin",
+    "height": 1.8903470039367676,
+    "mature_triangles": 170120,
+    "growth_triangles": 8896,
+    "normalization": [
+      1.144129767195338,
+      1.144129767195338,
+      1.144129767195338
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 67,
+    "name": "Burgundy hollyhock",
+    "height": 1.9224770069122314,
+    "mature_triangles": 32640,
+    "growth_triangles": 3424,
+    "normalization": [
+      1.136655598183032,
+      1.136655598183032,
+      1.136655598183032
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 68,
+    "name": "Slender weaver's bamboo",
+    "height": 3.557067632675171,
+    "mature_triangles": 51816,
+    "growth_triangles": 4508,
+    "normalization": [
+      3.7220652348344143,
+      3.7220652348344143,
+      3.7220652348344143
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 69,
+    "name": "Golden bamboo",
+    "height": 3.3406431674957275,
+    "mature_triangles": 51816,
+    "growth_triangles": 4508,
+    "normalization": [
+      3.369341951823201,
+      3.369341951823201,
+      3.369341951823201
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 70,
+    "name": "Black bamboo",
+    "height": 3.4988887310028076,
+    "mature_triangles": 51816,
+    "growth_triangles": 4508,
+    "normalization": [
+      3.5660478315987145,
+      3.5660478315987145,
+      3.5660478315987145
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 71,
+    "name": "Himalayan blue bamboo",
+    "height": 3.4964146614074707,
+    "mature_triangles": 51816,
+    "growth_triangles": 4508,
+    "normalization": [
+      3.536477714231283,
+      3.536477714231283,
+      3.536477714231283
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 72,
+    "name": "Red bamboo 'Jiuzhaigou'",
+    "height": 2.6900265216827393,
+    "mature_triangles": 42584,
+    "growth_triangles": 4508,
+    "normalization": [
+      2.8347612090483914,
+      2.8347612090483914,
+      2.8347612090483914
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 73,
+    "name": "Rose 'Mister Lincoln'",
+    "height": 1.50149405002594,
+    "mature_triangles": 36570,
+    "growth_triangles": 4062,
+    "normalization": [
+      1.5129570069326297,
+      1.5129570069326297,
+      1.5129570069326297
+    ],
+    "source": "art_source/plant_full_05.blend"
+  },
+  {
+    "id": 74,
+    "name": "Rose 'Iceberg'",
+    "height": 1.5716335773468018,
+    "mature_triangles": 80622,
+    "growth_triangles": 6986,
+    "normalization": [
+      1.594056013875153,
+      1.594056013875153,
+      1.594056013875153
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 75,
+    "name": "Rose 'Golden Celebration'",
+    "height": 1.394339919090271,
+    "mature_triangles": 53802,
+    "growth_triangles": 4742,
+    "normalization": [
+      1.4059920477111347,
+      1.4059920477111347,
+      1.4477944925348027
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 76,
+    "name": "Rose 'Just Joey'",
+    "height": 0.9181626439094543,
+    "mature_triangles": 49770,
+    "growth_triangles": 4742,
+    "normalization": [
+      0.9376181517052984,
+      0.9376181517052984,
+      0.9376181517052984
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 77,
+    "name": "Rose 'Scentimental'",
+    "height": 1.454176664352417,
+    "mature_triangles": 49770,
+    "growth_triangles": 4742,
+    "normalization": [
+      1.4594651020735716,
+      1.4594651020735716,
+      1.4594651020735716
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 78,
+    "name": "Giant redwood",
+    "height": 10.001160621643066,
+    "mature_triangles": 140876,
+    "growth_triangles": 9796,
+    "normalization": [
+      9.999603810003297,
+      9.999603810003297,
+      9.999603810003297
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 79,
+    "name": "Coast redwood",
+    "height": 11.50062084197998,
+    "mature_triangles": 97756,
+    "growth_triangles": 7492,
+    "normalization": [
+      11.499510454718074,
+      11.499510454718074,
+      11.499510454718074
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 80,
+    "name": "Giant bamboo",
+    "height": 8.132043838500977,
+    "mature_triangles": 40808,
+    "growth_triangles": 4624,
+    "normalization": [
+      8.264732041011731,
+      8.264732041011731,
+      8.264732041011731
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 81,
+    "name": "Ginkgo",
+    "height": 4.107900142669678,
+    "mature_triangles": 78964,
+    "growth_triangles": 7832,
+    "normalization": [
+      4.160717393874491,
+      4.160717393874491,
+      4.614722261783543
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 82,
+    "name": "Fig",
+    "height": 4.072261810302734,
+    "mature_triangles": 36412,
+    "growth_triangles": 3902,
+    "normalization": [
+      4.255544566080103,
+      4.255544566080103,
+      4.5746869639343375
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 83,
+    "name": "Pear",
+    "height": 3.848618268966675,
+    "mature_triangles": 50796,
+    "growth_triangles": 4384,
+    "normalization": [
+      4.323450859583247,
+      4.323450859583247,
+      4.323450859583247
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 84,
+    "name": "Peach",
+    "height": 3.9467740058898926,
+    "mature_triangles": 52716,
+    "growth_triangles": 4384,
+    "normalization": [
+      4.43371679803592,
+      4.43371679803592,
+      4.43371679803592
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 85,
+    "name": "Plum",
+    "height": 3.707554578781128,
+    "mature_triangles": 52716,
+    "growth_triangles": 4384,
+    "normalization": [
+      4.164983095319259,
+      4.164983095319259,
+      4.164983095319259
+    ],
+    "source": "art_source/plant_full_06.blend"
+  },
+  {
+    "id": 86,
+    "name": "Apricot",
+    "height": 3.7978086471557617,
+    "mature_triangles": 49644,
+    "growth_triangles": 4384,
+    "normalization": [
+      4.26637247774818,
+      4.26637247774818,
+      4.26637247774818
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 87,
+    "name": "Nectarine",
+    "height": 3.7407102584838867,
+    "mature_triangles": 52716,
+    "growth_triangles": 4384,
+    "normalization": [
+      4.202229437225089,
+      4.202229437225089,
+      4.202229437225089
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 88,
+    "name": "Orange",
+    "height": 3.783842086791992,
+    "mature_triangles": 44028,
+    "growth_triangles": 3960,
+    "normalization": [
+      4.250682759207615,
+      4.250682759207615,
+      4.250682759207615
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 89,
+    "name": "Mandarin",
+    "height": 3.4219577312469482,
+    "mature_triangles": 41452,
+    "growth_triangles": 3824,
+    "normalization": [
+      3.84415004572262,
+      3.84415004572262,
+      3.84415004572262
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 90,
+    "name": "Lime",
+    "height": 4.067109107971191,
+    "mature_triangles": 44028,
+    "growth_triangles": 3960,
+    "normalization": [
+      4.513457077250271,
+      4.513457077250271,
+      4.568898534485743
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 91,
+    "name": "Avocado",
+    "height": 4.206878662109375,
+    "mature_triangles": 36956,
+    "growth_triangles": 3688,
+    "normalization": [
+      4.44649312285773,
+      4.44649312285773,
+      4.725912495536378
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 92,
+    "name": "Snow gum",
+    "height": 4.246523380279541,
+    "mature_triangles": 33864,
+    "growth_triangles": 3568,
+    "normalization": [
+      4.7683399453525395,
+      4.7683399453525395,
+      4.7683399453525395
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 93,
+    "name": "Alpine snow gum",
+    "height": 3.5867764949798584,
+    "mature_triangles": 33864,
+    "growth_triangles": 3568,
+    "normalization": [
+      4.026249788487837,
+      4.026249788487837,
+      4.026249788487837
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 94,
+    "name": "Red flowering gum",
+    "height": 4.674352169036865,
+    "mature_triangles": 92524,
+    "growth_triangles": 3552,
+    "normalization": [
+      5.251061677427234,
+      5.251061677427234,
+      5.251061677427234
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 95,
+    "name": "Waratah",
+    "height": 1.642421007156372,
+    "mature_triangles": 58416,
+    "growth_triangles": 2890,
+    "normalization": [
+      1.7705303967175832,
+      1.7705303967175832,
+      1.7954478726727319
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 96,
+    "name": "Gymea lily",
+    "height": 3.3401756286621094,
+    "mature_triangles": 11032,
+    "growth_triangles": 1840,
+    "normalization": [
+      1.0395594255102887,
+      1.0395594255102887,
+      1.0395594255102887
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 97,
+    "name": "Globe artichoke",
+    "height": 1.1467361450195312,
+    "mature_triangles": 22928,
+    "growth_triangles": 568,
+    "normalization": [
+      1.1883276437146777,
+      1.1883276437146777,
+      1.1883276437146777
+    ],
+    "source": "art_source/plant_full_07.blend"
+  },
+  {
+    "id": 98,
+    "name": "Rhubarb",
+    "height": 0.6213163733482361,
+    "mature_triangles": 1914,
+    "growth_triangles": 1074,
+    "normalization": [
+      1.4813227053032314,
+      1.4813227053032314,
+      1.4813227053032314
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 99,
+    "name": "Asparagus",
+    "height": 1.3348277807235718,
+    "mature_triangles": 16620,
+    "growth_triangles": 2366,
+    "normalization": [
+      1.2207778742638846,
+      1.2207778742638846,
+      1.2207778742638846
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 100,
+    "name": "Broccoli",
+    "height": 0.5975381135940552,
+    "mature_triangles": 13160,
+    "growth_triangles": 910,
+    "normalization": [
+      1.5038503720013638,
+      1.5038503720013638,
+      1.5038503720013638
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 101,
+    "name": "Cauliflower",
+    "height": 0.5927422642707825,
+    "mature_triangles": 13160,
+    "growth_triangles": 910,
+    "normalization": [
+      1.491780447715721,
+      1.491780447715721,
+      1.491780447715721
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 102,
+    "name": "Capsicum",
+    "height": 0.748224139213562,
+    "mature_triangles": 8508,
+    "growth_triangles": 1032,
+    "normalization": [
+      1.0029324693158919,
+      1.0029324693158919,
+      1.0029324693158919
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 103,
+    "name": "Brussels sprouts",
+    "height": 1.2700577974319458,
+    "mature_triangles": 20310,
+    "growth_triangles": 1698,
+    "normalization": [
+      0.9767407448297859,
+      0.9767407448297859,
+      1.1866541385415939
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 104,
+    "name": "Leek",
+    "height": 0.7484353184700012,
+    "mature_triangles": 3580,
+    "growth_triangles": 1582,
+    "normalization": [
+      1.2341604238730923,
+      1.2341604238730923,
+      1.5296715813530228
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 105,
+    "name": "Hemp",
+    "height": 1.8680000305175781,
+    "mature_triangles": 14704,
+    "growth_triangles": 2992,
+    "normalization": [
+      1.1684126708476716,
+      1.1684126708476716,
+      1.1684126708476716
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 106,
+    "name": "Zebra grass",
+    "height": 1.8648674488067627,
+    "mature_triangles": 8868,
+    "growth_triangles": 976,
+    "normalization": [
+      1.0562366807407544,
+      1.0562366807407544,
+      1.0652762192206677
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 107,
+    "name": "Feather reed grass",
+    "height": 1.8647007942199707,
+    "mature_triangles": 8008,
+    "growth_triangles": 976,
+    "normalization": [
+      1.1941158002781165,
+      1.1941158002781165,
+      1.3159281098201516
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 108,
+    "name": "Blue switchgrass",
+    "height": 1.39426589012146,
+    "mature_triangles": 8432,
+    "growth_triangles": 976,
+    "normalization": [
+      0.885958207840095,
+      0.885958207840095,
+      1.0674586362573513
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 110,
+    "name": "Japanese blood grass",
+    "height": 0.565255880355835,
+    "mature_triangles": 2388,
+    "growth_triangles": 760,
+    "normalization": [
+      0.856713446931006,
+      0.856713446931006,
+      1.163890649197748
+    ],
+    "source": "art_source/plant_full_08.blend"
+  },
+  {
+    "id": 111,
+    "name": "Purple moor grass",
+    "height": 1.9848487377166748,
+    "mature_triangles": 8584,
+    "growth_triangles": 976,
+    "normalization": [
+      1.0411108229517134,
+      1.0411108229517134,
+      1.3345686087641662
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 112,
+    "name": "Tufted hair grass",
+    "height": 1.107311725616455,
+    "mature_triangles": 11000,
+    "growth_triangles": 976,
+    "normalization": [
+      0.7897604116744614,
+      0.7897604116744614,
+      1.2381246194925768
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 113,
+    "name": "Quaking grass",
+    "height": 0.7345014810562134,
+    "mature_triangles": 16932,
+    "growth_triangles": 976,
+    "normalization": [
+      0.7254606815518709,
+      0.7254606815518709,
+      1.3737873066627662
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 114,
+    "name": "Autumn moor grass",
+    "height": 0.5727267265319824,
+    "mature_triangles": 8388,
+    "growth_triangles": 976,
+    "normalization": [
+      0.6877527686978946,
+      0.6877527686978946,
+      1.3953378954136977
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 115,
+    "name": "Pink muhly grass",
+    "height": 1.1073342561721802,
+    "mature_triangles": 14430,
+    "growth_triangles": 976,
+    "normalization": [
+      0.8236547770584635,
+      0.8236547770584635,
+      1.1378581962294225
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 116,
+    "name": "Golden barrel cactus",
+    "height": 0.6000000238418579,
+    "mature_triangles": 19040,
+    "growth_triangles": 10926,
+    "normalization": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 117,
+    "name": "Bunny ears cactus",
+    "height": 0.6439999938011169,
+    "mature_triangles": 9136,
+    "growth_triangles": 3404,
+    "normalization": [
+      0.8141592753642627,
+      0.8141592753642627,
+      0.8141592753642627
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 118,
+    "name": "Prickly pear",
+    "height": 1.4249999523162842,
+    "mature_triangles": 11856,
+    "growth_triangles": 4300,
+    "normalization": [
+      0.9743589576388458,
+      0.9743589576388458,
+      0.9743589576388458
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 119,
+    "name": "Mexican fencepost cactus",
+    "height": 1.850000023841858,
+    "mature_triangles": 11808,
+    "growth_triangles": 2826,
+    "normalization": [
+      0.980392125895112,
+      0.980392125895112,
+      0.980392125895112
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 120,
+    "name": "Old man cactus",
+    "height": 0.949999988079071,
+    "mature_triangles": 17896,
+    "growth_triangles": 9446,
+    "normalization": [
+      0.9803921628932846,
+      0.9803921628932846,
+      0.9803921628932846
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 121,
+    "name": "Ladyfinger cactus",
+    "height": 0.30000001192092896,
+    "mature_triangles": 21296,
+    "growth_triangles": 3930,
+    "normalization": [
+      1.0416667529002421,
+      1.0416667529002421,
+      1.0416667529002421
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 122,
+    "name": "Star cactus",
+    "height": 0.13449999690055847,
+    "mature_triangles": 4088,
+    "growth_triangles": 2774,
+    "normalization": [
+      0.9776384694360644,
+      0.9776384694360644,
+      0.9776384694360644
+    ],
+    "source": "art_source/plant_full_09.blend"
+  },
+  {
+    "id": 123,
+    "name": "Holiday cactus",
+    "height": 0.2871797978878021,
+    "mature_triangles": 9824,
+    "growth_triangles": 1972,
+    "normalization": [
+      1.3522769277144109,
+      1.3522769277144109,
+      1.3522769277144109
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 125,
+    "name": "Lipstick echeveria",
+    "height": 0.375,
+    "mature_triangles": 3998,
+    "growth_triangles": 1998,
+    "normalization": [
+      1.0114559867271096,
+      1.0114559867271096,
+      1.0114559867271096
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 126,
+    "name": "Hens and chicks",
+    "height": 0.20000000298023224,
+    "mature_triangles": 11538,
+    "growth_triangles": 2106,
+    "normalization": [
+      0.8294544875655736,
+      0.8294544875655736,
+      0.8294544875655736
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 127,
+    "name": "Aloe vera",
+    "height": 0.9574999809265137,
+    "mature_triangles": 6474,
+    "growth_triangles": 3816,
+    "normalization": [
+      0.914393506878649,
+      0.914393506878649,
+      0.914393506878649
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 128,
+    "name": "Century plant",
+    "height": 1.0890462398529053,
+    "mature_triangles": 5148,
+    "growth_triangles": 3438,
+    "normalization": [
+      0.9638442687256628,
+      0.9638442687256628,
+      0.9638442687256628
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 129,
+    "name": "Zebra haworthia",
+    "height": 0.3310000002384186,
+    "mature_triangles": 7982,
+    "growth_triangles": 3726,
+    "normalization": [
+      0.9919760500648603,
+      0.9919760500648603,
+      0.9919760500648603
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 130,
+    "name": "Window haworthia",
+    "height": 0.18700000643730164,
+    "mature_triangles": 5102,
+    "growth_triangles": 3030,
+    "normalization": [
+      0.7520839184006534,
+      0.7520839184006534,
+      0.7520839184006534
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 131,
+    "name": "Jade plant",
+    "height": 0.6549232006072998,
+    "mature_triangles": 8108,
+    "growth_triangles": 3976,
+    "normalization": [
+      0.8945213013826433,
+      0.8945213013826433,
+      0.8945213013826433
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 132,
+    "name": "Gollum jade",
+    "height": 0.5115053057670593,
+    "mature_triangles": 7676,
+    "growth_triangles": 3712,
+    "normalization": [
+      0.9003490863355251,
+      0.9003490863355251,
+      0.9003490863355251
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 133,
+    "name": "Black rose aeonium",
+    "height": 0.6667500138282776,
+    "mature_triangles": 29828,
+    "growth_triangles": 4572,
+    "normalization": [
+      0.8216535578225455,
+      0.8216535578225455,
+      0.9462548135563484
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 134,
+    "name": "Jelly bean sedum",
+    "height": 0.23395200073719025,
+    "mature_triangles": 10626,
+    "growth_triangles": 3170,
+    "normalization": [
+      1.0008208797539087,
+      1.0008208797539087,
+      1.199886295409997
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 135,
+    "name": "Living stones",
+    "height": 0.061000000685453415,
+    "mature_triangles": 4720,
+    "growth_triangles": 1236,
+    "normalization": [
+      0.9933235953680707,
+      0.9933235953680707,
+      0.9933235953680707
+    ],
+    "source": "art_source/plant_full_10.blend"
+  },
+  {
+    "id": 136,
+    "name": "Dwarf mondo grass",
+    "height": 0.10507337749004364,
+    "mature_triangles": 7662,
+    "growth_triangles": 868,
+    "normalization": [
+      0.9957481252642021,
+      0.9957481252642021,
+      0.9957481252642021
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 137,
+    "name": "Black mondo grass",
+    "height": 0.21047532558441162,
+    "mature_triangles": 7662,
+    "growth_triangles": 868,
+    "normalization": [
+      1.154720454799999,
+      1.154720454799999,
+      1.154720454799999
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 138,
+    "name": "Velvet zoysia",
+    "height": 0.13599999248981476,
+    "mature_triangles": 8820,
+    "growth_triangles": 934,
+    "normalization": [
+      1.2984354919353938,
+      1.2984354919353938,
+      1.2984354919353938
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 139,
+    "name": "Buffalo grass",
+    "height": 0.18799999356269836,
+    "mature_triangles": 9268,
+    "growth_triangles": 934,
+    "normalization": [
+      1.1965816119886594,
+      1.1965816119886594,
+      1.3539928381404063
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 140,
+    "name": "Creeping bentgrass",
+    "height": 0.16200000047683716,
+    "mature_triangles": 8820,
+    "growth_triangles": 934,
+    "normalization": [
+      1.289898708393933,
+      1.289898708393933,
+      1.3411563493765117
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 141,
+    "name": "Creeping red fescue",
+    "height": 0.23999999463558197,
+    "mature_triangles": 8820,
+    "growth_triangles": 934,
+    "normalization": [
+      1.0890890387470349,
+      1.0890890387470349,
+      1.4273364230057948
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 142,
+    "name": "Sheep's fescue",
+    "height": 0.3310000002384186,
+    "mature_triangles": 6952,
+    "growth_triangles": 868,
+    "normalization": [
+      1.4023160495972034,
+      1.4023160495972034,
+      1.4023160495972034
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 143,
+    "name": "Bearskin fescue",
+    "height": 0.26600000262260437,
+    "mature_triangles": 6952,
+    "growth_triangles": 868,
+    "normalization": [
+      1.4172473959575922,
+      1.4172473959575922,
+      1.4172473959575922
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 144,
+    "name": "Blue moor grass",
+    "height": 0.3959999978542328,
+    "mature_triangles": 7512,
+    "growth_triangles": 868,
+    "normalization": [
+      1.4171819872782112,
+      1.4171819872782112,
+      1.4171819872782112
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 145,
+    "name": "Evergold sedge",
+    "height": 0.3959999978542328,
+    "mature_triangles": 8928,
+    "growth_triangles": 1167,
+    "normalization": [
+      1.4160279958366018,
+      1.4160279958366018,
+      1.4160279958366018
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 146,
+    "name": "Snowline sedge",
+    "height": 0.20099999010562897,
+    "mature_triangles": 8928,
+    "growth_triangles": 1167,
+    "normalization": [
+      1.3909148710105583,
+      1.3909148710105583,
+      1.3909148710105583
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 147,
+    "name": "Dwarf golden sweet flag",
+    "height": 0.12632706761360168,
+    "mature_triangles": 7512,
+    "growth_triangles": 868,
+    "normalization": [
+      1.4977980481626252,
+      1.4977980481626252,
+      1.0414140547422353
+    ],
+    "source": "art_source/plant_full_11.blend"
+  },
+  {
+    "id": 150,
+    "name": "Dancing-lady orchid",
+    "height": 1,
+    "mature_triangles": 10268,
+    "growth_triangles": 1720,
+    "normalization": [
+      1.123944259996038,
+      1.123944259996038,
+      1.123944259996038
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 151,
+    "name": "Pansy orchid",
+    "height": 0.44999998807907104,
+    "mature_triangles": 4948,
+    "growth_triangles": 820,
+    "normalization": [
+      1.1355005739392456,
+      1.1355005739392456,
+      1.019288005494349
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 152,
+    "name": "Blue Vanda orchid",
+    "height": 1.2000000476837158,
+    "mature_triangles": 5062,
+    "growth_triangles": 1184,
+    "normalization": [
+      1.2707005123897168,
+      1.2707005123897168,
+      0.9906046209905249
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 153,
+    "name": "Zygopetalum orchid",
+    "height": 0.6000000238418579,
+    "mature_triangles": 5036,
+    "growth_triangles": 856,
+    "normalization": [
+      1.187134820201272,
+      1.187134820201272,
+      1.0786483070298647
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 154,
+    "name": "Spider orchid",
+    "height": 0.5999999642372131,
+    "mature_triangles": 5516,
+    "growth_triangles": 892,
+    "normalization": [
+      1.3688868048260314,
+      1.3688868048260314,
+      0.9724534935887403
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 155,
+    "name": "Australian rock orchid",
+    "height": 0.75,
+    "mature_triangles": 13056,
+    "growth_triangles": 2424,
+    "normalization": [
+      1.5214035721122132,
+      1.5214035721122132,
+      1.0937397974563656
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 156,
+    "name": "Bee orchid",
+    "height": 0.3499999940395355,
+    "mature_triangles": 1656,
+    "growth_triangles": 276,
+    "normalization": [
+      1.0846849504495826,
+      1.0846849504495826,
+      1.0846849504495826
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 157,
+    "name": "Early purple orchid",
+    "height": 0.4000000059604645,
+    "mature_triangles": 5076,
+    "growth_triangles": 1176,
+    "normalization": [
+      1.1147487188312333,
+      1.1147487188312333,
+      1.1147487188312333
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 159,
+    "name": "Corncockle",
+    "height": 0.8999999761581421,
+    "mature_triangles": 4672,
+    "growth_triangles": 872,
+    "normalization": [
+      1.0929855698630473,
+      1.0929855698630473,
+      1.0929855698630473
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 160,
+    "name": "Red campion",
+    "height": 0.699999988079071,
+    "mature_triangles": 6376,
+    "growth_triangles": 1160,
+    "normalization": [
+      1.0980008225620985,
+      1.0980008225620985,
+      1.0980008225620985
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 161,
+    "name": "Ragged robin",
+    "height": 0.6000000238418579,
+    "mature_triangles": 7456,
+    "growth_triangles": 1088,
+    "normalization": [
+      1.0894313043331452,
+      1.0894313043331452,
+      1.0894313043331452
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 162,
+    "name": "Meadow cranesbill",
+    "height": 0.75,
+    "mature_triangles": 7376,
+    "growth_triangles": 1216,
+    "normalization": [
+      1.0911344252673918,
+      1.0911344252673918,
+      1.0911344252673918
+    ],
+    "source": "art_source/plant_full_12.blend"
+  },
+  {
+    "id": 163,
+    "name": "Field scabious",
+    "height": 0.7999999523162842,
+    "mature_triangles": 14072,
+    "growth_triangles": 1772,
+    "normalization": [
+      1.075777933382761,
+      1.075777933382761,
+      1.0875143021255504
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 164,
+    "name": "Yarrow",
+    "height": 0.6499999761581421,
+    "mature_triangles": 23672,
+    "growth_triangles": 10044,
+    "normalization": [
+      1.0944764077953062,
+      1.0944764077953062,
+      1.0944764077953062
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 165,
+    "name": "Purple coneflower",
+    "height": 1,
+    "mature_triangles": 15154,
+    "growth_triangles": 748,
+    "normalization": [
+      1.075764398767526,
+      1.075764398767526,
+      1.075764398767526
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 166,
+    "name": "Black-eyed Susan",
+    "height": 0.800000011920929,
+    "mature_triangles": 16416,
+    "growth_triangles": 784,
+    "normalization": [
+      1.0912737197704465,
+      1.0912737197704465,
+      1.0912737197704465
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 167,
+    "name": "Blanket flower",
+    "height": 0.6000000238418579,
+    "mature_triangles": 19214,
+    "growth_triangles": 820,
+    "normalization": [
+      1.0876777156448114,
+      1.0876777156448114,
+      1.0876777156448114
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 168,
+    "name": "Flannel flower",
+    "height": 0.6000000238418579,
+    "mature_triangles": 9232,
+    "growth_triangles": 1576,
+    "normalization": [
+      1.0737186170795447,
+      1.0737186170795447,
+      1.0737186170795447
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 169,
+    "name": "Strawflower",
+    "height": 0.75,
+    "mature_triangles": 20624,
+    "growth_triangles": 856,
+    "normalization": [
+      1.0928674591683085,
+      1.0928674591683085,
+      1.0928674591683085
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 170,
+    "name": "Australian blue pincushion",
+    "height": 0.29999998211860657,
+    "mature_triangles": 10488,
+    "growth_triangles": 1192,
+    "normalization": [
+      1.3499715528190555,
+      1.3499715528190555,
+      1.06195457396716
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 171,
+    "name": "Chocolate lily",
+    "height": 0.699999988079071,
+    "mature_triangles": 5524,
+    "growth_triangles": 856,
+    "normalization": [
+      0.9092034680925785,
+      0.9092034680925785,
+      1.1004351684959073
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 172,
+    "name": "Fringed lily",
+    "height": 0.5,
+    "mature_triangles": 10564,
+    "growth_triangles": 712,
+    "normalization": [
+      0.9321530558177482,
+      0.9321530558177482,
+      1.093779158158808
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 173,
+    "name": "Daffodil",
+    "height": 0.3999999761581421,
+    "mature_triangles": 3560,
+    "growth_triangles": 532,
+    "normalization": [
+      1.0247044858418584,
+      1.0247044858418584,
+      1.0247044858418584
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 175,
+    "name": "Crocus",
+    "height": 0.10000000149011612,
+    "mature_triangles": 3696,
+    "growth_triangles": 604,
+    "normalization": [
+      0.9310641710532677,
+      0.9310641710532677,
+      0.8714056910077683
+    ],
+    "source": "art_source/plant_full_13.blend"
+  },
+  {
+    "id": 176,
+    "name": "Hyacinth",
+    "height": 0.30000001192092896,
+    "mature_triangles": 16576,
+    "growth_triangles": 1648,
+    "normalization": [
+      1.1104255903561828,
+      1.1104255903561828,
+      1.1104255903561828
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 177,
+    "name": "English bluebell",
+    "height": 0.4000000059604645,
+    "mature_triangles": 9472,
+    "growth_triangles": 1072,
+    "normalization": [
+      1.123416825972583,
+      1.123416825972583,
+      1.2441881516466862
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 178,
+    "name": "Giant ornamental allium",
+    "height": 1.5,
+    "mature_triangles": 19744,
+    "growth_triangles": 1072,
+    "normalization": [
+      1.0557258151056517,
+      1.0557258151056517,
+      1.0557258151056517
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 179,
+    "name": "Lily of the valley",
+    "height": 0.2499999850988388,
+    "mature_triangles": 6096,
+    "growth_triangles": 1000,
+    "normalization": [
+      1.244489733851586,
+      1.244489733851586,
+      1.244489733851586
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 180,
+    "name": "Ranunculus",
+    "height": 0.3999999761581421,
+    "mature_triangles": 13256,
+    "growth_triangles": 964,
+    "normalization": [
+      1.0526885779466701,
+      1.0526885779466701,
+      1.0526885779466701
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 181,
+    "name": "Windflower",
+    "height": 0.3499999940395355,
+    "mature_triangles": 6344,
+    "growth_triangles": 964,
+    "normalization": [
+      1.1214732504864722,
+      1.1214732504864722,
+      1.0536021346833928
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 182,
+    "name": "Snapdragon",
+    "height": 0.800000011920929,
+    "mature_triangles": 8864,
+    "growth_triangles": 1376,
+    "normalization": [
+      1.1106938238189017,
+      1.1106938238189017,
+      1.1106938238189017
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 183,
+    "name": "Sweet William",
+    "height": 0.45000001788139343,
+    "mature_triangles": 9784,
+    "growth_triangles": 1356,
+    "normalization": [
+      1.038972115326459,
+      1.038972115326459,
+      1.038972115326459
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 184,
+    "name": "Stock",
+    "height": 0.6000000238418579,
+    "mature_triangles": 8908,
+    "growth_triangles": 1360,
+    "normalization": [
+      1.1106937901276837,
+      1.1106937901276837,
+      1.1106937901276837
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 185,
+    "name": "Love-in-a-mist",
+    "height": 0.45000001788139343,
+    "mature_triangles": 8024,
+    "growth_triangles": 3052,
+    "normalization": [
+      1.0823914540114483,
+      1.0823914540114483,
+      1.0823914540114483
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 186,
+    "name": "Calendula",
+    "height": 0.45000001788139343,
+    "mature_triangles": 20764,
+    "growth_triangles": 856,
+    "normalization": [
+      1.0892090613394532,
+      1.0892090613394532,
+      1.0892090613394532
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 187,
+    "name": "Zinnia",
+    "height": 0.75,
+    "mature_triangles": 34030,
+    "growth_triangles": 980,
+    "normalization": [
+      1.086494476134688,
+      1.086494476134688,
+      1.086494476134688
+    ],
+    "source": "art_source/plant_full_14.blend"
+  },
+  {
+    "id": 188,
+    "name": "Columbine",
+    "height": 0.699999988079071,
+    "mature_triangles": 12476,
+    "growth_triangles": 2032,
+    "normalization": [
+      1.067579874568934,
+      1.067579874568934,
+      1.0755676401714342
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 189,
+    "name": "Bleeding heart",
+    "height": 0.7999999523162842,
+    "mature_triangles": 19896,
+    "growth_triangles": 2428,
+    "normalization": [
+      1.155792405315016,
+      1.155792405315016,
+      1.2359257735786404
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 190,
+    "name": "Hellebore",
+    "height": 0.45000001788139343,
+    "mature_triangles": 15428,
+    "growth_triangles": 1576,
+    "normalization": [
+      1.2413828245499825,
+      1.2413828245499825,
+      1.0567278901162194
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 191,
+    "name": "Astilbe",
+    "height": 0.75,
+    "mature_triangles": 34196,
+    "growth_triangles": 6832,
+    "normalization": [
+      0.9589569207139116,
+      0.9589569207139116,
+      0.9589569207139116
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 192,
+    "name": "Penstemon",
+    "height": 0.8999999761581421,
+    "mature_triangles": 10152,
+    "growth_triangles": 1448,
+    "normalization": [
+      1.1106937574197382,
+      1.1106937574197382,
+      1.1106937574197382
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 193,
+    "name": "Tall garden phlox",
+    "height": 1,
+    "mature_triangles": 13600,
+    "growth_triangles": 1952,
+    "normalization": [
+      1.1087963954304192,
+      1.1087963954304192,
+      1.1087963954304192
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 194,
+    "name": "Canterbury bells",
+    "height": 0.8500000238418579,
+    "mature_triangles": 9140,
+    "growth_triangles": 1088,
+    "normalization": [
+      0.9534426476186088,
+      0.9534426476186088,
+      1.110693870862421
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 195,
+    "name": "Oriental lily",
+    "height": 0.9000000357627869,
+    "mature_triangles": 4796,
+    "growth_triangles": 524,
+    "normalization": [
+      1.1621974671632815,
+      1.1621974671632815,
+      1.0173865725950149
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 196,
+    "name": "Sweet violet",
+    "height": 0.15000000596046448,
+    "mature_triangles": 2318,
+    "growth_triangles": 820,
+    "normalization": [
+      1.3992995533817014,
+      1.3992995533817014,
+      1.0907084030443919
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 197,
+    "name": "Lady's mantle",
+    "height": 0.44999998807907104,
+    "mature_triangles": 13632,
+    "growth_triangles": 1828,
+    "normalization": [
+      1.1981995502291973,
+      1.1981995502291973,
+      1.0389720465180574
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 199,
+    "name": "Daphne",
+    "height": 1.399999976158142,
+    "mature_triangles": 120204,
+    "growth_triangles": 7944,
+    "normalization": [
+      1.1106714407173182,
+      1.1106714407173182,
+      1.1106714407173182
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 200,
+    "name": "Japanese pieris",
+    "height": 2,
+    "mature_triangles": 88104,
+    "growth_triangles": 8664,
+    "normalization": [
+      1.1504148180462428,
+      1.1504148180462428,
+      1.1504148180462428
+    ],
+    "source": "art_source/plant_full_15.blend"
+  },
+  {
+    "id": 201,
+    "name": "Snowball viburnum",
+    "height": 2.5,
+    "mature_triangles": 127360,
+    "growth_triangles": 7884,
+    "normalization": [
+      1.0825522263909477,
+      1.0825522263909477,
+      1.0825522263909477
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 202,
+    "name": "Mock orange",
+    "height": 2.4000000953674316,
+    "mature_triangles": 110506,
+    "growth_triangles": 6032,
+    "normalization": [
+      0.7395772689642526,
+      0.7395772689642526,
+      0.7395772689642526
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 203,
+    "name": "Weigela",
+    "height": 2,
+    "mature_triangles": 118998,
+    "growth_triangles": 7184,
+    "normalization": [
+      0.9418304655132362,
+      0.9418304655132362,
+      0.9418304655132362
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 204,
+    "name": "Deutzia",
+    "height": 1.1999999284744263,
+    "mature_triangles": 109726,
+    "growth_triangles": 7616,
+    "normalization": [
+      0.9464372212774247,
+      0.9464372212774247,
+      0.9464372212774247
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 205,
+    "name": "Forsythia",
+    "height": 2.200000047683716,
+    "mature_triangles": 71220,
+    "growth_triangles": 11216,
+    "normalization": [
+      0.8929839243966448,
+      0.8929839243966448,
+      0.8929839243966448
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 206,
+    "name": "Flowering quince",
+    "height": 2.200000047683716,
+    "mature_triangles": 81680,
+    "growth_triangles": 4992,
+    "normalization": [
+      1.1562735049953627,
+      1.1562735049953627,
+      1.1562735049953627
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 207,
+    "name": "Spirea",
+    "height": 2,
+    "mature_triangles": 177230,
+    "growth_triangles": 13684,
+    "normalization": [
+      1.0661994099596117,
+      1.0661994099596117,
+      1.0661994099596117
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 208,
+    "name": "Abelia",
+    "height": 1.600000023841858,
+    "mature_triangles": 117244,
+    "growth_triangles": 6032,
+    "normalization": [
+      0.9711280948448303,
+      0.9711280948448303,
+      0.9711280948448303
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 209,
+    "name": "Escallonia",
+    "height": 2,
+    "mature_triangles": 108816,
+    "growth_triangles": 6792,
+    "normalization": [
+      1.3056050880667036,
+      1.3056050880667036,
+      1.3056050880667036
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 210,
+    "name": "Hebe",
+    "height": 1.2000000476837158,
+    "mature_triangles": 179244,
+    "growth_triangles": 9744,
+    "normalization": [
+      1.1364144893629176,
+      1.1364144893629176,
+      1.1364144893629176
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 211,
+    "name": "Ceanothus",
+    "height": 2.200000047683716,
+    "mature_triangles": 117864,
+    "growth_triangles": 8112,
+    "normalization": [
+      1.2035426728558511,
+      1.2035426728558511,
+      1.2035426728558511
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 213,
+    "name": "Mexican orange blossom",
+    "height": 1.7999999523162842,
+    "mature_triangles": 133668,
+    "growth_triangles": 8796,
+    "normalization": [
+      1.1777792563346172,
+      1.1777792563346172,
+      1.1777792563346172
+    ],
+    "source": "art_source/plant_full_16.blend"
+  },
+  {
+    "id": 214,
+    "name": "Correa",
+    "height": 1.1999999284744263,
+    "mature_triangles": 94336,
+    "growth_triangles": 4524,
+    "normalization": [
+      1.0871969089451046,
+      1.0871969089451046,
+      1.0871969089451046
+    ],
+    "source": "art_source/plant_full_17.blend"
+  },
+  {
+    "id": 215,
+    "name": "Pink boronia",
+    "height": 1.5000001192092896,
+    "mature_triangles": 166972,
+    "growth_triangles": 10392,
+    "normalization": [
+      1.137702976004907,
+      1.137702976004907,
+      1.137702976004907
+    ],
+    "source": "art_source/plant_full_17.blend"
+  },
+  {
+    "id": 216,
+    "name": "Flowering tea-tree",
+    "height": 2,
+    "mature_triangles": 86860,
+    "growth_triangles": 7152,
+    "normalization": [
+      1.199546070212688,
+      1.199546070212688,
+      1.199546070212688
+    ],
+    "source": "art_source/plant_full_17.blend"
+  },
+  {
+    "id": 217,
+    "name": "Spotted emu bush",
+    "height": 1.5,
+    "mature_triangles": 78740,
+    "growth_triangles": 4452,
+    "normalization": [
+      1.1577425344038164,
+      1.1577425344038164,
+      1.1577425344038164
+    ],
+    "source": "art_source/plant_full_17.blend"
+  }
+]
