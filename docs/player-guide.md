@@ -131,7 +131,7 @@ Mobile layouts and simultaneous touch input are covered by automated tests and b
 
 ## Ten new garden trails
 
-Open **Garden atlas · milestones & trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas or follow the eastern path and walk between them. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
+Open **Garden atlas · milestones & trails** from the garden menus, or **Garden atlas** in the touch Garden drawer. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas, or cross one of the three arched stone bridges over the mountain stream and follow the eastern garden trail. The bridges sit at the ends and centre of the ravine; bank paths connect their landings. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
 
 | Garden | Milestone |
 | --- | --- |

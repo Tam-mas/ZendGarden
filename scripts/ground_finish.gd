@@ -10,6 +10,7 @@ static func material(soil: bool) -> ShaderMaterial:
  return mat
 
 static func path(g, center: Vector3, width: float = 1.0) -> MeshInstance3D:
+ if GardenConnectedLand.contains(center):return null
  var key="%d:%d" % [center.x,center.z]
  if g.raked_nodes.has(key) and is_instance_valid(g.raked_nodes[key]): g.raked_nodes[key].queue_free()
  var st=SurfaceTool.new()

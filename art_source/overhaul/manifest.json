@@ -1,34 +1,34 @@
 {
   "areas/alpine": {
-    "bytes": 4213016,
+    "bytes": 4014216,
     "clips": [],
     "dimensions": [
       24.0,
-      8.85014009475708,
+      8.747940063476562,
       24.0
     ],
     "folder": "areas",
     "kind": "alpine",
     "meshes": 36,
-    "triangles": 33850,
+    "triangles": 40220,
     "variant": "new"
   },
   "areas/fern_gully": {
-    "bytes": 5385256,
+    "bytes": 5196888,
     "clips": [],
     "dimensions": [
       24.0,
-      5.771204471588135,
+      5.528488397598267,
       24.0
     ],
     "folder": "areas",
     "kind": "fern_gully",
-    "meshes": 18,
-    "triangles": 31503,
+    "meshes": 19,
+    "triangles": 36777,
     "variant": "new"
   },
   "areas/furniture/harvest_table": {
-    "bytes": 449936,
+    "bytes": 449992,
     "clips": [],
     "dimensions": [
       2.0999999046325684,
@@ -42,7 +42,7 @@
     "variant": "new"
   },
   "areas/furniture/nursery_shelf": {
-    "bytes": 345360,
+    "bytes": 346764,
     "clips": [],
     "dimensions": [
       1.0700000524520874,
@@ -56,7 +56,7 @@
     "variant": "new"
   },
   "areas/furniture/wind_chime": {
-    "bytes": 464444,
+    "bytes": 465164,
     "clips": [],
     "dimensions": [
       0.775000024586916,
@@ -70,7 +70,7 @@
     "variant": "new"
   },
   "areas/glasshouse": {
-    "bytes": 3880664,
+    "bytes": 5340456,
     "clips": [],
     "dimensions": [
       24.0,
@@ -79,12 +79,12 @@
     ],
     "folder": "areas",
     "kind": "glasshouse",
-    "meshes": 57,
-    "triangles": 32894,
+    "meshes": 60,
+    "triangles": 35503,
     "variant": "new"
   },
   "areas/kitchen": {
-    "bytes": 3245036,
+    "bytes": 4624880,
     "clips": [],
     "dimensions": [
       24.0,
@@ -93,12 +93,12 @@
     ],
     "folder": "areas",
     "kind": "kitchen",
-    "meshes": 16,
-    "triangles": 22594,
+    "meshes": 17,
+    "triangles": 24492,
     "variant": "new"
   },
   "areas/limestone": {
-    "bytes": 2392796,
+    "bytes": 2885680,
     "clips": [],
     "dimensions": [
       24.0,
@@ -108,11 +108,11 @@
     "folder": "areas",
     "kind": "limestone",
     "meshes": 25,
-    "triangles": 26449,
+    "triangles": 28777,
     "variant": "new"
   },
   "areas/moon": {
-    "bytes": 2448992,
+    "bytes": 3116688,
     "clips": [],
     "dimensions": [
       24.0,
@@ -121,12 +121,12 @@
     ],
     "folder": "areas",
     "kind": "moon",
-    "meshes": 18,
-    "triangles": 26069,
+    "meshes": 19,
+    "triangles": 28187,
     "variant": "new"
   },
   "areas/orchard": {
-    "bytes": 2746036,
+    "bytes": 3332248,
     "clips": [],
     "dimensions": [
       24.0,
@@ -135,8 +135,8 @@
     ],
     "folder": "areas",
     "kind": "orchard",
-    "meshes": 12,
-    "triangles": 24451,
+    "meshes": 13,
+    "triangles": 25289,
     "variant": "new"
   },
   "areas/plants/birdsnest": {
@@ -392,7 +392,7 @@
     "variant": "new"
   },
   "areas/pollinator": {
-    "bytes": 3042636,
+    "bytes": 3855772,
     "clips": [],
     "dimensions": [
       24.0,
@@ -401,12 +401,12 @@
     ],
     "folder": "areas",
     "kind": "pollinator",
-    "meshes": 6,
-    "triangles": 25734,
+    "meshes": 7,
+    "triangles": 30315,
     "variant": "new"
   },
   "areas/reedwater": {
-    "bytes": 3535372,
+    "bytes": 3342620,
     "clips": [],
     "dimensions": [
       24.0,
@@ -415,12 +415,12 @@
     ],
     "folder": "areas",
     "kind": "reedwater",
-    "meshes": 13,
-    "triangles": 22162,
+    "meshes": 16,
+    "triangles": 28485,
     "variant": "new"
   },
   "areas/stream": {
-    "bytes": 4195120,
+    "bytes": 3788868,
     "clips": [],
     "dimensions": [
       24.0,
@@ -429,8 +429,8 @@
     ],
     "folder": "areas",
     "kind": "stream",
-    "meshes": 63,
-    "triangles": 38242,
+    "meshes": 47,
+    "triangles": 39962,
     "variant": "new"
   },
   "companions/cat": {
@@ -456,6 +456,20 @@
     "source": "art_source/overhaul/retained_models/companions/dog.glb",
     "triangles": 35734,
     "variant": "old"
+  },
+  "environment/alpine_ravine": {
+    "bytes": 8419272,
+    "clips": [],
+    "dimensions": [
+      96.77678108215332,
+      69.41639423370361,
+      153.6120204925537
+    ],
+    "folder": "environment",
+    "kind": "alpine_ravine",
+    "meshes": 104,
+    "triangles": 192098,
+    "variant": "new"
   },
   "scenery/footbridge": {
     "bytes": 862408,

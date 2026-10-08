@@ -12,12 +12,12 @@ static func run(g,failures: Array) -> void:
  var water=g.get_node("GardenWater");water.set_process(false)
  var reduced=g.settings.reduced_motion;var weather=g.climate.current
  g.settings.reduced_motion=false;g.climate.current=Vector3.ZERO
- check(water.surfaces.size()==9,failures,"A lake, pool or stream was left on the old water system")
+ check(water.surfaces.size()==20,failures,"A lake, pool or stream was left on the old water system")
  var point=GardenAreaCatalogue.center(9)+Vector3(-1,1,0)
  var before=events(water)
  GardenWater.disturb(g,point)
  check(events(water)==before+1,failures,"Water disturbance did not reach the Moon pool")
- GardenWater.disturb(g,Vector3(35,1,-40))
+ GardenWater.disturb(g,Vector3(24,1,-40))
  check(events(water)==before+1,failures,"Dry ground sends a ripple into another water body")
  water.splash(GardenAreaCatalogue.center(7)+Vector3(0,1.6,3),.5,true)
  check(events(water)==before+1,failures,"Walking on a bridge splashes the water underneath")

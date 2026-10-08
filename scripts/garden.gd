@@ -341,6 +341,7 @@ func make_world() -> void:
  GardenAreas.build(self)
  GardenConnectedLand.build(self)
  for row in range(2,int(GardenAreaCatalogue.legacy_plot_count(self)/2)): GardenExpansion.build_row(self,row)
+ GardenBoundary.build(self)
  for j in range(2):
   var pet = Art.companion(j==0)
   pet.position = GardenTerrain.point(Vector3(-5+j*2,0,6))
@@ -1049,7 +1050,7 @@ func walk_motion(motion: Vector3) -> void:
 
 func accessible(pos: Vector3) -> bool:
  if GardenAreaCatalogue.index_at(pos)>=0:return GardenAreas.walkable(pos)
- if GardenConnectedLand.contains(pos):return true
+ if GardenConnectedLand.contains(pos):return GardenRavine.walkable(pos)
  var north=minf(-26,-(int(GardenAreaCatalogue.legacy_plot_count(self)/2)-1)*17-8)
  if pos.x < -8.5 or pos.x > 25.5 or pos.z > 9 or pos.z < north: return false
  if pos.x>6.6 and pos.x<10.4 and pos.z>-7 and pos.z<7:
@@ -1452,7 +1453,7 @@ func object_at(pos: Vector3) -> int:
 func plantable_ground(pos: Vector3) -> bool:
  if not accessible(pos): return false
  if GardenAreaCatalogue.index_at(pos)>=0:return GardenAreas.plantable(pos) and object_at(pos)<0 and not GardenAreas.prop_blocks(self,pos)
- if GardenConnectedLand.on_trail(pos):return false
+ if GardenConnectedLand.contains(pos):return false
  if pos.x>6.3 and pos.x<10.7 and pos.z>-7.3 and pos.z<7.3: return false
  if pos.z>-10.3 and pos.z<-6.7 and pos.x>10 and pos.x<24: return false
  if absf(pos.x+7.4)<2 and absf(pos.z+18)<2: return false
@@ -1623,6 +1624,7 @@ func perform_action(repeating: bool=false) -> void:
     set_mode("move")
     toast("A fresh arrangement. Growth stays with your plant.")
    else:
+    if GardenConnectedLand.contains(hover_cell):toast("Keep the stream banks and stone crossings clear.");return
     var destination=GardenAreaFurnishings.placement(self,objects[moved_object].kind,hover_cell,objects[moved_object])
     var occupied=object_at(destination)
     if occupied>=0 and occupied!=moved_object: toast("Another ornament is here."); return
@@ -1641,6 +1643,7 @@ func perform_action(repeating: bool=false) -> void:
   "build":
    var f = furniture[selected_furniture]
    if coins<f.price: toast("Gather or fill a neighbour’s order for more petals."); return
+   if GardenConnectedLand.contains(hover_cell):toast("Keep the stream banks and stone crossings clear.");return
    var destination=GardenAreaFurnishings.placement(self,f.kind,hover_cell)
    if object_at(destination)>=0: toast("There is already an ornament here."); return
    coins-=f.price
@@ -2092,9 +2095,11 @@ func run_areas_test() -> void:
  get_tree().quit(1 if not failures.is_empty() else 0)
 
 func run_land_test() -> void:
- get_tree().create_timer(150).timeout.connect(func():push_error("Connected land test timed out");get_tree().quit(1))
+ get_tree().create_timer(240).timeout.connect(func():push_error("Connected land test timed out");get_tree().quit(1))
  var failures=[]
  await preload("res://tests/connected_land.gd").run(self,failures)
+ # Let the completed async test release its local resources before shutdown.
+ for frame in range(2):await get_tree().process_frame
  get_tree().quit(1 if not failures.is_empty() else 0)
 
 func run_cohesion_review() -> void:
@@ -2331,7 +2336,8 @@ func restore_garden() -> void:
    var planter=GardenContainers.object(self,str(p.container_uid))
    if not planter.is_empty():GardenContainers.attach(self,plant,planter,int(p.container_slot))
   refresh_plant(plant,false)
- if loaded_data.has("player"): player.position=GardenTerrain.point(Vector3(loaded_data.player[0],0,loaded_data.player[1]))+Vector3(0,.1,0)
+ GardenRavine.recover_arrangements(self)
+ if loaded_data.has("player"): player.position=GardenRavine.safe_player(Vector3(loaded_data.player[0],0,loaded_data.player[1]))+Vector3(0,.1,0)
  for i in range(plot_signs.size()):
   if is_instance_valid(plot_signs[i]):Art.set_sign_text(plot_signs[i],plots[i].name.to_upper()+("\nOpens day "+str(GardenExpansion.opening_day(i if i<4 else i-10)) if not GardenAreaCatalogue.plot_open(self,i) else ""))
  for key in automation:

@@ -5,6 +5,8 @@ subtraction gives disjoint pieces without depending on a Blender Boolean or an
 extra Python package. Pieces inside one flag touch without an artificial seam.
 """
 import math
+import json
+from pathlib import Path
 import garden_routes
 
 EPS = 1e-9
@@ -87,9 +89,9 @@ def terminal(index):
     if axis==0:return [(end,center[1]-w),(end+direction*.24,center[1]-w),(end+direction*.24,center[1]+w),(end,center[1]+w)]
     return [(center[0]-w,end),(center[0]+w,end),(center[0]+w,end+direction*depth),(center[0]-w,end+direction*depth)]
 
-def footprints(index):
+def inner_footprints(index):
     pieces=[];native=native_path(index)
-    if index==1:
+    if native:
         # One continuous ribbon has a shared cross-section through the bend.
         # Two separately capped strips left a triangular spur and a pinched
         # inner edge, even after their overlapping faces were removed.
@@ -99,12 +101,6 @@ def footprints(index):
         points=approach[:-1]+[(center(end-j*(end+9)/count),end-j*(end+9)/count) for j in range(count+1)]
         ratio=(len(points)-1)/(len(approach)-1)
         return ribbon(points,lambda t:1.8+(width-1.8)*smooth(.60,.95,min(1,t*ratio)))
-    if native:
-        center,width=native
-        end=9.
-        count=math.ceil((end+9)/.12)
-        points=[(center(-9+j*(end+9)/count),-9+j*(end+9)/count) for j in range(count+1)]
-        pieces.extend(ribbon(points,lambda t:width))
     width=lambda t:1.8+(end_width(index)-1.8)*smooth(.65,1,t)
     points=garden_routes.ROUTES['approaches'][index]
     if index==9:
@@ -132,26 +128,54 @@ def footprints(index):
         pieces=clipped
     return pieces
 
-def flags(index):
+def footprints(index):
+    # Trim against the actual shared-trail footprint, including its curved
+    # northern bend. Both meshes meet on one edge instead of overlapping caps.
+    pieces=inner_footprints(index)
+    ox=56+(index%2)*24;oz=-(index//2)*24
+    shared=json.loads((Path(__file__).resolve().parents[1]/'assets/areas/connecting_trail.json').read_text())['polygons']
+    for world in shared:
+        clip=[(x-ox,z-oz) for x,z in world]
+        xmin=min(p[0] for p in clip);xmax=max(p[0] for p in clip)
+        zmin=min(p[1] for p in clip);zmax=max(p[1] for p in clip)
+        if xmax<-12 or xmin>12 or zmax<-12 or zmin>12:continue
+        result=[]
+        for poly in pieces:
+            if max(p[0] for p in poly)<=xmin or min(p[0] for p in poly)>=xmax or max(p[1] for p in poly)<=zmin or min(p[1] for p in poly)>=zmax:
+                result.append(poly)
+            else:result.extend(difference(poly,clip))
+        pieces=result
+    return pieces
+
+def flags(index, joints=False):
     pieces=footprints(index)
     bounds=[(min(p[0] for p in poly),min(p[1] for p in poly),max(p[0] for p in poly),max(p[1] for p in poly)) for poly in pieces]
     xmin=min(b[0] for b in bounds);zmin=min(b[1] for b in bounds);xmax=max(b[2] for b in bounds);zmax=max(b[3] for b in bounds)
-    out=[];pitch_x=.60;pitch_z=.64;joint=.010
-    for row in range(math.floor(zmin/pitch_z),math.ceil(zmax/pitch_z)):
-        shift=(row%2)*pitch_x*.5
-        z0=row*pitch_z+joint;z1=(row+1)*pitch_z-joint
-        for col in range(math.floor((xmin-shift)/pitch_x),math.ceil((xmax-shift)/pitch_x)):
-            x0=col*pitch_x+shift+joint;x1=(col+1)*pitch_x+shift-joint
-            tile=[(x0,z0),(x1,z0),(x1,z1),(x0,z1)];covered=[]
-            for poly,bb in zip(pieces,bounds):
-                if bb[2]<x0 or bb[0]>x1 or bb[3]<z0 or bb[1]>z1:continue
-                cut=intersection(tile,poly)
-                if not cut:continue
-                fragments=[cut]
-                for previous in covered:
-                    fragments=[part for fragment in fragments for part in difference(fragment,previous)]
-                    if not fragments:break
-                out.extend(fragments);covered.append(cut)
+    # Three lengths of sawn flagstone, laid in staggered 480mm courses.
+    # The 8mm sand-filled joint is geometry, not a dark hole down to the lawn.
+    out=[];pitch_z=.48;joint=.004
+    # One world-space bond across every habitat and the shared trail.
+    ox=56+(index%2)*24;oz=-(index//2)*24
+    for row in range(math.floor((zmin+oz)/pitch_z),math.ceil((zmax+oz)/pitch_z)):
+        pitch_x=[.60,.90,1.20][row%3]
+        shift=[0.,.30,.45][row%3]
+        z0=row*pitch_z+joint-oz;z1=(row+1)*pitch_z-joint-oz
+        for col in range(math.floor((xmin+ox-shift)/pitch_x),math.ceil((xmax+ox-shift)/pitch_x)):
+            x0=col*pitch_x+shift+joint-ox;x1=(col+1)*pitch_x+shift-joint-ox
+            core=[(x0,z0),(x1,z0),(x1,z1),(x0,z1)]
+            outer=[(x0-joint,z0-joint),(x1+joint,z0-joint),(x1+joint,z1+joint),(x0-joint,z1+joint)]
+            tiles=difference(outer,core) if joints else [core]
+            for tile in tiles:
+                covered=[]
+                for poly,bb in zip(pieces,bounds):
+                    if bb[2]<x0-joint or bb[0]>x1+joint or bb[3]<z0-joint or bb[1]>z1+joint:continue
+                    cut=intersection(tile,poly)
+                    if not cut:continue
+                    fragments=[cut]
+                    for previous in covered:
+                        fragments=[part for fragment in fragments for part in difference(fragment,previous)]
+                        if not fragments:break
+                    out.extend(fragments);covered.append(cut)
     return out
 
 def lattice_pieces(poly):
@@ -182,8 +206,8 @@ def build(b,G,root,index):
     def level(x,z):
         nearest=min(range(len(samples)),key=lambda j:math.hypot(x-samples[j][0],z-samples[j][1]))
         t=nearest/(len(samples)-1)
-        y=max(lattice(x,z),b.height(index,x,z))+.125
-        y-=.020*(1-smooth(0,.15,t))
+        y=max(lattice(x,z),b.height(index,x,z))+.070
+        y-=.015*(1-smooth(0,.15,t))
         end=garden_routes.point(index,1)
         distance=abs((x-end[0]) if index in [0,7] else (z-end[1])) if index in [0,2,4,5,6,7,9] else math.dist((x,z),end)
         if index==9:distance=max(0,(math.hypot((x+1)/6.5,z/6.3)-.98)*6.3)
@@ -197,9 +221,9 @@ def build(b,G,root,index):
         elif index==4:
             # A modest level landing meets the orchard turf without a raised
             # square lip; its final flags follow the existing route footprint.
-            y-=.078*(1-smooth(.10,1.0,distance))
+            y-=.023*(1-smooth(.10,1.0,distance))
         return y
-    material=b.MATS['slate' if index==1 else 'stone']
+    material=b.MATS['flagstone']
     polygons=flags(index)
     if terminal(index):polygons.append(terminal(index))
     for poly in [piece for polygon in polygons for piece in lattice_pieces(polygon)]:
@@ -207,4 +231,8 @@ def build(b,G,root,index):
         # height field, including restored terrain edits. Clockwise Y-up faces.
         if area(poly)<0:poly=list(reversed(poly))
         G.poly(path,material,[(x,level(x,z),z) for x,z in poly],[tuple(reversed(range(len(poly))))])
-    root['paving_network_version']=1
+    for polygon in flags(index,True):
+        for poly in lattice_pieces(polygon):
+            if area(poly)<0:poly=list(reversed(poly))
+            G.poly(path,b.MATS['joint'],[(x,level(x,z)-.002,z) for x,z in poly],[tuple(reversed(range(len(poly))))])
+    root['paving_network_version']=2

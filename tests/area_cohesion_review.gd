@@ -88,6 +88,8 @@ static func run(g) -> int:
   image.resize(720,450,Image.INTERPOLATE_LANCZOS);image.save_webp(directory+"/"+view[0]+".webp",true,.56)
  if two_paths and "--forward-review" not in OS.get_cmdline_user_args():
   for index in [1,9]:await preload("res://tests/areas.gd").capture(g,index)
+ if "--refresh-atlas" in OS.get_cmdline_user_args():
+  for index in range(10):await preload("res://tests/areas.gd").capture(g,index)
  print("COHESION_REVIEW_RESULT: ",views.size()," transition details", "" if trail_only or junction_only or two_paths else " and 40 light/weather views")
  if two_paths:
   g.photo_mode=false

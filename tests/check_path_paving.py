@@ -9,6 +9,13 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 KINDS=['reedwater','fern_gully','limestone','pollinator','orchard','kitchen','glasshouse','stream','alpine','moon']
+TRAIL_BUCKETS={}
+for poly in json.loads((ROOT/'assets/areas/connecting_trail.json').read_text())['polygons']:
+    for j in range(1,len(poly)-1):
+        tri=[poly[0],poly[j],poly[j+1]]
+        for x in range(math.floor(min(p[0] for p in tri)),math.floor(max(p[0] for p in tri))+1):
+            for z in range(math.floor(min(p[1] for p in tri)),math.floor(max(p[1] for p in tri))+1):
+                TRAIL_BUCKETS.setdefault((x,z),[]).append(tri)
 
 def cross(a,b,c):return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])
 
@@ -65,6 +72,13 @@ def audit(index,baseline):
         for cell in cells:buckets.setdefault(cell,[]).append(j)
     assert not overlaps,(KINDS[index],'stacked path flags',len(overlaps),overlaps[:3])
     if not baseline:
+        center=(56+(index%2)*24,-(index//2)*24)
+        for tri in triangles:
+            world=[(p[0]+center[0],p[1]+center[1]) for p in tri]
+            for x in range(math.floor(min(p[0] for p in world)),math.floor(max(p[0] for p in world))+1):
+                for z in range(math.floor(min(p[1] for p in world)),math.floor(max(p[1] for p in world))+1):
+                    for main in TRAIL_BUCKETS.get((x,z),[]):
+                        assert overlap(world,main)<2e-6,(KINDS[index],'entrance overlaps shared trail',world)
         if index in [2,5,6]:
             edge={2:6.35,5:7.,6:5.5}[index]
             assert min(p[2] for p in points)>=edge-1e-5,(KINDS[index],'paving projects into destination')
@@ -90,8 +104,9 @@ def audit(index,baseline):
             radius=lambda p:math.hypot((p[0]+1)/6.5,p[2]/6.3)
             assert min(radius(p) for p in points)>.9798,('paving projects into oval court',min(radius(p) for p in points))
             ends=[p for p in points if abs(radius(p)-.98)<.0002]
-            assert len(ends)>8 and all(abs(p[1]-1.250)<1e-5 for p in ends),('incorrect oval threshold reveal',ends)
-        if index in [1,9]:
+            assert len(ends)>8 and all(min(abs(p[1]-1.250),abs(p[1]-1.248))<1e-5 for p in ends),('incorrect oval threshold reveal',ends)
+            assert any(abs(p[1]-1.250)<1e-5 for p in ends),('missing flush stone edge',path)
+        if index in [1,3,8,9]:
             route=json.loads((ROOT/'assets/areas/routes.json').read_text())['approaches'][index]
             radii=[math.dist(a,b)*math.dist(b,c)*math.dist(c,a)/(2*abs(cross(a,b,c))) for a,b,c in zip(route,route[1:],route[2:]) if abs(cross(a,b,c))>1e-8]
             assert min(radii)>1.1,(KINDS[index],'turn too tight for the paving width',min(radii))

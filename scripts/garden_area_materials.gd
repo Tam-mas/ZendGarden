@@ -43,7 +43,13 @@ static func prepare(node: Node) -> void:
     mat.set_shader_parameter("has_pigment",original.albedo_texture!=null)
     mat.set_shader_parameter("has_relief",original.normal_enabled and original.normal_texture!=null)
     mat.set_shader_parameter("has_finish",original.roughness_texture!=null)
-    mat.set_shader_parameter("tint",original.albedo_color)
+    var tone=original.albedo_color
+    var label=original.resource_name.to_lower()
+    if "weathered limestone" in label:tone*=Color(.48,.46,.40)
+    if "cut garden flagstone" in label:tone*=Color(.54,.55,.51)
+    if "bank mossrock" in label:tone*=Color(.27,.31,.25)
+    if "alpine granite" in label:tone*=Color(.36,.39,.36)
+    mat.set_shader_parameter("tint",tone)
     mat.set_shader_parameter("finish_factor",original.roughness)
     mat.set_shader_parameter("roughness_min",[.72,.79,.82,.34,.78,.96][kind])
     mat.set_shader_parameter("roughness_max",[.94,.97,.98,.60,.96,1.][kind])
@@ -52,5 +58,6 @@ static func prepare(node: Node) -> void:
     mat.set_shader_parameter("relief_depth",.40 if kind in [0,3] else .52)
     mat.set_shader_parameter("base_height",low);mat.set_shader_parameter("stain_height",stain)
     mat.set_shader_parameter("family",kind);cache[key]=mat
+    mat.set_shader_parameter("is_flagstone","cut garden flagstone" in original.resource_name.to_lower())
    node.set_surface_override_material(surface,cache[key])
  for child in node.get_children():prepare(child)

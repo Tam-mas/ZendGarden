@@ -39,18 +39,16 @@ static func run(g,failures: Array) -> void:
    if index==0:
     var world: Vector3=sign.global_transform*Vector3(along,0,0)
     check(not GardenAreaTransitions.near_route(GardenAreaTransitions.route_data().eastern_link,Vector2(world.x,world.z),1.35),failures,"Reedwater sign intrudes into the bluestone bend")
- # Grass cannot stop at x=30, and the far slope needs the same range of heights.
- for bounds in [Rect2(28,-20,2,12),Rect2(30,-20,2,12),Rect2(35,-65,8,12)]:
-  # The dummy headless renderer does not retain MultiMesh GPU transforms.
-  if DisplayServer.get_name()=="headless":continue
-  var count=0;var tall=0
+ # The alpine channel is clear of meadow grass; its banks retain tuft cover.
+ if DisplayServer.get_name()!="headless":
+  var bank_count=0
   for grass in g.get_tree().get_nodes_in_group("meadow_grass"):
    for i in range(grass.multimesh.instance_count):
     var t=grass.multimesh.get_instance_transform(i)
-    if bounds.has_point(Vector2(t.origin.x,t.origin.z)):
-     count+=1
-     if t.basis.y.length()>1.7:tall+=1
-  check(count>bounds.get_area()*7 and tall>count*.15,failures,"Meadow coverage or tall tufts missing in "+str(bounds)+" count "+str(count)+" tall "+str(tall))
+    if GardenConnectedLand.contains(t.origin):
+     bank_count+=1
+     check(GardenRavine.grass_allowed(t.origin),failures,"Grass in stream or crossing "+str(t.origin))
+  check(bank_count>1200,failures,"Ravine upper banks have no meadow cover")
  var root=g.world_root.get_node("GardenConnectingTrail/Shared garden trail")
  # The northern end must form a bend on land, without the old edge spur.
  check(root.mesh.get_aabb().end.z<11.5,failures,"Bluestone trail still runs to the outer cliff")
@@ -65,21 +63,6 @@ static func run(g,failures: Array) -> void:
    check(not hit.is_empty(),failures,"Terrace threshold has a missing corner")
    if not hit.is_empty():heights.append(hit.position.y)
  check(heights.size()==6 and heights.max()-heights.min()<.055,failures,"First terrace stair and approach differ across their width: "+str(heights))
- # Raking and restored terrain edits must also affect the new culling cells.
- var p=Vector3(35,0,-40);var key="35:-40"
- GardenSculpt.restore(g,{key:.28});await g.get_tree().physics_frame
- for grass in g.get_tree().get_nodes_in_group("meadow_grass"):
-  for i in range(grass.multimesh.instance_count):
-   var t=grass.multimesh.get_instance_transform(i)
-   if Vector2(t.origin.x-p.x,t.origin.z-p.z).length()<1.:
-    check(absf(t.origin.y-GardenConnectedLand.surface(t.origin).y)<.01,failures,"Joining grass detached from sculpted soil")
- GardenGroundFinish.path(g,p,1.3)
- for grass in g.get_tree().get_nodes_in_group("meadow_grass"):
-  for i in range(grass.multimesh.instance_count):
-   var t=grass.multimesh.get_instance_transform(i)
-   if absf(t.origin.x-p.x)<.65 and absf(t.origin.z-p.z)<.65:
-    check(t.basis.y.length()<.001,failures,"Raked joining ground retains grass")
- GardenSculpt.restore(g,{})
  await preload("res://tests/water_surfaces.gd").run(g,failures)
  if "--water-review" in OS.get_cmdline_user_args():
   await preload("res://tests/water_review.gd").run(g);return

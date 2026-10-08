@@ -55,6 +55,11 @@ static func run(g,failures: Array,indices: Array=[]) -> void:
    ray.exclude=[g.player.get_rid()]
    var hit=g.get_world_3d().direct_space_state.intersect_ray(ray)
    if hit.is_empty() or hit.normal.y<=0:failures.append("Entrance has no upward facing floor: "+GardenAreaCatalogue.entry(index).name+" at "+str(pos))
+  if index in [1,3,8]:
+   for z in [-7.,-3.,0.,3.,5.5]:
+    var x=sin(z*.42)+.30*sin(z*.83)+1.55 if index==1 else 3.*sin(z*.4) if index==3 else 2.4*sin(z*.45)
+    if g.plantable_ground(center+Vector3(x,0,z)):
+     failures.append("Planting can obstruct the inner path in "+GardenAreaCatalogue.entry(index).name)
   var p=GardenAreaTransitions.approach(index,.5)
   if g.plantable_ground(center+Vector3(p.x,0,p.y)):
    failures.append("Planting can block the entrance to "+GardenAreaCatalogue.entry(index).name)

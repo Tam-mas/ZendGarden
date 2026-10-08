@@ -20,7 +20,7 @@ static func build(g) -> void:
  var r=RandomNumberGenerator.new()
  r.seed=309
  # Varied canopy silhouettes frame the vista; the centre remains open to the lake.
- var tree_positions=[Vector3(-9,0,1),Vector3(-10,0,-10),Vector3(-8,0,-23),Vector3(25,0,5),Vector3(26,0,-14),Vector3(22,0,-24),Vector3(13,0,-25),Vector3(-12,0,8)]
+ var tree_positions=[Vector3(-9,0,1),Vector3(-10,0,-10),Vector3(-8,0,-23),Vector3(24.1,0,3.4),Vector3(25,0,-14),Vector3(22,0,-24),Vector3(13,0,-25),Vector3(-12,0,8)]
  for i in range(tree_positions.size()):
   var species=[29,31,30,45,32,29,33,31][i]
   var tree=Art.plant(g.catalogue[species],true)
@@ -31,6 +31,7 @@ static func build(g) -> void:
  # Permanent border planting adds rich ground-level habitat without using player capacity.
  for j in range(128):
   var p=Vector3(r.randf_range(-11,28),0.04,r.randf_range(-26,8))
+  if GardenConnectedLand.on_trail(p):continue
   if g.bed_at(p)>=0: continue
   if p.x>6.2 and p.x<10.8 and p.z>-7.2 and p.z<7: continue
   if p.z>-10.5 and p.z<-6.7 and p.x>10: continue
@@ -124,6 +125,7 @@ static func meadow(g) -> void:
  var positions: Array=[]
  for j in range(16000):
   var p=Vector3(r.randf_range(-13,30),.04,r.randf_range(-25.5,10))
+  if GardenConnectedLand.contains(p) and not GardenRavine.grass_allowed(p):continue
   if GardenConnectedLand.on_trail(p):continue
   if g.bed_at(p)>=0: continue
   if p.x>6.5 and p.x<10.5 and p.z>-7 and p.z<7: continue
@@ -141,7 +143,7 @@ static func meadow(g) -> void:
  for j in range(22000):
   var p=Vector3(r.randf_range(25.7,43.8),0,r.randf_range(-107.8,9))
   if p.x<30 and p.z> -25.5:continue
-  if GardenConnectedLand.on_trail(p):continue
+  if GardenConnectedLand.contains(p) and not GardenRavine.grass_allowed(p):continue
   p=GardenConnectedLand.surface(p)
   positions.append({"pos":p,"short":false})
  var blade_mesh=st.commit()
@@ -183,7 +185,8 @@ static func recede_landscape(node: Node) -> void:
  if node is MeshInstance3D and str(node.name) in ["HilltopMeadow","PlantableLoam"]:
   node.material_override=GardenGroundFinish.material(str(node.name)=="PlantableLoam")
  if node is MeshInstance3D and str(node.name)=="LimestonePathsAndWalls":
-  # An open gateway in the old boundary wall leads into future garden rows.
+  # Replace the entire old rear fence with the continuous, growing perimeter.
+  # This also clears its last stones out of the new west-bank trail.
   var opened=ArrayMesh.new()
   for surface in range(node.mesh.get_surface_count()):
    var arrays=node.mesh.surface_get_arrays(surface)
@@ -192,7 +195,7 @@ static func recede_landscape(node: Node) -> void:
    var kept=PackedInt32Array()
    for i in range(0,indices.size(),3):
     var center=(vertices[indices[i]]+vertices[indices[i+1]]+vertices[indices[i+2]])/3
-    if absf(center.z+24.5)<.65 and absf(center.x-17)<1.6: continue
+    if absf(center.z+24.5)<.65: continue
     kept.append_array(indices.slice(i,i+3))
    arrays[Mesh.ARRAY_INDEX]=kept
    opened.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
