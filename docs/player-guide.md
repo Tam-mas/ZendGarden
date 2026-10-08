@@ -253,3 +253,19 @@ On touch, the large **Interact** button changes to **Sit on bench**, **Rest unde
 ### Enjoy the view
 
 Press **H**, use **Enjoy the view** at the top right of the walking HUD or in **Guide**, or choose **Garden → Enjoy the view** on touch. The HUD, held tool and aiming guides disappear while the weather, wildlife and garden clock continue. Mouse look still works. Press any key, or click or tap, to return to your previous tool and menu. The return input only restores the interface.
+
+
+## Plant breeding and propagation
+
+The first breeding collection supports 28 plants: eight orchids, seven wildflowers, eight cottage flowers and five flowering bushes. The potting bench lists the supported species. Planting and tending an eligible specimen can reveal unusual foliage or a flower selection. Your first eligible growing specimen is guaranteed a discovery; after five unsuccessful specimens the next also reveals one. A specimen is checked once as it develops leaves, so advancing empty mornings does not reroll it. Flower colours reveal when it reaches flowering. Inspector text describes the variation as well as its colour.
+
+Visit a **Potting bench** in Wander with **E**, or touch **Interact**, for four tabs:
+
+- **Propagate:** preserve a flowering specimen or recorded discovery. The species determines the method: cutting, division, offset or a seed-grown selection. One starter-mix portion establishes one plant after two garden mornings. The source stays intact. Prepare starter mix here using four spare harvest items and six petals; four portions are ready after one morning. A bench holds two propagation experiments, or four after its 40-petal upgrade, alongside its existing starter-mix batch spaces.
+- **Breed:** choose two different flowering selections of the same species. One starter-mix portion and six petals prepare four seedlings after three garden mornings. Flower colour, marking and height alleles come from both parents, with an occasional new colour allele. Variegated foliage is preserved through propagation; seed offspring start with green leaves. Outcomes are fixed when the tray is started and remain the same after reloading.
+- **Nursery:** established propagated plants can be named and registered. Seedlings must be planted, grown to flowering and then propagated before registration. Cancelling placement keeps the selection in **Equipment & stored plants**. Moving or removing a bench does not lose experiments that are already resting.
+- **My cultivars:** preview, name, rename, favourite, plant or archive your forms. Names can contain up to 40 characters and must be unique within a species. Parentage, generation and discovery morning are recorded. Archiving hides a form from seed browsing and parent pickers while retaining its plants and journal record; include archived cultivars here to restore it.
+
+A registered cultivar is permanently available in the seed collection's **My cultivars** section. Copies retain their colouring, markings and selected mature height, with natural changes in branch arrangement. Search and the existing filters apply, including height sorting. Recorded flowering selections can be propagated even if their original specimen was removed. Existing gardens remain readable. New downloads use save format 3 and need this release or later to preserve cultivars. Garden save downloads and uploads include discoveries, inherited traits, registered cultivars, queued experiments and stored plants. Growth pauses while the game is closed, and neglect does not erase a cultivar.
+
+This is a simplified gardening system inspired by plant selection. Species palettes and compatible crosses are curated; generations use compressed garden time. The first release changes tissue colour, pattern and mature height while preserving each species' existing model and growth stages.

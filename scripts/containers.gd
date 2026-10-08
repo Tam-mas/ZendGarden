@@ -41,24 +41,26 @@ static func spec(obj: Dictionary) -> Dictionary:
 static func position(obj: Dictionary, slot: int) -> Vector3:
  return obj.node.to_global(spec(obj).slots[slot])
 
-static func can_plant(g, obj: Dictionary, slot: int, id: int, excluding: int=-1) -> String:
+static func can_plant(g, obj: Dictionary, slot: int, id: int, excluding: int=-1, form_uid: String="") -> String:
  if obj.kind not in SPECS or slot<0 or slot>=SPECS[obj.kind].slots.size():return "Choose a planting pocket."
  if not GardenAreaCatalogue.plot_open(g,g.nearest_plot(obj.pos)):return "Choose a planter in an open garden area."
  var data=g.catalogue[id]
  var spec=spec(obj)
  var collection_slot=GardenAreaFurnishings.collection_slot(obj)
  if collection_slot>=0 and GardenAreas.state(g,6).beds.has(str(collection_slot)):return "Clear this collection pocket in Garden atlas before sowing ordinary seeds here."
- if int(data.layer)>int(spec.layers) or float(data.height)>float(spec.height):return "This plant needs a larger planter or open soil."
+ var form=GardenPlantBreeding.form(g,form_uid)
+ if int(data.layer)>int(spec.layers) or float(data.height)*GardenPlantBreeding.height_factor(form)>float(spec.height):return "This plant needs a larger planter or open soil."
  if occupant(g,obj,slot,excluding)>=0:return "This pocket already has a plant."
  return ""
 
-static func plant(g, obj: Dictionary, slot: int, id: int) -> Dictionary:
- var error=can_plant(g,obj,slot,id)
+static func plant(g, obj: Dictionary, slot: int, id: int, form_uid: String="") -> Dictionary:
+ var error=can_plant(g,obj,slot,id,-1,form_uid)
  if not error.is_empty():g.toast(error);return {}
- var p=g.add_plant(id,obj.pos,g.nearest_plot(obj.pos))
+ var p=g.add_plant(id,obj.pos,g.nearest_plot(obj.pos),0,1.0 if not form_uid.is_empty() else 0.0,NAN,-1,form_uid)
  attach(g,p,obj,slot)
  GardenEquipment.starter(g,p)
  g.planted_total+=1;GardenSeedCollection.record_planting(g,id)
+ GardenPlantBreeding.record_planting(g,form_uid)
  GardenAreaProgression.refresh(g)
  return p
 
@@ -73,7 +75,7 @@ static func attach(g, p: Dictionary, obj: Dictionary, slot: int) -> void:
 static func move_plant(g, index: int, obj: Dictionary, slot: int) -> String:
  var p=g.planted[index]
  if not GardenAreaProgression.allowed(g,p.pos):return "This garden has not reached its milestone yet."
- var error=can_plant(g,obj,slot,int(p.id),index)
+ var error=can_plant(g,obj,slot,int(p.id),index,str(p.get("form_uid","")))
  if not error.is_empty():return error
  attach(g,p,obj,slot)
  return ""
@@ -94,7 +96,7 @@ static func record(p: Dictionary) -> Dictionary:
  var result={"orientation":p.node.rotation.y,"shape_seed":p.get("shape_seed",0),"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0),"treatments":p.get("treatments",{}).duplicate(true)}
  if is_contained(p):result.merge({"container_uid":p.container_uid,"container_slot":p.container_slot})
  if p.has("watered_until"):result["watered_until"]=p.watered_until
- for field in ["area_training","area_graft","area_offset_day"]:
+ for field in ["area_training","area_graft","area_offset_day","form_uid","breeding_checked"]:
   if p.has(field):result[field]=p[field]
  return result
 
@@ -113,8 +115,8 @@ static func pack(g, obj: Dictionary) -> void:
   if p.get("container_uid","")==obj.uid:store(g,p,obj.uid)
 
 static func restore_record(g, saved: Dictionary) -> Dictionary:
- var p=g.add_plant(int(saved.id),Vector3(saved.pos[0],0,saved.pos[1]),int(saved.plot),float(saved.age),float(saved.get("height_factor",1)),float(saved.get("orientation",0)),int(saved.get("shape_seed",0)))
- for key in ["water","stress","pruned","prune_cuts","treatments","watered_until"]:
+ var p=g.add_plant(int(saved.id),Vector3(saved.pos[0],0,saved.pos[1]),int(saved.plot),float(saved.age),float(saved.get("height_factor",1)),float(saved.get("orientation",0)),int(saved.get("shape_seed",0)),str(saved.get("form_uid","")))
+ for key in ["water","stress","pruned","prune_cuts","treatments","watered_until","breeding_checked","area_training","area_graft","area_offset_day"]:
   if saved.has(key):p[key]=saved[key]
  if saved.has("container_uid"):
   var obj=object(g,str(saved.container_uid))
@@ -125,7 +127,7 @@ static func restore_record(g, saved: Dictionary) -> Dictionary:
 static func replant(g, nursery_index: int, obj: Dictionary, slot: int) -> bool:
  if nursery_index<0 or nursery_index>=g.workshop_state.nursery.size():return false
  var saved=g.workshop_state.nursery[nursery_index]
- var error=can_plant(g,obj,slot,int(saved.id))
+ var error=can_plant(g,obj,slot,int(saved.id),-1,str(saved.get("form_uid","")))
  if not error.is_empty():g.toast(error);return false
  var p=restore_record(g,saved)
  attach(g,p,obj,slot)

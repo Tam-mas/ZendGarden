@@ -103,7 +103,7 @@ static func upgrade(g, obj: Dictionary) -> bool:
  if obj.kind!="rain_barrel" and recipe_for(obj.kind).is_empty():return false
  if g.coins<40:g.toast("This equipment upgrade costs 40 petals.");return false
  g.coins-=40;obj.price+=40;obj.work["upgraded"]=true
- g.toast("The barrel now stores 24 drinks." if obj.kind=="rain_barrel" else "A second batch can now rest at this station.")
+ g.toast("The barrel now stores 24 drinks." if obj.kind=="rain_barrel" else "Four propagation experiments and two starter-mix batches can now rest at this bench." if obj.kind=="potting_bench" else "A second batch can now rest at this station.")
  return true
 
 static func feed(g, obj: Dictionary) -> bool:
@@ -181,6 +181,9 @@ static func starter(g, p: Dictionary) -> void:
 
 static func status(g, obj: Dictionary) -> String:
  var queue=jobs(g,obj.uid)
+ if obj.kind=="potting_bench":
+  var experiments=g.breeding_state.jobs.filter(func(job):return job.station==obj.uid)
+  if not experiments.is_empty():return "%d experiment%s · next ready morning %d"%[experiments.size(),"s" if experiments.size()>1 else "",int(experiments[0].ready_day)]
  if not queue.is_empty():return "Batch ready morning %d"%int(queue[0].ready_day)
  if obj.kind=="rain_barrel":return "%.1f / %d drinks · %s"%[float(obj.work.water),24 if obj.work.get("upgraded",false) else 12,"watering planters" if obj.work.irrigating else "stored"]
  if obj.kind=="bird_feeder":return "Food until morning %d"%int(obj.work.feed_until) if int(obj.work.feed_until)>g.day else "Ready for a little food"

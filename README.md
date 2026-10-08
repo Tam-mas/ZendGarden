@@ -4,7 +4,7 @@
 
 [**Enter the garden →**](https://zend.garden)
 
-**Current source release: 57 — Orchids, wildflowers & varied bushes.** See the [player update history](scripts/player_updates.gd).
+**Current source release: 58 — Your own plant cultivars.** See the [player update history](scripts/player_updates.gd).
 
 Zend Garden is a cosy, first-person gardening game beside a mountain lake. Start with a small patch of soil, wander among the flowers, and gradually turn your corner of the valley into somewhere you want to spend time.
 
@@ -18,6 +18,7 @@ There is no need to keep up. Plants do not die from neglect, requests have no de
 
 - **Choose from 218 plants.** Flowers, grasses and groundcover, shrubs, trees, Australian natives, produce, and a dedicated cacti and succulents category give you plenty of ways to mix colour, height and shape. Discover several bamboo varieties, giant and coast redwoods, snow gums, fruit trees, roses, jasmine and hemp, alongside ten more ornamental grasses, twenty cacti and succulents, artichokes, rhubarb, asparagus, broccoli, cauliflower, capsicum, Brussels sprouts and leeks.
 - **Fill the garden with flowers.** Ten additional orchid types, fifteen wildflowers, twenty-five cottage-garden favourites and twenty flowering bushes join the collection. Try Cattleya and blue Vanda orchids, cornflowers and ragged robin, or daffodils, columbines and bleeding hearts. Watch seedlings develop leaves, buds and open flowers. The bushes have distinct branching, foliage and blossom arrangements, from cascading spirea and yellow forsythia canes to coppery pieris tips and dense hebe cushions. Browse the plant collections and sort all 218 plants by mature height in either direction to plan layered planting.
+- **Develop your own cultivars.** Discover unusual forms across 28 orchids, wildflowers, cottage flowers and bushes. Preserve a flowering selection at the potting bench, name it and keep it in My cultivars. Cross two forms of the same species, grow a tray of four seedlings and choose the next generation. Leaf margins, marbling, split tones, flower patterns and compact or taller habits give your garden a personal history.
 - **Explore ten new garden trails.** Cross the stone bridges and follow the eastern trail, or open Garden atlas to discover wetland, fern, limestone, meadow, orchard, kitchen, glasshouse, stream, alpine and moon gardens. Visit every area from the start, then earn its free milestone reward to plant, tend and arrange it. Guide and Garden atlas show all ten targets and live progress. Each has different scenery, growing benefits and activities, with eighteen additional collection plants to discover.
 - **Cross the mountain stream.** Three arched stone bridges connect the original garden to the ten new areas across a rocky ravine. Follow the bank paths beside flowing pools, cascades and the outlet waterfall. Low stone walls frame the gardens, with clear bridge openings, fitted landings and rocky outer banks.
 - **Build a working garden.** Turn spare harvest into compost, castings, mulch and starter mix; collect rain, adjust shade and seasonal shelter, and feed visiting birds. Plant individual pockets in eight kinds of container, including hanging baskets, vertical walls and tiered displays. Move entire planted containers or store their plants safely when packing them away.

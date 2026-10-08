@@ -14,13 +14,21 @@ static func matching(g) -> Array:
  var found: Array=[]
  var filters: Dictionary=g.collection_filters
  var group=str(filters.get("group","All collections"))
- for p in g.catalogue:
+ var entries=g.catalogue.duplicate()
+ for f in g.breeding_state.forms.values():
+  if not f.registered or f.archived:continue
+  var p=g.catalogue[int(f.species)].duplicate(true)
+  p["form_uid"]=f.uid;p["name"]=GardenPlantBreeding.title(g,f);p["height"]=float(p.height)*GardenPlantBreeding.height_factor(f)
+  p["collection_group"]="My cultivars"
+  if int(f.genes.bloom[0])!=0:p["color"]=Color(GardenPlantBreeding.palette(f)[int(f.genes.bloom[0])])
+  entries.append(p)
+ for p in entries:
   if g.category!="All" and p.category!=g.category: continue
-  if group!="All collections" and group in GardenCatalogue.COLLECTION_GROUPS and p.get("collection_group","")!=group: continue
+  if group!="All collections" and group in GardenCatalogue.COLLECTION_GROUPS+["My cultivars"] and p.get("collection_group","")!=group: continue
   if not g.collection_query.strip_edges().is_empty() and not (p.name+" "+p.get("botanical_name","")).to_lower().contains(g.collection_query.strip_edges().to_lower()): continue
-  if filters.view=="Favourites" and p.id not in g.favourite_plants: continue
-  if filters.view=="Recently planted" and p.id not in g.recent_plants: continue
-  if filters.view=="Discovered" and p.id not in g.unlocked_plants: continue
+  if filters.view=="Favourites" and (not GardenPlantBreeding.form(g,p.form_uid).favourite if p.has("form_uid") else p.id not in g.favourite_plants):continue
+  if filters.view=="Recently planted" and (p.form_uid not in g.breeding_state.recent if p.has("form_uid") else p.id not in g.recent_plants):continue
+  if filters.view=="Discovered" and not p.has("form_uid") and p.id not in g.unlocked_plants:continue
   var season=GardenClimate.season(g.day) if filters.season=="Growing now" else str(filters.season)
   if season!="Any season" and not p.seasons.is_empty() and season not in p.seasons: continue
   if filters.light!="Any light" and p.condition!="any" and p.condition!=filters.light.to_lower(): continue
@@ -40,7 +48,10 @@ static func matching(g) -> Array:
    if left==right:return name_before(a,b)
    return left>right if order=="Height: high to low" else left<right)
  elif order=="Growing days": found.sort_custom(func(a,b):return name_before(a,b) if a.days==b.days else a.days<b.days)
- elif filters.view=="Recently planted": found.sort_custom(func(a,b): return g.recent_plants.find(a.id)<g.recent_plants.find(b.id))
+ elif filters.view=="Recently planted": found.sort_custom(func(a,b):
+  var left=g.breeding_state.recent.find(a.form_uid) if a.has("form_uid") else g.recent_plants.find(a.id)
+  var right=g.breeding_state.recent.find(b.form_uid) if b.has("form_uid") else g.recent_plants.find(b.id)
+  return name_before(a,b) if left==right else left<right)
  return found
 
 static func name_before(a, b) -> bool:
@@ -84,6 +95,7 @@ static func build(g) -> void:
   update_categories(g)
   update_cards(g))
  g.list_box.add_child(search)
+ g.list_box.add_child(g.button("My cultivars & propagation",func():GardenBreedingUI.open_library(g),Vector2(0,44)))
  if g.touch_active() or g.get_viewport().get_visible_rect().size.y<700:
   var picker=g.button("Category: "+g.category+" ▾",func():
    var categories=g.list_box.get_node("SeedCategories")
@@ -116,7 +128,7 @@ static func build(g) -> void:
  var navigation=VBoxContainer.new()
  navigation.name="CollectionNavigation"
  g.list_box.add_child(navigation)
- var group_options=["All collections"]+GardenCatalogue.COLLECTION_GROUPS
+ var group_options=["All collections"]+GardenCatalogue.COLLECTION_GROUPS+["My cultivars"]
  if g.collection_filters.get("group","All collections") not in group_options:g.collection_filters.group="All collections"
  if g.collection_filters.get("sort","Catalogue")=="Height":g.collection_filters.sort="Height: low to high"
  var sort_options=["Catalogue","Name","Height: low to high","Height: high to low","Growing days"]
@@ -170,6 +182,8 @@ static func build(g) -> void:
  g.list_box.add_child(cards)
  update_cards(g)
  g.detail_label.text="%s\n%s layer · %d capacity · %d growing days\nLikes %s · welcomes %s\nGrows: %s" % [g.catalogue[g.selected].name,["Ground","Flower","Shrub","Canopy"][g.catalogue[g.selected].layer],g.catalogue[g.selected].capacity,g.catalogue[g.selected].days,g.catalogue[g.selected].condition,g.catalogue[g.selected].animal,GardenCatalogue.growing_seasons(g.selected)]
+ var selected_form=GardenPlantBreeding.selected_form(g)
+ if not selected_form.is_empty():g.detail_label.text=GardenPlantBreeding.title(g,selected_form)+"\n"+GardenPlantBreeding.traits(selected_form)+"\n"+g.detail_label.text
  if g.catalogue[g.selected].climber:g.detail_label.text+="\nClimbs nearby arbors & pergolas."
 
 static func update_categories(g) -> void:
@@ -192,14 +206,17 @@ static func update_cards(g) -> void:
   return
  for p in plants:
   var id: int=p.id
-  var unlocked=id in g.unlocked_plants
-  var b=g.button("",func(): g.choose_plant(id),Vector2(120,300 if g.touch_active() else 210))
-  b.name="PlantCard%02d" % id
+  var uid=str(p.get("form_uid",""))
+  var custom=not uid.is_empty()
+  var favourite=GardenPlantBreeding.form(g,uid).get("favourite",false) if custom else id in g.favourite_plants
+  var unlocked=custom or id in g.unlocked_plants
+  var b=g.button("",func(): GardenPlantBreeding.choose(g,uid) if custom else g.choose_plant(id),Vector2(120,300 if g.touch_active() else 210))
+  b.name="CultivarCard"+uid if custom else "PlantCard%02d" % id
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   b.tooltip_text="%s · %.1f m at maturity · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
   if not p.get("botanical_name","").is_empty():b.tooltip_text=p.botanical_name+"\n"+b.tooltip_text
   if p.climber: b.tooltip_text+="\nClimbs nearby arbors and pergolas."
-  GardenTheme.choose(b,id==g.selected)
+  GardenTheme.choose(b,uid==g.selected_cultivar if custom else id==g.selected and g.selected_cultivar.is_empty())
   var content=VBoxContainer.new()
   content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
   content.offset_left=6;content.offset_right=-6;content.offset_top=6;content.offset_bottom=-6
@@ -209,8 +226,17 @@ static func update_cards(g) -> void:
   var minimum_height=300 if g.touch_active() else 210
   content.minimum_size_changed.connect(func():
    b.custom_minimum_size.y=maxf(minimum_height,content.get_combined_minimum_size().y+12))
-  var portrait=TextureRect.new()
-  portrait.texture=load(GardenArt.card_path("res://assets/ui/plants/%02d" % id))
+  if custom:
+   var cultivar=g.label(GardenPlantBreeding.traits(GardenPlantBreeding.form(g,uid)),13)
+   cultivar.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;cultivar.mouse_filter=Control.MOUSE_FILTER_IGNORE
+   content.add_child(cultivar)
+  var portrait: TextureRect
+  if custom:
+   portrait=GardenCultivarThumbnail.new()
+   portrait.setup(g,GardenPlantBreeding.form(g,uid))
+  else:
+   portrait=TextureRect.new()
+   portrait.texture=load(GardenArt.card_path("res://assets/ui/plants/%02d" % id))
   portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
   portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
   portrait.custom_minimum_size=Vector2(96,106)
@@ -227,10 +253,12 @@ static func update_cards(g) -> void:
    text.mouse_filter=Control.MOUSE_FILTER_IGNORE
    text.add_theme_color_override("font_color",GardenTheme.TEXT if line[1]==name_size else GardenTheme.MUTED)
    content.add_child(text)
-  var star=g.button("★" if id in g.favourite_plants else "☆",func(): toggle_favourite(g,id),Vector2(34,34))
+  var star=g.button("★" if favourite else "☆",func():
+   if custom:GardenPlantBreeding.form(g,uid).favourite=not favourite;g.save_game();update_cards(g)
+   else:toggle_favourite(g,id),Vector2(34,34))
   star.name="Favourite"
-  GardenTheme.choose(star,id in g.favourite_plants)
-  star.tooltip_text="Remove favourite" if id in g.favourite_plants else "Save favourite"
+  GardenTheme.choose(star,favourite)
+  star.tooltip_text="Remove favourite" if favourite else "Save favourite"
   star.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
   star.offset_left=-54 if g.touch_active() else -38
   star.offset_right=-4

@@ -859,3 +859,12 @@
 **Plain:** You can now reverse left/right and up/down mouse movement separately in Settings.
 
 **Why:** Makes camera controls easier to find and adapt to your preferred way of looking around.
+### [2026-10-08 15:54] Added
+
+**Tech:** `GardenPlantBreeding`, `GardenBreedingUI`, `GardenCultivarAppearance` — selection, propagation and inherited cultivars
+
+**Dev:** Add a bounded journal for 28 species without changing the 218 catalogue IDs. Discover once per specimen, protect the first discovery and long discovery droughts, and reveal flowers at flowering. Propagation preserves foliage sports without consuming the parent; same-species crosses store four deterministic offspring with paired flower-colour, pattern and habit alleles, occasional new colour alleles and recorded ancestry. Add starter-mix costs, morning-based nursery jobs, upgraded bench capacity, safe cancelled placement, naming, registration, favourites and archive controls. Add four potting-bench tabs, rotating plant previews, cached thumbnails rendered one visible card at a time, custom seed-collection entries, height sorting and cultivar-aware container/stored-plant/undo paths. Apply organ-local UV patterns through the existing texture, normal, roughness and growth-attachment shaders; preserve dense-garden batches and selection appearance. Save format 3 carries the journal, jobs and references while reading versions 1 and 2 and rejecting malformed cultivar data. Update player release 58, README and guides. Local checks pass the full bench-to-plant flow, deterministic restoration, tissue maps across all 28 species and five stages, collection/model/growth/preview/save/update regressions, four viewport sizes, Chrome file selection and encrypted v1/v2/v3 transfer. Review model previews and cached thumbnails in both Compatibility and Forward+.
+
+**Plain:** Discover unusual plants, preserve and name your favourites, breed the next generation and keep your own cultivars in the seed collection.
+
+**Why:** Gives players a continuing selection-and-propagation activity and a personal collection that survives moving, storing and saving their garden.

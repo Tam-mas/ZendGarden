@@ -16,7 +16,7 @@ export function validateSave(bytes) {
   try { data = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)); }
   catch { throw new Error('We could not read this garden copy. Your original is still at the old address.'); }
   const fail = () => { throw new Error('This garden copy needs a closer look before it can be moved safely.'); };
-  if (!object(data) || ![1, 2].includes(data.version) || !Array.isArray(data.plants)) fail();
+  if (!object(data) || ![1, 2, 3].includes(data.version) || !Array.isArray(data.plants)) fail();
   for (const plant of data.plants) {
     if (!object(plant) || !Number.isInteger(plant.id) || plant.id < 0 || !pair(plant.pos)
       || !Number.isInteger(plant.plot) || plant.plot < 0
