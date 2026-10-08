@@ -1440,7 +1440,7 @@
     "name": "Tropical hibiscus",
     "family": "woody",
     "height": 2.0,
-    "triangles": 5252,
+    "triangles": 2622,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1448,7 +1448,7 @@
     "name": "Daphne",
     "family": "woody",
     "height": 1.4,
-    "triangles": 9220,
+    "triangles": 11574,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1456,7 +1456,7 @@
     "name": "Japanese pieris",
     "family": "woody",
     "height": 2.0,
-    "triangles": 13316,
+    "triangles": 12774,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1464,7 +1464,7 @@
     "name": "Snowball viburnum",
     "family": "woody",
     "height": 2.5,
-    "triangles": 4740,
+    "triangles": 10062,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1472,7 +1472,7 @@
     "name": "Mock orange",
     "family": "woody",
     "height": 2.4,
-    "triangles": 6916,
+    "triangles": 8126,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1480,7 +1480,7 @@
     "name": "Weigela",
     "family": "woody",
     "height": 2.0,
-    "triangles": 8324,
+    "triangles": 10046,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1488,7 +1488,7 @@
     "name": "Deutzia",
     "family": "woody",
     "height": 1.2,
-    "triangles": 10116,
+    "triangles": 10502,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1496,7 +1496,7 @@
     "name": "Forsythia",
     "family": "woody",
     "height": 2.2,
-    "triangles": 16772,
+    "triangles": 16502,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1504,7 +1504,7 @@
     "name": "Flowering quince",
     "family": "woody",
     "height": 2.2,
-    "triangles": 7428,
+    "triangles": 7050,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1512,7 +1512,7 @@
     "name": "Spirea",
     "family": "woody",
     "height": 2.0,
-    "triangles": 3460,
+    "triangles": 6938,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1520,7 +1520,7 @@
     "name": "Abelia",
     "family": "woody",
     "height": 1.6,
-    "triangles": 8708,
+    "triangles": 7862,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1528,7 +1528,7 @@
     "name": "Escallonia",
     "family": "woody",
     "height": 2.0,
-    "triangles": 10116,
+    "triangles": 10050,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1536,7 +1536,7 @@
     "name": "Hebe",
     "family": "woody",
     "height": 1.2,
-    "triangles": 11908,
+    "triangles": 10734,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1544,7 +1544,7 @@
     "name": "Ceanothus",
     "family": "woody",
     "height": 2.2,
-    "triangles": 3716,
+    "triangles": 3930,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1552,7 +1552,7 @@
     "name": "Hardy fuchsia",
     "family": "woody",
     "height": 1.6,
-    "triangles": 6916,
+    "triangles": 8462,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1560,7 +1560,7 @@
     "name": "Mexican orange blossom",
     "family": "woody",
     "height": 1.8,
-    "triangles": 8836,
+    "triangles": 11586,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1568,7 +1568,7 @@
     "name": "Correa",
     "family": "woody",
     "height": 1.2,
-    "triangles": 6020,
+    "triangles": 5610,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1576,7 +1576,7 @@
     "name": "Pink boronia",
     "family": "woody",
     "height": 1.5,
-    "triangles": 14340,
+    "triangles": 14070,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1584,7 +1584,7 @@
     "name": "Flowering tea-tree",
     "family": "woody",
     "height": 2.0,
-    "triangles": 10628,
+    "triangles": 10650,
     "source": "art_source/flower_additions.blend"
   },
   {
@@ -1592,7 +1592,7 @@
     "name": "Spotted emu bush",
     "family": "woody",
     "height": 1.5,
-    "triangles": 6660,
+    "triangles": 6150,
     "source": "art_source/flower_additions.blend"
   }
 ]

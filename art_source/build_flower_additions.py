@@ -14,10 +14,27 @@ from fruit_tree_geometry import add_anchor_channels
 from flower_additions_data import FLOWER_ADDITIONS
 from flower_additions_geometry import foliage,mature
 
-def build():
+def build(*, bushes_only=False):
     previous=bpy.context.window.scene
-    scene=bpy.data.scenes.new('ZendGarden_FlowerAdditions')
-    bpy.context.window.scene=scene
+    library=ROOT/'art_source/flower_additions.blend'
+    if bushes_only:
+        # Load the complete editable library; replace only the twenty shrub families.
+        with bpy.data.libraries.load(str(library),link=False) as (source,target):
+            target.scenes=[name for name in source.scenes if name.startswith('ZendGarden_FlowerAdditions')]
+        assert len(target.scenes)==1,'Expected one complete flower collection source scene'
+        scene=target.scenes[0]
+        assert sum(o.type=='MESH' for o in scene.objects)==350,'Incomplete source library'
+        assert {o.get('catalogue_id') for o in scene.objects if 'catalogue_id' in o}==set(range(148,218))
+        bpy.context.window.scene=scene
+        roots=[o for o in scene.objects if o.parent is None and o.name.startswith(('Plant_','Growth_'))]
+        for obj in roots:
+            idx=int(obj.name.split('_')[1])
+            if idx>=198:
+                for child in list(obj.children):bpy.data.objects.remove(child,do_unlink=True)
+                bpy.data.objects.remove(obj,do_unlink=True)
+    else:
+        scene=bpy.data.scenes.new('ZendGarden_FlowerAdditions')
+        bpy.context.window.scene=scene
     temporary=ROOT/'captures/flower-additions/pigments';temporary.mkdir(parents=True,exist_ok=True)
     library=ROOT/'art_source/flower_additions.blend'
     old_mature=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())
@@ -48,7 +65,13 @@ def build():
             pix[:,:3]*=swatch
         elif pattern=='leaf':
             # Generated leaf tissue is already green; keep its vein contrast.
-            pix[:,:3]*=np.array([.78,.87,.72])
+            if label.startswith('Leaf FlowerAddition ') and int(label.split()[2])>=198:
+                # Retain the generated veins while giving each shrub its real leaf pigment.
+                linear=np.array(m.diffuse_color[:3])
+                swatch=np.where(linear>.0031308,1.055*linear**(1/2.4)-.055,12.92*linear)
+                mean=np.maximum(pix[:,:3].mean(axis=0),.03)
+                pix[:,:3]=np.clip(pix[:,:3]/mean*swatch*.76,0,1)
+            else:pix[:,:3]*=np.array([.78,.87,.72])
         texture=bpy.data.images.new(label+' albedo',width=source.size[0],height=source.size[1])
         texture.pixels.foreach_set(pix.ravel())
         texture.filepath_raw=str(temporary/(''.join(c if c.isalnum() else '_' for c in label)+'.jpg'))
@@ -79,9 +102,14 @@ def build():
     try:
         for row in FLOWER_ADDITIONS:
             idx=row['id']
+            if bushes_only and idx<198:continue
             random.seed(idx*7919+181)
             name=row['name'];label=f'FlowerAddition {idx}'
-            leaves=[pigment('Botanical '+label+' stem','7b6650' if idx>=198 else '5d7541','smooth'),pigment('Leaf '+label,'56804b','leaf','leaf'),pigment('Leaf '+label+' young','80a358','leaf'),pigment('Botanical '+label+' roots','d5d6bc','smooth')]
+            shrub={}
+            if idx>=198:
+                from flower_bush_geometry import profile
+                shrub=profile(idx)
+            leaves=[pigment('Botanical '+label+' stem',shrub.get('bark','5d7541'),'smooth'),pigment('Leaf '+label,shrub.get('green','56804b'),'leaf','leaf'),pigment('Leaf '+label+' young',shrub.get('young','80a358'),'leaf','leaf' if idx>=198 else None),pigment('Botanical '+label+' roots','d5d6bc','smooth')]
             primary_pattern='orchid_petal' if idx in [149,151,195] else None
             petal= pigment('Botanical '+label+' petals',row['color'],'petal',primary_pattern)
             cream=pigment('Botanical '+label+' cream','f4eee1','petal')
@@ -97,7 +125,7 @@ def build():
             path=ROOT/'assets/plants'/f'plant_{idx:02d}.glb';export(root,organs,path)
             triangles=sum(len(f)-2 for f in g.f+b.f)
             assert 0<triangles<=200000,(name,triangles)
-            mrecords[idx]={'id':idx,'name':name,'vertices':len(g.v)+len(b.v),'triangles':triangles,'path':str(path.relative_to(ROOT)),'morphology_version':3,'source':'art_source/flower_additions.blend'}
+            mrecords[idx]={'id':idx,'name':name,'vertices':len(g.v)+len(b.v),'triangles':triangles,'path':str(path.relative_to(ROOT)),'morphology_version':4 if idx>=198 else 3,'source':'art_source/flower_additions.blend'}
             youngroot=bpy.data.objects.new(f'Growth_{idx:02d}_{name}',None);scene.collection.objects.link(youngroot)
             early=[]
             for stage,phase in [('Seedling','seedling'),('Juvenile','juvenile')]:
@@ -110,7 +138,8 @@ def build():
             root.location=((idx-148)%10*4,(idx-148)//10*5,0)
             youngroot.location=root.location.copy();youngroot.location.y+=2
             print('FLOWER_ADDITION',idx,name,triangles,growth_tris,flush=True)
-        # Only this scene and its packed dependencies are written.
+        # Only this complete scene and its packed dependencies are written.
+        assert sum(o.type=='MESH' for o in scene.objects)==350,'Source must retain all seventy plants'
         bpy.data.libraries.write(str(library),{scene},fake_user=True,compress=True)
         mature_records=[mrecords[i] for i in sorted(mrecords)];growth_records=[grecords[i] for i in sorted(grecords)]
         assert [p['id'] for p in mature_records]==list(range(len(mature_records)))

@@ -10,6 +10,7 @@ python3 tests/check_fruit_trees.py
 python3 tests/check_botanical_additions.py
 python3 tests/check_low_grasses.py
 python3 tests/check_flower_additions.py
+python3 tests/check_bush_variation.py
 python3 tests/check_audio.py
 python3 tests/check_areas.py
 python3 tests/check_path_paving.py

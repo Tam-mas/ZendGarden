@@ -18,14 +18,14 @@ def frame(axis):
     u=UP.cross(n).normalized() if abs(n.z)<.95 else Vector((1,0,0))
     return u,n.cross(u).normalized(),n
 
-def petal(g,c,direction,length,width,mat=0,cup=.12,ruffle=.04,notch=0,low_detail=False):
+def petal(g,c,direction,length,width,mat=0,cup=.12,ruffle=.04,notch=0,low_detail=False,tiny=False):
     """Curved tapered blade with an explicit UV midrib and scalloped rim."""
     c=Vector(c);d=Vector(direction).normalized()
     side=d.cross(UP).normalized()
     if side.length<.01:side=Vector((1,0,0))
     normal=side.cross(d).normalized()
     if normal.z<0:normal=-normal
-    rows=[];segments=8 if length>.025 and not low_detail else 4;columns=5 if length>.025 and not low_detail else 3
+    rows=[];segments=3 if tiny and length<.012 else 8 if length>.025 and not low_detail else 4;columns=5 if length>.025 and not low_detail else 3
     for j in range(segments+1):
         t=j/segments
         w=width*math.sin(math.pi*t)**.65
@@ -41,9 +41,9 @@ def petal(g,c,direction,length,width,mat=0,cup=.12,ruffle=.04,notch=0,low_detail
     for a,b in zip(rows,rows[1:]):
         for k in range(columns-1):g.face((a[k],b[k],b[k+1],a[k+1]),mat)
 
-def petal_in_plane(g,c,d,n,length,width,mat=0,cup=.12,ruffle=.04,notch=0):
+def petal_in_plane(g,c,d,n,length,width,mat=0,cup=.12,ruffle=.04,notch=0,tiny=False):
     """Rotate the organ rather than making every bloom face the sky."""
-    tmp=Geometry();petal(tmp,(0,0,0),(1,0,0),length,width,mat,cup,ruffle,notch)
+    tmp=Geometry();petal(tmp,(0,0,0),(1,0,0),length,width,mat,cup,ruffle,notch,tiny=tiny)
     x=Vector(d).normalized();z=Vector(n).normalized();y=z.cross(x).normalized()
     if y.length<.01:y=UP.cross(x).normalized()
     z=x.cross(y).normalized();c=Vector(c);offset=len(g.v)
@@ -51,12 +51,12 @@ def petal_in_plane(g,c,d,n,length,width,mat=0,cup=.12,ruffle=.04,notch=0):
     for face,mi in zip(tmp.f,tmp.mi):g.face(tuple(i+offset for i in face),mi)
     g.uv.update({i+offset:uv for i,uv in tmp.uv.items()})
 
-def rays(g,c,axis,r,count,width=.32,mat=0,droop=0,ruffle=.04,notch=0,start=0):
+def rays(g,c,axis,r,count,width=.32,mat=0,droop=0,ruffle=.04,notch=0,start=0,tiny=False):
     u,v,n=frame(axis)
     for k in range(count):
         a=start+k*TAU/count
         direction=u*math.cos(a)+v*math.sin(a)-n*droop
-        petal_in_plane(g,c,direction,n,r,r*width,mat,.12,ruffle,notch)
+        petal_in_plane(g,c,direction,n,r,r*width,mat,.12,ruffle,notch,tiny=tiny)
 
 def funnel(g,c,axis,r,length,mat=0,lobes=5,flare=.65,ruffle=.04,base_radius=.14,curve=0):
     c=Vector(c);u,v,n=frame(axis);offset=len(g.v);rings=9 if r>=.012 else 5;sides=30 if r>=.012 else 12
@@ -73,12 +73,12 @@ def funnel(g,c,axis,r,length,mat=0,lobes=5,flare=.65,ruffle=.04,base_radius=.14,
             a=offset+j*sides+k;b=offset+j*sides+(k+1)%sides
             g.face((a,b,b+sides,a+sides),mat)
 
-def stamens(g,c,axis,r,count=7,mat=2):
+def stamens(g,c,axis,r,count=7,mat=2,low_detail=False):
     c=Vector(c);u,v,n=frame(axis)
     for k in range(count):
         a=k*2.39996;end=c+n*r*.35+(u*math.cos(a)+v*math.sin(a))*r*.15
-        g.tube([c,end],[max(.00035,r*.015),max(.00025,r*.009)],mat,5)
-        g.ellipsoid(end,(r*.035,r*.035,r*.055),mat,3 if r>=.012 else 2,6 if r>=.012 else 5)
+        g.tube([c,end],[max(.00035,r*.015),max(.00025,r*.009)],mat,4 if low_detail else 5)
+        g.ellipsoid(end,(r*.035,r*.035,r*.055),mat,2 if low_detail else 3 if r>=.012 else 2,5 if low_detail else 6 if r>=.012 else 5)
 
 def orchid(g,c,axis,r,kind):
     c=Vector(c);u,v,n=frame(axis)
@@ -132,16 +132,18 @@ def heart(g,c,r):
 
 def flower(row,g,c,axis=(0,0,1),radius=None):
     idx=row['id'];r=radius or row['bloom_radius'];c=Vector(c);u,v,n=frame(axis)
+    flower_stamens=partial(stamens,low_detail=idx>=198)
+    flower_rays=partial(rays,tiny=idx>=198)
     if idx<158:
         kind=['cattleya','slipper','oncidium','pansy','vanda','zygo','spider','rock','bee','spike'][idx-148]
         orchid(g,c,axis,r,kind);return
     if idx==158:
         for ring in range(2):
-            rays(g,c+n*r*ring*.08,axis,r*(1-ring*.20),10,.10,0,-.05,.08,.20,start=ring*.28)
-        stamens(g,c,n,r,14);return
+            flower_rays(g,c+n*r*ring*.08,axis,r*(1-ring*.20),10,.10,0,-.05,.08,.20,start=ring*.28)
+        flower_stamens(g,c,n,r,14);return
     if idx==172:
-        rays(g,c,axis,r*.90,3,.08,0,0,.01,start=math.pi/3)
-        rays(g,c,axis,r,3,.30,0,0,.10)
+        flower_rays(g,c,axis,r*.90,3,.08,0,0,.01,start=math.pi/3)
+        flower_rays(g,c,axis,r,3,.30,0,0,.10)
         for k in range(3):
             a=k*TAU/3;d=u*math.cos(a)+v*math.sin(a);side=n.cross(d)
             for step in range(9):
@@ -150,11 +152,11 @@ def flower(row,g,c,axis=(0,0,1),radius=None):
                     start=c+d*r*t+side*sign*r*.25*math.sin(math.pi*t)
                     end=start+side*sign*r*.15+d*r*.045
                     g.tube([start,end],[r*.010,r*.003],0,4)
-        stamens(g,c,n,r,6);return
+        flower_stamens(g,c,n,r,6);return
     if idx==196:
         for a in [.5,2.64,3.45,5.97,4.71]:
             petal_in_plane(g,c,u*math.cos(a)+v*math.sin(a),n,r,r*.30,1 if a==4.71 else 0,.08,.03)
-        stamens(g,c,n,r,3);return
+        flower_stamens(g,c,n,r,3);return
     if idx==191:
         # The astilbe head is an airy branching plume, not a compact pom-pom.
         for branch in range(12):
@@ -164,7 +166,7 @@ def flower(row,g,c,axis=(0,0,1),radius=None):
             g.tube([start,tip],[r*.012,r*.004],3,5)
             for k in range(5):
                 p=start.lerp(tip,(k+.4)/5)
-                rays(g,p,axis,r*.07,5,.32,0,.02)
+                flower_rays(g,p,axis,r*.07,5,.32,0,.02)
         return
     if idx==189:heart(g,c,r);return
     if idx==182: # Snapdragon: a compressed tube and distinct upper/lower lips.
@@ -178,60 +180,93 @@ def flower(row,g,c,axis=(0,0,1),radius=None):
         return
     if idx==214: # Correa: long pendent four-lobed tube, green-yellow mouth.
         funnel(g,c,axis,r*.72,r*2.7,0,4,.90,.04,.70)
-        rays(g,c+n*r*2.7,axis,r*.72,4,.20,4,-.05,.02)
-        stamens(g,c+n*r*2.55,n,r,4);return
+        flower_rays(g,c+n*r*2.7,axis,r*.72,4,.20,4,-.05,.02)
+        flower_stamens(g,c+n*r*2.55,n,r,4);return
     if idx==217: # Eremophila: curved tube and asymmetric two/three-lobed mouth.
         funnel(g,c,axis,r*.64,r*2.3,0,5,.80,.03,.55,.35)
         mouth=c+n*r*2.3
         for a in [.9,2.24,3.65,4.71,5.78]:
             petal_in_plane(g,mouth,u*math.cos(a)+v*math.sin(a),n,r*.65,r*.18,0,.12,.02)
-        stamens(g,c+n*r*2.3,n,r,4);return
-    if idx in [176,177,192,199,200,203,208,209,210]:
+        flower_stamens(g,c+n*r*2.3,n,r,4);return
+    if idx==200:
+        offset=len(g.v);sides=10
+        for j in range(7):
+            t=j/6;radius=r*(.25+.70*math.sin(math.pi*t)**.7)
+            for k in range(sides):
+                a=k*TAU/sides;p=c+n*r*t*1.45+(u*math.cos(a)+v*math.sin(a))*radius
+                g.v.append(tuple(p));g.uv[len(g.v)-1]=(k/sides,t)
+        for j in range(6):
+            for k in range(sides):
+                a=offset+j*sides+k;b=offset+j*sides+(k+1)%sides
+                g.face((a,b,b+sides,a+sides),1)
+        flower_rays(g,c+n*r*1.45,axis,r*.3,5,.23,1);return
+    if idx==210:
+        # A complete short raceme: many tiny four-lobed corollas around an upright axis.
+        base=c-n*r*1.7;tip=c+n*r*1.7
+        g.tube([base,tip],[r*.08,r*.025],3,5)
+        for k in range(22):
+            t=(k+.5)/22;a=k*2.39996
+            out=u*math.cos(a)+v*math.sin(a)
+            pos=base.lerp(tip,t)+out*r*.37
+            flower_rays(g,pos,out,r*.20,4,.28,0)
+            flower_stamens(g,pos,out,r*.25,2,1)
+        return
+    if idx==205:
+        funnel(g,c-n*r*.1,axis,r*.24,r*.32,0,4,.3)
+        flower_rays(g,c,axis,r,4,.17,0,-.22,.02);return
+    if idx==208:
+        flower_rays(g,c,axis,r*.75,5,.22,5,.08,.01)
+        funnel(g,c,axis,r,r*1.6,1,5,.8,.02);return
+    if idx==216:
+        flower_rays(g,c,axis,r,5,.34,0,.03,.02)
+        g.ellipsoid(c+n*r*.10,(r*.25,r*.25,r*.12),5,3,8)
+        flower_stamens(g,c,n,r,8);return
+    if idx in [176,177,192,199,203,209]:
         lobes=6 if idx in [176,177] else 4 if idx in [199,210] else 5
         funnel(g,c,axis,r,r*(1.75 if idx==192 else 1.05),0,lobes,.6,.04)
-        stamens(g,c+n*r*.7,n,r,lobes);return
+        flower_stamens(g,c+n*r*.7,n,r,lobes);return
     if idx==174: # Snowdrop: three long outer petals and three green-tipped inner ones.
-        rays(g,c,axis,r,3,.22,1,-.65,.02)
-        rays(g,c,axis,r*.55,3,.28,4,-.3,.02,start=math.pi/3);return
+        flower_rays(g,c,axis,r,3,.22,1,-.65,.02)
+        flower_rays(g,c,axis,r*.55,3,.28,4,-.3,.02,start=math.pi/3);return
     if idx==173:
-        rays(g,c,axis,r,6,.38,0,.08);funnel(g,c,axis,r*.48,r*.65,2,6,.3,.14);return
-    if idx==175:rays(g,c,axis,r,6,.40,0,-.5,.03);stamens(g,c,n,r,3);return
+        flower_rays(g,c,axis,r,6,.38,0,.08);funnel(g,c,axis,r*.48,r*.65,2,6,.3,.14);return
+    if idx==175:flower_rays(g,c,axis,r,6,.40,0,-.5,.03);flower_stamens(g,c,n,r,3);return
     if idx==179: # Lily of the valley bells have rolled, distinctly lobed mouths.
         funnel(g,c,axis,r,r*1.2,1,6,.20,.07);return
     if idx==188: # Columbine: outer sepals and five spurred petals.
-        rays(g,c,axis,r,5,.24,0,.08)
-        rays(g,c+n*r*.15,axis,r*.65,5,.26,1,-.30,start=math.pi/5)
+        flower_rays(g,c,axis,r,5,.24,0,.08)
+        flower_rays(g,c+n*r*.15,axis,r*.65,5,.26,1,-.30,start=math.pi/5)
         for k in range(5):
             a=k*TAU/5;start=c+(u*math.cos(a)+v*math.sin(a))*r*.45
             end=start-n*r*.8;g.tube([start,start-n*r*.6,end+u*r*.1],[r*.055,r*.035,r*.004],0,6)
-        stamens(g,c,n,r,8);return
+        flower_stamens(g,c,n,r,8);return
     if idx==161: # Ragged robin: five deeply cut petals, each with four narrow fingers.
         for k in range(5):
             a=k*TAU/5
             for cut in range(4):
                 turn=a+(cut-1.5)*.105
                 petal_in_plane(g,c,u*math.cos(turn)+v*math.sin(turn),n,r,r*.065,0,.08,.02)
-        stamens(g,c,n,r,5);return
+        flower_stamens(g,c,n,r,5);return
     if idx==193: # Tall garden phlox: five rounded lobes on a narrow throat.
         funnel(g,c-n*r*.2,n,r*.15,r*.3,0,5,.25)
-        rays(g,c,axis,r,5,.36,0,0,.04);return
+        flower_rays(g,c,axis,r,5,.36,0,0,.04);return
     if idx==194:funnel(g,c,axis,r,r*1.3,0,5,.55,.06);return
     if idx==195:
         for k in range(6):
             a=k*TAU/6
             petal_in_plane(g,c,u*math.cos(a)+v*math.sin(a)+n*.18,n,r,r*.27,0,.35,.08)
-        stamens(g,c,n,r,6);return
+        flower_stamens(g,c,n,r,6);return
     if idx==169: # Strawflower: overlapping, pointed papery bracts.
-        for ring in range(4):rays(g,c+n*r*ring*.07,axis,r*(1-ring*.16),16+ring*2,.12,0,-ring*.08,.02,start=ring*.2)
+        for ring in range(4):flower_rays(g,c+n*r*ring*.07,axis,r*(1-ring*.16),16+ring*2,.12,0,-ring*.08,.02,start=ring*.2)
         g.ellipsoid(c+n*r*.2,(r*.20,r*.20,r*.13),2,6,12);return
     if idx==180: # Ranunculus: many concentric cupped petals rather than a daisy.
-        for ring in range(6):rays(g,c+n*r*ring*.08,axis,r*(1-ring*.12),9+ring,.32,0,-ring*.11,.08,start=ring*.4)
+        for ring in range(6):flower_rays(g,c+n*r*ring*.08,axis,r*(1-ring*.12),9+ring,.32,0,-ring*.11,.08,start=ring*.4)
         return
     if idx in [165,166,167,186,187]:
         count={165:15,166:13,167:12,186:14,187:16}[idx]
-        rays(g,c,axis,r,count,.15,0,.32 if idx==165 else .05,.04)
+        flower_rays(g,c,axis,r,count,.15,0,.32 if idx==165 else .05,.04)
         if idx==187:
-            for ring in range(2):rays(g,c+n*r*(.08+ring*.08),axis,r*(.8-ring*.2),count,.18,0,-.13,.06,start=.15+ring*.2)
+            for ring in range(2):flower_rays(g,c+n*r*(.08+ring*.08),axis,r*(.8-ring*.2),count,.18,0,-.13,.06,start=.15+ring*.2)
         if idx==167:
             for k in range(count):
                 a=k*TAU/count;d=u*math.cos(a)+v*math.sin(a)
@@ -243,37 +278,37 @@ def flower(row,g,c,axis=(0,0,1),radius=None):
         return
     if idx in [163,164,170,178,183,197,201,207,211]:
         # Individual florets, not an opaque ball substituting for a flower head.
-        count=18 if idx not in [178,201] else 30
+        count=18 if idx not in [178,201] else 48 if idx==201 else 30
         for k in range(count):
             a=k*2.39996;distance=r*.80*math.sqrt((k+.3)/count)
             if idx in [178,201]:
                 z=1-2*(k+.5)/count;s=math.sqrt(1-z*z)
                 outward=(u*math.cos(a)*s+v*math.sin(a)*s+n*z).normalized()
                 p=c+outward*r*.76
-                rays(g,p,outward,r*.23,6 if idx==178 else 5,.26,0,.03)
-                stamens(g,p,outward,r*.23,3)
+                flower_rays(g,p,outward,r*.23,6 if idx==178 else 5,.38 if idx==201 else .26,0,.03)
+                if idx!=201:flower_stamens(g,p,outward,r*.23,3)
                 continue
             lift=0 if idx==164 else math.sqrt(max(0,r*r-distance*distance))*.55
             p=c+u*math.cos(a)*distance+v*math.sin(a)*distance+n*lift
-            rays(g,p,axis,r*.18,4 if idx in [163,197] else 5,.27,0,.02)
+            flower_rays(g,p,axis,r*.18,4 if idx in [163,197] else 5,.27,0,.02)
             g.ellipsoid(p+n*r*.025,(r*.03,)*3,2,3,5)
         return
     if idx==212: # Fuchsia has reflexed sepals, a separate corolla and long stamens.
         funnel(g,c,axis,r*.24,r*.95,0,4,.85,.03,.85)
         tier=c+n*r*.95
-        rays(g,tier,axis,r,4,.17,0,.5,.04)
+        flower_rays(g,tier,axis,r,4,.17,0,.5,.04)
         funnel(g,tier,n,r*.5,r*.7,5,4,.50,.04)
         for k in range(8):
             a=k*TAU/8;end=c+n*r*2.10+(u*math.cos(a)+v*math.sin(a))*r*.13
             g.tube([c,end],[r*.012,r*.008],1,5);g.ellipsoid(end,(r*.025,)*3,2,3,5)
         return
     if idx==198: # Hibiscus staminal column projects conspicuously beyond five petals.
-        rays(g,c,axis,r,5,.44,0,-.1,.12)
+        flower_rays(g,c,axis,r,5,.44,0,-.1,.12)
         g.tube([c,c+n*r*1.05],[r*.05,r*.028],2,8)
-        stamens(g,c+n*r*.70,n,r,12);return
+        flower_stamens(g,c+n*r*.70,n,r,12);return
     count=max(3,min(12,int(row['petals'])))
-    rays(g,c,axis,r,count,.25 if idx in [171,172] else .34,0,.03,.05,.10 if idx in [158,159,160] else 0)
-    stamens(g,c,n,r,8 if idx in [168,213,216] else 6)
+    flower_rays(g,c,axis,r,count,.25 if idx in [171,172] else .34,0,.03,.05,.10 if idx in [158,159,160] else 0)
+    flower_stamens(g,c,n,r,8 if idx in [168,213,216] else 6)
 
 def foliage(row,phase='mature'):
     g=Geometry();h=row['height'];idx=row['id'];kind=row['foliage']
@@ -345,38 +380,8 @@ def foliage(row,phase='mature'):
                 g.tube([root_start,root_mid,end],[h*.013,h*.009,h*.003],3,6)
         return g,points
     if woody:
-        # Basal stems, secondary branches and leafy terminal shoots, no spheres.
-        stems=1 if phase=='seedling' else 2 if phase=='juvenile' else 5
-        for trunk in range(stems):
-            angle=trunk*2.39996;base=Vector((math.cos(angle)*h*.04,math.sin(angle)*h*.04,0))
-            end=base+Vector((math.cos(angle)*h*.16,math.sin(angle)*h*.16,h*.84))
-            g.tube([base,base.lerp(end,.40),end],[h*.015,h*.009,h*.003],0,8)
-            levels=2 if phase=='seedling' else 3 if phase=='juvenile' else 5
-            for k in range(levels):
-                turn=angle+k*2.39996;start=base.lerp(end,.24+k*.13)
-                reach=h*(.20+random.random()*.13)*(1-k*.08)
-                tip=start+Vector((math.cos(turn)*reach,math.sin(turn)*reach,h*.20))
-                g.tube([start,start.lerp(tip,.5)+UP*h*.018,tip],[h*.006,h*.003,h*.0008],0,6)
-                for node in range(1 if idx==205 else 3 if idx==206 else 4 if not juvenile else 2):
-                    p=start.lerp(tip,.28+node*.18)
-                    ll=h*(.065 if idx not in [198,201,202,212] else .095)
-                    for sign in [-1,1]:leaf(p,turn+sign*1.1,ll,material=2 if node==3 else 1)
-                points.append((tip,Vector((math.cos(turn),math.sin(turn),.25)).normalized()))
-                g.attachment_paths.append([start,start.lerp(tip,.5)+UP*h*.018,tip])
-                if not juvenile:
-                    # Secondary shoots form a leafy, rounded canopy around each twig.
-                    for shoot in range(3):
-                        fork=start.lerp(tip,.48+shoot*.17)
-                        heading=turn+(-.8 if shoot%2 else .8)
-                        twig=fork+Vector((math.cos(heading)*h*.11,math.sin(heading)*h*.11,h*(.05+shoot*.015)))
-                        mid=fork.lerp(twig,.5)+UP*h*.015
-                        g.tube([fork,mid,twig],[h*.0025,h*.0014,h*.00045],0,5)
-                        for node in range(1 if idx==205 else 2 if idx==206 else 3):
-                            p=fork.lerp(twig,.25+node*.27)
-                            for sign in [-1,1]:leaf(p,heading+sign*1.1,ll*.85,material=2 if node==2 else 1)
-                        points.append((twig,Vector((math.cos(heading),math.sin(heading),.3)).normalized()))
-                        g.attachment_paths.append([fork,mid,twig])
-        return g,points
+        from flower_bush_geometry import bush_foliage
+        return bush_foliage(row,phase)
     bulb=idx in [173,174,175,176,177,178,179,180,181]
     basal=bulb or kind in ['strap','rosette','heart'] or idx in [170,171,172,190,196,197]
     if basal:
@@ -400,7 +405,6 @@ def foliage(row,phase='mature'):
 def mature(row):
     g,anchors=foliage(row);b=Geometry();buds=Geometry();h=row['height'];idx=row['id']
     count=row['flower_count'];r=row['bloom_radius'];centres=[]
-    if idx>=198 and idx not in [201,207,211]:count=round(count*(3.5 if idx==205 else 1.8))
     hanging=idx in [174,177,179,189,194,200,212,214]
     spikes=idx in [155,157,176,177,182,184,192,194,200,210]
     if idx<158:
@@ -420,17 +424,8 @@ def mature(row):
                 c=p+offset;g.tube([p,c],[max(.0005,h*.004),.0004],0,6)
                 centres.append((c,Vector((math.cos(a),math.sin(a),.20))))
     elif idx>=198:
-        for k in range(count):
-            anchor_index=(k*37)%len(anchors)
-            tip,axis=anchors[anchor_index]
-            # Alternate branch-tip clusters and axillary blooms on actual twigs.
-            layer=k//len(anchors)
-            path=g.attachment_paths[anchor_index]
-            attachment=tip if layer==0 else path[1].lerp(tip,max(.25,.80-(layer-1)*.20))
-            angle=k*2.39996;offset=Vector((math.cos(angle)*r*.40,math.sin(angle)*r*.40,0))
-            flower_stalk=h*(.055 if idx in [199,200,201,207,210,211,213] else .025)
-            c=attachment+axis*(flower_stalk+r*.65)+UP*flower_stalk*.25+offset;g.tube([attachment,c],[max(.0005,h*.002),.0004],0,5)
-            centres.append((c,-UP if hanging else axis))
+        from flower_bush_geometry import bush_blooms
+        centres=bush_blooms(row,g,anchors)
     else:
         for k in range(count):
             tip,axis=anchors[k%len(anchors)];a=(k%len(anchors))*2.39996 if idx==177 else k*2.39996
@@ -456,17 +451,32 @@ def mature(row):
             g.tube([start,(start+c)*.5+UP*r*.13,c],[max(.0004,h*.004),max(.0003,h*.002),.00035],0,5)
             centres.append((c,axis))
     b.fruit_anchors={};buds.fruit_anchors={}
-    for c,axis in centres:
+    for placement in centres:
+        c,axis=placement[:2]
+        r=placement[2] if len(placement)==3 else row['bloom_radius']
         first=len(b.v);first_bud=len(buds.v)
-        flower(row,b,c,axis)
+        flower(row,b,c,axis,r)
         b.fruit_anchors.update({i:tuple(c) for i in range(first,len(b.v))})
         n=Vector(axis).normalized()
-        # Buds have green sepals and a closed pigment tip at the bloom attachment.
-        centre=c+n*r*.13
-        buds.ellipsoid(centre,(r*.18,r*.18,r*.32),0,4,8)
-        for k in range(4):
-            a=k*TAU/4;u,v,_=frame(axis)
-            buds.leaf(c,c+(u*math.cos(a)+v*math.sin(a)+n*1.8)*r*.22,r*.06,1,.10,4)
+        # Compound flower heads retain their silhouettes while their florets are closed.
+        if idx in [201,210]:
+            if idx==201:
+                for k in range(18):
+                    z=1-2*(k+.5)/18;a=k*2.39996;reach=math.sqrt(1-z*z)
+                    place=c+Vector((math.cos(a)*reach,math.sin(a)*reach,z))*r*.68
+                    buds.ellipsoid(place,(r*.10,)*3,1,2,5)
+            else:
+                buds.tube([c-n*r*1.7,c+n*r*1.7],[r*.07,r*.03],1,4)
+                u,v,_=frame(axis)
+                for k in range(14):
+                    a=k*2.39996;place=c+n*r*(-1.5+3*(k+.5)/14)+(u*math.cos(a)+v*math.sin(a))*r*.28
+                    buds.ellipsoid(place,(r*.13,r*.13,r*.21),0,2,5)
+        else:
+            centre=c+n*r*.13
+            buds.ellipsoid(centre,(r*.18,r*.18,r*.32),0,3 if idx>=198 else 4,6 if idx>=198 else 8)
+            for k in range(2 if idx>=198 else 4):
+                a=k*TAU/(2 if idx>=198 else 4);u,v,_=frame(axis)
+                buds.leaf(c,c+(u*math.cos(a)+v*math.sin(a)+n*1.8)*r*.22,r*.06,1,.10,3 if idx>=198 else 4)
         buds.fruit_anchors.update({i:tuple(c) for i in range(first_bud,len(buds.v))})
     assert g.v and b.v and buds.v,row['name']
     # One metre-based envelope shared by full foliage, flowers and closed buds.

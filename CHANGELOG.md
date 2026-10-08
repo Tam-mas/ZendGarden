@@ -1,3 +1,13 @@
+### [2026-10-08 14:10] Changed
+
+**Tech:** `flower_bush_geometry`, `build_flower_additions`, `GardenUpdates` — distinct flowering-bush habits and foliage
+
+**Dev:** Replace the shared upright shrub framework for IDs 198–217 with species-specific woody habits: dense low crowns, layered evergreens, broad lobed-leaf crowns, arching canes, cascading spirea, thorned quince and fine native twigs. Model simple, opposite, crossing-paired, ternate and pinnate leaves with different dimensions, densities and pigments; give pieris coppery young tips and keep forsythia/quince sparsely leafed during blossom. Place branch-bound bouquets, hanging urn chains, complete hebe racemes, sterile viburnum heads, fuchsia pendants, rusty abelia calyces and flowers along older wood. Keep compound bud silhouettes and local bloom-opening anchors. Extend leafy growth along arching canes; use simpler tiny organs and petioles to retain existing geometry limits. Re-export twenty mature and twenty growth GLBs through Blender MCP, retain the complete seventy-plant packed source library, and refresh twenty WebP selection portraits. Add a shrub-only source rebuild that preserves the fifty other families, source notes, player release 55 and exported botanical-contrast checks in local/browser workflows. All 218 mature/growth assets pass height, PBR, attachment and geometry-budget checks; verify the other 594 model/portrait files and all non-bush records and authored heights are unchanged. The complete source retains 350 editable meshes and 638 packed images. Focused collection, growth, save, player-update and plant-model regressions pass. Review all twenty shrubs and all five stages in Compatibility. Ten representative shrubs and all their stages also pass native Forward+ rendering with no shader or script errors.
+
+**Plain:** The twenty flowering bushes now have their own shapes, foliage and flower displays, from cascading spirea and bare yellow canes to coppery pieris tips, dense hebe leaves and grey-green correa.
+
+**Why:** Distinct botanical habits give players more ways to build varied, layered gardens.
+
 ### [2026-10-08 12:42] Added
 
 **Tech:** `GardenCatalogue`, `GardenSeedCollection`, `GardenPlantGrowth` — seventy flowering plants, collection navigation and mature-height ordering

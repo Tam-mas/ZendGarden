@@ -600,3 +600,30 @@ Scientific model: **Eremophila maculata**. Authored mature height: **1.50 m**. F
 Dense twiggy shrub with small alternate lanceolate leaves. Red-orange tubular flowers have a spotted pale interior, curved swollen tube, two upper lobes and three lower lobes; stamens project from the mouth. Young leaves and branches precede curved buds and open tubes. Dry pointed fruits follow flowers.
 
 Sources: [Reference 1](https://anpsa.org.au/plant_profiles/eremophila-maculata/), [Reference 2](https://anbg.gov.au/photo/apii/id/a/30785).
+
+## Shrub habit revision — 8 October 2026
+
+The twenty bushes use species-specific woody frameworks, leaf blades and flower positions in `flower_bush_geometry.py`. Botanical identities and the references above remain authoritative. Mature height, catalogue IDs and saved growth values stay stable.
+
+- Hibiscus: upright broad leaves and large isolated coral flowers.
+- Daphne: dense low evergreen dome with crowded terminal foliage and small pink bouquets.
+- Pieris: layered branches, coppery tip leaves and branched chains of white urns.
+- Snowball viburnum: broad crown, lobed opposite leaves and rounded terminal heads.
+- Mock orange: tall open arching canes, opposite toothed leaves and short white clusters.
+- Weigela: wide arching stems with grouped pink trumpets.
+- Deutzia: low arching mound with narrow leaves and short white racemes.
+- Forsythia: a yellow fountain flowering along nearly bare canes.
+- Flowering quince: irregular thorned framework, sparse emerging leaves and coral flowers close to wood.
+- Spirea: wide cascading canes lined with white corymbs.
+- Abelia: airy arching reddish twigs, small leaves and persistent rusty calyces.
+- Escallonia: dense upright evergreen crown with deep pink terminal clusters.
+- Hebe: a broad cushion with crossing pairs of fleshy oval leaves and complete purple racemes.
+- Ceanothus: broad blue-flowering canopy over small dark leaves.
+- Hardy fuchsia: arching red stems with separate hanging red-and-purple flowers.
+- Choisya: rounded evergreen canopy with three-leaflet leaves and white flower bouquets.
+- Correa: spreading grey-green opposite leaves and hanging red-and-green tubes.
+- Boronia: slender fine compound foliage and pink four-petalled stars.
+- Tea-tree: upright fine twigs, small pointed leaves and pink blossoms close to the wood.
+- Emu bush: a wide hemispherical canopy with narrow muted leaves and curved orange-red tubes.
+
+Seedling and juvenile frameworks use the same species habits at their own growth scales. Blooms and buds keep local attachment data. The source builder can replace bushes alone while retaining every other mesh in the complete seventy-plant editable library.
