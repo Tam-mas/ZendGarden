@@ -103,7 +103,7 @@ static func plant(data: Dictionary, decorative: bool = false) -> Node3D:
 
 static func add_leaf_wind(node: Node) -> void:
  if node is MeshInstance3D:
-  var anchored=str(node.name).begins_with("BloomFruit") or str(node.name).begins_with("BudsFruit")
+  var anchored=str(node.name).begins_with("BloomFruit") or str(node.name).begins_with("BudsFruit") or str(node.name).begins_with("BloomFlower") or str(node.name).begins_with("BudsFlower")
   var fruit_growth=float(node.get_meta("fruit_growth",1.0)) if anchored else 1.0
   for surface in range(node.mesh.get_surface_count()):
    var original=node.mesh.surface_get_material(surface)

@@ -1034,5 +1034,565 @@
     "family": "low_grass",
     "height": 0.1263,
     "triangles": 5470
+  },
+  {
+    "id": 148,
+    "name": "Cattleya orchid",
+    "family": "strap",
+    "height": 0.5,
+    "triangles": 1072,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 149,
+    "name": "Slipper orchid",
+    "family": "strap",
+    "height": 0.3,
+    "triangles": 1024,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 150,
+    "name": "Dancing-lady orchid",
+    "family": "strap",
+    "height": 1.0,
+    "triangles": 5232,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 151,
+    "name": "Pansy orchid",
+    "family": "strap",
+    "height": 0.45,
+    "triangles": 2032,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 152,
+    "name": "Blue Vanda orchid",
+    "family": "strap",
+    "height": 1.2,
+    "triangles": 2104,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 153,
+    "name": "Zygopetalum orchid",
+    "family": "strap",
+    "height": 0.6,
+    "triangles": 2032,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 154,
+    "name": "Spider orchid",
+    "family": "strap",
+    "height": 0.6,
+    "triangles": 2288,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 155,
+    "name": "Australian rock orchid",
+    "family": "strap",
+    "height": 0.75,
+    "triangles": 6832,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 156,
+    "name": "Bee orchid",
+    "family": "rosette",
+    "height": 0.35,
+    "triangles": 1264,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 157,
+    "name": "Early purple orchid",
+    "family": "rosette",
+    "height": 0.4,
+    "triangles": 4560,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 158,
+    "name": "Cornflower",
+    "family": "alternate",
+    "height": 0.75,
+    "triangles": 2098,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 159,
+    "name": "Corncockle",
+    "family": "opposite",
+    "height": 0.9,
+    "triangles": 1810,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 160,
+    "name": "Red campion",
+    "family": "opposite",
+    "height": 0.7,
+    "triangles": 2738,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 161,
+    "name": "Ragged robin",
+    "family": "opposite",
+    "height": 0.6,
+    "triangles": 2482,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 162,
+    "name": "Meadow cranesbill",
+    "family": "lobed",
+    "height": 0.75,
+    "triangles": 5810,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 163,
+    "name": "Field scabious",
+    "family": "lobed",
+    "height": 0.8,
+    "triangles": 5426,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 164,
+    "name": "Yarrow",
+    "family": "fern",
+    "height": 0.65,
+    "triangles": 3826,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 165,
+    "name": "Purple coneflower",
+    "family": "alternate",
+    "height": 1.0,
+    "triangles": 2034,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 166,
+    "name": "Black-eyed Susan",
+    "family": "alternate",
+    "height": 0.8,
+    "triangles": 1970,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 167,
+    "name": "Blanket flower",
+    "family": "alternate",
+    "height": 0.6,
+    "triangles": 2098,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 168,
+    "name": "Flannel flower",
+    "family": "lobed",
+    "height": 0.6,
+    "triangles": 5298,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 169,
+    "name": "Strawflower",
+    "family": "alternate",
+    "height": 0.75,
+    "triangles": 2226,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 170,
+    "name": "Australian blue pincushion",
+    "family": "rosette",
+    "height": 0.3,
+    "triangles": 1276,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 171,
+    "name": "Chocolate lily",
+    "family": "strap",
+    "height": 0.7,
+    "triangles": 2444,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 172,
+    "name": "Fringed lily",
+    "family": "strap",
+    "height": 0.5,
+    "triangles": 1932,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 173,
+    "name": "Daffodil",
+    "family": "strap",
+    "height": 0.4,
+    "triangles": 1292,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 174,
+    "name": "Snowdrop",
+    "family": "strap",
+    "height": 0.18,
+    "triangles": 1276,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 175,
+    "name": "Crocus",
+    "family": "strap",
+    "height": 0.1,
+    "triangles": 1404,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 176,
+    "name": "Hyacinth",
+    "family": "strap",
+    "height": 0.3,
+    "triangles": 5260,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 177,
+    "name": "English bluebell",
+    "family": "strap",
+    "height": 0.4,
+    "triangles": 3212,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 178,
+    "name": "Giant ornamental allium",
+    "family": "strap",
+    "height": 1.5,
+    "triangles": 1036,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 179,
+    "name": "Lily of the valley",
+    "family": "strap",
+    "height": 0.25,
+    "triangles": 2908,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 180,
+    "name": "Ranunculus",
+    "family": "lobed",
+    "height": 0.4,
+    "triangles": 3724,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 181,
+    "name": "Windflower",
+    "family": "lobed",
+    "height": 0.35,
+    "triangles": 3628,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 182,
+    "name": "Snapdragon",
+    "family": "opposite",
+    "height": 0.8,
+    "triangles": 3506,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 183,
+    "name": "Sweet William",
+    "family": "opposite",
+    "height": 0.45,
+    "triangles": 1586,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 184,
+    "name": "Stock",
+    "family": "alternate",
+    "height": 0.6,
+    "triangles": 4018,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 185,
+    "name": "Love-in-a-mist",
+    "family": "fern",
+    "height": 0.45,
+    "triangles": 4082,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 186,
+    "name": "Calendula",
+    "family": "alternate",
+    "height": 0.45,
+    "triangles": 2226,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 187,
+    "name": "Zinnia",
+    "family": "opposite",
+    "height": 0.75,
+    "triangles": 2098,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 188,
+    "name": "Columbine",
+    "family": "compound",
+    "height": 0.7,
+    "triangles": 2866,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 189,
+    "name": "Bleeding heart",
+    "family": "compound",
+    "height": 0.8,
+    "triangles": 5490,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 190,
+    "name": "Hellebore",
+    "family": "compound",
+    "height": 0.45,
+    "triangles": 4572,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 191,
+    "name": "Astilbe",
+    "family": "compound",
+    "height": 0.75,
+    "triangles": 3826,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 192,
+    "name": "Penstemon",
+    "family": "opposite",
+    "height": 0.9,
+    "triangles": 3858,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 193,
+    "name": "Tall garden phlox",
+    "family": "opposite",
+    "height": 1.0,
+    "triangles": 5746,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 194,
+    "name": "Canterbury bells",
+    "family": "alternate",
+    "height": 0.85,
+    "triangles": 3090,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 195,
+    "name": "Oriental lily",
+    "family": "alternate",
+    "height": 0.9,
+    "triangles": 1682,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 196,
+    "name": "Sweet violet",
+    "family": "heart",
+    "height": 0.15,
+    "triangles": 1660,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 197,
+    "name": "Lady's mantle",
+    "family": "lobed",
+    "height": 0.45,
+    "triangles": 1516,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 198,
+    "name": "Tropical hibiscus",
+    "family": "woody",
+    "height": 2.0,
+    "triangles": 5252,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 199,
+    "name": "Daphne",
+    "family": "woody",
+    "height": 1.4,
+    "triangles": 9220,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 200,
+    "name": "Japanese pieris",
+    "family": "woody",
+    "height": 2.0,
+    "triangles": 13316,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 201,
+    "name": "Snowball viburnum",
+    "family": "woody",
+    "height": 2.5,
+    "triangles": 4740,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 202,
+    "name": "Mock orange",
+    "family": "woody",
+    "height": 2.4,
+    "triangles": 6916,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 203,
+    "name": "Weigela",
+    "family": "woody",
+    "height": 2.0,
+    "triangles": 8324,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 204,
+    "name": "Deutzia",
+    "family": "woody",
+    "height": 1.2,
+    "triangles": 10116,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 205,
+    "name": "Forsythia",
+    "family": "woody",
+    "height": 2.2,
+    "triangles": 16772,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 206,
+    "name": "Flowering quince",
+    "family": "woody",
+    "height": 2.2,
+    "triangles": 7428,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 207,
+    "name": "Spirea",
+    "family": "woody",
+    "height": 2.0,
+    "triangles": 3460,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 208,
+    "name": "Abelia",
+    "family": "woody",
+    "height": 1.6,
+    "triangles": 8708,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 209,
+    "name": "Escallonia",
+    "family": "woody",
+    "height": 2.0,
+    "triangles": 10116,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 210,
+    "name": "Hebe",
+    "family": "woody",
+    "height": 1.2,
+    "triangles": 11908,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 211,
+    "name": "Ceanothus",
+    "family": "woody",
+    "height": 2.2,
+    "triangles": 3716,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 212,
+    "name": "Hardy fuchsia",
+    "family": "woody",
+    "height": 1.6,
+    "triangles": 6916,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 213,
+    "name": "Mexican orange blossom",
+    "family": "woody",
+    "height": 1.8,
+    "triangles": 8836,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 214,
+    "name": "Correa",
+    "family": "woody",
+    "height": 1.2,
+    "triangles": 6020,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 215,
+    "name": "Pink boronia",
+    "family": "woody",
+    "height": 1.5,
+    "triangles": 14340,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 216,
+    "name": "Flowering tea-tree",
+    "family": "woody",
+    "height": 2.0,
+    "triangles": 10628,
+    "source": "art_source/flower_additions.blend"
+  },
+  {
+    "id": 217,
+    "name": "Spotted emu bush",
+    "family": "woody",
+    "height": 1.5,
+    "triangles": 6660,
+    "source": "art_source/flower_additions.blend"
   }
 ]

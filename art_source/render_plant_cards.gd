@@ -64,6 +64,17 @@ func render_cards() -> void:
   if review and "--portraits" in OS.get_cmdline_user_args():
    portrait.resize(192,192,Image.INTERPOLATE_LANCZOS)
    GardenArt.save_card(portrait,"res://assets/ui/plants/%02d"%plant.id)
+  if "--stages" in OS.get_cmdline_user_args():
+   var stage_directory="res://captures/flower-stages"
+   DirAccess.make_dir_recursive_absolute(stage_directory)
+   var stages=[.10,.35,.65,.85,1.0]
+   for stage_index in range(stages.size()):
+    var root_scale=Vector3.ONE*lerpf(.12,1.0,stages[stage_index])
+    model.scale=root_scale
+    GardenPlantGrowth.apply(model,plant,stages[stage_index],812+plant.id,root_scale)
+    await process_frame
+    await RenderingServer.frame_post_draw
+    viewport.get_texture().get_image().save_png(stage_directory+"/%02d-%d.png"%[plant.id,stage_index])
   viewport.remove_child(model)
   model.queue_free()
  print("PLANT_CARD_RENDER: PASS — %d model portraits" % rendered)

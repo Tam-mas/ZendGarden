@@ -67,7 +67,7 @@ var favourite_plants: Array=[]
 var recent_plants: Array=[]
 
 func default_collection_filters() -> Dictionary:
- return {"view":"All plants","season":"Any season","light":"Any light","height":"Any height","colour":"Any colour","wildlife":"Any wildlife","sort":"Catalogue"}
+ return {"group":"All collections","view":"All plants","season":"Any season","light":"Any light","height":"Any height","colour":"Any colour","wildlife":"Any wildlife","sort":"Catalogue"}
 
 var active_tab = "Seeds"
 var mode = "walk"

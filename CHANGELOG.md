@@ -1,3 +1,13 @@
+### [2026-10-08 12:42] Added
+
+**Tech:** `GardenCatalogue`, `GardenSeedCollection`, `GardenPlantGrowth` — seventy flowering plants, collection navigation and mature-height ordering
+
+**Dev:** Append IDs 148–217: ten orchids, fifteen wildflowers, twenty-five cottage flowers and twenty flowering bushes. Record botanical identities, source photographs and stage traits; generate 140 self-contained GLBs through Blender MCP and retain 350 editable organ meshes in a compressed, packed Blender library. Author independent seedlings, juvenile foliage and buds, with flowers opening around their own attachments. Correct Blender 4.0 custom-data handle invalidation when adding anchor UV and colour layers; keep original exports and all 148 legacy records and heights unchanged. Generate three imagegen tissue maps with recorded prompts, store the source maps and seventy model portraits as WebP, and keep imported textures embedded without extracted duplicates. Add nine collection sections and both height-sort directions across all 218 selectable plants, including stable ties, recent choices and legacy Height preferences. Keep navigation outside the detailed filters and collapse phone categories for more card space. Refresh dense-garden batches when attached buds or flowers change size. Add player release 54, guide notes, rebuild preservation and focused asset/runtime coverage to the local and browser workflows. All 218 mature/growth exports pass geometry and PBR checks; the new collection passes identity, height, anchor precision, stage, batch, sorting and save restoration checks. Existing plant-model, preview, improvement, player-update and save-file checks pass. Review all seventy plants and five stages in Compatibility, plus eight representative plants and stages in Forward+. The new source library passes read-only Blender validation with all images packed. Full interactive gameplay regression could not complete within practical time under software rendering; headless gameplay input checks require captured mouse support and are not treated as passes.
+
+**Plain:** Choose seventy more flowering plants, browse orchids, wildflowers, cottage flowers and bushes, and sort the whole seed collection by height to plan layered planting.
+
+**Why:** More recognisable botanical forms and clearer browsing make it easier to build varied flower gardens.
+
 ### [2026-10-07 20:47] Changed
 
 **Tech:** `GardenAreaTransitions`, `GardenWater`, `GardenWorldLighting`, `Landscape.meadow` — clear garden entrances, continuous grass and responsive water

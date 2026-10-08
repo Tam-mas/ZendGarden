@@ -10,5 +10,5 @@ for index in range(136,148):
     assert any((ROOT/f'assets/ui/plants/{index}.{suffix}').exists() for suffix in ['png','webp'])
     assert (ROOT/f'assets/plants/plant_{index}.glb').is_file()
     assert (ROOT/f'assets/plants/growth/growth_{index}.glb').is_file()
-assert len(set(row[0] for row in specs))==148
+assert len(set(row[0] for row in specs))==218
 print('LOW_GRASSES_CHECK: PASS — twelve distinct short, creeping and grass-like plants')

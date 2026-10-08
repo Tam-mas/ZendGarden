@@ -2,6 +2,7 @@ class_name GardenCatalogue
 extends RefCounted
 
 const CATEGORIES = ["Flowers", "Grasses", "Shrubs", "Trees", "Natives", "Produce", "Cacti & succulents"]
+const COLLECTION_GROUPS = ["Orchids", "Wildflowers", "Cottage flowers", "Flowering bushes", "Grasses & groundcovers", "Trees", "Australian natives", "Fruit & vegetables", "Cacti & succulents"]
 const ROWS = [
  ["Cosmos", "Flowers", "efb0ba", 1, 2, "sun", "butterflies"],
  ["Lavender", "Flowers", "a894cc", 1, 3, "sun", "bees"],
@@ -150,13 +151,436 @@ const ROWS = [
  ["Blue moor grass", "Grasses", "82aaa4", 0, 7, "any", "birds"],
  ["Evergold sedge", "Grasses", "d5cd8b", 0, 7, "shade", "birds"],
  ["Snowline sedge", "Grasses", "cad7bd", 0, 7, "shade", "birds"],
- ["Dwarf golden sweet flag", "Grasses", "c2bb65", 0, 7, "water", "birds"]
+ ["Dwarf golden sweet flag", "Grasses", "c2bb65", 0, 7, "water", "birds"],
+ ["Cattleya orchid", "Flowers", "c477ca", 1, 14, "any", "bees"],
+ ["Slipper orchid", "Flowers", "c5a452", 1, 14, "shade", "bees"],
+ ["Dancing-lady orchid", "Flowers", "edc632", 1, 14, "any", "bees"],
+ ["Pansy orchid", "Flowers", "dd90b8", 1, 14, "shade", "bees"],
+ ["Blue Vanda orchid", "Flowers", "839acf", 1, 14, "any", "bees"],
+ ["Zygopetalum orchid", "Flowers", "a99b53", 1, 14, "any", "bees"],
+ ["Spider orchid", "Flowers", "bec37e", 1, 14, "any", "bees"],
+ ["Australian rock orchid", "Flowers", "f3e5b0", 1, 14, "any", "bees"],
+ ["Bee orchid", "Flowers", "ca8cbb", 1, 14, "sun", "bees"],
+ ["Early purple orchid", "Flowers", "a448b5", 1, 14, "any", "bees"],
+ ["Cornflower", "Flowers", "416cbd", 1, 8, "sun", "butterflies"],
+ ["Corncockle", "Flowers", "c65ba4", 1, 8, "sun", "butterflies"],
+ ["Red campion", "Flowers", "d34b85", 1, 9, "any", "bees"],
+ ["Ragged robin", "Flowers", "d981ac", 1, 9, "sun", "butterflies"],
+ ["Meadow cranesbill", "Flowers", "7d81ca", 1, 11, "sun", "bees"],
+ ["Field scabious", "Flowers", "b095cb", 1, 10, "sun", "butterflies"],
+ ["Yarrow", "Flowers", "f0e9d3", 1, 10, "sun", "butterflies"],
+ ["Purple coneflower", "Flowers", "c87aaa", 1, 12, "sun", "butterflies"],
+ ["Black-eyed Susan", "Flowers", "ebba32", 1, 9, "sun", "butterflies"],
+ ["Blanket flower", "Flowers", "c7543b", 1, 9, "sun", "butterflies"],
+ ["Flannel flower", "Flowers", "eeeadd", 1, 11, "sun", "bees"],
+ ["Strawflower", "Flowers", "dfa047", 1, 8, "sun", "butterflies"],
+ ["Australian blue pincushion", "Flowers", "798bc8", 1, 9, "sun", "butterflies"],
+ ["Chocolate lily", "Flowers", "a882bb", 1, 10, "any", "bees"],
+ ["Fringed lily", "Flowers", "b574bc", 1, 10, "sun", "bees"],
+ ["Daffodil", "Flowers", "ead04d", 1, 7, "any", "bees"],
+ ["Snowdrop", "Flowers", "f4f2e8", 1, 6, "shade", "bees"],
+ ["Crocus", "Flowers", "9274bd", 1, 6, "sun", "bees"],
+ ["Hyacinth", "Flowers", "a989cb", 1, 7, "any", "bees"],
+ ["English bluebell", "Flowers", "6a72b7", 1, 8, "shade", "bees"],
+ ["Giant ornamental allium", "Flowers", "a577c3", 1, 11, "sun", "bees"],
+ ["Lily of the valley", "Flowers", "f0eee5", 1, 8, "shade", "bees"],
+ ["Ranunculus", "Flowers", "e8a5a8", 1, 9, "sun", "bees"],
+ ["Windflower", "Flowers", "c05671", 1, 8, "sun", "bees"],
+ ["Snapdragon", "Flowers", "d76a90", 1, 9, "sun", "bees"],
+ ["Sweet William", "Flowers", "bc4e73", 1, 9, "sun", "butterflies"],
+ ["Stock", "Flowers", "c098c5", 1, 9, "sun", "bees"],
+ ["Love-in-a-mist", "Flowers", "92b0d0", 1, 8, "sun", "bees"],
+ ["Calendula", "Flowers", "de9134", 1, 7, "sun", "bees"],
+ ["Zinnia", "Flowers", "dc6687", 1, 8, "sun", "butterflies"],
+ ["Columbine", "Flowers", "8b75b1", 1, 11, "any", "bees"],
+ ["Bleeding heart", "Flowers", "d581a4", 1, 11, "shade", "butterflies"],
+ ["Hellebore", "Flowers", "ae829a", 1, 12, "shade", "bees"],
+ ["Astilbe", "Flowers", "c990b5", 1, 11, "shade", "bees"],
+ ["Penstemon", "Flowers", "eee1e2", 1, 11, "sun", "bees"],
+ ["Tall garden phlox", "Flowers", "c485b3", 1, 12, "sun", "butterflies"],
+ ["Canterbury bells", "Flowers", "9786c1", 1, 10, "any", "bees"],
+ ["Oriental lily", "Flowers", "d58ca3", 1, 11, "sun", "butterflies"],
+ ["Sweet violet", "Flowers", "9472b6", 1, 8, "shade", "bees"],
+ ["Lady's mantle", "Flowers", "c4c768", 1, 10, "any", "bees"],
+ ["Tropical hibiscus", "Shrubs", "dd735f", 2, 18, "sun", "butterflies"],
+ ["Daphne", "Shrubs", "d7a9b9", 2, 18, "any", "butterflies"],
+ ["Japanese pieris", "Shrubs", "eee8dc", 2, 20, "shade", "bees"],
+ ["Snowball viburnum", "Shrubs", "eee9d7", 2, 20, "any", "bees"],
+ ["Mock orange", "Shrubs", "f2ead6", 2, 20, "sun", "bees"],
+ ["Weigela", "Shrubs", "d17f9b", 2, 18, "sun", "bees"],
+ ["Deutzia", "Shrubs", "f1ecdf", 2, 16, "any", "bees"],
+ ["Forsythia", "Shrubs", "e8c34b", 2, 18, "sun", "bees"],
+ ["Flowering quince", "Shrubs", "cb6b6b", 2, 20, "sun", "bees"],
+ ["Spirea", "Shrubs", "eee9df", 2, 18, "sun", "bees"],
+ ["Abelia", "Shrubs", "dfb6bd", 2, 17, "sun", "butterflies"],
+ ["Escallonia", "Shrubs", "c76a8e", 2, 18, "sun", "bees"],
+ ["Hebe", "Shrubs", "b178ab", 2, 16, "sun", "butterflies"],
+ ["Ceanothus", "Shrubs", "688abf", 2, 19, "sun", "bees"],
+ ["Hardy fuchsia", "Shrubs", "c96d95", 2, 17, "any", "bees"],
+ ["Mexican orange blossom", "Shrubs", "f0ead9", 2, 18, "any", "bees"],
+ ["Correa", "Natives", "be7b70", 2, 16, "any", "native birds"],
+ ["Pink boronia", "Natives", "d594b8", 2, 17, "any", "bees"],
+ ["Flowering tea-tree", "Natives", "e0afb8", 2, 18, "sun", "bees"],
+ ["Spotted emu bush", "Natives", "bd715d", 2, 17, "sun", "native birds"]
 ]
 
 # Ideal watered growing days, not calendar deadlines. Twelve days form a season.
-const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16,7,7,7,7,7,7,7,7,7,7,7,7]
+const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16,7,7,7,7,7,7,7,7,7,7,7,7,14,14,14,14,14,14,14,14,14,14,8,8,9,9,11,10,10,12,9,9,11,8,9,10,10,7,6,6,7,8,11,8,9,8,9,9,9,8,7,8,11,11,12,11,11,12,10,11,8,10,18,18,20,20,20,18,16,18,20,18,17,18,16,19,17,18,16,17,18,17]
 const SEASONAL={0:["Spring","Summer"],3:["Summer"],4:["Spring","Summer"],6:["Spring"],7:["Spring","Summer"],8:["Spring"],9:["Spring"],11:["Spring","Summer"],21:["Spring"],23:["Autumn","Winter","Spring"],24:["Spring","Summer"],28:["Spring","Summer"],30:["Spring","Summer","Autumn"],33:["Spring","Summer"],35:["Spring","Summer","Autumn"],38:["Winter","Spring"],47:["Summer"],48:["Spring","Autumn","Winter"],49:["Summer","Autumn"],50:["Spring","Summer"],52:["Spring","Autumn"],53:["Summer"],54:["Spring","Summer"],55:["Summer"],56:["Summer"],57:["Summer"],58:["Spring","Autumn"],59:["Summer"],60:["Spring", "Summer"],61:["Spring"],62:["Winter", "Spring"],63:["Summer", "Autumn"],64:["Spring"],65:["Spring", "Summer"],66:["Spring", "Summer"],67:["Summer"],73:["Spring", "Summer", "Autumn"],74:["Spring", "Summer", "Autumn"],75:["Spring", "Summer", "Autumn"],76:["Spring", "Summer", "Autumn"],77:["Spring", "Summer", "Autumn"],82:["Summer", "Autumn"],83:["Summer", "Autumn"],84:["Summer"],85:["Summer"],86:["Summer"],87:["Summer"],94:["Summer"],95:["Spring"],96:["Spring", "Summer"],97:["Spring", "Summer"],98:["Spring", "Summer"],99:["Spring"],100:["Spring", "Autumn", "Winter"],101:["Spring", "Autumn", "Winter"],102:["Summer"],103:["Autumn", "Winter"],104:["Spring", "Autumn", "Winter"],105:["Spring", "Summer"],106:["Spring","Summer","Autumn"],107:["Spring","Summer","Autumn"],108:["Spring","Summer","Autumn"],110:["Spring","Summer","Autumn"],111:["Spring","Summer","Autumn"],113:["Spring","Summer","Autumn"],115:["Spring","Summer","Autumn"],116:["Spring","Summer","Autumn"],117:["Spring","Summer","Autumn"],118:["Spring","Summer","Autumn"],119:["Spring","Summer","Autumn"],120:["Spring","Summer","Autumn"],121:["Spring","Summer","Autumn"],122:["Spring","Summer","Autumn"],124:["Spring","Summer","Autumn"],125:["Spring","Summer","Autumn"],127:["Spring","Summer","Autumn"],128:["Spring","Summer","Autumn"],129:["Spring","Summer","Autumn"],130:["Spring","Summer","Autumn"],131:["Spring","Summer","Autumn"],132:["Spring","Summer","Autumn"],134:["Spring","Summer","Autumn"],135:["Spring","Summer","Autumn"],123:["Autumn","Winter","Spring"],133:["Autumn","Winter","Spring"]}
 const BOTANICAL_NAMES={106: "Miscanthus sinensis 'Zebrinus'", 107: "Calamagrostis × acutiflora 'Karl Foerster'", 108: "Panicum virgatum 'Heavy Metal'", 109: "Hakonechloa macra 'Aureola'", 110: "Imperata cylindrica 'Red Baron'", 111: "Molinia caerulea subsp. arundinacea 'Transparent'", 112: "Deschampsia cespitosa", 113: "Briza media", 114: "Sesleria autumnalis", 115: "Muhlenbergia capillaris", 116: "Echinocactus grusonii", 117: "Opuntia microdasys", 118: "Opuntia ficus-indica", 119: "Pachycereus marginatus", 120: "Cephalocereus senilis", 121: "Mammillaria elongata", 122: "Astrophytum asterias", 123: "Schlumbergera truncata", 124: "Echeveria elegans", 125: "Echeveria agavoides 'Lipstick'", 126: "Sempervivum tectorum", 127: "Aloe vera", 128: "Agave americana", 129: "Haworthiopsis attenuata", 130: "Haworthia cooperi", 131: "Crassula ovata", 132: "Crassula ovata 'Gollum'", 133: "Aeonium 'Zwartkop'", 134: "Sedum × rubrotinctum", 135: "Lithops aucampiae", 136: "Ophiopogon japonicus 'Nana'", 137: "Ophiopogon planiscapus 'Nigrescens'", 138: "Zoysia tenuifolia", 139: "Bouteloua dactyloides", 140: "Agrostis stolonifera", 141: "Festuca rubra", 142: "Festuca ovina", 143: "Festuca gautieri", 144: "Sesleria caerulea", 145: "Carex oshimensis 'Evergold'", 146: "Carex conica 'Snowline'", 147: "Acorus gramineus 'Minimus Aureus'"}
+
+const FLOWER_METADATA={
+ "148": {
+  "botanical_name": "Cattleya labiata",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "149": {
+  "botanical_name": "Paphiopedilum insigne",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "150": {
+  "botanical_name": "Oncidium sphacelatum",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "151": {
+  "botanical_name": "Miltoniopsis vexillaria",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "152": {
+  "botanical_name": "Vanda coerulea",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "153": {
+  "botanical_name": "Zygopetalum maculatum",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "154": {
+  "botanical_name": "Brassia verrucosa",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "155": {
+  "botanical_name": "Dendrobium speciosum",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "156": {
+  "botanical_name": "Ophrys apifera",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "157": {
+  "botanical_name": "Orchis mascula",
+  "collection_group": "Orchids",
+  "attached_bloom": true
+ },
+ "158": {
+  "botanical_name": "Centaurea cyanus",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "159": {
+  "botanical_name": "Agrostemma githago",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "160": {
+  "botanical_name": "Silene dioica",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "161": {
+  "botanical_name": "Silene flos-cuculi",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "162": {
+  "botanical_name": "Geranium pratense",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "163": {
+  "botanical_name": "Knautia arvensis",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "164": {
+  "botanical_name": "Achillea millefolium",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "165": {
+  "botanical_name": "Echinacea purpurea",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "166": {
+  "botanical_name": "Rudbeckia hirta",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "167": {
+  "botanical_name": "Gaillardia aristata",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "168": {
+  "botanical_name": "Actinotus helianthi",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "169": {
+  "botanical_name": "Xerochrysum bracteatum",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "170": {
+  "botanical_name": "Brunonia australis",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "171": {
+  "botanical_name": "Arthropodium strictum",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "172": {
+  "botanical_name": "Thysanotus tuberosus",
+  "collection_group": "Wildflowers",
+  "attached_bloom": true
+ },
+ "173": {
+  "botanical_name": "Narcissus pseudonarcissus",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "174": {
+  "botanical_name": "Galanthus nivalis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "175": {
+  "botanical_name": "Crocus vernus 'Remembrance'",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "176": {
+  "botanical_name": "Hyacinthus orientalis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "177": {
+  "botanical_name": "Hyacinthoides non-scripta",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "178": {
+  "botanical_name": "Allium giganteum",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "179": {
+  "botanical_name": "Convallaria majalis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "180": {
+  "botanical_name": "Ranunculus asiaticus (double garden form)",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "181": {
+  "botanical_name": "Anemone coronaria",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "182": {
+  "botanical_name": "Antirrhinum majus",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "183": {
+  "botanical_name": "Dianthus barbatus",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "184": {
+  "botanical_name": "Matthiola incana (single-flowered form)",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "185": {
+  "botanical_name": "Nigella damascena",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "186": {
+  "botanical_name": "Calendula officinalis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "187": {
+  "botanical_name": "Zinnia elegans (double garden form)",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "188": {
+  "botanical_name": "Aquilegia vulgaris",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "189": {
+  "botanical_name": "Lamprocapnos spectabilis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "190": {
+  "botanical_name": "Helleborus orientalis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "191": {
+  "botanical_name": "Astilbe chinensis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "192": {
+  "botanical_name": "Penstemon digitalis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "193": {
+  "botanical_name": "Phlox paniculata",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "194": {
+  "botanical_name": "Campanula medium",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "195": {
+  "botanical_name": "Lilium 'Star Gazer' (Oriental hybrid)",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "196": {
+  "botanical_name": "Viola odorata",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "197": {
+  "botanical_name": "Alchemilla mollis",
+  "collection_group": "Cottage flowers",
+  "attached_bloom": true
+ },
+ "198": {
+  "botanical_name": "Hibiscus rosa-sinensis",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "199": {
+  "botanical_name": "Daphne odora",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "200": {
+  "botanical_name": "Pieris japonica",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "201": {
+  "botanical_name": "Viburnum opulus 'Roseum'",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "202": {
+  "botanical_name": "Philadelphus coronarius",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "203": {
+  "botanical_name": "Weigela florida",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "204": {
+  "botanical_name": "Deutzia gracilis",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "205": {
+  "botanical_name": "Forsythia x intermedia",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "206": {
+  "botanical_name": "Chaenomeles speciosa",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "207": {
+  "botanical_name": "Spiraea x vanhouttei",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "208": {
+  "botanical_name": "Abelia x grandiflora",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "209": {
+  "botanical_name": "Escallonia rubra",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "210": {
+  "botanical_name": "Veronica speciosa (syn. Hebe speciosa)",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "211": {
+  "botanical_name": "Ceanothus thyrsiflorus",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "212": {
+  "botanical_name": "Fuchsia magellanica",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "213": {
+  "botanical_name": "Choisya ternata",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "214": {
+  "botanical_name": "Correa reflexa",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "215": {
+  "botanical_name": "Boronia pinnata",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "216": {
+  "botanical_name": "Leptospermum scoparium",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ },
+ "217": {
+  "botanical_name": "Eremophila maculata",
+  "collection_group": "Flowering bushes",
+  "attached_bloom": true
+ }
+}
 
 static func saved_age(id: int, age: float, version: int) -> float:
  return age/float(ROWS[id][4])*GROWTH_DAYS[id] if version==1 else age
@@ -171,6 +595,10 @@ static func plants() -> Array:
   result.append({"id": i, "name": r[0], "category": r[1], "color": Color(r[2]), "layer": r[3], "days": GROWTH_DAYS[i], "seasons": SEASONAL.get(i,[]), "condition": r[5], "animal": r[6], "capacity": [1, 2, 4, 7][r[3]], "price": 8 + r[3] * 12 + (i % 4) * 3, "value": 7 + r[3] * 5, "climber": r[0] in ["Sweet pea", "Clematis", "Pea", "Cucumber", "Common jasmine", "Pink jasmine"]})
   result.back()["botanical_name"]=BOTANICAL_NAMES.get(i,"")
   result.back()["height"]=GardenPlantProfiles.HEIGHTS[i]
+  result.back()["collection_group"]={"Flowers":"Cottage flowers","Shrubs":"Flowering bushes","Grasses":"Grasses & groundcovers","Trees":"Trees","Natives":"Australian natives","Produce":"Fruit & vegetables","Cacti & succulents":"Cacti & succulents"}.get(r[1],"Cottage flowers")
+  if i in [0,2,7]:result.back()["collection_group"]="Wildflowers"
+  if FLOWER_METADATA.has(str(i)):
+   for key in FLOWER_METADATA[str(i)]:result.back()[key]=FLOWER_METADATA[str(i)][key]
  return result
 
 static func furnishings() -> Array:

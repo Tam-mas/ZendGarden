@@ -1,0 +1,34 @@
+{
+  "generator": "built-in image_gen.imagegen tool (default mode; not CLI/API)",
+  "generated_at": "2026-10-08",
+  "processing": "Pillow; center-crop to square then Lanczos resize to 512x512; WebP quality 88; no alpha present",
+  "textures": [
+    {
+      "name": "orchid_petal",
+      "prompt": "Use case: photorealistic-natural\nAsset type: seamless game UV base-color texture for 3D flower petals\nScene/backdrop: a single continuous, flat rectangular surface fully covered edge to edge\nSubject: neutral ivory orchid petal tissue, with fine translucent structure\nStyle/medium: highly realistic botanical macro texture, suitable for a realistic game model\nComposition/framing: orthographic flat-on surface, no perspective, no object silhouette; UV direction runs left-to-right across petal width and bottom-to-top from base to tip; faint soft veins radiate from the lower base and continue naturally\nLighting/mood: evenly exposed diffuse neutral light, flat illumination with no cast shadows, no specular glare\nColor palette: ivory and warm cream, subtle natural pale-yellow variation; sparse small warm magenta freckles only close to the lower base, fading quickly so most of the surface remains ivory\nMaterials/textures: delicate fine veins, subtle organic pigment variation, realistic petal cells at macro scale\nConstraints: texture must tile or at least have clean compatible edges; entire canvas is botanical tissue\nAvoid: photographed whole flowers, edges or outlines of petals, tabletop, background gaps, folds, perspective, deep shadows, labels, text, borders, watermark, dense magenta spotting across the whole image",
+      "source_path": "work/textures/orchid_petal.png",
+      "output_path": "assets/textures/flower_additions/orchid_petal.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 18110
+    },
+    {
+      "name": "orchid_sepal",
+      "prompt": "Use case: photorealistic-natural\nAsset type: seamless game UV base-color texture for realistic 3D orchid petals\nScene/backdrop: one continuous rectangular botanical surface filled edge to edge\nSubject: green-brown speckled orchid sepal tissue inspired by Zygopetalum and Paphiopedilum\nStyle/medium: highly realistic botanical macro texture for use on a game plant mesh\nComposition/framing: orthographic flat-on surface without a visible object outline; gentle UV direction from sepal base at bottom to tip at top; subtle fine veins spread from the bottom edge\nLighting/mood: evenly exposed diffuse neutral light, flat illumination with no cast shadows or glare\nColor palette: muted olive green, warm brown, and cream, with natural irregular darker speckles and small reticulated patches; balanced overall, no single huge blotch\nMaterials/textures: fine realistic plant cuticle, delicate veins, organic pigment variation\nConstraints: texture covers entire canvas; clean edges appropriate for UV application\nAvoid: photographed whole flowers or leaves, perspective, silhouettes, gaps/background, heavy shadows, text, labels, borders, watermark",
+      "source_path": "work/textures/orchid_sepal.png",
+      "output_path": "assets/textures/flower_additions/orchid_sepal.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 92378
+    },
+    {
+      "name": "leaf",
+      "prompt": "Use case: photorealistic-natural\nAsset type: seamless game UV base-color texture for realistic broad leaves on flowering plants and shrubs\nScene/backdrop: one continuous, flat rectangular surface filled edge to edge\nSubject: healthy medium green broadleaf tissue with a central midrib and branching secondary veins\nStyle/medium: realistic botanical macro texture for a game plant mesh, natural rather than glossy\nComposition/framing: orthographic flat-on leaf tissue, rectangular crop, no visible leaf edge or silhouette; midrib runs vertically from base at bottom to tip at top, fine branching veins curve outward evenly across the width\nLighting/mood: soft even diffuse neutral light, flat illumination with no cast shadows and no specular glare\nColor palette: layered natural greens, slightly lighter along midrib and veins, subtle darker field between veins\nMaterials/textures: fine cuticle grain, delicate branching venation, very subtle natural mottling\nConstraints: texture fills entire canvas, edges suitable for UV mapping\nAvoid: photographed whole leaves, flowers, stems, background gaps, perspective, hard shadows, dramatic highlights, text, labels, borders, watermark",
+      "source_path": "work/textures/leaf.png",
+      "output_path": "assets/textures/flower_additions/leaf.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 86434
+    }
+  ]
+}
