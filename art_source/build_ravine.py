@@ -10,6 +10,45 @@ sys.path.insert(0,str(ROOT/'art_source'))
 import build_distinct_areas as b
 import ravine_profile as r
 
+CASCADE_Z=(-83.,-57.,-28.,-4.)
+
+def ledge(G,parent,p,size,seed,mat=None,angle=.18):
+    """Weathered, bedded stone: a broad shoulder with a broken, bevelled rim.
+
+    The river uses the same granite as the garden walls, but horizontal fracture
+    planes distinguish it from the rounded garden boulders. Low-poly stones are
+    batched per reach rather than becoming hundreds of individual draw calls.
+    """
+    rng=random.Random(seed);vs=[];n=9
+    radius=[rng.uniform(.88,1.08) for _ in range(n)]
+    for ring,(scale,y) in enumerate([(.83,-.48),(1.,-.12),(.91,.25),(.62,.43)]):
+        for j in range(n):
+            a=math.tau*j/n;xx=math.cos(a)*size[0]*.5*radius[j]*scale;zz=math.sin(a)*size[2]*.5*radius[j]*scale
+            x=p[0]+xx*math.cos(angle)-zz*math.sin(angle);z=p[2]+xx*math.sin(angle)+zz*math.cos(angle)
+            bottom=p[1]+size[1]*(y+rng.uniform(-.045,.045))
+            # Keep the weathered shoulder horizontal, but extend its buried
+            # footing into the sampled slope at every lower-ring vertex.
+            # Burying only the centre leaves the downhill edge hovering.
+            if ring==0:bottom=min(bottom,r.ground(x,z)-.14)
+            vs.append((x,bottom,z))
+    faces=[tuple(range(n)),tuple(range(4*n-1,3*n-1,-1))]
+    for ring in range(3):
+        for j in range(n):faces.append((ring*n+j,(ring+1)*n+j,(ring+1)*n+(j+1)%n,ring*n+(j+1)%n))
+    G.poly(parent,mat or b.MATS['granite'],vs,faces)
+
+def botanical(parent,x,z,species='',plant_id=-1,scale=1.,angle=0.):
+    plant=b.pivot('RavineBotanical',parent,(x,r.ground(x,z)-.025,z),area_species=species,area_plant_id=plant_id)
+    plant.scale=(scale,scale,scale);plant.rotation_euler.z=angle
+    return plant
+
+def outlet_boulder(G,parent,p,size,seed):
+    """Retain rounded outlet shoulders while seating their underside in rock."""
+    stone=b.Geometry()
+    stone.ell(parent,b.MATS['granite'],p,size,seed=seed,rough=.3)
+    for (owner,material),(vertices,faces) in stone.groups.items():
+        grounded=[(x,min(y,r.ground(x,z)-.14) if y<=p[1]+.00001 else y,z) for x,y,z in vertices]
+        G.poly(owner,material,grounded,faces)
+
 def wedge(G,parent,mat,x0,x1,low0,low1,high0,high1,z0,z1):
     v=[(x0,low0,z0),(x1,low1,z0),(x1,low1,z1),(x0,low0,z1),(x0,high0,z0),(x1,high1,z0),(x1,high1,z1),(x0,high0,z1)]
     G.poly(parent,mat,v,[(0,1,2,3),(7,6,5,4),(4,5,1,0),(5,6,2,1),(6,7,3,2),(7,4,0,3)])
@@ -64,6 +103,13 @@ def bridge(G,root,z,index):
         for j in range(22):
             x0=28.15+j*13.7/22;x1=x0+13.7/22-.009
             wedge(G,parent,b.MATS['stone'],x0,x1,r.deck(x0,z)+.81,r.deck(x1,z)+.81,r.deck(x0,z)+.95,r.deck(x1,z)+.95,z+side*1.61-.25,z+side*1.61+.25)
+        # Capped end piers finish each rail without closing the clear landing.
+        # Their inner edge remains outside the 2.44 m protected walking lane.
+        for x in [28.42,41.58]:
+            for course in range(4):
+                y=r.deck(x,z)+course*.245
+                G.box(parent,b.MATS['stone'],(x,y+.117,z+side*1.64),(.49,.234,.49))
+            G.box(parent,b.MATS['stone'],(x,r.deck(x,z)+1.035,z+side*1.64),(.60,.13,.60))
     for j in range(74):
         x0=25.5+j*.25;x1=x0+.25
         lows=[]
@@ -73,48 +119,64 @@ def bridge(G,root,z,index):
             lows.append(low)
         wedge(G,parent,b.MATS['mossrock'],x0,x1,*lows,r.deck(x0,z)-.025,r.deck(x1,z)-.025,z-1.82,z+1.82)
 
-def build():
+def _build():
     old=bpy.context.window.scene;b.materials();b.MATS['granite']=b.MATS['stone'].copy();b.MATS['granite'].name='Ravine alpine granite';scene=b.hq.scene('AlpineRavine')
+    for generated in [o for o in scene.objects if o.parent is None and o.name.split('.')[0]=='AlpineRavine']:
+        for child in list(generated.children_recursive)+[generated]:bpy.data.objects.remove(child,do_unlink=True)
     root=b.pivot('AlpineRavine',None);G=b.Geometry();rng=random.Random(41892)
     for i,z in enumerate(r.BRIDGES):bridge(G,root,z,i)
     occupied=[]
     for cell in range(10):
         chunk=b.pivot('RavineReach%d'%cell,root)
-        rocks=b.pivot('Boulder granite reach%d'%cell,chunk)
+        rocks=b.pivot('Boulder granite reach%d'%cell,chunk,flat=True)
         for side in [-1,1]:
-            for j in range(16):
-                z=-107+cell*12+rng.uniform(0,11.4);x=r.center(z)+side*rng.uniform(r.width(z)*.82,5.0)
-                if x<29.3 or x>40.6:continue
-                size=(rng.uniform(.48,1.65),rng.uniform(.4,1.1),rng.uniform(.6,1.85))
-                if j%6==0:size=(size[0]*1.45,size[1]*1.6,size[2]*1.4)
-                p=(x,r.ground(x,z)-size[1]*.12,z)
-                occupied.append((x,z,size[0]*.52,size[2]*.52))
-                G.ell(rocks,b.MATS['granite'],p,size,seed=cell*100+side*20+j,rough=.24)
-        # Wet cobbles, placed in clusters instead of a regular stone necklace.
-        for j in range(38):
-            z=-108+cell*12+rng.uniform(.1,11.9);x=r.center(z)+rng.uniform(-r.width(z),r.width(z))
-            if abs(x-r.center(z))<r.width(z)*.70:continue
-            size=rng.uniform(.12,.38)
-            G.ell(chunk,b.MATS['granite'],(x,r.ground(x,z)+size*.2,z),(size,size*.55,size*1.3),seed=j,sectors=9,rings=5,rough=.28)
-        for group in range(22):
-            z=-107.5+cell*12+rng.uniform(0,11);side=-1 if group%2 else 1
-            x=r.center(z)+side*rng.uniform(r.width(z)+.35,5.3)
-            if x<29.3 or x>40.7:continue
-            if any(abs(z-k)<2.2 for k in r.BRIDGES):continue
-            for j in range(rng.randint(2,4)):
-                xx=x+rng.uniform(-.3,.3);zz=z+rng.uniform(-.5,.5)
-                if any(((xx-a)/w)**2+((zz-c)/d)**2<1.15 for a,c,w,d in occupied):continue
-                species='maidenhair' if group%4==0 else ''
-                plant_id=-1 if species else [140,145,136,143][group%4]
-                plant=b.pivot('RavineBotanical',chunk,(xx,r.ground(xx,zz),zz),area_species=species,area_plant_id=plant_id)
-                size=rng.uniform(.65,1.1);plant.scale=(size,size,size);plant.rotation_euler.z=rng.random()*math.tau
-        # Small mountain shrubs on shelves above the water, kept below sightlines.
-        for j in range(3):
-            z=-105+cell*12+j*3.1;side=-1 if j%2 else 1;x=29.8 if side<0 else 40.1
-            if any(abs(z-k)<3 for k in r.BRIDGES):continue
-            if any(((x-a)/w)**2+((z-c)/d)**2<1.3 for a,c,w,d in occupied):continue
-            plant=b.pivot('RavineShrub',chunk,(x,r.ground(x,z),z),area_species='hawthorn',area_plant_id=-1)
-            plant.scale=(.5,.5,.5);plant.rotation_euler.z=j*2.3
+            # Two related outcrops per bank leave restful open water between.
+            # Satellite stones follow the current and share the host's bedding.
+            for group in range(2):
+                z=-106.6+cell*12+group*5.9+rng.uniform(-.65,.65)
+                x=r.center(z)+side*rng.uniform(r.width(z)+.1,4.35)
+                for j in range(3):
+                    xx=x+side*j*.35;zz=z+j*.72+rng.uniform(-.22,.22)
+                    size=(rng.uniform(1.45,2.1)*(1-j*.20),rng.uniform(.65,1.25)*(1-j*.17),rng.uniform(1.9,2.9)*(1-j*.21))
+                    if xx-size[0]*.6<28.95 or xx+size[0]*.6>40.95:continue
+                    if any(abs(zz-k)<2.4 for k in r.BRIDGES):continue
+                    p=(xx,r.ground(xx,zz)-size[1]*.10,zz)
+                    occupied.append((xx,zz,size[0]*.6,size[2]*.6))
+                    ledge(G,rocks,p,size,cell*200+side*40+group*10+j,angle=.18+side*.14)
+        # Shingle fans collect on alternating inside bends; no pebble necklace.
+        side=-1 if cell%2 else 1;fan_z=-103.+cell*12.
+        for j in range(32):
+            z=fan_z+rng.uniform(-2.,2.5);x=r.center(z)+side*rng.uniform(r.width(z)*.82,r.width(z)+.55)
+            size=rng.uniform(.12,.34)
+            G.ell(chunk,b.MATS['granite'],(x,r.ground(x,z)+size*.10,z),(size,size*.45,size*1.4),seed=cell*50+j,sectors=9,rings=4,rough=.25)
+        # Repeated grass/sedge drifts tie the stream to the garden, with ferns
+        # tucked into the shaded toes and fewer, lower plants near the source.
+        for group in range(16):
+            z=-107.3+cell*12+rng.uniform(0,10.5);side=-1 if group%2 else 1
+            x=r.center(z)+side*rng.uniform(r.width(z)+.5,5.0)
+            if x<29.25 or x>40.65 or any(abs(z-k)<2.5 for k in r.BRIDGES):continue
+            species='maidenhair' if group%4==0 and cell>2 else ''
+            plant_id=-1 if species else ([143,144,136,143][group%4] if cell<3 else [136,145,146,140][group%4])
+            for j in range(4):
+                xx=x+rng.uniform(-.28,.28);zz=z+(j-1.5)*.43+rng.uniform(-.12,.12)
+                if not 29.05<xx<40.8 or any(abs(zz-k)<2.3 for k in r.BRIDGES):continue
+                if any(((xx-a)/w)**2+((zz-c)/d)**2<1.1 for a,c,w,d in occupied):continue
+                botanical(chunk,xx,zz,species,plant_id,rng.uniform(.63,.98),rng.random()*math.tau)
+        # Occasional hawthorn gives a soft middle layer; open bridge viewpoints
+        # frame the water and still let the original garden remain in view.
+        if cell%2:
+            z=-102.5+cell*12;x=30.0 if cell%4==1 else 40.0
+            if not any(abs(z-k)<4. for k in r.BRIDGES) and not any(((x-a)/w)**2+((z-c)/d)**2<1.3 for a,c,w,d in occupied):
+                botanical(chunk,x,z,'hawthorn',scale=.58,angle=cell*2.3)
+    # Four rock-framed drops explain the moving whitewater. Asymmetric ledges
+    # narrow the flow visually while retaining a continuous central channel.
+    for index,z in enumerate(CASCADE_Z):
+        shelves=b.pivot('Cascade granite shelves%d'%index,root,flat=True)
+        for side in [-1,1]:
+            for j in range(3):
+                zz=z-.45+j*.57;x=r.center(zz)+side*(r.width(zz)-.13+j*.16)
+                p=(x,r.ground(x,zz)+.1,zz)
+                ledge(G,shelves,p,(1.25-j*.16,.54-j*.06,1.5),840+index*10+j+side*3,angle=side*.22)
     # The stream emerges from a shaded cleft at the head of the ravine.
     head=b.pivot('Boulder spring cleft',root)
     for j in range(16):
@@ -165,11 +227,26 @@ def build():
         G.poly(cliff,b.MATS['granite'],[(58.75,-66.,-48.),shelf(*rim[(j+1)%len(rim)],66.),shelf(*rim[j],66.)],[(0,1,2)])
     for j in range(10):
         side=-1 if j%2 else 1;x=r.center(12)+side*rng.uniform(2.2,4.4)
-        G.ell(head,b.MATS['granite'],(x,r.ground(x,11.6),11.6),(1.5,2.1,2.),seed=j+260,rough=.3)
+        outlet_boulder(G,head,(x,r.ground(x,11.6),11.6),(1.5,2.1,2.),j+260)
     G.flush()
     record=b.hq.export(root,'environment','alpine_ravine')
     bpy.data.libraries.write(str(b.hq.SOURCE/'AlpineRavine.blend'),{scene},fake_user=True,compress=True)
     bpy.context.window.scene=old;r.write()
     (ROOT/'art_source/areas/ravine_manifest.json').write_text(json.dumps(record,indent=2)+'\n')
     print('RAVINE_ASSET: '+json.dumps(record))
+    return record
+
+def build():
+    # MCP rebuilds touch only this generated scene. Return the artist to their
+    # prior scene and selection even when a texture or export operation fails.
+    if bpy.context.mode!='OBJECT':raise RuntimeError('Switch to Object mode before authoring the ravine')
+    previous=bpy.context.window.scene;selected=list(bpy.context.selected_objects);active=bpy.context.view_layer.objects.active
+    try:return _build()
+    finally:
+        bpy.context.window.scene=previous
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in selected:
+            if obj.name in previous.objects:obj.select_set(True)
+        if active and active.name in previous.objects:bpy.context.view_layer.objects.active=active
+
 if __name__=='__main__':build()

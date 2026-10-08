@@ -1,5 +1,7 @@
 # Ten garden habitats
 
+The latest planting and ground treatment is documented in [COMPOSITION.md](COMPOSITION.md).
+
 `../build_distinct_areas.py` builds the ten 24 × 24 metre landscapes and eighteen collection plants. They were authored through the connected Blender MCP in Blender 5.2.1. Each area has a dedicated `ZendGarden_HQ_Area_*` scene and a packed, editable source library at `../overhaul/Area_*.blend`; collection plants share `Area_Collections.blend`. The current scene and selection are restored after each export. Only generated roots in the builder's own scenes are replaced. The game uses the exported GLBs and does not require Blender.
 
 To regenerate through MCP, inspect the current Blender scene and Object mode first, add `art_source` to `sys.path`, then import `build_distinct_areas`. Call `build_one(index)` sequentially for indices 0–9, followed by `build_specialties()`. Import the module in each tool call; individual MCP calls use fresh Python namespaces. For a background build, use approved normal macOS access and run heavy exports sequentially. Do not change preferences or overwrite the user's interactive scene.

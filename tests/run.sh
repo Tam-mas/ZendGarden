@@ -16,6 +16,8 @@ python3 tests/check_audio.py
 python3 tests/check_areas.py
 python3 tests/check_path_paving.py
 python3 tests/check_connecting_trail.py
+python3 tests/check_ravine.py
+python3 tests/check_ravine_grounding.py
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 logfile="$(mktemp -t zend-garden-test)"
 import_log="$(mktemp -t zend-garden-import)"
@@ -24,14 +26,14 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
-for check in flower_collection flower_additions plant_art_sample plant_art_full; do
+for check in flower_collection flower_additions plant_art_sample plant_art_full area_atlas; do
   flower_log="$(mktemp -t zend-garden-flower)"
   "$GODOT_BIN" --headless --path "$PWD" --script "tests/${check}.gd" > "$flower_log" 2>&1 || { cat "$flower_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[[^]]' "$flower_log"; then
     cat "$flower_log"
     exit 1
   fi
-  rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]|PLANT_ART_SAMPLE_RESULT:.*"failures":\[\]|PLANT_ART_FULL_RESULT:.*"failures":\[\]' "$flower_log"
+  rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]|PLANT_ART_SAMPLE_RESULT:.*"failures":\[\]|PLANT_ART_FULL_RESULT:.*"failures":\[\]|AREA_ATLAS_RESULT: \[\]' "$flower_log"
 done
 breeding_log="$(mktemp -t zend-garden-breeding)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/plant_breeding.gd > "$breeding_log" 2>&1 || { cat "$breeding_log"; exit 1; }

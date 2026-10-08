@@ -83,7 +83,8 @@ static func build(g) -> void:
  footing.material_override=footing_mat;footing.set_meta("editable_ground",true);root.add_child(footing)
  for j in range(5):
   var sign=g.Art.furnishing("sign");root.add_child(sign)
+  sign.name="TrailDirections%d"%j
   sign.position=GardenTerrain.point(Vector3(69.7,0,6-j*24))+Vector3(0,.02,0)
   sign.rotation.y=-PI/2;sign.set_meta("terrain_anchor",true)
-  g.Art.set_sign_text(sign,GardenAreaCatalogue.entry(j*2).name+"\n"+GardenAreaCatalogue.entry(j*2+1).name)
+  g.Art.set_sign_text(sign,"WEST · "+GardenAreaCatalogue.entry(j*2).name+"\nEAST · "+GardenAreaCatalogue.entry(j*2+1).name)
   GardenAreaMaterials.prepare(sign)

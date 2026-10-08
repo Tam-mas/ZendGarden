@@ -53,6 +53,7 @@ static func build(g) -> void:
   var root=Node3D.new();root.name="Habitat_"+info.kind
   g.world_root.add_child(root);root.position=GardenAreaCatalogue.center(index)
   var model=instantiate("res://assets/areas/"+info.kind+".glb")
+  if model:GardenAreaMaterials.register_margins(model,index)
   if model:root.add_child(model);prepare_meshes(model,false,false,index+4)
   if model:GardenAreaMaterials.prepare(model)
   GardenAreaFlora.build(g,root)
@@ -138,6 +139,7 @@ static func prepare_meshes(node: Node, ground: bool=false, solid: bool=false,bed
     if bed_plot==6:mat.set_shader_parameter("dry_floor",load("res://assets/textures/beds/sand.webp"))
     mat.set_shader_parameter("earth",load("res://assets/textures/beds/gravel.webp"))
     mat.set_shader_parameter("relief",load("res://assets/textures/beds/gravel_normal.webp"))
+    GardenAreaMaterials.ground_margins(mat,bed_plot-4)
     node.material_override=mat
   elif solid:
    node.create_trimesh_collision()

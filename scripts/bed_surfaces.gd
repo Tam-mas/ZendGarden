@@ -52,6 +52,7 @@ static func area_material(index: int,id: String) -> ShaderMaterial:
   mat.set_shader_parameter("habitat_center",Vector2(GardenAreaCatalogue.center(4).x,GardenAreaCatalogue.center(4).z))
   mat.set_shader_parameter("meadow",load("res://assets/textures/Meadow_earth.webp"))
   mat.set_shader_parameter("meadow_normal",load("res://assets/textures/Meadow_earth_normal.webp"))
+  GardenAreaMaterials.ground_margins(mat,4)
  return mat
 
 static func rebuild(g,center: Vector3=Vector3.INF) -> void:

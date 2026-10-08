@@ -100,7 +100,7 @@ static func build_water(root: Node3D,reach: int) -> void:
  var mesh=MeshInstance3D.new();mesh.name="AlpineCurrent%d"%reach;mesh.mesh=st.commit();mesh.position=origin
  mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
  var mat=ShaderMaterial.new();mat.shader=load("res://shaders/ravine_water.gdshader")
- mat.set_shader_parameter("deep_color",Color("254f50"));mat.set_shader_parameter("edge_color",Color("688779"))
+ mat.set_shader_parameter("deep_color",Color("355f5b"));mat.set_shader_parameter("edge_color",Color("899b82"))
  mesh.material_override=mat;root.add_child(mesh)
  GardenWater.register(mesh,{"kind":"stream","points":points,"width":4.7})
 
@@ -114,7 +114,10 @@ static func build_fall(root: Node3D) -> void:
   for lane in range(8):
    for corner in [Vector2i(row,lane),Vector2i(row+1,lane),Vector2i(row+1,lane+1),Vector2i(row,lane),Vector2i(row+1,lane+1),Vector2i(row,lane+1)]:
     var t=corner.x/80.;var across=corner.y/8.
-    var x=s.x+(across-.5)*lerpf(s.w*2.,2.8,t);var y=lerpf(s.y,-63.,t)
+    # The sheet contracts after the lip, then opens slightly as it breaks into
+    # spray. Its first row still meets the sampled stream exactly.
+    var breadth=lerpf(s.w*2.,2.85,smoothstep(0.,.16,t))+smoothstep(.4,1.,t)*.6
+    var x=s.x+(across-.5)*breadth;var y=lerpf(s.y,-63.,t)
     var top=ground(x,12.);var level=maxf(0.,(top-y)/(top+66.)*66.)
     st.set_uv(Vector2(across,t*60.));st.add_vertex(Vector3(x,y,12.+cliff_outset(x,12.,level)+.065))
  st.generate_normals();st.generate_tangents();st.index()

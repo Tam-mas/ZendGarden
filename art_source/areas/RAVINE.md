@@ -82,3 +82,33 @@ transitions into the fixed southern bridge foundation and outer rock rims.
 expanded-garden wall samples, exposed cliff faces, the former wall blockage,
 landing seams and the route into later garden rows. `--land-test` walks the
 entire 108-metre bank route both ways and each lane of the southern landing.
+
+## Stream composition and quiet water
+
+The banks now use groups of bedded granite with bevelled shoulders, satellite
+stones and occasional shingle fans. Four asymmetric stone shelves frame the
+existing cascades without closing the central channel. Low blue grasses near
+the source gradually give way to sedge and maidenhair drifts downstream;
+occasional hawthorn softens the upper bank. Bridge viewpoints and both bank
+trails remain open. Capped masonry end piers finish all three parapets with
+2.68 metres between their caps, outside the protected 2.44-metre walking lane.
+
+The water keeps its sampled downhill surface normal, with gentle flow through
+the pools and broken foam settling below each cascade. The outlet contracts
+just after the lip before opening into irregular spray threads. Water, rain
+ripples and reduced motion continue to use the shared water controller; no
+extra water surfaces, save fields or terrain profiles are introduced.
+
+`python3 tests/check_ravine.py` checks the actual shipped GLB for embedded
+textures, finite geometry, its detail budget, planted-bank clearance and clear
+bridge lanes. The current export has 89,446 triangles and 344 instanced
+botanical anchors. Rebuilding through `build_ravine.build()` replaces only
+generated ravine roots and restores the interactive scene and selection even
+if export fails.
+
+Rock footings follow the sampled ground at each lower vertex, so downhill
+edges remain embedded even on the steepest banks. Rounded outlet stones retain
+their upper shoulders with the same buried footing treatment. Run
+`python3 tests/check_ravine_grounding.py` to check contact and face winding
+across both banks without starting Blender; the outer cliff foundations are
+unchanged.
