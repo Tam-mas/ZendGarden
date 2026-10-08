@@ -8,6 +8,7 @@ from pathlib import Path
 from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'art_source'))
 sys.path.insert(0, str(ROOT / 'art_source/overhaul'))
 import common_hq as hq
 
@@ -58,6 +59,7 @@ def height(i,x,z):
         land=1.2+4.2*(1-smooth(2.0,10.5,math.hypot(x+1.2,z+3.5)))
     else:
         land=1.2-.85*(1-smooth(2.2,3.2,math.hypot(x+1,z)))
+    if i==8:land=1.2+(land-1.2)*smooth(-9.,-4.5,z)
     return round(base+(land-base)*edge,5)
 
 def at(i,x,z,dy=0):return (x,height(i,x,z)+.07+dy,z)
@@ -611,6 +613,8 @@ import area_refinement
 area_refinement.install(sys.modules[__name__])
 import area_cohesion
 area_cohesion.install(sys.modules[__name__])
+import area_realism
+area_realism.install(sys.modules[__name__])
 
 if __name__=='__main__':
     args=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []

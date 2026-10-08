@@ -1,3 +1,33 @@
+### [2026-10-08 11:30] Fixed
+
+**Tech:** `GardenBoundary`, `GardenAreaTransitions`, `build_ravine.py` — complete garden perimeters, supported terrain sides and fitted bridge landings
+
+**Dev:** Replace the original rear wall, including its obstruction at x=27/z=-24.5, with continuous capped fieldstone boundaries around both gardens and the river banks. Keep all three bridge mouths open and move the legacy perimeter and its rock foundations as original plots expand. Preserve masonry vertex colours during terrain chunking. Rebuild the Blender escarpment around the whole extension, close both ends and the underside below the lake, add embedded rock shelves, remove the shallow habitat side sheets and prevent intersections with the original hillside. Fit the outlet waterfall to the cliff profile and use closer rock texture detail. Widen the southern landing and eastern aprons, match their heights to the decks, bed the bridge ends and paving edges into continuous stone foundations, move the birch clear and exclude meadow grass from the apron. Retain saved terrain records while tapering their influence at fixed outer rims and the southern bridge threshold. Add release 56 and refresh all ten Atlas previews. Validation passes the complete 108-metre bank walk both ways, all three crossings and approach routes, 443 bridge/approach floor samples, 2,988 wall checks across starting, sculpted and expanded gardens, cliff/outlet rays, save compatibility, all ten garden activities, planting clearance, 16,911 disjoint shared-paving triangles, all ten paving networks and 34 packed Blender libraries. Review eighteen ravine/edge views in both renderers and all ten gardens in four lighting/weather conditions; validate the local browser export and security checks.
+
+**Plain:** The gardens now have continuous low stone walls, solid rocky sides and clear, smoothly joined bridge paths.
+
+**Why:** Walking stays unobstructed and the garden boundaries look finished from the paths, the lake and the neighbouring gardens.
+
+### [2026-10-08 10:42] Added
+
+**Tech:** `GardenRavine`, `build_ravine.py`, `ravine_profile.py` — alpine stream divide with three stone arch crossings
+
+**Dev:** Replace the joining lawn with a quarter-metre terrain lattice, a meandering stream, four shallow cascades and a southern outlet fall. Author and pack three complete stone arch bridges, fitted spandrel courses, parapets, recessed arch barrels, granite banks and botanical anchors in Blender; reuse the ImageGen stone textures with lossless embedded imports. Keep 172,628 model triangles batched into 31 meshes and reuse instanced garden flora. Fit bridge decks and physics to one shared arch profile, cut their footprints out of the path mesh, add a continuous west-bank path, and connect all crossings to the shared ten-area trail. Grade the Alpine Lookout approach and reserve its and the orchard's border planting. Keep old plot coordinates, milestones, save records and reduced-motion behaviour; protect the ravine from new planting, structures and terrain edits, restore players above decks and route companions across the bridges. Recover former slope plants into Stored plants with their care records and move furnishings with their IDs, work state and contents intact. Add release 55 and refresh all ten Atlas previews. Validation covers 443 bridge/approach floor samples, physical walks both ways, parapets, companion navigation, save recovery, water, all ten garden activities and path joins, 16,704 disjoint trail triangles, all ten exported paving networks, release/save-file tests and 34 packed Blender libraries. Review eleven ravine views/conditions in Compatibility and Forward+, plus all ten gardens in four lighting/weather conditions; validate the local 23-piece browser export and its security checks.
+
+**Plain:** A planted mountain-stream ravine now separates the two gardens, with three stone bridges and clear paths connecting both sides.
+
+**Why:** The gardens feel distinct while remaining easy to explore, with a flowing, rocky landscape to enjoy between them.
+
+### [2026-10-08 09:02] Changed
+
+**Tech:** `garden_paving.py`, `area_realism.py`, `GardenAreaMaterials`, `GardenAreaTransitions` — realistic paving and scenery across all ten habitats
+
+**Dev:** Rebuild the ten GLBs and packed Blender libraries with ImageGen sandstone and reclaimed-brick pigments, derived normal maps, varied flag lengths and 8mm filled joints. Cut area paths against the actual shared-trail footprint; retain fitted deck, stair and courtyard thresholds and metre-lattice sculpting. Replace the meadow and alpine spur junctions with continuous tangent bends, give the alpine return a two-metre radius and move its sign clear. Reserve planting clearance along all three inner bank paths. Add irregular rocks and stream-bank groups, boardwalk bearers and fixings, glasshouse brick foundations, sills and rainwater goods, segmented moon-pool coping and painted pergola timber. Preserve per-board UVs through the exporter, balance gravel and timber tones, and use matching renderer-aware stone colours with mipmaps. Keep terrain grids, collection slots, fixture IDs and saved progress compatible; add player release 54 and refresh all ten Atlas previews. Extend exported overlap/coverage checks to the shared trail and revised bends, and allow completed terrain-test resources to release before shutdown. Exported geometry, area gameplay, route traversal, planting clearance, terrain restoration, release history, save files and all 33 Blender source-library checks pass. Review all ten areas under four lighting/weather conditions in Compatibility and Forward+ and capture walking-height joins. The local browser export verifies 400 models and 10,045 texture references, packages 447.6 MiB into 23 pieces and passes browser-file and security checks.
+
+**Plain:** All ten gardens have more natural stone paths with clean joins, richer garden materials and more believable rocks, bridges, masonry and pool edges.
+
+**Why:** Connected, well-finished paths and consistent material detail make each garden more convincing and pleasant to explore.
+
 ### [2026-10-07 20:47] Changed
 
 **Tech:** `GardenAreaTransitions`, `GardenWater`, `GardenWorldLighting`, `Landscape.meadow` — clear garden entrances, continuous grass and responsive water

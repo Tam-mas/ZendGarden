@@ -25,24 +25,25 @@ def hull(points):
     return chains[0]+chains[1]
 
 def polygons():
-    link=garden_routes.ROUTES['eastern_link']
-    points=[(25+j*.25,6.) for j in range(76)]+link
-    # The curved link turns into the main trail. There is no north-facing stub
-    # beyond that bend, and neither strip has a cap stacked over the other.
-    end=points[-1][1]
+    links=garden_routes.ROUTES['bridge_links']
+    points=list(links[0]);end=points[-1][1]
     points.extend((68.,end-j*.25) for j in range(1,math.ceil((end+106)/.25)+1))
     points[-1]=(68.,-106.)
     def width(t):
-        d=t*(len(points)-1);k=min(int(d),len(points)-2)
-        x,z=points[k]
-        if x<44:return 3.-paving.smooth(39,44,x)
+        k=min(int(t*(len(points)-1)),len(points)-2);x,z=points[k]
         return 2.-.12*paving.smooth(0,3,7.9-z) if x>67.9 and z<=7.9 else 2.
     ribbons=paving.ribbon(points,width)
+    for link in links[1:]:ribbons.extend(paving.ribbon(link,lambda t:2.0))
+    # The west bank path connects every crossing even before later beds open.
+    ribbons.extend(paving.ribbon([(27.,6.-j*.25) for j in range(433)],lambda t:1.8))
+    for z in [6.,-48.,-102.]:
+        ribbons.extend(paving.ribbon([(23.+j*.25,z) for j in range(19)] if z==6. else [(25.5+j*.25,z) for j in range(9)],lambda t:2.8))
+        ribbons.extend(paving.ribbon([(42.+j*.25,z) for j in range(13)],lambda t:2.8))
     bounds=[(min(p[0] for p in poly),min(p[1] for p in poly),max(p[0] for p in poly),max(p[1] for p in poly)) for poly in ribbons]
     out=[]
-    for row in range(-212,23):
+    for row in range(-216,23):
         z0=row*.5;z1=z0+.5
-        for col in range(50,139):
+        for col in range(46,139):
             x0=col*.5;x1=x0+.5
             tile=[(x0,z0),(x1,z0),(x1,z1),(x0,z1)];covered=[]
             for poly,bb in zip(ribbons,bounds):
@@ -63,7 +64,11 @@ def polygons():
 def write():
     garden_routes.write()
     path=ROOT/'assets/areas/connecting_trail.json'
-    data={'version':1,'polygons':polygons()}
+    footprints=polygons()
+    for z in [6.,-48.,-102.]:
+        cut=[(25.5,z-1.4),(44,z-1.4),(44,z+1.4),(25.5,z+1.4)]
+        footprints=[part for poly in footprints for part in paving.difference(poly,cut)]
+    data={'version':2,'polygons':footprints}
     path.write_text(json.dumps(data,separators=(',',':'))+'\n')
     print(f'TRAIL_FOOTPRINT: {len(data["polygons"])} disjoint terrain cells')
 

@@ -275,8 +275,9 @@ def export(root,folder,kind):
     """Evaluate only this asset while baking/exporting the gallery's clips."""
     previous=bpy.context.window.scene
     for o in list(root.children_recursive):
-        if o.type=='MESH' and o.data.materials and any('wood' in m.name.lower() or 'cedar' in m.name.lower() or 'oak' in m.name.lower() for m in o.data.materials):uv_grain(o)
-        if o.type=='MESH' and o.data.materials:uv_mineral(o)
+        if o.type=='MESH' and o.data.materials and not o.get('authored_surface_uv',False):
+            if any('wood' in m.name.lower() or 'cedar' in m.name.lower() or 'oak' in m.name.lower() for m in o.data.materials):uv_grain(o)
+            uv_mineral(o)
     # Join before linking into a second scene: Blender's join operator unlinks
     # the consumed objects from its active scene, not every owning scene.
     base.merge_meshes(root)
