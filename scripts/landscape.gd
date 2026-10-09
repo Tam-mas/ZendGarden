@@ -240,7 +240,7 @@ static func recede_landscape(node: Node) -> void:
  if node is MeshInstance3D and str(node.name).begins_with("ForestChunk_"):
   node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
   # Small sections retain woodland coverage while reducing distant geometry.
-  node.lod_bias=2.0
+  node.lod_bias=.5
   # Use restrained foliage colours instead of the bright imported canopy palette.
   var shades=[Color("30452f"),Color("3b5135"),Color("506047")]
   for surface in range(node.mesh.get_surface_count()):

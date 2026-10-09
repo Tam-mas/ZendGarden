@@ -1,4 +1,50 @@
-# Dense gardens: 4 October 2026
+# Dense gardens
+
+## 9 October 2026: targeting and habitat detail
+
+Implemented review options 1, 2 and 4. Container occupancy now uses a garden-owned
+lookup invalidated alongside the spatial index. Ray targeting rejects distant
+and off-ray pockets before checking occupancy, with allowance for the elevated
+plant target. No saved fields change.
+
+Habitat batches retain complete imported organ meshes rather than reconstructing
+surfaces without LODs. Mesh data, materials, shadow meshes and all imported LOD
+buffers are preserved. In Auto, habitat LOD bias is 0.5 and small-plant shadows
+are omitted only when the camera is more than four metres from the whole batch's
+padded bounds. Standard restores habitat LOD bias 1 and authored shadows. Distant
+forest bias is corrected from 2 to 0.5; lower values simplify earlier. No source
+models, texture sizes, render resolution or cell partitioning change.
+
+`tests/garden_performance.gd` compares 1,248 rays against the original targeting
+rules, including rotated/elevated pockets, occupied and empty slots, reach edges
+and ground obstruction. It checks lookup invalidation and verifies exact imported
+surface data, LOD and material preservation, plus shadow restoration and moved
+bounds. It runs headlessly in both the local suite and browser-build CI.
+
+A native isolated test with 1,739 plants and 120 distant pockets takes about
+0.09 ms per targeting call, compared with about 90 ms before this change. With
+100 and 5,000 plants the new distant-pocket path remains around 0.08–0.09 ms.
+These are operation timings, not whole-game frame rates.
+
+Two matched full-world Compatibility views on an RTX 5070 Ti compare current
+Auto with a runtime reconstruction of the old habitat meshes without LODs,
+full habitat shadows and forest bias 2:
+
+| View | Old detail primitive counter | Current Auto | Current Standard |
+| --- | ---: | ---: | ---: |
+| Kitchen entrance | 83,401,430 | 6,629,590 | 7,128,102 |
+| Distant kitchen | 60,923,563 | 5,338,147 | 5,667,559 |
+
+These engine counters include render passes; they are not counts of unique
+asset triangles or browser FPS. Near/far screenshots were inspected for visible
+planting and shadow changes. Compatibility workshop targeting/save checks and
+dense-garden checks pass in both Compatibility and Forward+. The workshop test requires a real display for its
+mouse-capture assertions. Save files, update history, atlas and breeding tests
+also pass. A current browser walking-route measurement is still needed: the
+older photo-mode benchmark below skips ordinary hover targeting and walking.
+
+## 4 October 2026: earlier browser baseline
+
 
 The supplied day-77 garden contains 1,739 planted specimens, 55 structures and
 12 unlocked areas. Its JSON file is approximately 399 KB. The personal save is

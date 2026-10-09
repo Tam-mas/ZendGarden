@@ -1701,6 +1701,7 @@ func add_plant(id: int, pos: Vector3, plot: int, age: float = 0.0, height_factor
  if not form_uid.is_empty():p["form_uid"]=form_uid;p["breeding_checked"]=true
  n.scale=plant_scale(p)
  planted.append(p)
+ plant_index.invalidate()
  refresh_plant(p)
  return p
 

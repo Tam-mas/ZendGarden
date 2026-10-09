@@ -16,6 +16,7 @@ class AtlasGarden extends Node:
  var area_roots=[]
  var catalogue=GardenCatalogue.plants()
  var planted=[]
+ var plant_index=GardenPlantIndex.new()
  var objects=[]
  var inventory={}
  var orders=[]
