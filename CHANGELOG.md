@@ -1,3 +1,13 @@
+### [2026-10-09] Changed
+
+**Tech:** Indexed planter targeting, preserved habitat mesh LODs and distance-aware scenery detail
+
+**Dev:** Cache pocket occupants in the existing garden-owned plant index, invalidate on attachment/movement/new planting, and reject unreachable or off-ray pockets before occupancy lookup. Preserve targeting order, elevated/rotated pocket positions and exclusion semantics. Keep complete imported habitat organ meshes, their LOD index buffers, compressed vertex formats, tissue materials and shadow geometry instead of rebuilding bare surfaces. Cache transformed batch bounds and let Auto simplify habitat planting earlier and omit distant small-plant shadows; Standard restores full habitat shadows. Correct distant forest LOD bias from 2 to 0.5. Preserve source assets, garden save format and dismissal state; add player release 62. Add a repeatable regression to local and browser CI, covering 1,248 targeting rays, occupancy invalidation, exact imported mesh preservation and graphics changes. Save-file, update-history, atlas and breeding checks pass, as do rendered Compatibility workshop checks and dense-garden checks in Compatibility and Forward+. The workshop's mouse-capture assertions require a real display and fail under headless rendering. Isolated native targeting with 1,739 plants and 120 distant pockets falls from about 90 ms to 0.09 ms. Matched Compatibility kitchen views with reconstructed legacy detail settings reduce the rendered primitive counter from 83.40M to 6.63M nearby and 60.92M to 5.34M farther away in Auto; these include render passes and are not unique mesh triangle counts or browser FPS measurements. Review matched near/far images in Auto and Standard. Browser FPS and deployment are not measured or changed by this pass.
+
+**Plain:** Walking through full gardens is lighter, especially around many planters. Distant plants and woodland use less detail, and Auto graphics reduces distant small-plant shadows while keeping nearby planting detailed.
+
+**Why:** Remove repeated whole-garden targeting scans and unnecessary distant geometry without changing players' plants, progress or close-up models.
+
 ### [2026-10-08] Changed
 
 **Tech:** Ten-habitat composition pass, stream refinement, planted-ground profiles and activity navigation

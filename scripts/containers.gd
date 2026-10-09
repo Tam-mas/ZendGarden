@@ -26,9 +26,7 @@ static func tool_covers(g, p: Dictionary, ground_covered: bool) -> bool:
  return ground_covered and not is_contained(p)
 
 static func occupant(g, obj: Dictionary, slot: int, excluding: int=-1) -> int:
- for i in range(g.planted.size()):
-  if i!=excluding and g.planted[i].get("container_uid","")==obj.uid and int(g.planted[i].get("container_slot",-1))==slot:return i
- return -1
+ return g.plant_index.occupant(g.planted,str(obj.uid),slot,excluding)
 
 static func spec(obj: Dictionary) -> Dictionary:
  var result: Dictionary=SPECS[obj.kind].duplicate(true)
@@ -140,15 +138,25 @@ static func ray(g, origin: Vector3, direction: Vector3, ground: Vector3) -> Dict
  var best={};var closest=8.0
  for obj in g.objects:
   if obj.kind not in SPECS:continue
-  for slot in range(SPECS[obj.kind].slots.size()):
-   var plant_index=occupant(g,obj,slot)
-   var center=position(obj,slot)+Vector3(0,.12,0)
-   if plant_index>=0:center.y+=minf(.32,float(g.catalogue[g.planted[plant_index].id].height)*.35)
+  var slots: Array=spec(obj).slots
+  var transform: Transform3D=obj.node.global_transform
+  for slot in range(slots.size()):
+   var pocket=transform*slots[slot]
+   var center=pocket+Vector3(0,.12,0)
+   # An occupant lifts the target by at most .32 m. Reject only pockets
+   # that cannot intersect the ray or reach, including that full allowance.
+   if g.player.position.distance_squared_to(center)>7.32*7.32:continue
    var offset=center-origin
    var along=offset.dot(direction)
+   if along<-.32 or along>closest+.32:continue
+   if (origin+direction*along).distance_squared_to(center)>.55*.55:continue
+   var plant_index=occupant(g,obj,slot)
+   if plant_index>=0:center.y+=minf(.32,float(g.catalogue[g.planted[plant_index].id].height)*.35)
+   offset=center-origin
+   along=offset.dot(direction)
    if along<0 or along>closest:continue
    if (origin+direction*along).distance_to(center)>.23:continue
    if ground.is_finite() and along>origin.distance_to(ground)+.15:continue
    if g.player.position.distance_to(center)>7:continue
-   closest=along;best={"object":obj,"slot":slot,"plant":plant_index,"position":position(obj,slot)}
+   closest=along;best={"object":obj,"slot":slot,"plant":plant_index,"position":pocket}
  return best

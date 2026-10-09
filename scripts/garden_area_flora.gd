@@ -32,9 +32,12 @@ static func collect(node: Node,transform: Transform3D,result: Array) -> void:
   if not node.visible:return
   transform=transform*node.transform
  if node is MeshInstance3D:
+  # Keep imported LODs, vertex formats and shadow geometry intact. Rebuilding
+  # from surface arrays silently discards the lower-detail index buffers.
+  var mesh=node.mesh.duplicate()
   for surface in range(node.mesh.get_surface_count()):
-   var mesh=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,node.mesh.surface_get_arrays(surface))
-   result.append({"mesh":mesh,"material":node.get_active_material(surface),"transform":transform})
+   mesh.surface_set_material(surface,node.get_active_material(surface))
+  result.append({"mesh":mesh,"transform":transform,"shadow":node.cast_shadow})
  for child in node.get_children():collect(child,transform,result)
 
 static func build(g,root: Node3D) -> void:
@@ -45,7 +48,10 @@ static func build(g,root: Node3D) -> void:
   for organ in organs:
    var instance=MultiMeshInstance3D.new();instance.name="BotanicalInstances"
    var mm=MultiMesh.new();mm.transform_format=MultiMesh.TRANSFORM_3D;mm.mesh=organ.mesh;mm.instance_count=group.anchors.size()
-   instance.multimesh=mm;instance.material_override=organ.material
+   instance.multimesh=mm;instance.cast_shadow=organ.shadow
+   instance.set_meta("full_shadow",organ.shadow)
+   instance.set_meta("low_plant",group.id>=0 and int(g.catalogue[group.id].layer)<2)
+   instance.add_to_group("habitat_flora")
    group.parent.add_child(instance);instance.visibility_range_end=80
    batches.append({"node":instance,"anchors":group.anchors,"organ":organ.transform})
  root.set_meta("flora_batches",batches);refresh(root)
@@ -68,4 +74,21 @@ static func scan(g,node: Node,parent: Node3D,groups: Dictionary) -> void:
 static func refresh(root: Node3D) -> void:
  for batch in root.get_meta("flora_batches",[]):
   var inverse=batch.node.global_transform.affine_inverse()
-  for j in range(batch.anchors.size()):batch.node.multimesh.set_instance_transform(j,inverse*batch.anchors[j].global_transform*batch.organ)
+  var bounds: AABB
+  for j in range(batch.anchors.size()):
+   var world: Transform3D=batch.anchors[j].global_transform*batch.organ
+   batch.node.multimesh.set_instance_transform(j,inverse*world)
+   var box: AABB=world*batch.node.multimesh.mesh.get_aabb()
+   bounds=box if j==0 else bounds.merge(box)
+  batch.node.set_meta("world_bounds",bounds.grow(.4))
+
+static func update_detail(g) -> void:
+ if not is_instance_valid(g.camera):return
+ var balanced=g.settings.graphics=="auto" and not g.touch_active()
+ var position: Vector3=g.camera.global_position
+ for renderer in g.get_tree().get_nodes_in_group("habitat_flora"):
+  renderer.lod_bias=.5 if balanced else 1.0
+  var bounds: AABB=renderer.get_meta("world_bounds",AABB())
+  var gap=position.distance_to(position.clamp(bounds.position,bounds.end))
+  var lighter=balanced and renderer.get_meta("low_plant",false) and gap>4.0
+  renderer.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if lighter else int(renderer.get_meta("full_shadow"))

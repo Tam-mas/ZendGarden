@@ -149,7 +149,7 @@ func apply_graphics() -> void:
  var low=g.settings.graphics=="mobile" or (g.settings.graphics=="auto" and enabled)
  var population=g.planted.size() if is_instance_valid(g.plant_batches) else g.loaded_data.get("plants",[]).size()
  var dense=not low and g.settings.graphics=="auto" and population>=GardenPlantBatches.MIN_PLANTS
- var key=str(low)+str(dense)+str(g.settings.render_scale)
+ var key=str(g.settings.graphics)+str(low)+str(dense)+str(g.settings.render_scale)
  if graphics_applied==key: return
  graphics_applied=key
  g.sun.shadow_enabled=not low
@@ -161,6 +161,7 @@ func apply_graphics() -> void:
  get_viewport().mesh_lod_threshold=2.0 if dense else 1.0
  apply_detail(g.world_root,90.0 if low else 0.0)
  apply_detail(g.plant_root,65.0 if low else 0.0)
+ GardenAreaFlora.update_detail(g)
  if is_instance_valid(g.plant_batches):g.plant_batches.invalidate()
 
 func apply_detail(node: Node, distance_limit: float) -> void:

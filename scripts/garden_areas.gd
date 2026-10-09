@@ -750,6 +750,7 @@ static func update(g,delta: float) -> void:
  if g.area_update_time<.5:return
  var elapsed=g.area_update_time
  g.area_update_time=0
+ GardenAreaFlora.update_detail(g)
  GardenAreaProgression.refresh(g)
  for j in range(10):
   for pocket in state(g,j).beds.values():
