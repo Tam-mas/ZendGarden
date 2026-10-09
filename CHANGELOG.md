@@ -1,3 +1,13 @@
+### [2026-10-10 08:57] Fixed
+
+**Tech:** `garden_paving.py`, `build_distinct_areas.py`, `build_connecting_trail.py`, `area_furnishings.gd`, `garden_area_transitions.gd`, `web/shell.html` — alpine hillside, rear trail corner and welcome copy
+
+**Dev:** Rebuild only the Alpine Lookout GLB and packed Blender library: remove its steep inner paving and place the lookout railing on the crest. Retire the untouched free hillside bench from legacy and current saves while preserving moved, rotated and purchased furniture; omit it from new and restored starter stock. Join the shared trail directly into the northern return with a gradual width transition, removing the square corner spur. Remove only the Alpine Lookout/Moon Garden direction board, retaining both activity signs and all other direction boards. Combine the welcome sentences into one paragraph and remove the daily-growth line. Preserve terrain grids, collection slots, fixtures, other habitat assets, save formats and update dismissal state; add player release 63. All ten exported paving checks, habitat/texture audits, read-only Blender source checks, real-capsule trail traversal, chair migration, save-file and update-history checks pass. Inspect five Compatibility game captures and desktop/phone welcome layouts. Starter-furniture/progression checks also pass in Compatibility and exit cleanly; the headless variant passes its assertions but reports shutdown resource warnings. Verify that the other nine habitat GLBs remain byte-for-byte identical to the downloaded version.
+
+**Plain:** Alpine Lookout has a clear grassy hillside and a hilltop fence, the rear path corner is smooth, the extra direction sign is gone, and the welcome screen has simpler wording.
+
+**Why:** Remove misleading uphill access and tidy this garden corner while keeping players' gardens and furniture arrangements intact.
+
 ### [2026-10-09] Changed
 
 **Tech:** Indexed planter targeting, preserved habitat mesh LODs and distance-aware scenery detail

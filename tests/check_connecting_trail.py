@@ -25,6 +25,7 @@ def covered(point):
 
 assert max(p[1] for tri in triangles for p in tri)<11.5,'trail runs to the cliff edge'
 assert not covered((68,11.5)),'unused northern path stub'
+assert not covered((68.8,-105.7)),'square spur remains on the rear alpine/moon corner'
 routes=json.loads((ROOT/'assets/areas/routes.json').read_text())['bridge_links']
 for route in routes:
     for a,b,c in zip(route[::3],route[3::3],route[6::3]):

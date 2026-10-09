@@ -116,6 +116,9 @@ static func run(g,failures: Array) -> void:
  check(g.planted_total==metric_before,failures,"Starter plants count towards milestones")
  # All stock benches face their local focal point; front pockets face the court.
  for index in range(10):
+  if index==8:
+   check(not g.objects.any(func(obj):return obj.get("starter_id","")=="alpine:starter-bench"),failures,"Removed hillside bench returns with starter furniture")
+   continue
   var bench=g.objects.filter(func(obj):return obj.get("starter_id","")==GardenAreaCatalogue.entry(index).kind+":starter-bench")[0]
   var direction=(GardenAreaFurnishings.FOCUS[index]-GardenAreaFurnishings.BENCHES[index]).normalized()
   check((-bench.node.global_basis.z).dot(direction)>.999,failures,"Starter bench points away from its garden: %d"%index)

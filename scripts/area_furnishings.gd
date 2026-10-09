@@ -53,7 +53,7 @@ static func heading(index: int) -> float:
  return atan2(-direction.x,-direction.z)
 
 static func ordinary(index: int) -> Array:
- var result=[{"id":"bench","kind":"bench","pos":BENCHES[index],"rotation":heading(index)}]
+ var result=[] if index==8 else [{"id":"bench","kind":"bench","pos":BENCHES[index],"rotation":heading(index)}]
  if index==2:
   for j in range(4):result.append({"id":"pot%d"%j,"kind":"wide_bowl" if j%2==0 else "pot","pos":Vector3([-4.5,4.1,3.3,-4.4][j],0,[6,-6.8,1.5,-2.8][j]),"rotation":0.0})
  if index==5:
@@ -67,7 +67,19 @@ static func add_template(g,id: String) -> void:
  g.add_object(spec.kind,pos,0,false,0.0,"My garden",Color("f1e5c7"),{"area_fixture":id,"elevation":elevation,"starter_orientation_version":1})
  restore_collection(g,g.objects.back())
 
+static func remove_hillside_bench(g) -> void:
+ # Retire only the untouched free alpine seat, including saves predating IDs.
+ # A seat moved or rotated by the player remains their furniture.
+ var original=GardenAreaCatalogue.center(8)+BENCHES[8]
+ for obj in g.objects.duplicate():
+  if obj.kind!="bench" or int(obj.price)!=0:continue
+  if obj.get("starter_id","") not in ["","alpine:starter-bench"]:continue
+  if Vector2(obj.pos.x-original.x,obj.pos.z-original.z).length()>.05:continue
+  if absf(angle_difference(float(obj.rotation),heading(8)))>.01 and not is_zero_approx(float(obj.rotation)):continue
+  obj.node.queue_free();g.objects.erase(obj)
+
 static func restore(g) -> void:
+ remove_hillside_bench(g)
  for index in range(10):
   var s=GardenAreas.state(g,index)
   if s.furniture_initialized:continue

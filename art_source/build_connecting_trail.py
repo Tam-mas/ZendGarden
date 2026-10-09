@@ -27,13 +27,19 @@ def hull(points):
 def polygons():
     links=garden_routes.ROUTES['bridge_links']
     points=list(links[0]);end=points[-1][1]
-    points.extend((68.,end-j*.25) for j in range(1,math.ceil((end+106)/.25)+1))
-    points[-1]=(68.,-106.)
+    # Continue the spine directly into the return around the north boundary.
+    # Two independently capped ribbons left a square spur on this corner.
+    north=links[2]
+    stop=north[-1][1]
+    points.extend((68.,end-j*.25) for j in range(1,math.ceil((end-stop)/.25)))
+    points.append(tuple(north[-1]))
+    points.extend(reversed(north[:-1]))
     def width(t):
         k=min(int(t*(len(points)-1)),len(points)-2);x,z=points[k]
-        return 2.-.12*paving.smooth(0,3,7.9-z) if x>67.9 and z<=7.9 else 2.
+        taper=paving.smooth(0,3,7.9-z)*(1-paving.smooth(101.5,103.5,-z))
+        return 2.-.12*taper if x>67.9 and z<=7.9 else 2.
     ribbons=paving.ribbon(points,width)
-    for link in links[1:]:ribbons.extend(paving.ribbon(link,lambda t:2.0))
+    ribbons.extend(paving.ribbon(links[1],lambda t:2.0))
     # The west bank path connects every crossing even before later beds open.
     ribbons.extend(paving.ribbon([(27.,6.-j*.25) for j in range(433)],lambda t:1.8))
     for z in [6.,-48.,-102.]:

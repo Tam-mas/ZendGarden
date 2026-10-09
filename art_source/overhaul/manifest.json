@@ -1,6 +1,6 @@
 {
   "areas/alpine": {
-    "bytes": 4215712,
+    "bytes": 3893100,
     "clips": [],
     "dimensions": [
       24.0,
@@ -10,7 +10,7 @@
     "folder": "areas",
     "kind": "alpine",
     "meshes": 52,
-    "triangles": 46344,
+    "triangles": 41860,
     "variant": "new"
   },
   "areas/fern_gully": {
