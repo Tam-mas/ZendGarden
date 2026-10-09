@@ -28,15 +28,17 @@ static func run(g) -> int:
  var extension="--extension-review" in OS.get_cmdline_user_args()
  var resume="--resume-review" in OS.get_cmdline_user_args()
  var refresh_atlas="--refresh-atlas" in OS.get_cmdline_user_args()
+ var lookout_only="--lookout-review" in OS.get_cmdline_user_args()
  if trail_only:directory="res://captures/bluestone-trails"
  if junction_only:directory="res://captures/fitted-path-junctions"
  if two_paths:directory="res://captures/fern-moon-paths"
  if extension:directory="res://captures/garden-extension"
+ if lookout_only:directory="res://captures/alpine-cleanup"
  if "--forward-review" in OS.get_cmdline_user_args():directory+="/forward-plus"
  DirAccess.make_dir_recursive_absolute(directory)
  var conditions=[["morning",.30,Vector3.ZERO],["midday",.48,Vector3.ZERO],["dusk",.735,Vector3.ZERO],["rain",.43,Vector3(1,1,.35)]]
  if extension:conditions=[["morning",.30,Vector3.ZERO]]
- if trail_only or junction_only or two_paths:conditions=[]
+ if trail_only or junction_only or two_paths or lookout_only:conditions=[]
  for condition in conditions:
   for index in range(10):
    var info=GardenAreaCatalogue.entry(index);var center=GardenAreaCatalogue.center(index)
@@ -110,6 +112,14 @@ static func run(g) -> int:
    views.append(["moon-original-angle",GardenTerrain.point(Vector3(76.05979,0,-88.85773))+Vector3(0,1.8,0),GardenTerrain.point(Vector3(78.3619,0,-90.6836))])
    views.append(["fern_gully-above",Vector3(79.3,8,12.5),Vector3(80.0,1.2,8.7)])
    views.append(["moon-above",Vector3(76,8,-86),Vector3(76.7,1.2,-89.8)])
+ if lookout_only:
+  views=[
+   ["alpine-hillside",Vector3(54.6,3.3,-106.4),Vector3(54.8,5.2,-99.5)],
+   ["alpine-hilltop",Vector3(62,10,-104),Vector3(54.8,5.4,-99.5)],
+   ["rear-path-corner",Vector3(72,4.5,-105.8),Vector3(67.5,1.3,-104.5)],
+   ["rear-path-above",Vector3(69,10,-106),Vector3(67,1.3,-104.5)],
+   ["moon-trail-signs",Vector3(72,3.2,-86),Vector3(69.7,1.3,-90)]
+  ]
  for view in views:
   if extension and resume and FileAccess.file_exists(directory+"/"+view[0]+".png"):continue
   g.camera.global_position=view[1];g.camera.look_at(view[2]);g.update_lighting();g.climate.apply(g)
@@ -134,6 +144,7 @@ static func run(g) -> int:
  if refresh_atlas and not extension:
   for index in range(10):await preload("res://tests/areas.gd").capture(g,index)
  if extension:print("EXTENSION_REVIEW_RESULT: 10 habitats, ",views.size()," trail/stream details, dusk and rain")
+ elif lookout_only:print("LOOKOUT_REVIEW_RESULT: ",views.size()," hillside, fence, rear corner and sign views")
  else:print("COHESION_REVIEW_RESULT: ",views.size()," transition details", "" if trail_only or junction_only or two_paths else " and 40 light/weather views")
  if two_paths:
   g.photo_mode=false

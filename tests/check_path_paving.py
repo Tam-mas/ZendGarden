@@ -84,6 +84,10 @@ def audit(index,baseline):
             assert min(p[2] for p in points)>=edge-1e-5,(KINDS[index],'paving projects into destination')
         if index==0:assert min(p[0] for p in points)>=7.055-1e-5,('paving projects into boardwalk',points)
         if index==7:assert max(p[0] for p in points)<=-3.385+1e-5,('paving projects into bridge',points)
+        if index==8:
+            assert min(p[2] for p in points)>5.,'alpine paving still climbs the steep hillside'
+            _,railing=read(path,False,('Lookout railing',))
+            assert railing and min(p[1] for p in railing)>5.3,'lookout fence is below the hilltop'
         if index in [5,6]:
             edge={5:7.,6:5.5}[index]
             ends=[p for p in points if abs(p[2]-edge)<1e-5]

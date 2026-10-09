@@ -29,7 +29,6 @@ static func on_path(index: int,pos: Vector3) -> bool:
  if p.z>=-9. and p.z<=float(route_data().approaches[index][-1][1]):
   if index==1 and absf(p.x-(sin(p.z*.42)+.30*sin(p.z*.83)+1.55))<.68:return true
   if index==3 and absf(p.x-3.*sin(p.z*.4))<.94:return true
-  if index==8 and absf(p.x-2.4*sin(p.z*.45))<.84:return true
  return near_route(route_data().approaches[index],Vector2(p.x,p.z),1.03)
 
 static func bluestone() -> ShaderMaterial:
@@ -81,7 +80,7 @@ static func build(g) -> void:
  var footing=MeshInstance3D.new();footing.name="Trail stone foundation";footing.mesh=base.commit()
  var footing_mat=GardenBoundary.material();footing_mat.albedo_color=Color("777466")
  footing.material_override=footing_mat;footing.set_meta("editable_ground",true);root.add_child(footing)
- for j in range(5):
+ for j in range(4):
   var sign=g.Art.furnishing("sign");root.add_child(sign)
   sign.name="TrailDirections%d"%j
   sign.position=GardenTerrain.point(Vector3(69.7,0,6-j*24))+Vector3(0,.02,0)

@@ -18,7 +18,7 @@ Area libraries and GLBs. It keeps terrain grids, collection slots and fixture ID
 | Walled Kitchen Garden | Smaller-scale reclaimed wall brick, weathered stone coping and an entrance flush with the herringbone courtyard. |
 | Old Glasshouse | Brick foundation, stone sills, open gutters and downpipes; fitted courtyard approach and properly scaled shelf grain. |
 | Stream Garden | Irregular groups of embedded bank stones, weathered bridge timber and a flush deck approach. |
-| Alpine Lookout | Continuous entrance bend without a trailing branch, more irregular rocks, and planting clearance along the entire inner path. |
+| Alpine Lookout | Lower-lawn entrance bend, a natural hillside without the steep inner path or default chair, and a fence on the hilltop. |
 | Moon Garden | Quieter gravel, fitted segmented pool coping and weathered painted pergola timber; the approach follows the oval court edge. |
 
 Paths use 600/900/1200mm lengths in 480mm courses with 8mm sand-filled joints.
@@ -42,8 +42,10 @@ Run `tests/check_path_paving.py` for exported-triangle overlaps, fitted edges,
 shared-trail intersections and bend coverage; `tests/check_areas.py` for mesh,
 texture and botanical reservations; and the game with `--areas-test` for planting,
 furniture, activities, capsule traversal and saved terrain edits. The inner-path
-checks include planting clearance in Fern Gully, Pollinator Meadow and Alpine
-Lookout. `--cohesion-review` captures all ten areas in four lighting conditions;
+checks include planting clearance in Fern Gully and Pollinator Meadow; Alpine
+Lookout retains its lower approach only. `--cohesion-review --lookout-review`
+captures the alpine hillside, hilltop fence, rear corner and nearby signs.
+`--cohesion-review` captures all ten areas in four lighting conditions;
 `--junction-review` adds walking-height details. Use both Compatibility and
 Forward+ renderers. Add `--refresh-atlas` to save current views into the ten
 in-game Atlas cards without repeating the gameplay test.

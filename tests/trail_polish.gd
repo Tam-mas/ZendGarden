@@ -3,6 +3,30 @@ extends RefCounted
 static func check(value: bool,failures: Array,message: String) -> void:
  if not value:failures.append(message)
 
+static func alpine_furniture(g,failures: Array) -> void:
+ check(GardenAreaFurnishings.ordinary(8).is_empty(),failures,"Alpine hillside still receives a default chair")
+ for index in range(10):
+  if index!=8:check(GardenAreaFurnishings.ordinary(index).any(func(stock):return stock.id=="bench"),failures,"Another area's bench was removed: "+str(index))
+ var original=GardenAreaCatalogue.center(8)+GardenAreaFurnishings.BENCHES[8]
+ var before=g.objects.size()
+ var added=[]
+ for spec in [
+  [original,0,0.,{"starter_id":"alpine:starter-bench"}],
+  [original,0,0.,{}],
+  [original+Vector3(3,0,3),0,0.,{"starter_id":"alpine:starter-bench"}],
+  [original,0,.7,{"starter_id":"alpine:starter-bench"}],
+  [original,12,0.,{}]
+ ]:
+  g.add_object("bench",spec[0],spec[1],false,spec[2],"My garden",Color("f1e5c7"),spec[3]);added.append(g.objects.back())
+ GardenAreaFurnishings.restore(g)
+ check(g.objects.size()==before+3,failures,"Old alpine chair cleanup removed player furniture or missed an untouched chair")
+ check(not added[0] in g.objects and not added[1] in g.objects,failures,"Original hillside chairs remain in an existing save")
+ for obj in added.slice(2):check(obj in g.objects,failures,"Moved, rotated or purchased chair was removed")
+ GardenAreaFurnishings.restore(g)
+ check(g.objects.size()==before+3,failures,"Chair cleanup changes furniture on a second restore")
+ for obj in added:
+  if obj in g.objects:obj.node.queue_free();g.objects.erase(obj)
+
 static func capture(g) -> void:
  if DisplayServer.get_name()=="headless":return
  g.ui.hide();g.touch.hide();g.player.hide();g.photo_mode=true
@@ -29,6 +53,10 @@ static func run(g,failures: Array) -> void:
  g.set_process(false);g.settings.intro_seen=true;g.settings.request_notifications=false
  if is_instance_valid(g.welcome):GardenExperience.finish(g)
  g.dismiss_request();g.side_panel.hide();GardenSculpt.restore(g,{})
+ alpine_furniture(g,failures)
+ var directions=g.world_root.get_node("GardenConnectingTrail")
+ check(not directions.has_node("TrailDirections4"),failures,"Redundant Alpine Lookout/Moon Garden sign remains")
+ for row in range(4):check(directions.has_node("TrailDirections%d"%row),failures,"Another trail sign was removed")
  await g.get_tree().physics_frame
  # The full board, rather than just its origin, must clear every approach.
  for index in range(10):
@@ -74,5 +102,14 @@ static func run(g,failures: Array) -> void:
  var opening=3*sin(-8*.4)
  await walker.cross(g,GardenAreaCatalogue.center(3)+Vector3(opening,0,-6.5),GardenAreaCatalogue.center(3)+Vector3(opening,0,-9.3),failures,"Meadow fence opening")
  await walker.cross(g,GardenAreaCatalogue.center(3)+Vector3(opening,0,-9.3),GardenAreaCatalogue.center(3)+Vector3(opening,0,-6.5),failures,"Meadow fence return")
+ # Walk the rear bend with the real player capsule, including both edges.
+ var north: Array=GardenAreaTransitions.route_data().bridge_links[2]
+ for side in [-.65,0.,.65]:
+  await walker.cross(g,Vector3(68+side,0,-101.5),Vector3(68+side,0,-103.5),failures,"Rear trail into corner")
+  for j in range(north.size()-1,maxi(0,north.size()-49),-8):
+   var end=maxi(0,j-8)
+   var a=Vector2(north[j][0],north[j][1]);var b=Vector2(north[end][0],north[end][1])
+   var direction=(b-a).normalized();var offset=Vector2(-direction.y,direction.x)*side
+   await walker.cross(g,Vector3(a.x+offset.x,0,a.y+offset.y),Vector3(b.x+offset.x,0,b.y+offset.y),failures,"Rear path corner lane "+str(side))
  await preload("res://tests/area_cohesion.gd").run(g,failures)
  await capture(g)

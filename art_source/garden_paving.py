@@ -73,7 +73,8 @@ def ribbon(points,width):
 def native_path(index):
     if index==1:return (lambda z:math.sin(z*.42)+.30*math.sin(z*.83)+1.55),1.05
     if index==3:return (lambda z:3*math.sin(z*.4)),1.55
-    if index==8:return (lambda z:2.4*math.sin(z*.45)),1.35
+    # The alpine approach ends on the lower lawn. The former inner ribbon
+    # climbed the unwalkable hillside and continued through the lookout rail.
     return None
 
 def end_width(index):
