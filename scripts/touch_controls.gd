@@ -735,13 +735,17 @@ func settings_page() -> void:
   var values=entry[1]
   var choice=OptionButton.new()
   choice.custom_minimum_size.y=48
+  choice.fit_to_longest_item=false
+  choice.clip_text=true
   for title in entry[2]: choice.add_item(title)
   choice.select(maxi(0,values.find(g.settings[key])))
   choice.item_selected.connect(func(index): g.settings[key]=values[index]; configure(); g.save_game())
   g.list_box.add_child(choice)
  g.add_note("Auto graphics balances detail in fuller gardens. Choose Standard for full plant shadows, or set your preferred 3D resolution.")
  var handed=CheckButton.new()
- handed.text="Left-handed touch layout"
+ handed.text="Left-handed controls"
+ handed.clip_text=true
+ handed.tooltip_text=handed.text
  handed.button_pressed=g.settings.left_handed
  handed.custom_minimum_size.y=48
  handed.toggled.connect(func(value): g.settings.left_handed=value; last_size=Vector2.ZERO; g.save_game())

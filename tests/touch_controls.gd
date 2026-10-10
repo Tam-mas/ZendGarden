@@ -162,7 +162,7 @@ static func run(g, failures: Array) -> void:
   g.open_sidebar("Settings")
   await g.get_tree().process_frame
   var bounds=Rect2(Vector2.ZERO,g.get_viewport().get_visible_rect().size)
-  if not bounds.encloses(g.side_panel.get_global_rect()): failures.append("Touch menu overflow at "+str(size))
+  if not bounds.encloses(g.side_panel.get_global_rect()): failures.append("Touch menu overflow at %s: panel %s, viewport %s, minimum %s"%[size,g.side_panel.get_global_rect(),bounds,g.side_panel.get_combined_minimum_size()])
   touch.close_menu()
   if touch.tablet_layout:
    for page in ["Shop","Orders","Guide","Garden"]:
@@ -272,6 +272,22 @@ static func run(g, failures: Array) -> void:
    g.settings.touch_height=0
    g.settings.control_size=100
    g.settings.left_handed=false
+ # Font metrics differ between macOS, Linux and browsers. Long settings labels
+ # must not determine the width of the touch panel, even with a larger fallback.
+ var normal_font=g.menu_theme.default_font
+ g.menu_theme.default_font=ThemeDB.fallback_font
+ for kind in ["CheckButton","OptionButton"]:g.menu_theme.set_font_size("font_size",kind,24)
+ for size in [Vector2i(320,568),Vector2i(700,560),Vector2i(1024,768)]:
+  g.get_window().size=size
+  await g.get_tree().process_frame
+  touch.configure()
+  touch.open_menu("Settings")
+  for frame in range(3):await g.get_tree().process_frame
+  var bounds=Rect2(Vector2.ZERO,g.get_viewport().get_visible_rect().size)
+  if not bounds.encloses(g.side_panel.get_global_rect()):failures.append("Fallback-font settings overflow at %s: %s"%[size,g.side_panel.get_global_rect()])
+  touch.close_menu()
+ for kind in ["CheckButton","OptionButton"]:g.menu_theme.clear_font_size("font_size",kind)
+ g.menu_theme.default_font=normal_font
  # Resize while fingers are held: old coordinates must not survive rotation.
  press(0,touch.origin)
  press(8,Vector2(500,200))

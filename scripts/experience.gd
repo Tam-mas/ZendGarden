@@ -65,7 +65,10 @@ static func settings_page(g) -> void:
   var key=entry[0]
   var toggle=CheckButton.new()
   toggle.text=entry[1].replace("mouse","look") if g.touch_active() else entry[1]
-  if g.touch_active(): toggle.custom_minimum_size.y=48
+  if g.touch_active():
+   toggle.custom_minimum_size.y=48
+   toggle.clip_text=true
+   toggle.tooltip_text=toggle.text
   toggle.button_pressed=g.settings[key]
   toggle.toggled.connect(func(value): g.settings[key]=value; g.apply_settings(); g.save_game())
   g.list_box.add_child(toggle)
