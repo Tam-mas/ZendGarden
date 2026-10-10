@@ -96,7 +96,7 @@ static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
  if not fields(tutorial,["step","plant","seed","morning"],["active"]):return false
  if tutorial.has("pos") and not vector(tutorial.pos):return false
  var settings: Dictionary=data.get("settings",{})
- if not fields(settings,["control_size","render_scale","updates_seen","volume","music_volume","nature_volume","sensitivity","fov"],["left_handed","intro_seen","request_notifications","reduced_motion","invert_x","invert_y","pause_menus"],["controls","graphics","petal_rate"]):return false
+ if not fields(settings,["control_size","touch_inset","touch_height","render_scale","updates_seen","volume","music_volume","nature_volume","sensitivity","fov"],["left_handed","intro_seen","request_notifications","reduced_motion","invert_x","invert_y","pause_menus"],["controls","graphics","petal_rate"]):return false
  if settings.has("petal_rate") and settings.petal_rate not in GardenEconomy.MODES:return false
  if settings.has("learned_hints") and (not settings.learned_hints is Array or not settings.learned_hints.all(func(value):return value is String)):return false
  for value in data.get("owned_surfaces",[]):

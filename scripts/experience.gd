@@ -59,19 +59,22 @@ static func settings_page(g) -> void:
   g.list_box.add_child(g.button("Download previous garden",func(): g.save_files.download(true)))
  g.add_note("Keep a copy or move your garden to another device. Upload asks before replacing your garden.",14)
  if is_instance_valid(g.touch): g.touch.settings_page()
- g.add_note("MOUSE LOOK",15)
+ g.add_note("LOOK CONTROLS" if g.touch_active() else "MOUSE LOOK",15)
  for entry in [["invert_x","Invert mouse left / right"],["invert_y","Invert mouse up / down"],["request_notifications","Neighbour request pop-ups"],["reduced_motion","Reduced motion"],["pause_menus","Pause time in menus"]]:
   if entry[0]=="request_notifications": g.add_note("COMFORT & QUIET",15)
   var key=entry[0]
   var toggle=CheckButton.new()
-  toggle.text=entry[1]
-  if g.touch_active(): toggle.custom_minimum_size.y=48
+  toggle.text=entry[1].replace("mouse","look") if g.touch_active() else entry[1]
+  if g.touch_active():
+   toggle.custom_minimum_size.y=48
+   toggle.clip_text=true
+   toggle.tooltip_text=toggle.text
   toggle.button_pressed=g.settings[key]
   toggle.toggled.connect(func(value): g.settings[key]=value; g.apply_settings(); g.save_game())
   g.list_box.add_child(toggle)
  for entry in [["volume","Master volume",0,100,1],["music_volume","Music volume",0,100,1],["nature_volume","Nature volume",0,100,1],["sensitivity","Mouse sensitivity",0.3,2.0,.1],["fov","Field of view",55,90,1]]:
   var key=entry[0]
-  g.add_note(entry[1])
+  g.add_note(entry[1].replace("Mouse sensitivity","Look sensitivity") if g.touch_active() else entry[1])
   var slider=HSlider.new()
   slider.min_value=entry[2]; slider.max_value=entry[3]; slider.step=entry[4]
   slider.value=g.settings[key]

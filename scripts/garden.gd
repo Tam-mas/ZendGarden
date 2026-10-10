@@ -165,7 +165,7 @@ var sign_color=Color("f1e5c7")
 var editing_sign=-1
 
 var touch: GardenTouch
-var settings={"petal_rate":"easy","controls":"auto","left_handed":false,"control_size":100,"graphics":"auto","render_scale":0,"intro_seen":false,"updates_seen":0,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
+var settings={"petal_rate":"easy","controls":"auto","left_handed":false,"control_size":100,"touch_inset":0,"touch_height":0,"graphics":"auto","render_scale":0,"intro_seen":false,"updates_seen":0,"request_notifications":true,"reduced_motion":false,"invert_x":false,"invert_y":false,"pause_menus":true,"volume":75.0,"music_volume":70.0,"nature_volume":100.0,"sensitivity":1.0,"fov":74.0}
 var request_popup: PanelContainer
 var request_unread=false
 var orders_button: Button
@@ -525,7 +525,9 @@ func make_ui() -> void:
  detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  detail_label.custom_minimum_size.x = 256
  col.add_child(detail_label)
- col.add_child(button("Garden atlas · milestones & trails",func():GardenAreaAtlas.open(self),Vector2(0,40)))
+ col.add_child(button("Garden atlas · milestones & trails",func():
+  if touch_active():touch.open_menu("Garden")
+  else:GardenAreaAtlas.open(self),Vector2(0,40)))
  col.add_child(button("Settings",func(): open_sidebar("Settings"),Vector2(0,30)))
  var capacity = panel_at(Vector2(1054,112),Vector2(362,144))
  hud_capacity=capacity
@@ -726,6 +728,10 @@ func refresh_sidebar() -> void:
   GardenTheme.choose(tab,tab.text.begins_with(active_tab))
  clear_list()
  match active_tab:
+  "Garden":
+   touch.garden_page()
+  "Seed details":
+   GardenSeedCollection.details(self,touch.seed_detail)
   "Seeds":
    GardenSeedCollection.build(self)
   "Shop":
@@ -851,10 +857,11 @@ func refresh_sidebar() -> void:
     list_box.add_child(button("Call "+companion_names[i],func(): GardenLeisure.call_pet(self,pet_index)))
    list_box.add_child(button("Save garden",func(): save_game(); toast("Your garden is saved.")))
    list_box.add_child(button("Comfort & sound settings",func(): open_sidebar("Settings")))
-   detail_label.text = "Left thumb to walk · Drag to look\nTools selects an action · Garden opens menus\nLayer chooses plant height · Photo mode has Rise / Lower and Take photo buttons" if touch_active() else "WASD move · Shift stroll faster\nMouse look · Tab menus · Wheel field of view\nL switches target layer · Esc settings"
+   detail_label.text = "Left thumb to walk · Right thumb to look\nTap the current tool to choose another · Seeds opens your collection\nHold a continuous action and drag to look; release to stop\nGarden opens the familiar menus, companions and photo mode" if touch_active() else "WASD move · Shift stroll faster\nMouse look · Tab menus · Wheel field of view\nL switches target layer · Esc settings"
 
  if touch_active():
   add_note(detail_label.text,16)
+  touch.layout_menu()
 
 func refresh_ui() -> void:
  refresh_sidebar()

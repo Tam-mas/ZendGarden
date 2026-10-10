@@ -21,11 +21,17 @@ static func drag(index: int, pos: Vector2, relative: Vector2) -> void:
  Input.parse_input_event(event)
  Input.flush_buffered_events()
 
+static func capture(g, filename: String) -> void:
+ if DisplayServer.get_name()=="headless":return
+ await RenderingServer.frame_post_draw
+ g.get_viewport().get_texture().get_image().save_png("res://captures/"+filename)
+
 static func run(g, failures: Array) -> void:
  var was_processing=g.is_processing()
  g.set_process(false)
  var old_settings=g.settings.duplicate()
  var old_size=g.get_window().size
+ g.get_window().size=Vector2i(1280,800)
  g.settings.controls="touch"
  g.touch.configure()
  g.set_mode("walk")
@@ -66,6 +72,19 @@ static func run(g, failures: Array) -> void:
  press(2,Vector2(530,220),false)
  press(1,touch.origin,false)
  if touch.stick!=Vector2.ZERO or touch.look_id!=-1: failures.append("Released touch kept moving")
+ # Two thumbs can walk, water and turn. Dragging the action owns the look only
+ # for continuous tools, and cancellation must stop both the tool and camera.
+ var action_pos=touch.buttons.action.get_global_rect().get_center()
+ press(11,touch.origin)
+ press(12,action_pos)
+ var action_yaw=g.yaw
+ drag(12,action_pos+Vector2(20,0),Vector2(-900,900))
+ if not touch.held or touch.stick_id!=11 or g.yaw==action_yaw:failures.append("Two-thumb tool-and-look gesture failed")
+ press(12,action_pos,false,true)
+ var released_yaw=g.yaw
+ drag(12,action_pos+Vector2(40,0),Vector2(20,0))
+ if touch.held or touch.action_id!=-1 or g.yaw!=released_yaw:failures.append("Canceled action kept working or looking")
+ press(11,touch.origin,false)
  # Regression: the web backend's relative delta can come from another finger.
  # Alternate nonsequential IDs and wildly wrong relative values; only absolute
  # displacement of the looking finger may affect the camera.
@@ -132,8 +151,9 @@ static func run(g, failures: Array) -> void:
  touch.show_drawer("garden")
  if g.gameplay_active(): failures.append("Garden drawer did not block touch movement")
  touch.close_menu()
- # Exercise layouts across short phones, portrait phones and large tablets.
- for size in [Vector2i(844,390),Vector2i(390,844),Vector2i(320,568),Vector2i(640,360),Vector2i(1024,768),Vector2i(768,1024),Vector2i(1366,1024)]:
+ # Tablet landscapes, portrait and square unfolded screens; small layouts keep
+ # a usable fallback without determining the tablet design.
+ for size in [Vector2i(844,390),Vector2i(390,844),Vector2i(320,568),Vector2i(640,360),Vector2i(1024,768),Vector2i(768,1024),Vector2i(1366,1024),Vector2i(800,740),Vector2i(740,800),Vector2i(700,560)]:
   g.get_window().size=size
   await g.get_tree().process_frame
   touch.configure()
@@ -142,8 +162,54 @@ static func run(g, failures: Array) -> void:
   g.open_sidebar("Settings")
   await g.get_tree().process_frame
   var bounds=Rect2(Vector2.ZERO,g.get_viewport().get_visible_rect().size)
-  if not bounds.encloses(g.side_panel.get_global_rect()): failures.append("Touch menu overflow at "+str(size))
+  if not bounds.encloses(g.side_panel.get_global_rect()): failures.append("Touch menu overflow at %s: panel %s, viewport %s, minimum %s"%[size,g.side_panel.get_global_rect(),bounds,g.side_panel.get_combined_minimum_size()])
   touch.close_menu()
+  if touch.tablet_layout:
+   for page in ["Shop","Orders","Guide","Garden"]:
+    touch.open_menu(page)
+    await g.get_tree().process_frame
+    if not bounds.encloses(g.side_panel.get_global_rect()):failures.append("Touch "+page+" menu overflow at "+str(size))
+   touch.open_menu("Seeds")
+   await g.get_tree().process_frame
+   await g.get_tree().process_frame
+   var cards=g.list_box.get_node("PlantCards")
+   var previous_seed=g.selected
+   g.list_box.get_parent().scroll_vertical=180
+   await g.get_tree().process_frame
+   var browsing_scroll=g.list_box.get_parent().scroll_vertical
+   cards.get_child(0).pressed.emit()
+   await g.get_tree().process_frame
+   if g.active_tab!="Seed details" or not g.side_panel.visible or g.selected!=previous_seed:failures.append("Touch seed card skipped its details page")
+   touch.back_to_seeds()
+   await g.get_tree().process_frame
+   await g.get_tree().process_frame
+   if g.list_box.get_parent().scroll_vertical!=browsing_scroll:failures.append("Returning from plant details lost collection scroll")
+   g.list_box.get_node("PlantCards").get_child(0).pressed.emit()
+   await g.get_tree().process_frame
+   await capture(g,"touch-details-%dx%d.png"%[size.x,size.y])
+   var choose=g.list_box.get_node("PlantThisSeed")
+   if choose.disabled:failures.append("Initial seed cannot be selected from details")
+   else:choose.pressed.emit()
+   if g.mode!="plant" or g.side_panel.visible:failures.append("Plant this did not return to gardening")
+   # Discrete actions never become a camera drag or a repeating held tool.
+   g.hover_valid=true
+   touch._process(0)
+   var pos=touch.buttons.action.get_global_rect().get_center()
+   var discrete_yaw=g.yaw
+   press(71,pos)
+   drag(71,pos+Vector2(18,0),Vector2(18,0))
+   if touch.held or g.yaw!=discrete_yaw:failures.append("Planting became a continuous camera gesture")
+   press(71,pos,false)
+   touch.open_menu("Seeds")
+   await g.get_tree().process_frame
+   if g.list_box.get_node("PlantCards").columns<2:failures.append("Touch collection lost its card grid")
+   await capture(g,"touch-seeds-%dx%d.png"%[size.x,size.y])
+   touch.close_menu()
+   touch.show_drawer("tools")
+   await g.get_tree().process_frame
+   if touch.drawer.size.y>=bounds.size.y*.7:failures.append("Tool tray became a full-height menu")
+   await capture(g,"touch-tools-%dx%d.png"%[size.x,size.y])
+   touch.close_menu()
   g.toast_time=0
   for handed in [false,true]:
    for control_size in [80,100,120]:
@@ -157,7 +223,9 @@ static func run(g, failures: Array) -> void:
      touch.undo_time=12 if mode=="remove" else 0
      touch._process(0)
      await g.get_tree().process_frame
-     var controls: Array=[touch.stick_base,touch.status_panel,touch.context_panel]
+     var controls: Array=[touch.stick_base,touch.status_panel]
+     if touch.context_panel.visible:controls.append(touch.context_panel)
+     if touch.look_base.visible:controls.append(touch.look_base)
      for key in touch.buttons:
       var button=touch.buttons[key]
       if button.visible:
@@ -175,14 +243,51 @@ static func run(g, failures: Array) -> void:
   g.photo_mode=false
   touch.layout()
   touch._process(0)
-  await RenderingServer.frame_post_draw
-  g.get_viewport().get_texture().get_image().save_png("res://captures/touch-%dx%d.png" % [size.x,size.y])
+  await capture(g,"touch-%dx%d.png" % [size.x,size.y])
   if size==Vector2i(390,844):
    touch.show_drawer("tools")
    await g.get_tree().process_frame
-   await RenderingServer.frame_post_draw
-   g.get_viewport().get_texture().get_image().save_png("res://captures/touch-tools-390x844.png")
+   await capture(g,"touch-tools-390x844.png")
    touch.close_menu()
+  if touch.tablet_layout:
+   for handed in [false,true]:
+    g.settings.left_handed=handed
+    g.settings.touch_inset=100
+    g.settings.touch_height=120
+    g.settings.control_size=120
+    touch.layout()
+    for mode in ["build","prune","hoe","remove"]:
+     g.mode=mode
+     touch._process(0)
+     await g.get_tree().process_frame
+     var extreme_controls=[touch.stick_base,touch.look_base,touch.context_panel]
+     for control in touch.buttons.values():
+      if control.visible:extreme_controls.append(control)
+     for i in range(extreme_controls.size()):
+      var rect=extreme_controls[i].get_global_rect()
+      if not bounds.encloses(rect) or rect.has_point(bounds.size/2):failures.append("Adjusted controls overflow or cover aim at "+str(size))
+      for j in range(i):
+       if rect.intersects(extreme_controls[j].get_global_rect()):failures.append("Adjusted controls overlap at "+str(size)+" "+mode)
+   g.settings.touch_inset=0
+   g.settings.touch_height=0
+   g.settings.control_size=100
+   g.settings.left_handed=false
+ # Font metrics differ between macOS, Linux and browsers. Long settings labels
+ # must not determine the width of the touch panel, even with a larger fallback.
+ var normal_font=g.menu_theme.default_font
+ g.menu_theme.default_font=ThemeDB.fallback_font
+ for kind in ["CheckButton","OptionButton"]:g.menu_theme.set_font_size("font_size",kind,24)
+ for size in [Vector2i(320,568),Vector2i(700,560),Vector2i(1024,768)]:
+  g.get_window().size=size
+  await g.get_tree().process_frame
+  touch.configure()
+  touch.open_menu("Settings")
+  for frame in range(3):await g.get_tree().process_frame
+  var bounds=Rect2(Vector2.ZERO,g.get_viewport().get_visible_rect().size)
+  if not bounds.encloses(g.side_panel.get_global_rect()):failures.append("Fallback-font settings overflow at %s: %s"%[size,g.side_panel.get_global_rect()])
+  touch.close_menu()
+ for kind in ["CheckButton","OptionButton"]:g.menu_theme.clear_font_size("font_size",kind)
+ g.menu_theme.default_font=normal_font
  # Resize while fingers are held: old coordinates must not survive rotation.
  press(0,touch.origin)
  press(8,Vector2(500,200))
@@ -193,6 +298,8 @@ static func run(g, failures: Array) -> void:
  # Saved overrides and handedness must work without relying on device detection.
  g.settings.left_handed=true
  g.settings.control_size=120
+ g.settings.touch_inset=100
+ g.settings.touch_height=120
  touch.layout()
  if touch.origin.x<g.get_viewport().get_visible_rect().size.x/2: failures.append("Left-handed layout did not swap movement")
  touch.stick=Vector2.ONE
@@ -200,10 +307,19 @@ static func run(g, failures: Array) -> void:
  touch._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
  if touch.stick!=Vector2.ZERO or touch.held: failures.append("Focus loss left a touch gesture active")
  var saved=JSON.parse_string(JSON.stringify(g.settings))
- if saved.controls!="touch" or not saved.left_handed or saved.control_size!=120: failures.append("Touch preferences did not survive serialization")
+ if saved.controls!="touch" or not saved.left_handed or saved.control_size!=120 or saved.touch_inset!=100 or saved.touch_height!=120: failures.append("Touch preferences did not survive serialization")
+ if not GardenSaveFormat.valid({"version":2,"plants":[],"settings":saved},g.catalogue.size(),[]):failures.append("Save validation rejected touch position preferences")
  g.settings=old_settings
  g.get_window().size=old_size
  touch.configure()
  g.set_mode("walk")
  g.set_process(was_processing)
+ if DisplayServer.get_name()=="headless":
+  # Fixed-FPS headless checks can finish before the audio thread releases its
+  # looping WAV playbacks. Stop those test-only voices before shutting down.
+  for voice in g.ambient.players.values():
+   voice.stop()
+   voice.stream=null
+  await g.get_tree().process_frame
+  OS.delay_msec(30)
  print("TOUCH_CONTROLS_RESULT: ",failures)

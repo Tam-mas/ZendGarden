@@ -22,6 +22,18 @@ static func choose(button: Button, selected: bool) -> void:
  for state in ["normal","hover","pressed"]:
   button.add_theme_stylebox_override(state,button_style(selected,state))
 
+# Texture icons keep these controls legible in web builds without system-font
+# coverage for the dropdown and star glyphs.
+static func disclosure(button: Button, expanded: bool=false) -> void:
+ button.icon=preload("res://assets/ui/chevron-up.svg") if expanded else preload("res://assets/ui/chevron-down.svg")
+ button.icon_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+ button.add_theme_constant_override("icon_max_width",16)
+
+static func favourite(button: Button, selected: bool) -> void:
+ button.icon=preload("res://assets/ui/favourite-saved.svg") if selected else preload("res://assets/ui/favourite.svg")
+ button.icon_alignment=HORIZONTAL_ALIGNMENT_CENTER if button.text.is_empty() else HORIZONTAL_ALIGNMENT_LEFT
+ button.add_theme_constant_override("icon_max_width",20)
+
 static func frame(kind: String="wood", tint: Color=Color.WHITE, margin: int=18) -> StyleBoxTexture:
  var style=StyleBoxTexture.new()
  style.texture=load("res://assets/ui/"+kind+".png")
