@@ -166,7 +166,7 @@ static func build(g) -> void:
  var filter_toggle=g.button("Filters",func():
   g.collection_filters_open=not g.collection_filters_open
   g.list_box.get_node("SeedFilters").visible=g.collection_filters_open
-  GardenTheme.disclosure(g.list_box.get_node("FilterToggle"),g.collection_filters_open),Vector2(85,34))
+  GardenTheme.disclosure(g.list_box.get_node("FilterToggle"),g.collection_filters_open),Vector2(104 if g.touch_active() else 85,34))
  filter_toggle.name="FilterToggle"
  GardenTheme.disclosure(filter_toggle,g.collection_filters_open)
  browse.add_child(filter_toggle)
