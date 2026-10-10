@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Garden statistics · Zend Garden</title>
+  <link rel="stylesheet" href="stats.css">
+  <script src="stats.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><div><p class="eyebrow">Zend Garden · Private</p><h1>Time in the garden</h1></div><a href="/">Visit the garden ↗</a></header>
+    <form id="login" class="panel">
+      <h2>Your garden statistics</h2>
+      <p>Enter your dashboard password to see anonymous session totals.</p>
+      <label for="password">Dashboard password</label>
+      <div class="controls"><input id="password" type="password" autocomplete="current-password" required><button type="submit">Open statistics</button></div>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section id="dashboard" hidden>
+      <div class="toolbar"><label for="days">Sessions started</label><select id="days"><option value="1">Today</option><option value="7" selected>Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select><button id="refresh">Refresh</button><button id="logout" class="subtle">Lock dashboard</button></div>
+      <div id="cards" class="cards"></div>
+      <div class="panel"><h2>Sessions by start day</h2><p class="muted">Dates use UTC. All time in a session belongs to the day it started, including time after midnight.</p><div id="daily" class="table-scroll"></div></div>
+      <div class="columns"><div class="panel"><h2>Session length</h2><div id="lengths"></div></div><div class="panel"><h2>Devices</h2><p class="muted">A broad touch or desktop category.</p><div id="devices"></div></div></div>
+      <div class="panel"><h2>Game versions</h2><div id="versions" class="table-scroll"></div></div>
+      <aside class="panel notes"><h2>What the times mean</h2>
+        <p><strong>Game-open time</strong> is elapsed time after the garden loads, including background tabs, paused menus and device sleep.</p>
+        <p><strong>Garden advancing</strong> counts time when the garden clock advances. It can include an unattended garden and excludes browser suspension and menus that pause the clock. It does not measure attention.</p>
+        <p>Reports arrive about every two minutes. Background browsers may delay them; time catches up on the next report. If a browser closes without sending a final report, the unreported tail is lost. Advancing time can miss up to five seconds at closing.</p>
+        <p>Sessions are separate visits, not unique people. No tab-focus tracking, names, save contents or persistent visitor identifiers are collected. Summaries expire after 90 days.</p>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

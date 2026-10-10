@@ -1,5 +1,5 @@
 {
   "version": 1,
-  "include": ["/", "/index.html", "/shell.html", "/moving", "/moving.html", "/api/garden-transfer/*"],
+  "include": ["/api/session", "/api/stats"],
   "exclude": []
 }

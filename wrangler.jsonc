@@ -2,16 +2,16 @@
   "name": "zendgarden",
   "pages_build_output_dir": "./build/web",
   "compatibility_date": "2026-09-18",
-  // Set false and redeploy to restore the old entry page without touching saves.
-  "vars": { "ZEND_MIGRATION_ENABLED": "true" },
-  "r2_buckets": [
-    { "binding": "GARDEN_TRANSFERS", "bucket_name": "zend-garden-transfers" }
+  "vars": { "ZEND_ANALYTICS_ENABLED": "true" },
+  "d1_databases": [
+    { "binding": "GARDEN_STATS", "database_name": "zend-garden-stats",
+      "database_id": "b835ab95-073f-4619-b53e-6bb43d07e568" }
   ],
-  // Preview builds must not use the production relay.
+  // Previews and local builds never write production statistics.
   "env": {
     "preview": {
-      "vars": { "ZEND_MIGRATION_ENABLED": "false" },
-      "r2_buckets": []
+      "vars": { "ZEND_ANALYTICS_ENABLED": "false" },
+      "d1_databases": []
     }
   }
 }

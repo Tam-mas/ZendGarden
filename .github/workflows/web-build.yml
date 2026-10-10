@@ -24,8 +24,11 @@ jobs:
         run: python3 tests/check_audio.py
       - name: Test browser asset loader
         run: node tests/web_loader.cjs
-      - name: Test garden migration relay and save validation
-        run: node tests/migration.cjs
+      - name: Test anonymous statistics and save validation
+        run: |
+          node tests/analytics.cjs
+          node tests/save_storage.cjs
+          python3 tests/analytics_sql.py
       - name: Export and package for Cloudflare Pages
         run: python3 tools/build_web.py
       - name: Check garden path junctions

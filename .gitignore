@@ -16,6 +16,8 @@ __pycache__/
 # Local personal documents and credentials
 /*.docx
 .env
+.dev.vars*
+/.stats-access.txt
 .env.*
 !.env.example
 

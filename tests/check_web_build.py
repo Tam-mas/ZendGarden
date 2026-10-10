@@ -8,7 +8,8 @@ from pathlib import Path
 
 root = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else Path(__file__).resolve().parents[1] / 'build/web'
 for name in ('index.html', 'index.js', 'index.wasm', 'loader.js', 'pack.json', '_headers', '404.html',
-             '_routes.json', 'moving.html', 'migration.css', 'migration.js', 'migration-storage.js', 'save-format.js', 'save-files.js'):
+             '_routes.json', 'save-storage.js', 'save-format.js', 'save-files.js', 'telemetry.js',
+             'stats.html', 'stats.css', 'stats.js'):
     assert (root / name).is_file(), f'Missing {name}'
 assert not (root / 'index.pck').exists(), 'Oversized unsplit pack remains'
 assert gzip.decompress((root / 'index.wasm').read_bytes()).startswith(b'\x00asm'), 'Invalid WASM'
@@ -35,8 +36,8 @@ assert '<script src="save-files.js"></script>' in html
 assert 'garden-woodland.webp' in html and (root/'art/garden-woodland.webp').is_file(), 'New start background missing'
 assert 'garden-woodland.jpg' not in html
 routes = json.loads((root / '_routes.json').read_text())
-assert '/api/garden-transfer/*' in routes['include']
+assert routes['include'] == ['/api/session', '/api/stats']
 assert '/pack/*' not in routes['include'], 'Game downloads must bypass functions'
-moving = (root / 'moving.html').read_text()
-assert 'index.js' not in moving and 'loader.js' not in moving, 'Old-origin reader must not start the game'
+for removed in ('moving.html', 'migration.js', 'migration.css', 'migration-storage.js'):
+    assert not (root / removed).exists(), f'Obsolete domain-transfer asset: {removed}'
 print(f'PASS: browser site, WASM, {len(manifest["chunks"])} pack pieces, and Pages file limits')

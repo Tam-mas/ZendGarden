@@ -1,3 +1,23 @@
+### [2026-10-10 11:58] Added
+
+**Tech:** `web/telemetry.js`, `scripts/garden.gd`, `functions/api/session.js`, `functions/api/stats.js`, `analytics/schema.sql`, `web/stats.*` — anonymous session totals and private dashboard
+
+**Dev:** Record cumulative game-open wall time including background throttling and sleep, with separate batched frame time while the garden clock advances. Use direct JavaScript object calls under the existing CSP. Send every two minutes and best-effort at closing; keep a random session ID only in memory. Store one monotonic D1 summary per session with signed reporting tokens and idempotent starts. Protect aggregate statistics with a separate encrypted owner password; expose counts, average/median/longest sessions, duration thresholds, device categories and game versions. Use UTC start-day cohorts, document unfinished-session and missing-tail limits, and expire summaries after 90 days. Disable production collection on previews and other hosts. Collect no focus/visibility/input events, visitor identity, IP addresses, save data or persistent IDs. Exclude local secrets from Git and exports. Timing, privacy/authentication, real SQLite median/deduplication/retention, isolated browser save/lock/dashboard, Pages function compilation and full web build/security checks pass. Keep the in-game update history at version 63 as requested.
+
+**Plain:** A password-protected dashboard shows how long anonymous garden visits last, including time left open in the background and time the garden actually advances.
+
+**Why:** Understand how the game is used without tracking players' attention or personal gardens.
+
+### [2026-10-10 11:58] Removed
+
+**Tech:** `web/migration*`, `web/moving.html`, `functions/api/garden-transfer`, `functions/_middleware.js`, `wrangler.jsonc` — retired old-domain transfer service
+
+**Dev:** Remove the transfer screens, encrypted relay, R2 binding, activation flag, obsolete documentation and transfer-only tests. Extract ordinary IndexedDB reads, complete-session browser locks and mounted-save fingerprints into `web/save-storage.js`; preserve v1/v2/v3 validation and downloaded-save support. Leave existing garden saves, browser recovery archives and the old R2 bucket untouched. Restrict Pages Function routing to the two new statistics endpoints so static game pages use their existing security headers directly. No in-game release entry is added.
+
+**Plain:** The completed move to zend.garden no longer runs a transfer service, and saved gardens keep their normal protection.
+
+**Why:** Remove obsolete infrastructure while keeping current gardens and recovery copies intact.
+
 ### [2026-10-10 08:57] Fixed
 
 **Tech:** `garden_paving.py`, `build_distinct_areas.py`, `build_connecting_trail.py`, `area_furnishings.gd`, `garden_area_transitions.gd`, `web/shell.html` — alpine hillside, rear trail corner and welcome copy
