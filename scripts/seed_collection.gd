@@ -1,6 +1,9 @@
 class_name GardenSeedCollection
 extends RefCounted
 
+static func tablet(g) -> bool:
+ return g.touch_active() and g.touch is Object and bool(g.touch.get("tablet_layout"))
+
 static func colour_group(color: Color) -> String:
  if color.s<.18 and color.v>.75: return "Cream / white"
  if color.v<.25: return "Dark"
@@ -59,7 +62,8 @@ static func name_before(a, b) -> bool:
  return int(a.id)<int(b.id) if comparison==0 else comparison<0
 
 static func selector(g, parent: Node, key: String, options: Array, caption: String="") -> void:
- var row=HBoxContainer.new()
+ var row: BoxContainer=VBoxContainer.new() if tablet(g) and parent.name=="CollectionNavigation" else HBoxContainer.new()
+ row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  parent.add_child(row)
  row.add_child(g.label(key.capitalize() if caption.is_empty() else caption,13))
  var choices=OptionButton.new()
@@ -67,7 +71,7 @@ static func selector(g, parent: Node, key: String, options: Array, caption: Stri
  choices.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  choices.fit_to_longest_item=false
  choices.clip_text=true
- choices.custom_minimum_size.y=42 if g.touch_active() else 32
+ choices.custom_minimum_size.y=48 if g.touch_active() else 32
  for option in options: choices.add_item(option)
  choices.select(maxi(0,options.find(g.collection_filters.get(key,options[0]))))
  choices.item_selected.connect(func(index):
@@ -95,14 +99,22 @@ static func build(g) -> void:
   update_categories(g)
   update_cards(g))
  g.list_box.add_child(search)
- g.list_box.add_child(g.button("My cultivars & propagation",func():GardenBreedingUI.open_library(g),Vector2(0,44)))
+ var shortcuts: Node=g.list_box
+ if tablet(g):
+  shortcuts=HBoxContainer.new()
+  shortcuts.add_theme_constant_override("separation",8)
+  g.list_box.add_child(shortcuts)
+ var cultivars=g.button("My cultivars" if tablet(g) else "My cultivars & propagation",func():GardenBreedingUI.open_library(g),Vector2(0,44))
+ cultivars.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+ shortcuts.add_child(cultivars)
  if g.touch_active() or g.get_viewport().get_visible_rect().size.y<700:
-  var picker=g.button("Category: "+g.category+" ▾",func():
+  var picker=g.button("Category: "+g.category,func():
    var categories=g.list_box.get_node("SeedCategories")
    categories.visible=not categories.visible
    update_categories(g),Vector2(0,42))
   picker.name="CategoryPicker"
-  g.list_box.add_child(picker)
+  picker.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+  shortcuts.add_child(picker)
  var cats=GridContainer.new()
  cats.name="SeedCategories"
  cats.columns=3
@@ -125,7 +137,10 @@ static func build(g) -> void:
   cats.add_child(b)
  update_categories(g)
  # Browsing sections and ordering remain available when detailed filters are closed.
- var navigation=VBoxContainer.new()
+ var navigation=GridContainer.new()
+ navigation.columns=2 if tablet(g) else 1
+ navigation.add_theme_constant_override("h_separation",10)
+ navigation.add_theme_constant_override("v_separation",5)
  navigation.name="CollectionNavigation"
  g.list_box.add_child(navigation)
  var group_options=["All collections"]+GardenCatalogue.COLLECTION_GROUPS+["My cultivars"]
@@ -142,17 +157,18 @@ static func build(g) -> void:
  views.fit_to_longest_item=false
  views.clip_text=true
  views.size_flags_horizontal=Control.SIZE_EXPAND_FILL
- views.custom_minimum_size.y=42 if g.touch_active() else 34
+ views.custom_minimum_size.y=48 if g.touch_active() else 34
  var modes=["All plants","Discovered","Favourites","Recently planted"]
  for name in modes: views.add_item(name)
  views.select(maxi(0,modes.find(g.collection_filters.view)))
  views.item_selected.connect(func(index): g.collection_filters.view=modes[index]; update_cards(g))
  browse.add_child(views)
- var filter_toggle=g.button("Filters ▴" if g.collection_filters_open else "Filters ▾",func():
+ var filter_toggle=g.button("Filters",func():
   g.collection_filters_open=not g.collection_filters_open
   g.list_box.get_node("SeedFilters").visible=g.collection_filters_open
-  g.list_box.get_node("FilterToggle").text="Filters ▴" if g.collection_filters_open else "Filters ▾",Vector2(85,34))
+  GardenTheme.disclosure(g.list_box.get_node("FilterToggle"),g.collection_filters_open),Vector2(85,34))
  filter_toggle.name="FilterToggle"
+ GardenTheme.disclosure(filter_toggle,g.collection_filters_open)
  browse.add_child(filter_toggle)
  var filters=VBoxContainer.new()
  filters.name="SeedFilters"
@@ -187,17 +203,63 @@ static func build(g) -> void:
  if g.catalogue[g.selected].climber:g.detail_label.text+="\nClimbs nearby arbors & pergolas."
 
 static func update_categories(g) -> void:
- var picker=g.list_box.get_node_or_null("CategoryPicker")
- if picker:picker.text="Category: "+g.category+(" ▴" if g.list_box.get_node("SeedCategories").visible else " ▾")
+ var picker=g.list_box.find_child("CategoryPicker",true,false)
+ if picker:
+  picker.text="Category: "+g.category
+  GardenTheme.disclosure(picker,g.list_box.get_node("SeedCategories").visible)
  for b in g.list_box.get_node("SeedCategories").get_children():
   GardenTheme.choose(b,b.get_meta("category",b.text)==g.category)
+
+static func layout_cards(g, available_width: float) -> void:
+ var cards=g.list_box.get_node_or_null("PlantCards")
+ if cards:cards.columns=clampi(int(available_width/170),2,4) if g.touch.tablet_layout else 2
+
+static func details(g, plant: Dictionary) -> void:
+ if plant.is_empty():return
+ var id=int(plant.id)
+ var uid=str(plant.get("form_uid",""))
+ var custom=not uid.is_empty()
+ var unlocked=custom or id in g.unlocked_plants
+ g.side_title.text=plant.name
+ g.list_box.add_child(g.button("Back to seeds",g.touch.back_to_seeds))
+ var portrait: TextureRect
+ if custom:
+  portrait=GardenCultivarThumbnail.new()
+  portrait.setup(g,GardenPlantBreeding.form(g,uid))
+ else:
+  portrait=TextureRect.new()
+  portrait.texture=load(GardenArt.card_path("res://assets/ui/plants/%02d"%id))
+ portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+ portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+ portrait.custom_minimum_size=Vector2(160,190)
+ g.list_box.add_child(portrait)
+ var choose=g.button("Plant this" if unlocked else "Discover & plant · %d petals"%plant.price,func():
+  if custom:GardenPlantBreeding.choose(g,uid)
+  else:g.choose_plant(id))
+ choose.name="PlantThisSeed"
+ choose.disabled=not unlocked and g.coins<int(plant.price)
+ g.list_box.add_child(choose)
+ if not unlocked:g.add_note("Discover once to keep unlimited seeds. You have %d petals."%g.coins,16)
+ if not plant.get("botanical_name","").is_empty():g.add_note(plant.botanical_name,18)
+ g.add_note("%s layer · %.1f m at maturity · %d capacity"%[["Groundcover","Flowers","Shrubs","Canopy"][plant.layer],float(plant.height),plant.capacity],17)
+ g.add_note("%d growing days · Likes %s\nGrows: %s\nWelcomes %s"%[plant.days,plant.condition,GardenCatalogue.growing_seasons(id),plant.animal],17)
+ if plant.climber:g.add_note("Climbs nearby arbors and pergolas.",17)
+ if custom:g.add_note(GardenPlantBreeding.traits(GardenPlantBreeding.form(g,uid)),17)
+ var favourite=GardenPlantBreeding.form(g,uid).get("favourite",false) if custom else id in g.favourite_plants
+ var favourite_button=g.button("Saved favourite" if favourite else "Save favourite",func():
+  if custom:GardenPlantBreeding.form(g,uid).favourite=not favourite;g.save_game()
+  else:toggle_favourite(g,id)
+  g.refresh_sidebar())
+ GardenTheme.favourite(favourite_button,favourite)
+ g.list_box.add_child(favourite_button)
+ g.detail_label.text="Aim at soil or a planter pocket, then tap Plant here."
 
 static func update_cards(g) -> void:
  var cards=g.list_box.get_node_or_null("PlantCards")
  if cards==null: return
  for child in cards.get_children(): cards.remove_child(child); child.queue_free()
  var plants=matching(g)
- g.list_box.get_node("SeedResults").text="%d varieties · ★ to save a favourite" % plants.size()
+ g.list_box.get_node("SeedResults").text="%d varieties · Star to save a favourite" % plants.size()
  if plants.is_empty():
   var empty=g.label("No plants match. Try another collection, category or clear your filters.",15)
   empty.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -210,7 +272,10 @@ static func update_cards(g) -> void:
   var custom=not uid.is_empty()
   var favourite=GardenPlantBreeding.form(g,uid).get("favourite",false) if custom else id in g.favourite_plants
   var unlocked=custom or id in g.unlocked_plants
-  var b=g.button("",func(): GardenPlantBreeding.choose(g,uid) if custom else g.choose_plant(id),Vector2(120,300 if g.touch_active() else 210))
+  var b=g.button("",func():
+   if g.touch_active():g.touch.open_seed_details(p)
+   elif custom:GardenPlantBreeding.choose(g,uid)
+   else:g.choose_plant(id),Vector2(120,230 if g.touch_active() else 210))
   b.name="CultivarCard"+uid if custom else "PlantCard%02d" % id
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   b.tooltip_text="%s · %.1f m at maturity · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
@@ -223,7 +288,7 @@ static func update_cards(g) -> void:
   content.add_theme_constant_override("separation",1)
   content.mouse_filter=Control.MOUSE_FILTER_IGNORE
   b.add_child(content)
-  var minimum_height=300 if g.touch_active() else 210
+  var minimum_height=230 if g.touch_active() else 210
   content.minimum_size_changed.connect(func():
    b.custom_minimum_size.y=maxf(minimum_height,content.get_combined_minimum_size().y+12))
   if custom:
@@ -253,11 +318,12 @@ static func update_cards(g) -> void:
    text.mouse_filter=Control.MOUSE_FILTER_IGNORE
    text.add_theme_color_override("font_color",GardenTheme.TEXT if line[1]==name_size else GardenTheme.MUTED)
    content.add_child(text)
-  var star=g.button("★" if favourite else "☆",func():
+  var star=g.button("",func():
    if custom:GardenPlantBreeding.form(g,uid).favourite=not favourite;g.save_game();update_cards(g)
    else:toggle_favourite(g,id),Vector2(34,34))
   star.name="Favourite"
   GardenTheme.choose(star,favourite)
+  GardenTheme.favourite(star,favourite)
   star.tooltip_text="Remove favourite" if favourite else "Save favourite"
   star.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
   star.offset_left=-54 if g.touch_active() else -38

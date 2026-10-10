@@ -19,6 +19,12 @@ var context_panel: Panel
 var context_title: Label
 var context_hint: Label
 var walk_label: Label
+var look_label: Label
+var look_base: Panel
+var look_knob: Panel
+var look_origin=Vector2.ZERO
+var look_anchor=Vector2.ZERO
+var action_anchor=Vector2.ZERO
 var context_keys: Array=[]
 var origin=Vector2.ZERO
 var radius=62.0
@@ -35,6 +41,13 @@ var window_size=Vector2i.ZERO
 var removed: Dictionary={}
 var undo_time=0.0
 var graphics_applied=""
+var tablet_layout=false
+var wide_menu=false
+var seed_detail: Dictionary={}
+var seed_scroll=0
+
+const CONTINUOUS_TOOLS=["water","rake","hoe","harvest"]
+const TOOL_CHOICES=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"],["hoe","Hoe"]]
 
 func setup(game) -> void:
  g=game
@@ -63,9 +76,22 @@ func setup(game) -> void:
  walk_label=readout_label(hud,14)
  walk_label.text="WALK"
  walk_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
- add_button("garden","Garden",func(): show_drawer("garden"))
- add_button("seeds","Seeds",func(): reset_gestures(); g.open_sidebar("Seeds"))
+ look_base=Panel.new()
+ look_knob=Panel.new()
+ for panel in [look_base,look_knob]:
+  panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
+  var style=StyleBoxFlat.new()
+  style.bg_color=Color(.22,.30,.19,.38) if panel==look_base else Color(.9,.84,.62,.55)
+  style.set_corner_radius_all(100)
+  panel.add_theme_stylebox_override("panel",style)
+  hud.add_child(panel)
+ look_label=readout_label(hud,14)
+ look_label.text="LOOK"
+ look_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+ add_button("garden","Garden",func(): open_menu("Garden"))
+ add_button("seeds","Seeds",func(): open_menu("Seeds"))
  add_button("tools","Tools",func(): show_drawer("tools"))
+ GardenTheme.disclosure(buttons.tools)
  add_button("action","Water",act)
  add_button("layer","Layer",func():
   if g.mode=="hoe":GardenTools.toggle_hoe(g)
@@ -84,6 +110,7 @@ func setup(game) -> void:
  add_button("photo","Take photo",g.capture_photo)
  add_button("done","Done",g.toggle_photo)
  close_button=g.button("Back to garden",close_menu)
+ close_button.name="TouchBackToGarden"
  g.side_panel.get_child(0).add_child(close_button)
  close_button.hide()
  get_viewport().size_changed.connect(func(): last_size=Vector2.ZERO)
@@ -140,6 +167,11 @@ func configure() -> void:
   var factor=maxf(1.0,minf(dimensions.x/1600.0,dimensions.y/1000.0))
   get_window().content_scale_size=Vector2i(dimensions/factor)
   GardenInterface.layout(g,true)
+  var atlas_button=g.side_panel.get_child(0).get_child(4)
+  atlas_button.text="Garden atlas · milestones & trails"
+  g.side_panel.get_child(0).get_child(5).custom_minimum_size.y=30
+  g.side_title.autowrap_mode=TextServer.AUTOWRAP_OFF
+  g.side_title.custom_minimum_size.x=0
  apply_graphics()
  last_size=Vector2.ZERO
  # Establish coordinates before the next touch, not on the following frame.
@@ -194,57 +226,98 @@ func cycle_layer() -> void:
  g.toast("Target layer: "+["groundcover","flowers","shrubs","canopy"][g.selected_layer])
  GardenTutorial.hint(g,"layers","One spot can hold groundcover, flowers, shrubs and a tree. Switch layers to choose the plant you mean.")
 
+func open_menu(page: String) -> void:
+ if is_instance_valid(drawer):drawer.queue_free();drawer=null
+ reset_gestures()
+ # Shortcuts always open the page, even if it was last selected.
+ g.side_panel.hide()
+ g.open_sidebar(page)
+ layout_menu()
+
+func open_seed_details(plant: Dictionary) -> void:
+ seed_scroll=g.list_box.get_parent().scroll_vertical
+ seed_detail=plant.duplicate()
+ g.active_tab="Seed details"
+ g.refresh_sidebar()
+ g.list_box.get_parent().set_deferred("scroll_vertical",0)
+ layout_menu()
+
+func back_to_seeds() -> void:
+ var restore_scroll=seed_scroll
+ g.active_tab="Seeds"
+ g.refresh_sidebar()
+ layout_menu()
+ var cards=g.list_box.get_node("PlantCards")
+ # Card heights settle over container layout passes. Restoring sooner clamps
+ # against the old details page's scroll range and loses the browsing position.
+ await g.get_tree().process_frame
+ await g.get_tree().process_frame
+ if g.active_tab=="Seeds" and g.side_panel.visible and is_instance_valid(cards) and cards.get_parent()==g.list_box:
+  g.list_box.get_parent().scroll_vertical=restore_scroll
+
+func garden_page() -> void:
+ g.side_title.text="Your garden"
+ g.add_note("Browse Seeds, Shop, Orders and Guide with the tabs above. Return to the garden whenever you’re ready.",17)
+ g.list_box.add_child(g.button("Garden atlas · milestones & trails",func():GardenAreaAtlas.open(g)))
+ g.list_box.add_child(g.button("Next morning",func():close_menu();g.next_day()))
+ g.add_note("COMPANIONS",15)
+ for index in range(g.companion_names.size()):
+  var pet_index=index
+  g.list_box.add_child(g.button("Call "+g.companion_names[index],func():close_menu();GardenLeisure.call_pet(g,pet_index)))
+  if not g.rest_kind.is_empty():
+   g.list_box.add_child(g.button("Invite "+g.companion_names[index]+" to settle",func():close_menu();GardenLeisure.call_pet(g,pet_index,true)))
+ if not g.rest_kind.is_empty():g.list_box.add_child(g.button("Stand up",func():close_menu();GardenLeisure.leave(g)))
+ if g.pets.any(func(p):return p.position.distance_to(g.player.position)<4):
+  g.list_box.add_child(g.button("Pet companion",func():close_menu();g.greet_pet()))
+ g.add_note("STAY A WHILE",15)
+ g.list_box.add_child(g.button("Photo mode",func():close_menu();g.toggle_photo()))
+ g.list_box.add_child(g.button("Enjoy the view",func():close_menu();GardenClearView.enter(g)))
+ g.detail_label.text="Your usual garden menus, with room to browse by touch."
+
 func show_drawer(kind: String) -> void:
+ if kind=="garden":open_menu("Garden");return
+ if is_instance_valid(drawer):close_menu();return
  reset_gestures()
  g.side_panel.hide()
- if is_instance_valid(drawer): drawer.queue_free()
  drawer=PanelContainer.new()
+ drawer.name="TouchToolTray"
  drawer.theme=g.menu_theme
  drawer.add_theme_stylebox_override("panel",GardenTheme.frame())
  add_child(drawer)
  var frame=VBoxContainer.new()
+ frame.add_theme_constant_override("separation",8)
  drawer.add_child(frame)
- frame.add_child(g.label("Choose a tool" if kind=="tools" else "Your garden",24))
- frame.add_child(g.button("Back to garden",close_menu,Vector2(0,48)))
+ frame.add_child(g.label("Choose a tool",22))
  var scroll=ScrollContainer.new()
  scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  frame.add_child(scroll)
  var col=GridContainer.new()
- col.columns=2
+ col.columns=3
  col.add_theme_constant_override("h_separation",8)
  col.add_theme_constant_override("v_separation",8)
  col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  scroll.add_child(col)
- if kind=="garden":col.add_child(g.button("Garden atlas · ten new trails",func():close_menu();GardenAreaAtlas.open(g),Vector2(0,48)))
- var choices=[["Seeds","Seeds"],["Shop","Shop"],["Orders","Orders"],["Guide","Guide"],["Settings","Settings"]]
- if kind=="tools": choices=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"],["hoe","Hoe"]]
- for entry in choices:
+ for entry in TOOL_CHOICES:
   var key=entry[0]
-  var choice=g.button(entry[1]+(" ✓" if kind=="tools" and g.mode==key else ""),func():
+  var choice=g.button(entry[1],func():
    close_menu()
-   if kind=="tools": g.set_mode(key)
-   else: g.open_sidebar(key),Vector2(0,60))
+   g.set_mode(key),Vector2(0,54))
+  choice.name="Tool"+key.capitalize()
+  GardenTheme.choose(choice,g.mode==key)
   choice.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   col.add_child(choice)
- if kind=="garden":
-  col.add_child(g.button("Next morning",func(): close_menu(); g.next_day(),Vector2(0,48)))
-  col.add_child(g.button("Call "+g.companion_names[0],func(): close_menu(); GardenLeisure.call_pet(g,0),Vector2(0,48)))
-  col.add_child(g.button("Call "+g.companion_names[1],func(): close_menu(); GardenLeisure.call_pet(g,1),Vector2(0,48)))
-  if not g.rest_kind.is_empty():
-   col.add_child(g.button("Invite "+g.companion_names[0]+" to settle",func(): close_menu(); GardenLeisure.call_pet(g,0,true),Vector2(0,48)))
-   col.add_child(g.button("Invite "+g.companion_names[1]+" to settle",func(): close_menu(); GardenLeisure.call_pet(g,1,true),Vector2(0,48)))
-   col.add_child(g.button("Stand up",func(): close_menu(); GardenLeisure.leave(g),Vector2(0,48)))
-  if g.pets.any(func(p):return p.position.distance_to(g.player.position)<4):
-   col.add_child(g.button("Pet companion",func():close_menu();g.greet_pet(),Vector2(0,48)))
-  col.add_child(g.button("Photo mode",func(): close_menu(); g.toggle_photo(),Vector2(0,48)))
-  col.add_child(g.button("Enjoy the view",func(): close_menu(); GardenClearView.enter(g),Vector2(0,48)))
+ frame.add_child(g.button("Back to garden",close_menu,Vector2(0,48)))
  fit_drawer()
 
 func fit_drawer() -> void:
  if not is_instance_valid(drawer): return
  var size=get_viewport().get_visible_rect().size
- drawer.position=Vector2(maxf(12,(size.x-400)/2),12)
- drawer.size=Vector2(minf(400,size.x-24),size.y-24)
+ var width=minf(368,size.x-24)
+ var height=minf(310,size.y-24)
+ drawer.size=Vector2(width,height)
+ var x=clampf(buttons.tools.position.x,12,size.x-width-12)
+ if g.settings.left_handed:x=clampf(buttons.tools.position.x+buttons.tools.size.x-width,12,size.x-width-12)
+ drawer.position=Vector2(x,maxf(12,buttons.tools.position.y-height-12))
 
 func layout() -> void:
  # A changed coordinate system invalidates fingers already on the glass.
@@ -252,6 +325,13 @@ func layout() -> void:
  var size=get_viewport().get_visible_rect().size
  last_size=size
  hud.size=size
+ tablet_layout=size.x>=700 and size.y>=560
+ wide_menu=tablet_layout and size.x>=960 and size.x/size.y>=1.25
+ if tablet_layout:
+  layout_tablet(size)
+  layout_menu()
+  fit_drawer()
+  return
  var scale=minf(float(g.settings.control_size)/100.0,(size.x-48)/234.0)
  radius=54*scale
  var left=bool(g.settings.left_handed)
@@ -277,6 +357,7 @@ func layout() -> void:
  status_text.position=Vector2(10,4)
  status_text.size=Vector2(status_panel.size.x-20,40)
  status_text.add_theme_font_size_override("font_size",14 if size.x<380 else 16)
+ status_text.max_lines_visible=2
  place("undo",Vector2(size.x-132,68),Vector2(120,48))
  var portrait=size.x<600
  var context_width=minf(500,size.x-2*(maxf(radius*2,action_width)+32)) if not portrait else size.x-24
@@ -294,27 +375,101 @@ func layout() -> void:
  g.toast_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  g.transition_label.position=Vector2(16,size.y/2-40)
  g.transition_label.size.x=size.x-32
+ layout_menu()
+ context_keys=[]
+ fit_drawer()
+
+func layout_menu() -> void:
+ var size=get_viewport().get_visible_rect().size
  var col=g.side_panel.get_child(0)
  col.add_theme_constant_override("separation",5)
  for tab in col.get_child(0).get_children():
   tab.custom_minimum_size.y=48
   tab.add_theme_font_size_override("font_size",14 if size.x<380 else 16)
  col.get_child(4).custom_minimum_size.y=48
+ col.get_child(5).custom_minimum_size.y=48
  close_button.custom_minimum_size.y=48
- col.get_child(2).custom_minimum_size=Vector2(264,0)
+ col.get_child(2).custom_minimum_size=Vector2(264,80 if tablet_layout else 0)
  g.detail_label.hide()
+ g.side_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ g.side_title.custom_minimum_size.x=264
+ col.get_child(4).text="Garden & companions"
  var menu_width=minf(480,size.x-24)
- g.side_panel.position=Vector2((size.x-menu_width)/2,12)
- g.side_panel.size=Vector2(menu_width,size.y-24)
+ if tablet_layout:menu_width=clampf(size.x*.42,392,520) if wide_menu else minf(740,size.x*.9)
+ g.side_panel.position=Vector2(20 if wide_menu else (size.x-menu_width)/2,16 if tablet_layout else 12)
+ g.side_panel.size=Vector2(menu_width,size.y-(32 if tablet_layout else 24))
+ if g.active_tab=="Seeds":GardenSeedCollection.layout_cards(g,menu_width-44)
+ var ornaments=g.list_box.get_node_or_null("OrnamentCards")
+ if ornaments:ornaments.columns=clampi(int((menu_width-44)/170),2,4) if tablet_layout else 2
+
+func layout_tablet(size: Vector2) -> void:
+ var scale=clampf(float(g.settings.control_size)/100.0,.8,1.2)
+ radius=60*scale
+ var inset=clampf(float(g.settings.get("touch_inset",0)),0,minf(100,(size.x-640)/2))
+ var lift=clampf(float(g.settings.get("touch_height",0)),0,minf(120,size.y*.15))
+ var edge=20+inset
+ var left=bool(g.settings.left_handed)
+ origin=Vector2(size.x-edge-radius if left else edge+radius,size.y-20-radius-lift)
+ look_origin=Vector2(edge+radius if left else size.x-edge-radius,origin.y)
+ for entry in [[stick_base,origin],[look_base,look_origin]]:
+  entry[0].position=entry[1]-Vector2.ONE*radius
+  entry[0].size=Vector2.ONE*radius*2
+ stick_knob.size=Vector2.ONE*radius*.72
+ look_knob.size=Vector2.ONE*radius*.55
+ for entry in [[walk_label,origin],[look_label,look_origin]]:
+  entry[0].position=Vector2(entry[1].x-radius,entry[1].y+radius+2)
+  entry[0].size=Vector2(radius*2,20)
+ var row_width=minf(240*scale,(size.x-2*edge-224)/2)
+ var row_x=size.x-edge-row_width if left else edge
+ var row_y=origin.y-radius-68
+ var seed_width=80*scale
+ place("seeds",Vector2(row_x,row_y),Vector2(seed_width,56))
+ place("tools",Vector2(row_x+seed_width+8,row_y),Vector2(row_width-seed_width-8,56))
+ var action_width=160*scale
+ var action_x=edge if left else size.x-edge-action_width
+ for key in ["action","greet","photo"]:place(key,Vector2(action_x,row_y),Vector2(action_width,56))
+ place("garden",Vector2(size.x-124,20),Vector2(104,52))
+ place("done",buttons.garden.position,buttons.garden.size)
+ status_panel.position=Vector2(20,16)
+ status_panel.size=Vector2(minf(480,size.x-164),80)
+ status_text.position=Vector2(12,6)
+ status_text.size=status_panel.size-Vector2(24,12)
+ status_text.max_lines_visible=3
+ status_text.add_theme_font_size_override("font_size",16)
+ var context_width=minf(460,size.x-2*(row_width+edge+12))
+ context_panel.size=Vector2(maxf(200,context_width),70)
+ context_title.position=Vector2(12,7)
+ context_title.size=Vector2(context_panel.size.x-24,24)
+ context_title.max_lines_visible=1
+ context_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
+ context_hint.position=Vector2(12,32)
+ context_hint.size=Vector2(context_panel.size.x-24,34)
+ g.reticle.position=size/2-Vector2(8,18)
+ g.toast_label.size=Vector2(minf(520,size.x-40),0)
+ g.toast_label.position=Vector2((size.x-g.toast_label.size.x)/2,110)
+ g.toast_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ g.transition_label.position=Vector2(20,size.y/2-40)
+ g.transition_label.size.x=size.x-40
  context_keys=[]
- fit_drawer()
+ layout_context([])
 
 func layout_context(keys: Array) -> void:
- if keys==context_keys: return
+ if keys==context_keys and not tablet_layout: return
  context_keys=keys.duplicate()
- if keys.is_empty(): return
  var size=get_viewport().get_visible_rect().size
  var width=context_panel.size.x
+ if tablet_layout:
+  var columns=3 if width>=300 else 2
+  var rows=ceili(float(keys.size())/columns)
+  var x=(size.x-width)/2
+  var y=size.y-20-70-(rows*56+8 if rows>0 else 0)
+  context_panel.position=Vector2(x,y)
+  var option_width=(width-8*(columns-1))/columns
+  for index in range(keys.size()):
+   place(keys[index],Vector2(x+(index%columns)*(option_width+8),y+78+(index/columns)*56),Vector2(option_width,48))
+   buttons[keys[index]].add_theme_font_size_override("font_size",16)
+  return
+ if keys.is_empty(): return
  var button_width=minf(180,(width-8*(keys.size()-1))/keys.size())
  var row_width=button_width*keys.size()+8*(keys.size()-1)
  var x=context_panel.position.x+(width-row_width)/2
@@ -342,15 +497,25 @@ func _process(delta: float) -> void:
  if blocked(): reset_gestures()
  for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel,g.view_button]: panel.hide()
  g.compact_hud.hide()
+ g.reticle.visible=not blocked() and not g.photo_mode
  status_panel.visible=not blocked()
- context_panel.visible=not blocked() and not g.tutorial_state.get("active",false)
+ context_panel.visible=not blocked() and not g.tutorial_state.get("active",false) and (not tablet_layout or g.mode!="walk" or not g.inspector_lines.is_empty() or not g.rest_kind.is_empty() or g.photo_mode)
  walk_label.visible=not blocked()
+ look_label.visible=tablet_layout and not blocked()
+ look_base.visible=look_label.visible
+ look_knob.visible=look_label.visible
  status_text.text="Day %d · %d petals\n%s" % [g.day,g.coins,GardenClimate.season(g.day)]
+ if tablet_layout:
+  status_text.text=g.plots[g.current_plot].name+"\nDay %d · %02d:%02d · %d petals\n%s · %s"%[g.day,int(g.clock_time*24),int(fmod(g.clock_time*1440,60)),g.coins,GardenClimate.season(g.day),g.climate.description()]
  if last_size.x<380: status_text.text="Day %d\n%d petals"%[g.day,g.coins]
  for b in buttons.values(): b.visible=not blocked()
  stick_base.visible=not blocked()
  stick_knob.visible=not blocked()
  stick_knob.position=origin+stick*radius*.65-stick_knob.size/2
+ var look_offset=Vector2.ZERO
+ if finger_positions.has(look_id):look_offset=finger_positions[look_id]-look_anchor
+ elif held and finger_positions.has(action_id):look_offset=finger_positions[action_id]-action_anchor
+ look_knob.position=look_origin+look_offset.limit_length(radius*.65)-look_knob.size/2
  if blocked():
   if is_instance_valid(g.request_popup) and g.request_popup.visible: fit_popup(g.request_popup)
   if is_instance_valid(g.welcome):
@@ -363,21 +528,28 @@ func _process(delta: float) -> void:
  buttons.action.visible=g.mode!="walk" and not g.photo_mode
  buttons.action.disabled=not g.hover_valid
  buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake","hoe":"Raise ground" if g.hoe_raise else "Lower ground"}.get(g.mode,"Use")
+ buttons.tools.text="Tools"
+ for entry in TOOL_CHOICES:
+  if entry[0]==g.mode:buttons.tools.text=entry[1]
+ if buttons.tools.size.x<104:buttons.tools.text="Tools"
  context_title.text={"walk":"Explore your garden","water":"Water · +20% growth","prune":"Prune · %.2f m square"%GardenTools.prune_width(g),"harvest":"Gather · %.1f m square"%GardenTools.gather_width(g),"hoe":"Hoe · "+("raise ground" if g.hoe_raise else "lower ground")}.get(g.mode,g.mode.capitalize())
  if g.mode=="plant": context_title.text="Plant · "+g.catalogue[g.selected].name
  if g.mode=="build": context_title.text="Place · "+g.furniture[g.selected_furniture].name
  context_hint.text="Drag the view to look. Choose Tools to start gardening." if g.mode=="walk" else g.status_label.text.replace("\n"," · ")
- if g.mode in ["water","rake","hoe","harvest"]: context_hint.text="Aim at the ground. Hold "+buttons.action.text+" while looking around."
+ if g.mode in CONTINUOUS_TOOLS: context_hint.text="Hold "+buttons.action.text+" and drag to look. Release to stop."
  if not g.inspector_lines.is_empty():
   context_title.text=g.inspector_lines[0]
   context_hint.text=" · ".join(g.inspector_lines.slice(1,4))
  if g.mode=="plant" and not g.preview_error.is_empty(): context_hint.text=g.preview_error
+ elif g.mode=="plant" and g.inspector_lines.is_empty():
+  context_hint.text="%s · %d capacity\nBed: %d / %d used"%[g.catalogue[g.selected].condition.capitalize(),g.catalogue[g.selected].capacity,g.capacity_used(g.current_plot),g.plot_capacity(g.current_plot)]
  if g.photo_mode:
   context_title.text="Photo mode"
   context_hint.text="Walk and drag to frame your picture."
  buttons.layer.visible=(g.mode in ["prune","move","remove","hoe"] or (g.hover_target>=0 and g.mode in ["walk","water","harvest"])) and not g.photo_mode
- buttons.layer.text=["Ground","Flowers","Shrubs","Trees"][g.selected_layer]+" ↻"
+ buttons.layer.text=["Ground","Flowers","Shrubs","Trees"][g.selected_layer]
  if g.mode=="hoe":buttons.layer.text="Switch to "+("lower" if g.hoe_raise else "raise")
+ if g.mode=="hoe" and tablet_layout and context_panel.size.x<300:buttons.layer.text="Lower" if g.hoe_raise else "Raise"
  buttons.cancel.visible=g.mode!="walk" and not g.photo_mode
  buttons.cancel.text="Done"
  buttons.left.visible=(rotating or g.mode=="prune") and not g.photo_mode
@@ -405,7 +577,7 @@ func _process(delta: float) -> void:
  for key in ["layer","left","right","cancel","undo","up","down"]:
   if buttons[key].visible: options.append(key)
  layout_context(options)
- if held and g.mode in ["water","rake","hoe","harvest"]:
+ if held and g.mode in CONTINUOUS_TOOLS:
   repeat_time-=delta
   if repeat_time<=0:
    act(true)
@@ -460,7 +632,8 @@ func _input(event: InputEvent) -> void:
    if b.visible and b.get_global_rect().has_point(event.position):
     if not b.disabled:
      if key=="action" and action_id<0:
-      action_id=event.index; held=true
+      action_id=event.index; held=g.mode in CONTINUOUS_TOOLS
+      action_anchor=event.position
       repeat_time=GardenTools.GATHER_INTERVAL if g.mode=="harvest" else .3
      b.pressed.emit()
     get_viewport().set_input_as_handled()
@@ -476,6 +649,10 @@ func _input(event: InputEvent) -> void:
   elif event.index==look_id:
    var css_scale=display_size/get_viewport().get_visible_rect().size
    g.apply_mouse_look(movement*css_scale*1.7)
+  elif event.index==action_id and held and look_id<0:
+   # The same thumb holds the tool and turns the view; no third finger needed.
+   var css_scale=display_size/get_viewport().get_visible_rect().size
+   g.apply_mouse_look(movement*css_scale*1.7)
   get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -488,6 +665,7 @@ func _unhandled_input(event: InputEvent) -> void:
     stick=((event.position-origin)/radius).limit_length(1.0)
   elif look_id<0:
    look_id=event.index
+   look_anchor=event.position
   get_viewport().set_input_as_handled()
 
 func _notification(what: int) -> void:
@@ -568,16 +746,17 @@ func settings_page() -> void:
  handed.custom_minimum_size.y=48
  handed.toggled.connect(func(value): g.settings.left_handed=value; last_size=Vector2.ZERO; g.save_game())
  g.list_box.add_child(handed)
- for entry in [["control_size","Touch control size",80,120,10]]:
+ for entry in [["control_size","Touch control size",80,120,10],["touch_inset","Controls farther from the edges",0,100,10],["touch_height","Raise the bottom controls",0,120,10]]:
   var key=entry[0]
   g.add_note(entry[1])
   var slider=HSlider.new()
   slider.min_value=entry[2]; slider.max_value=entry[3]; slider.step=entry[4]
-  slider.value=g.settings[key]
+  slider.value=g.settings.get(key,0)
   slider.custom_minimum_size.y=48
   slider.value_changed.connect(func(value): g.settings[key]=value; last_size=Vector2.ZERO; apply_graphics())
   slider.drag_ended.connect(func(_changed): g.save_game())
   g.list_box.add_child(slider)
+ g.add_note("Position adjustments apply on tablets and unfolded phones. Text stays the same size when you resize the controls. Hold Water, Gather, Rake or the hoe action and drag that thumb to look; release to stop.")
 
 func welcome_page() -> void:
  GardenExperience.welcome(g)

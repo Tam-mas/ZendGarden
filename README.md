@@ -50,7 +50,7 @@ Use the **arrow keys** to walk and the **mouse** to look around. Press **Tab** t
 | **H** | Enjoy the view with HUD and held tool hidden; any key or click/tap returns |
 | **Escape** | Open settings or leave the current view |
 
-The game also has touch controls, with options for control size and a left-handed layout. Settings let you adjust sound, camera sensitivity, reduced motion and graphics quality. See the [player guide](docs/player-guide.md) for the full controls, tool tips, shop details and saving help.
+Tablets and unfolded phones use the familiar garden menus with larger tap targets, adaptive plant-card grids and a compact tool tray. Hold a continuous action and drag the same thumb to look while your other thumb moves. Settings include control size, edge spacing, height and handedness, alongside sound, camera sensitivity, reduced motion and graphics quality. See the [player guide](docs/player-guide.md) for the full controls, tool tips, shop details and saving help.
 
 ## Come back when you feel like it
 

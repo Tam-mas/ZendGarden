@@ -1,3 +1,13 @@
+### [2026-10-10 22:33] Changed
+
+**Tech:** `GardenTouch`, `GardenSeedCollection`, `GardenExperience` — adaptive tablet menus and two-thumb gardening
+
+**Dev:** Reuse the desktop Seeds, Shop, Orders and Guide tabs in a wide side panel or larger portrait/square overlay. Move Seeds and the selected-tool shortcut above the movement control, add a look-control guide, and replace the tall tool drawer with a compact nine-tool tray. Show plant details with an explicit selection action, preserve collection scroll on return, and adapt seed/ornament grid columns without rebuilding an open menu on resize. Keep desktop direct seed selection. Let a held Water/Gather/Rake/Hoe action drag the camera using that finger’s own displacement; discrete actions stay single-shot, and cancellation, menus and viewport changes clear ownership. Save separately clamped control inset and height preferences with backward-compatible defaults, retaining handedness and control size independently of text. Use small texture icons for dropdowns and favourites so browser font coverage does not hide them. Add release 64, rendered/headless layout and input regressions, browser touch checks, and a CI touch regression.
+
+**Plain:** Tablets and unfolded phones keep the familiar garden menus, with controls near your thumbs and roomier collections to browse.
+
+**Why:** Make the PC gardening workflow comfortable on larger touch screens while keeping existing gardens and desktop controls familiar.
+
 ### [2026-10-10 11:58] Added
 
 **Tech:** `web/telemetry.js`, `scripts/garden.gd`, `functions/api/session.js`, `functions/api/stats.js`, `analytics/schema.sql`, `web/stats.*` — anonymous session totals and private dashboard
