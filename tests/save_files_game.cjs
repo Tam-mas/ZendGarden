@@ -86,7 +86,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
    const deadline=Date.now()+45000;
    while(Date.now()<deadline) {
     const day=await page.evaluate(async()=>{
-     const storage=await import('/migration-storage.js');const bytes=await storage.readCurrent();
+     const storage=await import('/save-storage.js');const bytes=await storage.readCurrent();
      return bytes ? JSON.parse(new TextDecoder().decode(bytes)).day : null;
     });
     if(day===29)return;

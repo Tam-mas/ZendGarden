@@ -9,6 +9,9 @@ site = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else root / 'build/web'
 html = (site / 'index.html').read_text()
 assert not re.search(r'<script(?![^>]*\bsrc=)[^>]*>', html), 'Inline executable script bypasses strict CSP'
 assert (site / 'godot-config.js').is_file()
+export_config = (root / 'export_presets.cfg').read_text()
+assert '.stats-access.txt,.dev.vars*' in export_config, 'Private local credentials must be excluded from game packs'
+assert not any(path.name.startswith(('.stats-access', '.dev.vars')) for path in site.rglob('*'))
 headers = (site / '_headers').read_text()
 for directive in ("script-src 'self' 'wasm-unsafe-eval'", "connect-src 'self'", "frame-ancestors 'none'", "object-src 'none'", 'X-Frame-Options: DENY', 'Strict-Transport-Security:'):
     assert directive in headers, f'Missing policy: {directive}'

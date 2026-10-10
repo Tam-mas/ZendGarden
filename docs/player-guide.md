@@ -97,11 +97,9 @@ Lady beetles visit gardens with at least two flower plants or one produce plant.
 
 Your garden saves automatically every 20 seconds and when a new day starts. You can also save manually from the menu. The desktop game saves when it closes normally; in the browser, use Save before closing the tab.
 
-The garden’s new home is **zend.garden**. Once the move is enabled, visiting the old
-**zend.tammas.com** address in the same browser can carry your garden across while
-keeping its original copy there. If you already have a different garden at the new
-address, you can choose which to continue. Bookmark the new home for future visits;
-this does not synchronise progress between devices or browsers.
+Play at **zend.garden** and bookmark it for future visits. Browser saves belong to
+that address, browser and device. Use the save-file download and import buttons to
+carry a garden between browsers or devices.
 
 The save file is named `garden_v1.json`; screenshots are stored in the `photos` folder alongside it. Standard save locations are:
 

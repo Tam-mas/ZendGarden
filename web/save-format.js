@@ -1,7 +1,5 @@
 // This is a guard for the fields the game restores, not a save conversion.
 export const MAX_SAVE_BYTES = 4 * 1024 * 1024;
-export const SOURCE_ORIGIN = 'https://zend.tammas.com';
-export const HOME_ORIGIN = 'https://zend.garden';
 export const USER_DIR = '/userfs/godot/app_userdata/Zend Garden';
 export const SAVE_FILE = `${USER_DIR}/garden_v1.json`;
 
@@ -10,12 +8,12 @@ const number = value => typeof value === 'number' && Number.isFinite(value);
 const pair = value => Array.isArray(value) && value.length === 2 && value.every(number);
 export function validateSave(bytes) {
   if (!(bytes instanceof Uint8Array) || !bytes.length || bytes.length > MAX_SAVE_BYTES) {
-    throw new Error('This garden copy is incomplete or too large to move safely.');
+    throw new Error('This saved garden is incomplete or too large to open safely.');
   }
   let data;
   try { data = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)); }
-  catch { throw new Error('We could not read this garden copy. Your original is still at the old address.'); }
-  const fail = () => { throw new Error('This garden copy needs a closer look before it can be moved safely.'); };
+  catch { throw new Error('We could not read this saved garden. Please keep a backup before trying again.'); }
+  const fail = () => { throw new Error('This saved garden could not be opened safely. Please keep a backup before trying again.'); };
   if (!object(data) || ![1, 2, 3].includes(data.version) || !Array.isArray(data.plants)) fail();
   for (const plant of data.plants) {
     if (!object(plant) || !Number.isInteger(plant.id) || plant.id < 0 || !pair(plant.pos)
@@ -61,16 +59,4 @@ export function validateSave(bytes) {
 export async function sha256(bytes) {
   return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)),
     n => n.toString(16).padStart(2, '0')).join('');
-}
-export function sameBytes(a, b) {
-  return a?.length === b?.length && (!a || a.every((value, index) => value === b[index]));
-}
-export function base64(bytes) {
-  let text = '';
-  for (let i = 0; i < bytes.length; i += 8192) text += String.fromCharCode(...bytes.subarray(i, i + 8192));
-  return btoa(text).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
-}
-export function unbase64(text) {
-  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]+$/.test(text)) throw new Error('This moving link is incomplete.');
-  return Uint8Array.from(atob(text.replaceAll('-', '+').replaceAll('_', '/')), ch => ch.charCodeAt(0));
 }

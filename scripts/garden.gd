@@ -197,6 +197,7 @@ var area_atlas_open=false
 var area_atlas_index=-1
 var area_atlas_return=false
 var area_notice=""
+var analytics_seconds=0.0
 
 func _ready() -> void:
  GardenTerrain.offsets.clear()
@@ -225,6 +226,8 @@ func _ready() -> void:
  if OS.has_feature("web"):
   GardenSaveFiles.browser_mount_verified=true
   browser_save_result(true)
+  var telemetry=JavaScriptBridge.get_interface("window").ZendTelemetry
+  if telemetry!=null:telemetry.setVersion(GardenUpdates.CURRENT_VERSION)
  GardenExpansion.prepare(self)
  make_world()
  GardenSculpt.setup(self)
@@ -948,6 +951,14 @@ func replenish_orders() -> void:
   arrived=true
  if arrived: notify_requests()
 
+func report_advancing_time(delta: float) -> void:
+ if not OS.has_feature("web") or smoke:return
+ analytics_seconds+=delta
+ if analytics_seconds<5.0:return
+ var telemetry=JavaScriptBridge.get_interface("window").ZendTelemetry
+ if telemetry!=null:telemetry.advance(analytics_seconds)
+ analytics_seconds=0.0
+
 func _process(delta: float) -> void:
  GardenWorkshop.fit(self)
  GardenAreaAtlas.fit(self)
@@ -994,6 +1005,7 @@ func _process(delta: float) -> void:
   if mode=="walk": current_plot=nearest_plot(player.position)
   if day_transition: update_day_transition(delta)
   elif not (settings.pause_menus and not gameplay_active() and not smoke):
+   report_advancing_time(delta)
    clock_time += delta/DAY_SECONDS
    if clock_time>=1:
     clock_time-=1
