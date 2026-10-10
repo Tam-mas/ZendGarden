@@ -451,10 +451,10 @@ func layout_tablet(size: Vector2) -> void:
  g.transition_label.position=Vector2(20,size.y/2-40)
  g.transition_label.size.x=size.x-40
  context_keys=[]
- layout_context([])
+ layout_context([],true)
 
-func layout_context(keys: Array) -> void:
- if keys==context_keys and not tablet_layout: return
+func layout_context(keys: Array, force: bool=false) -> void:
+ if keys==context_keys and not force: return
  context_keys=keys.duplicate()
  var size=get_viewport().get_visible_rect().size
  var width=context_panel.size.x
