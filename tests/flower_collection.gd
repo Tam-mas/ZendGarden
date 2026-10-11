@@ -115,6 +115,7 @@ func verify() -> void:
  for touch_mode in [false,true]:
   g.touch=touch_mode
   g.collection_filters=CollectionGarden.defaults()
+  g.collection_filters_open=false
   g.collection_filters.group="Removed section"
   g.collection_filters.sort="Removed sort"
   g.refresh_sidebar()
@@ -124,12 +125,16 @@ func verify() -> void:
   var sort_picker=g.list_box.find_child("FilterSort",true,false)
   check(group_picker!=null and sort_picker!=null,"Persistent collection or sort control missing")
   if group_picker==null or sort_picker==null:continue
-  check(group_picker.is_visible_in_tree() and sort_picker.is_visible_in_tree() and not g.list_box.get_node("SeedFilters").visible,"Collection/sort controls hidden with detailed filters")
+  check(not group_picker.is_visible_in_tree() and not g.list_box.get_node("SeedFilters").visible,"Detailed filters crowd out the catalogue")
+  g.list_box.get_node("SeedBrowse/FilterToggle").pressed.emit()
+  await process_frame
+  await process_frame
+  check(group_picker.is_visible_in_tree() and sort_picker.is_visible_in_tree(),"Filters do not expand")
   check(group_picker.get_parent().get_parent().name=="CollectionNavigation" and sort_picker.get_parent().get_parent().name=="CollectionNavigation","Navigation still lives inside expanded filters")
   check(group_picker.size.x>100 and sort_picker.size.x>100,"Navigation leaves too little room for readable choices")
   if touch_mode:
    check(group_picker.size.y>=42 and sort_picker.size.y>=42,"Touch navigation controls too small")
-   check(g.list_box.has_node("CategoryPicker") and not g.list_box.get_node("SeedCategories").visible,"Phone categories crowd out collection navigation")
+   check(g.list_box.find_child("SeedCategories",true,false) is OptionButton,"Category should use compact picker")
   check(g.collection_filters.group=="All collections" and g.collection_filters.sort=="Catalogue","Invalid preferences not restored to visible defaults")
   group_picker.item_selected.emit(1)
   check(g.collection_filters.group==GardenCatalogue.COLLECTION_GROUPS[0] and g.category=="All","Section chooser does not browse across categories")
@@ -141,11 +146,10 @@ func verify() -> void:
   search.text_changed.emit(search.text)
   check(g.category=="All" and g.collection_filters.group=="All collections" and group_picker.selected==0,"Search all plants is restricted by a section")
   check(search.has_focus(),"Search lost focus while updating cards")
-  for b in g.list_box.get_node("SeedCategories").get_children():
-   if b.get_meta("category","")=="Flowers":
-    group_picker.item_selected.emit(1)
-    b.pressed.emit()
-    check(g.category=="Flowers" and g.collection_filters.group=="All collections" and group_picker.selected==0,"Category selection retains a conflicting section")
+  var picker=g.list_box.find_child("SeedCategories",true,false)
+  group_picker.item_selected.emit(1)
+  picker.item_selected.emit(1)
+  check(g.category=="Flowers" and g.collection_filters.group=="All collections" and group_picker.selected==0,"Category selection retains a conflicting section")
  g.queue_free()
  await process_frame
  print("FLOWER_COLLECTION_RESULT: ",JSON.stringify(failures))

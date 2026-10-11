@@ -31,6 +31,7 @@ static func matching(g) -> Array:
   if not g.collection_query.strip_edges().is_empty() and not (p.name+" "+p.get("botanical_name","")).to_lower().contains(g.collection_query.strip_edges().to_lower()): continue
   if filters.view=="Favourites" and (not GardenPlantBreeding.form(g,p.form_uid).favourite if p.has("form_uid") else p.id not in g.favourite_plants):continue
   if filters.view=="Recently planted" and (p.form_uid not in g.breeding_state.recent if p.has("form_uid") else p.id not in g.recent_plants):continue
+  if filters.view=="My cultivars" and not p.has("form_uid"):continue
   if filters.view=="Discovered" and not p.has("form_uid") and p.id not in g.unlocked_plants:continue
   var season=GardenClimate.season(g.day) if filters.season=="Growing now" else str(filters.season)
   if season!="Any season" and not p.seasons.is_empty() and season not in p.seasons: continue
@@ -62,31 +63,29 @@ static func name_before(a, b) -> bool:
  return int(a.id)<int(b.id) if comparison==0 else comparison<0
 
 static func selector(g, parent: Node, key: String, options: Array, caption: String="") -> void:
- var row: BoxContainer=VBoxContainer.new() if tablet(g) and parent.name=="CollectionNavigation" else HBoxContainer.new()
+ var row=VBoxContainer.new()
  row.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  parent.add_child(row)
- row.add_child(g.label(key.capitalize() if caption.is_empty() else caption,13))
+ row.add_child(g.label(key.capitalize() if caption.is_empty() else caption,14))
  var choices=OptionButton.new()
  choices.name="Filter"+key.capitalize()
  choices.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  choices.fit_to_longest_item=false
  choices.clip_text=true
- choices.custom_minimum_size.y=48 if g.touch_active() else 32
- for option in options: choices.add_item(option)
+ choices.custom_minimum_size.y=44 if g.touch_active() else 34
+ for option in options:choices.add_item(option)
  choices.select(maxi(0,options.find(g.collection_filters.get(key,options[0]))))
  choices.item_selected.connect(func(index):
   g.collection_filters[key]=options[index]
-  if key=="group":
-   g.category="All"
-   update_categories(g)
+  if key=="group":g.category="All";update_categories(g)
   update_cards(g))
  row.add_child(choices)
 
 static func build(g) -> void:
- g.side_title.text="The seed collection"
+ g.side_title.text="Seeds"
  var search=LineEdit.new()
  search.name="SeedSearch"
- search.placeholder_text="Search all plants…"
+ search.placeholder_text="Search plants…"
  search.text=g.collection_query
  search.clear_button_enabled=true
  search.custom_minimum_size.y=44 if g.touch_active() else 36
@@ -95,97 +94,74 @@ static func build(g) -> void:
   if not value.is_empty():
    g.category="All"
    g.collection_filters.group="All collections"
-   g.list_box.get_node("CollectionNavigation").find_child("FilterGroup",true,false).select(0)
+   g.list_box.find_child("FilterGroup",true,false).select(0)
   update_categories(g)
   update_cards(g))
  g.list_box.add_child(search)
- var shortcuts: Node=g.list_box
- if tablet(g):
-  shortcuts=HBoxContainer.new()
-  shortcuts.add_theme_constant_override("separation",8)
-  g.list_box.add_child(shortcuts)
- var cultivars=g.button("My cultivars" if tablet(g) else "My cultivars & propagation",func():GardenBreedingUI.open_library(g),Vector2(0,44))
- cultivars.size_flags_horizontal=Control.SIZE_EXPAND_FILL
- shortcuts.add_child(cultivars)
- if g.touch_active() or g.get_viewport().get_visible_rect().size.y<700:
-  var picker=g.button("Category: "+g.category,func():
-   var categories=g.list_box.get_node("SeedCategories")
-   categories.visible=not categories.visible
-   update_categories(g),Vector2(0,42))
-  picker.name="CategoryPicker"
-  picker.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-  shortcuts.add_child(picker)
- var cats=GridContainer.new()
- cats.name="SeedCategories"
- cats.columns=3
- cats.visible=not g.touch_active() and g.get_viewport().get_visible_rect().size.y>=700
- g.list_box.add_child(cats)
- for category in ["All"]+GardenCatalogue.CATEGORIES:
-  var chosen=category
-  var caption="Cacti &\nsucculents" if category=="Cacti & succulents" else category
-  var b=g.button(caption,func():
-   g.category=chosen
-   g.collection_filters.group="All collections"
-   var navigation=g.list_box.get_node_or_null("CollectionNavigation")
-   if navigation:navigation.find_child("FilterGroup",true,false).select(0)
-   update_categories(g)
-   update_cards(g),Vector2(81,44 if category=="Cacti & succulents" else 40 if g.touch_active() else 30))
-  b.set_meta("category",category)
-  b.tooltip_text=category
-  b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-  b.add_theme_font_size_override("font_size",14)
-  cats.add_child(b)
- update_categories(g)
- # Browsing sections and ordering remain available when detailed filters are closed.
- var navigation=GridContainer.new()
- navigation.columns=2 if tablet(g) else 1
- navigation.add_theme_constant_override("h_separation",10)
- navigation.add_theme_constant_override("v_separation",5)
- navigation.name="CollectionNavigation"
- g.list_box.add_child(navigation)
- var group_options=["All collections"]+GardenCatalogue.COLLECTION_GROUPS+["My cultivars"]
- if g.collection_filters.get("group","All collections") not in group_options:g.collection_filters.group="All collections"
- if g.collection_filters.get("sort","Catalogue")=="Height":g.collection_filters.sort="Height: low to high"
- var sort_options=["Catalogue","Name","Height: low to high","Height: high to low","Growing days"]
- if g.collection_filters.get("sort","Catalogue") not in sort_options:g.collection_filters.sort="Catalogue"
- selector(g,navigation,"group",group_options,"Collection")
- selector(g,navigation,"sort",sort_options)
  var browse=HBoxContainer.new()
+ browse.name="SeedBrowse"
  g.list_box.add_child(browse)
  var views=OptionButton.new()
  views.name="CollectionView"
  views.fit_to_longest_item=false
  views.clip_text=true
  views.size_flags_horizontal=Control.SIZE_EXPAND_FILL
- views.custom_minimum_size.y=48 if g.touch_active() else 34
- var modes=["All plants","Discovered","Favourites","Recently planted"]
- for name in modes: views.add_item(name)
+ views.custom_minimum_size.y=44 if g.touch_active() else 36
+ var modes=["All plants","Discovered","Favourites","Recently planted","My cultivars"]
+ for title in ["All plants","My seeds","Favourites","Recently planted","My cultivars"]:views.add_item(title)
  views.select(maxi(0,modes.find(g.collection_filters.view)))
- views.item_selected.connect(func(index): g.collection_filters.view=modes[index]; update_cards(g))
+ views.item_selected.connect(func(index):g.collection_filters.view=modes[index];update_cards(g))
  browse.add_child(views)
- var filter_toggle=g.button("Filters",func():
+ var toggle=g.button("Filters & sort",func():
   g.collection_filters_open=not g.collection_filters_open
   g.list_box.get_node("SeedFilters").visible=g.collection_filters_open
-  GardenTheme.disclosure(g.list_box.get_node("FilterToggle"),g.collection_filters_open),Vector2(104 if g.touch_active() else 85,34))
- filter_toggle.name="FilterToggle"
- GardenTheme.disclosure(filter_toggle,g.collection_filters_open)
- browse.add_child(filter_toggle)
+  GardenTheme.disclosure(g.list_box.get_node("SeedBrowse/FilterToggle"),g.collection_filters_open),Vector2(150,36))
+ toggle.name="FilterToggle"
+ GardenTheme.disclosure(toggle,g.collection_filters_open)
+ browse.add_child(toggle)
+ var manage=g.button("Manage cultivars & nursery",func():GardenBreedingUI.open_library(g))
+ manage.name="ManageCultivars"
+ manage.visible=g.collection_filters.view=="My cultivars"
+ g.list_box.add_child(manage)
  var filters=VBoxContainer.new()
  filters.name="SeedFilters"
  filters.visible=g.collection_filters_open
  filters.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  g.list_box.add_child(filters)
+ filters.add_child(g.label("Plant type",14))
+ var category=OptionButton.new()
+ category.name="SeedCategories"
+ category.fit_to_longest_item=false
+ category.clip_text=true
+ category.custom_minimum_size.y=44 if g.touch_active() else 34
+ for title in ["All"]+GardenCatalogue.CATEGORIES:category.add_item(title)
+ category.item_selected.connect(func(index):
+  g.category=(["All"]+GardenCatalogue.CATEGORIES)[index]
+  g.collection_filters.group="All collections"
+  g.list_box.find_child("FilterGroup",true,false).select(0)
+  update_cards(g))
+ filters.add_child(category)
+ update_categories(g)
+ var navigation=VBoxContainer.new()
+ navigation.name="CollectionNavigation"
+ filters.add_child(navigation)
+ var groups=["All collections"]+GardenCatalogue.COLLECTION_GROUPS+["My cultivars"]
+ if g.collection_filters.get("group","All collections") not in groups:g.collection_filters.group="All collections"
+ var sorts=["Catalogue","Name","Height: low to high","Height: high to low","Growing days"]
+ if g.collection_filters.get("sort","")=="Height":g.collection_filters.sort="Height: low to high"
+ if g.collection_filters.get("sort","") not in sorts:g.collection_filters.sort="Catalogue"
+ selector(g,navigation,"group",groups,"Collection")
+ selector(g,navigation,"sort",sorts)
  selector(g,filters,"season",["Any season","Growing now","Spring","Summer","Autumn","Winter"])
  selector(g,filters,"light",["Any light","Sun","Shade","Water"])
  selector(g,filters,"height",["Any height","Low (under 0.6 m)","Medium (0.6–2 m)","Tall (2 m+)"])
  selector(g,filters,"colour",["Any colour","Cream / white","Red / pink","Yellow / orange","Green","Blue","Purple / pink","Dark"])
  selector(g,filters,"wildlife",["Any wildlife","Bees","Butterflies","Birds","Native birds","Frogs","Fireflies","Moths"])
- filters.add_child(g.button("Clear filters",func():
-  g.collection_query=""
-  g.category="All"
-  g.collection_filters=g.default_collection_filters()
-  g.refresh_sidebar()))
- var count=g.label("",13)
+ filters.add_child(g.button("Clear all filters",func():g.collection_query="";g.category="All";g.collection_filters=g.default_collection_filters();g.refresh_sidebar()))
+ var active=HFlowContainer.new()
+ active.name="ActiveFilters"
+ g.list_box.add_child(active)
+ var count=g.label("",14)
  count.name="SeedResults"
  count.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  g.list_box.add_child(count)
@@ -197,22 +173,34 @@ static func build(g) -> void:
  cards.add_theme_constant_override("v_separation",8)
  g.list_box.add_child(cards)
  update_cards(g)
- g.detail_label.text="%s\n%s layer · %d capacity · %d growing days\nLikes %s · welcomes %s\nGrows: %s" % [g.catalogue[g.selected].name,["Ground","Flower","Shrub","Canopy"][g.catalogue[g.selected].layer],g.catalogue[g.selected].capacity,g.catalogue[g.selected].days,g.catalogue[g.selected].condition,g.catalogue[g.selected].animal,GardenCatalogue.growing_seasons(g.selected)]
- var selected_form=GardenPlantBreeding.selected_form(g)
- if not selected_form.is_empty():g.detail_label.text=GardenPlantBreeding.title(g,selected_form)+"\n"+GardenPlantBreeding.traits(selected_form)+"\n"+g.detail_label.text
- if g.catalogue[g.selected].climber:g.detail_label.text+="\nClimbs nearby arbors & pergolas."
 
 static func update_categories(g) -> void:
- var picker=g.list_box.find_child("CategoryPicker",true,false)
- if picker:
-  picker.text="Category: "+g.category
-  GardenTheme.disclosure(picker,g.list_box.get_node("SeedCategories").visible)
- for b in g.list_box.get_node("SeedCategories").get_children():
-  GardenTheme.choose(b,b.get_meta("category",b.text)==g.category)
+ var picker=g.list_box.find_child("SeedCategories",true,false)
+ if picker:picker.select(maxi(0,(["All"]+GardenCatalogue.CATEGORIES).find(g.category)))
 
-static func layout_cards(g, available_width: float) -> void:
+static func layout_cards(g, _available_width: float) -> void:
  var cards=g.list_box.get_node_or_null("PlantCards")
- if cards:cards.columns=clampi(int(available_width/170),2,4) if g.touch.tablet_layout else 2
+ if cards:cards.columns=2
+
+static func active_filters(g) -> void:
+ var box=g.list_box.get_node("ActiveFilters")
+ for child in box.get_children():box.remove_child(child);child.queue_free()
+ var defaults=g.default_collection_filters()
+ var applied={}
+ if g.category!="All":applied["category"]=g.category
+ for key in ["group","season","light","height","colour","wildlife"]:
+  if g.collection_filters[key]!=defaults[key]:applied[key]=g.collection_filters[key]
+ for key in applied:
+  var name=key
+  var remove=g.button(str(applied[key])+" ×",func():
+   if name=="category":g.category="All"
+   else:g.collection_filters[name]=defaults[name]
+   g.refresh_sidebar(),Vector2(0,28))
+  remove.tooltip_text="Remove filter: "+str(applied[key])
+  remove.custom_minimum_size.x=minf(260,remove.get_theme_font("font").get_string_size(remove.text,HORIZONTAL_ALIGNMENT_LEFT,-1,remove.get_theme_font_size("font_size")).x+24)
+  box.add_child(remove)
+ box.visible=not applied.is_empty()
+ g.list_box.get_node("ManageCultivars").visible=g.collection_filters.view=="My cultivars"
 
 static func details(g, plant: Dictionary) -> void:
  if plant.is_empty():return
@@ -228,7 +216,7 @@ static func details(g, plant: Dictionary) -> void:
   portrait.setup(g,GardenPlantBreeding.form(g,uid))
  else:
   portrait=TextureRect.new()
-  portrait.texture=load(GardenArt.card_path("res://assets/ui/plants/%02d"%id))
+  portrait.texture=GardenMenus.plant_texture(id)
  portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
  portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
  portrait.custom_minimum_size=Vector2(160,190)
@@ -252,14 +240,15 @@ static func details(g, plant: Dictionary) -> void:
   g.refresh_sidebar())
  GardenTheme.favourite(favourite_button,favourite)
  g.list_box.add_child(favourite_button)
- g.detail_label.text="Aim at soil or a planter pocket, then tap Plant here."
+ g.add_note("Aim at soil or a planter pocket, then plant. Your seeds can be used again and again.")
 
 static func update_cards(g) -> void:
  var cards=g.list_box.get_node_or_null("PlantCards")
  if cards==null: return
  for child in cards.get_children(): cards.remove_child(child); child.queue_free()
  var plants=matching(g)
- g.list_box.get_node("SeedResults").text="%d varieties · Star to save a favourite" % plants.size()
+ active_filters(g)
+ g.list_box.get_node("SeedResults").text="%d varieties" % plants.size()
  if plants.is_empty():
   var empty=g.label("No plants match. Try another collection, category or clear your filters.",15)
   empty.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -275,49 +264,54 @@ static func update_cards(g) -> void:
   var b=g.button("",func():
    if g.touch_active():g.touch.open_seed_details(p)
    elif custom:GardenPlantBreeding.choose(g,uid)
-   else:g.choose_plant(id),Vector2(120,230 if g.touch_active() else 210))
+   else:g.choose_plant(id),Vector2(120,0))
   b.name="CultivarCard"+uid if custom else "PlantCard%02d" % id
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   b.tooltip_text="%s · %.1f m at maturity · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
   if not p.get("botanical_name","").is_empty():b.tooltip_text=p.botanical_name+"\n"+b.tooltip_text
   if p.climber: b.tooltip_text+="\nClimbs nearby arbors and pergolas."
   GardenTheme.choose(b,uid==g.selected_cultivar if custom else id==g.selected and g.selected_cultivar.is_empty())
-  var content=VBoxContainer.new()
-  content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-  content.offset_left=6;content.offset_right=-6;content.offset_top=6;content.offset_bottom=-6
-  content.add_theme_constant_override("separation",1)
-  content.mouse_filter=Control.MOUSE_FILTER_IGNORE
-  b.add_child(content)
-  var minimum_height=230 if g.touch_active() else 210
-  content.minimum_size_changed.connect(func():
-   b.custom_minimum_size.y=maxf(minimum_height,content.get_combined_minimum_size().y+12))
-  if custom:
-   var cultivar=g.label(GardenPlantBreeding.traits(GardenPlantBreeding.form(g,uid)),13)
-   cultivar.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;cultivar.mouse_filter=Control.MOUSE_FILTER_IGNORE
-   content.add_child(cultivar)
+  var content=GardenMenus.card_content(b)
   var portrait: TextureRect
   if custom:
    portrait=GardenCultivarThumbnail.new()
    portrait.setup(g,GardenPlantBreeding.form(g,uid))
   else:
    portrait=TextureRect.new()
-   portrait.texture=load(GardenArt.card_path("res://assets/ui/plants/%02d" % id))
+   portrait.texture=GardenMenus.plant_texture(id)
   portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
   portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-  portrait.custom_minimum_size=Vector2(96,106)
+  portrait.custom_minimum_size=Vector2(96,108)
   portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
-  portrait.modulate=Color.WHITE if unlocked else Color(.65,.61,.52)
+  portrait.modulate=Color.WHITE
   content.add_child(portrait)
-  var name_size=18 if g.touch_active() else 16
-  var detail_size=15 if g.touch_active() else 14
-  var timing="%d days%s%s"%[p.days," · " if g.touch_active() else "\n","Year-round" if p.seasons.is_empty() else "/".join(p.seasons)]
-  for line in [[p.name,name_size],["Likes "+p.condition+" · %.1f m"%float(p.get("height",1)),detail_size],[timing,detail_size],["Capacity %d"%p.capacity if unlocked else "Discover: %d petals"%p.price,detail_size]]:
-   var text=g.label(line[0],line[1])
-   text.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-   text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-   text.mouse_filter=Control.MOUSE_FILTER_IGNORE
-   text.add_theme_color_override("font_color",GardenTheme.TEXT if line[1]==name_size else GardenTheme.MUTED)
-   content.add_child(text)
+  var title=g.label(p.name,16)
+  title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+  title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+  title.mouse_filter=Control.MOUSE_FILTER_IGNORE
+  content.add_child(title)
+  var growing=GardenMenus.row(content)
+  growing.alignment=BoxContainer.ALIGNMENT_CENTER
+  growing.mouse_filter=Control.MOUSE_FILTER_IGNORE
+  GardenMenus.stat(g,growing,p.condition,p.condition.capitalize(),"Preferred light or habitat")
+  GardenMenus.stat(g,growing,"clock","%dd"%p.days,"Ideal growing days")
+  var size_row=GardenMenus.row(content)
+  size_row.alignment=BoxContainer.ALIGNMENT_CENTER
+  size_row.mouse_filter=Control.MOUSE_FILTER_IGNORE
+  GardenMenus.stat(g,size_row,"height","%.1fm"%float(p.get("height",1)),"Mature height")
+  GardenMenus.stat(g,size_row,"capacity",str(p.capacity),"Bed capacity")
+  var availability=g.label("Ready to plant" if unlocked else "%d petals · Discover"%p.price,14)
+  availability.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+  availability.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+  availability.mouse_filter=Control.MOUSE_FILTER_IGNORE
+  content.add_child(availability)
+  var info=g.button("",func():g.touch.open_seed_details(p),Vector2(30,30))
+  info.name="PlantInfo"
+  info.icon=preload("res://assets/ui/menu-info.svg")
+  info.add_theme_constant_override("icon_max_width",18)
+  info.tooltip_text="Growing details: "+p.name
+  info.position=Vector2(4,4)
+  b.add_child(info)
   var star=g.button("",func():
    if custom:GardenPlantBreeding.form(g,uid).favourite=not favourite;g.save_game();update_cards(g)
    else:toggle_favourite(g,id),Vector2(34,34))
@@ -326,10 +320,10 @@ static func update_cards(g) -> void:
   GardenTheme.favourite(star,favourite)
   star.tooltip_text="Remove favourite" if favourite else "Save favourite"
   star.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-  star.offset_left=-54 if g.touch_active() else -38
+  star.offset_left=-48 if g.touch_active() else -38
   star.offset_right=-4
   star.offset_top=4
-  star.offset_bottom=54 if g.touch_active() else 38
+  star.offset_bottom=48 if g.touch_active() else 38
   b.add_child(star)
   cards.add_child(b)
 

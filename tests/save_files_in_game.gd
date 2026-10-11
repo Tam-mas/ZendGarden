@@ -2,8 +2,10 @@ extends RefCounted
 
 static func run(g, failures: Array) -> void:
  g.open_sidebar("Settings")
+ g.menu_sections.settings="Save files"
+ g.refresh_sidebar()
  for text in ["Download save file","Upload save file…"]:
-  if not g.list_box.get_children().any(func(control):return control is Button and control.text==text):failures.append("Save Settings button missing: "+text)
+  if not g.list_box.get_node("SavefilesOptions").get_children().any(func(control):return control is Button and control.text==text):failures.append("Save Settings button missing: "+text)
  var was_processing=g.is_processing()
  var original_dimensions=g.get_viewport().size
  var controls=g.settings.controls

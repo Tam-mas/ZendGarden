@@ -79,8 +79,9 @@ static func run(g, failures: Array) -> void:
  await capture(g,"returned")
  # Menu state also survives; Escape must only restore that existing menu.
  g.open_sidebar("Guide")
+ g.list_box.get_node("GardenactionsSection").pressed.emit()
  var guide_button: Button
- for child in g.list_box.get_children():
+ for child in g.list_box.get_node("GardenactionsOptions").get_children():
   if child is Button and child.text.begins_with("Enjoy the view"):guide_button=child
  if guide_button==null:failures.append("Guide has no enjoy-view button")
  else:guide_button.pressed.emit()
@@ -92,12 +93,13 @@ static func run(g, failures: Array) -> void:
  GardenTools.repeat_mouse(g)
  if g.clear_view or b.water!=0:failures.append("Dismiss click waters through returned HUD")
  preload("res://tests/gathering.gd").mouse(false);GardenTools.repeat_mouse(g)
- # Touch players can enter from Garden and tap anywhere to return safely.
+ # Touch players can enter from Guide and tap anywhere to return safely.
  g.settings.controls="touch";g.touch.configure();g.touch.show_drawer("garden")
+ g.list_box.get_node("GardenactionsSection").pressed.emit()
  var touch_button: Button
- for child in g.touch.drawer.find_children("*","Button",true,false):
+ for child in g.list_box.get_node("GardenactionsOptions").get_children():
   if child.text=="Enjoy the view":touch_button=child
- if touch_button==null:failures.append("Touch Garden menu lacks enjoy-view button")
+ if touch_button==null:failures.append("Touch Guide lacks enjoy-view button")
  else:touch_button.pressed.emit()
  g.touch._process(.1)
  if not g.clear_view or g.touch.visible:failures.append("Touch view keeps controls visible")

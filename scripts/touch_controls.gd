@@ -88,7 +88,7 @@ func setup(game) -> void:
  look_label=readout_label(hud,14)
  look_label.text="LOOK"
  look_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
- add_button("garden","Garden",func(): open_menu("Garden"))
+ add_button("garden","Guide",func(): open_menu("Guide"))
  add_button("seeds","Seeds",func(): open_menu("Seeds"))
  add_button("tools","Tools",func(): show_drawer("tools"))
  GardenTheme.disclosure(buttons.tools)
@@ -111,7 +111,7 @@ func setup(game) -> void:
  add_button("done","Done",g.toggle_photo)
  close_button=g.button("Back to garden",close_menu)
  close_button.name="TouchBackToGarden"
- g.side_panel.get_child(0).add_child(close_button)
+ add_child(close_button)
  close_button.hide()
  get_viewport().size_changed.connect(func(): last_size=Vector2.ZERO)
  configure()
@@ -145,7 +145,7 @@ func configure() -> void:
  enabled=g.settings.controls=="touch" or (g.settings.controls=="auto" and detected)
  window_size=get_window().size
  hud.visible=enabled
- close_button.visible=enabled
+ close_button.hide()
  if enabled:
   Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
   # Keep one logical UI pixel close to a CSS pixel, including retina devices.
@@ -167,11 +167,6 @@ func configure() -> void:
   var factor=maxf(1.0,minf(dimensions.x/1600.0,dimensions.y/1000.0))
   get_window().content_scale_size=Vector2i(dimensions/factor)
   GardenInterface.layout(g,true)
-  var atlas_button=g.side_panel.get_child(0).get_child(4)
-  atlas_button.text="Garden atlas · milestones & trails"
-  g.side_panel.get_child(0).get_child(5).custom_minimum_size.y=30
-  g.side_title.autowrap_mode=TextServer.AUTOWRAP_OFF
-  g.side_title.custom_minimum_size.x=0
  apply_graphics()
  last_size=Vector2.ZERO
  # Establish coordinates before the next touch, not on the following frame.
@@ -255,27 +250,8 @@ func back_to_seeds() -> void:
  if g.active_tab=="Seeds" and g.side_panel.visible and is_instance_valid(cards) and cards.get_parent()==g.list_box:
   g.list_box.get_parent().scroll_vertical=restore_scroll
 
-func garden_page() -> void:
- g.side_title.text="Your garden"
- g.add_note("Browse Seeds, Shop, Orders and Guide with the tabs above. Return to the garden whenever you’re ready.",17)
- g.list_box.add_child(g.button("Garden atlas · milestones & trails",func():GardenAreaAtlas.open(g)))
- g.list_box.add_child(g.button("Next morning",func():close_menu();g.next_day()))
- g.add_note("COMPANIONS",15)
- for index in range(g.companion_names.size()):
-  var pet_index=index
-  g.list_box.add_child(g.button("Call "+g.companion_names[index],func():close_menu();GardenLeisure.call_pet(g,pet_index)))
-  if not g.rest_kind.is_empty():
-   g.list_box.add_child(g.button("Invite "+g.companion_names[index]+" to settle",func():close_menu();GardenLeisure.call_pet(g,pet_index,true)))
- if not g.rest_kind.is_empty():g.list_box.add_child(g.button("Stand up",func():close_menu();GardenLeisure.leave(g)))
- if g.pets.any(func(p):return p.position.distance_to(g.player.position)<4):
-  g.list_box.add_child(g.button("Pet companion",func():close_menu();g.greet_pet()))
- g.add_note("STAY A WHILE",15)
- g.list_box.add_child(g.button("Photo mode",func():close_menu();g.toggle_photo()))
- g.list_box.add_child(g.button("Enjoy the view",func():close_menu();GardenClearView.enter(g)))
- g.detail_label.text="Your usual garden menus, with room to browse by touch."
-
 func show_drawer(kind: String) -> void:
- if kind=="garden":open_menu("Garden");return
+ if kind=="garden":open_menu("Guide");return
  if is_instance_valid(drawer):close_menu();return
  reset_gestures()
  g.side_panel.hide()
@@ -380,27 +356,25 @@ func layout() -> void:
  fit_drawer()
 
 func layout_menu() -> void:
+ if not enabled:
+  GardenInterface.layout(g,true)
+  return
  var size=get_viewport().get_visible_rect().size
  var col=g.side_panel.get_child(0)
  col.add_theme_constant_override("separation",5)
- for tab in col.get_child(0).get_children():
+ for tab in g.menu_tabs.get_children():
   tab.custom_minimum_size.y=48
   tab.add_theme_font_size_override("font_size",14 if size.x<380 else 16)
- col.get_child(4).custom_minimum_size.y=48
- col.get_child(5).custom_minimum_size.y=48
- close_button.custom_minimum_size.y=48
- col.get_child(2).custom_minimum_size=Vector2(264,80 if tablet_layout else 0)
+ for utility in g.menu_utilities.get_children():
+  if utility is Button:utility.custom_minimum_size.y=44;utility.custom_minimum_size.x=maxf(44,utility.custom_minimum_size.x)
+ g.menu_scrollbox.custom_minimum_size=Vector2(0,40)
  g.detail_label.hide()
  g.side_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
- g.side_title.custom_minimum_size.x=264
- col.get_child(4).text="Garden & companions"
- var menu_width=minf(480,size.x-24)
- if tablet_layout:menu_width=clampf(size.x*.42,392,520) if wide_menu else minf(740,size.x*.9)
- g.side_panel.position=Vector2(20 if wide_menu else (size.x-menu_width)/2,16 if tablet_layout else 12)
- g.side_panel.size=Vector2(menu_width,size.y-(32 if tablet_layout else 24))
+ g.side_title.custom_minimum_size.x=0
+ var menu_width=minf(420,size.x-24)
+ g.side_panel.position=Vector2(12,12)
+ g.side_panel.size=Vector2(menu_width,size.y-24)
  if g.active_tab=="Seeds":GardenSeedCollection.layout_cards(g,menu_width-44)
- var ornaments=g.list_box.get_node_or_null("OrnamentCards")
- if ornaments:ornaments.columns=clampi(int((menu_width-44)/170),2,4) if tablet_layout else 2
 
 func layout_tablet(size: Vector2) -> void:
  var scale=clampf(float(g.settings.control_size)/100.0,.8,1.2)
@@ -727,40 +701,6 @@ func undo_remove() -> void:
  removed.clear()
  g.refresh_ui()
  g.toast("Back where it belongs.")
-
-func settings_page() -> void:
- g.add_note("CONTROLS & DISPLAY",15)
- for entry in [["controls",["auto","touch","keyboard"],["Auto controls","Touch controls","Keyboard & mouse"]],["graphics",["auto","mobile","standard"],["Auto graphics","Mobile graphics","Standard graphics"]],["render_scale",[0,50,70,85,100],["Auto 3D resolution","3D resolution: 50%","3D resolution: 70%","3D resolution: 85%","3D resolution: 100%"]]]:
-  var key=entry[0]
-  var values=entry[1]
-  var choice=OptionButton.new()
-  choice.custom_minimum_size.y=48
-  choice.fit_to_longest_item=false
-  choice.clip_text=true
-  for title in entry[2]: choice.add_item(title)
-  choice.select(maxi(0,values.find(g.settings[key])))
-  choice.item_selected.connect(func(index): g.settings[key]=values[index]; configure(); g.save_game())
-  g.list_box.add_child(choice)
- g.add_note("Auto graphics balances detail in fuller gardens. Choose Standard for full plant shadows, or set your preferred 3D resolution.")
- var handed=CheckButton.new()
- handed.text="Left-handed controls"
- handed.clip_text=true
- handed.tooltip_text=handed.text
- handed.button_pressed=g.settings.left_handed
- handed.custom_minimum_size.y=48
- handed.toggled.connect(func(value): g.settings.left_handed=value; last_size=Vector2.ZERO; g.save_game())
- g.list_box.add_child(handed)
- for entry in [["control_size","Touch control size",80,120,10],["touch_inset","Controls farther from the edges",0,100,10],["touch_height","Raise the bottom controls",0,120,10]]:
-  var key=entry[0]
-  g.add_note(entry[1])
-  var slider=HSlider.new()
-  slider.min_value=entry[2]; slider.max_value=entry[3]; slider.step=entry[4]
-  slider.value=g.settings.get(key,0)
-  slider.custom_minimum_size.y=48
-  slider.value_changed.connect(func(value): g.settings[key]=value; last_size=Vector2.ZERO; apply_graphics())
-  slider.drag_ended.connect(func(_changed): g.save_game())
-  g.list_box.add_child(slider)
- g.add_note("Position adjustments apply on tablets and unfolded phones. Text stays the same size when you resize the controls. Hold Water, Gather, Rake or the hoe action and drag that thumb to look; release to stop.")
 
 func welcome_page() -> void:
  GardenExperience.welcome(g)

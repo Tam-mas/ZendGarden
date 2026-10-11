@@ -1,3 +1,13 @@
+### [2026-10-11 13:03] Changed
+
+**Tech:** `GardenMenus`, `GardenSeedCollection`, `GardenInterface`, `GardenTouch` — compact left-side menu navigation and expandable settings
+
+**Dev:** Keep the existing wooden theme with a 380-pixel desktop sidebar and a left-aligned touch sidebar capped at 420 pixels. Replace the fixed help/navigation footer with gear and close icons above the tabs and one content scroller. Size catalogue cards from their contents, retain desktop quick planting, provide explicit detail buttons, trim transparent preview margins at display time without modifying the source images, and add texture icons for light, growth, mature height and capacity. Consolidate seed filters with removable active choices; divide Shop into Decor, Tools, Bed care, Equipment and Owned; lead Orders with requests and separate reserved/spare harvest. Settings use a vertical single-open accordion; Guide combines searchable topics with the atlas and expandable garden actions, companions and progression. Keep game purchase, planting, delivery, save-file and confirmation handlers unchanged. Add release 65 and regression coverage for menu navigation, accordion behaviour, direct planting, reserved harvest and desktop/tablet bounds.
+
+**Plain:** The familiar wooden menu is easier to browse, with clearer plant cards, organised pages, compact gear and close icons, and settings that expand only when needed.
+
+**Why:** Give the garden more breathing room while making common actions and information easier to find on PC and larger touch screens.
+
 ### [2026-10-10 22:33] Changed
 
 **Tech:** `GardenTouch`, `GardenSeedCollection`, `GardenExperience` — adaptive tablet menus and two-thumb gardening
