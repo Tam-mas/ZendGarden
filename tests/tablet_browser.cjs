@@ -68,10 +68,17 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await tap(60,588); // Seeds, above movement.
   await paused();
   await capture('wide-seeds');
+  await tap(115,204); // The main dropdown includes plant types and personal views.
+  await capture('quick-types');
+  await tap(110,282); // Flowers in the open dropdown.
+  await capture('quick-flowers');
+  await tap(115,204);
+  await tap(110,255); // All plants again.
+  await page.waitForTimeout(500);
   await tap(130,450); // First seed card opens its details.
   await capture('wide-details');
   const before=await page.evaluate(()=>window.tabletAdvanced);
-  await tap(200,405); // Explicit Plant this below the plant portrait.
+  await tap(200,435); // Explicit Plant this below the plant name and portrait.
   await page.waitForFunction(value=>window.tabletAdvanced>value,before,{timeout:90000});
   await capture('wide-planting');
   await tap(180,588); // Current tool opens compact tray.
@@ -100,6 +107,11 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await page.setViewportSize({width:768,height:1024});
   await capture('portrait-seeds');
   await paused();
+  await tap(170,101); // Shop: Decor, Equipment, Tools, Bed care.
+  await tap(252,151);
+  await capture('portrait-tool-cards');
+  await tap(155,151);
+  await capture('portrait-equipment');
   await tap(348,52); // Settings gear, at the top right of the left sidebar.
   await tap(120,151); // Expand Sound below its category heading.
   await capture('portrait-settings');

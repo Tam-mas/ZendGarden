@@ -1,3 +1,13 @@
+### [2026-10-11 14:02] Changed
+
+**Tech:** `GardenSeedCollection`, `GardenMenus`, `GardenLeisure.sign_target` — quick plant types, illustrated tools and aimed sign editing
+
+**Dev:** Put plant types and collection views in the main seed dropdown; remove the duplicate type filter. Order Shop as Decor, Equipment, Tools and Bed care, render tool portraits from the held models, and retain upgrade prices/day gates in compact cards. Remove Owned, move fish stocking to Equipment and arrangement guidance to Guide. Pick nearby custom signs using their authored surfaces and range checks; share the Edit sign action between E and touch, preserve lettering/colour/rotation, and return to the garden after saving. Keep the title/icon row to one line during initial touch layout, with full plant names in their details. Keep scenery signs and existing garden saves intact. Add player release 66 and regressions for quick categories, tool purchases and desktop/touch sign targeting.
+
+**Plain:** Plant types and illustrated tools are quicker to browse, and you can change a garden sign by walking up and pointing at it.
+
+**Why:** Remove an unnecessary shop section and put common actions where players expect to find them.
+
 ### [2026-10-11 13:03] Changed
 
 **Tech:** `GardenMenus`, `GardenSeedCollection`, `GardenInterface`, `GardenTouch` — compact left-side menu navigation and expandable settings

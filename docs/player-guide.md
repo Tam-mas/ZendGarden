@@ -73,7 +73,7 @@ Move **Music volume** all the way down to silence the music completely; **Nature
 
 ### Pruning, paths, and visitors
 
-Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Shop** or **Orders**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
+Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Orders → Basket**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
 
 **Gather (5)** collects every ready plant in the highlighted square, including plants sharing a position on different layers. Hold the left mouse button and sweep your aim across the garden to keep collecting; unready plants stay untouched. On touch, hold **Gather** while looking around. The Shop’s **Gather reach** upgrades increase the square from **1.3 m → 2.1 m → 2.9 m**. They cost **45 petals from day 3**, then **90 petals from day 18**, independently of pruner upgrades. Border plants still provide only one item per day.
 
@@ -113,7 +113,7 @@ Some installations use different locations; see [Godot's user data paths](https:
 
 ### Personal garden signs
 
-Open **Shop → Custom garden sign** to write up to 64 characters and choose a text colour. Each sign costs 15 petals. Place it on the ground and use **Q/E** to rotate it; the lettering is readable from both sides. Use the **Edit sign** buttons in the Shop to change existing signs for free, or the usual move and remove tools to rearrange them. Your signs are saved with your garden.
+Open **Shop → Decor → Custom garden sign** to write up to 64 characters and choose a text colour. Each sign costs 15 petals. Place it on the ground and use **Q/E** to rotate it; the lettering is readable from both sides. In Wander, walk within a few steps and point at the sign’s board. Press **E** or tap **Edit sign** to change its text and colour for free; saving returns you to the garden. Use the usual move and remove tools to rearrange signs. Your signs are saved with your garden.
 
 ### Playing on a tablet or unfolded phone
 
@@ -121,7 +121,7 @@ Touch controls appear automatically. Hold the **WALK** control with one thumb an
 
 Tap **Plant here**, **Pick up**, **Place** or **Remove** for a single action. For **Water**, **Gather**, **Rake** and the hoe, hold the action and drag that same thumb to turn the view while working. Your movement thumb stays free, and releasing or cancelling the action stops it. Extra options appear only when relevant: **Smaller / Larger** for pruning, **Turn left / Turn right** for structures, plant-layer selection and **Switch to lower / raise** for the hoe. **Done** returns to wandering. Removing a plant or ornament offers **Undo lift** for 12 seconds.
 
-**Guide** opens help and the garden atlas, with expandable sections for garden actions, companions and more garden space. The familiar **Seeds, Shop, Orders and Guide** tabs stay in a left-side panel on landscape, portrait and unfolded screens. The Settings gear and close × sit above the tabs. Seeds uses compact two-column cards with light, growing-day, height and capacity icons. Tap a card to read its growing conditions, mature height and other details, then choose **Plant this** or **Discover & plant**. Returning to the collection keeps your browsing position. Plant selection on PC keeps its usual direct action.
+**Guide** opens help and the garden atlas, with expandable sections for garden actions, companions and more garden space. The familiar **Seeds, Shop, Orders and Guide** tabs stay in a left-side panel on landscape, portrait and unfolded screens. The Settings gear and close × sit above the tabs. The **All plants** dropdown also offers Flowers, Grasses, Shrubs, Trees, Natives, Produce and Cacti & succulents, followed by your personal collection views. Extra conditions and sorting stay under **Filters & sort**. Seeds uses compact two-column cards with light, growing-day, height and capacity icons. Tap a card to read its growing conditions, mature height and other details, then choose **Plant this** or **Discover & plant**. Returning to the collection keeps your browsing position. Plant selection on PC keeps its usual direct action.
 
 The garden readout includes your location, day, time, petals, season and weather. Menus stop movement and respect **Pause time in menus**. Changing orientation resets held gestures while keeping your selected seed, tool and open menu. Text fields support the on-screen keyboard, and browser photos download to your device. Compact screens retain a smaller fallback layout; the larger touch layout is designed for tablets and unfolded phones.
 
@@ -175,7 +175,7 @@ Kitchen recipes use one spare item of each ingredient: **salad** uses lettuce, t
 
 ## Working equipment and container gardens
 
-Find equipment and planters in **Shop**. Choose **Working garden · equipment & planters** to see supplies, prepared batches and stored plants. In Wander, face a placed item within a few steps and press **E**; on touch, use **Interact**. This opens its controls and pauses garden time.
+Find equipment and planters in **Shop → Equipment**. Choose **My equipment, supplies & nursery** to see supplies, prepared batches and stored plants. In Wander, face a placed item within a few steps and press **E**; on touch, use **Interact**. This opens its controls and pauses garden time.
 
 | Equipment | Price | Benefit |
 | --- | ---: | --- |
@@ -213,6 +213,8 @@ Each pocket has its own plant and care. Aim Plant, Water, Prune or Gather at a p
 Aim **Move** at the container's frame to carry the whole display, or at a plant to move that plant alone. Growth, shape and care travel with it. **Remove** aimed at a container packs its plants into **Stored plants** and refunds the container. Replant stored plants into suitable pockets or place them on open ground. Touch **Undo lift** restores the container and its contents together. Removing an individual plant still lifts it normally; use **Keep this plant in the nursery** in its pocket controls when you want to keep it.
 
 ## Shop reference
+
+Shop is ordered **Decor**, **Equipment**, **Tools**, then **Bed care**. Tools uses illustrated upgrade cards. **Equipment → Stock a pond with fish** adds fish to an unstocked pond in your current garden for 20 petals. **Guide → Moving & arranging** explains placement and sign editing.
 
 Prices are in petals. Select a structure in Shop, then aim at open ground to place it. **Q/E** rotates it; **Move** relocates it. **Remove** (formerly “Lift”) removes a plant or ornament; it does not raise the ground. Removing an ornament refunds its purchase price. Plants do not refund petals, but unlocked seeds stay available. Use the hoe to raise or lower the ground.
 

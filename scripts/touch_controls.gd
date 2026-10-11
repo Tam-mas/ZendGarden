@@ -369,7 +369,9 @@ func layout_menu() -> void:
   if utility is Button:utility.custom_minimum_size.y=44;utility.custom_minimum_size.x=maxf(44,utility.custom_minimum_size.x)
  g.menu_scrollbox.custom_minimum_size=Vector2(0,40)
  g.detail_label.hide()
- g.side_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ g.side_title.autowrap_mode=TextServer.AUTOWRAP_OFF
+ g.side_title.clip_text=true
+ g.side_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
  g.side_title.custom_minimum_size.x=0
  var menu_width=minf(420,size.x-24)
  g.side_panel.position=Vector2(12,12)
@@ -532,15 +534,17 @@ func _process(delta: float) -> void:
  buttons.right.text="Larger" if g.mode=="prune" else "Turn right"
  var rest_target=GardenLeisure.target(g)
  var work_target=GardenWorkshop.target(g)
- buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (not g.rest_kind.is_empty() or not rest_target.is_empty() or not work_target.is_empty() or GardenAreaCatalogue.index_at(g.player.position)>=0 or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
+ var sign_index=GardenLeisure.sign_target(g)
+ buttons.greet.visible=g.mode=="walk" and not g.photo_mode and (sign_index>=0 or not g.rest_kind.is_empty() or not rest_target.is_empty() or not work_target.is_empty() or GardenAreaCatalogue.index_at(g.player.position)>=0 or g.pets.any(func(p): return p.position.distance_to(g.player.position)<4))
  buttons.greet.text="Stand up" if not g.rest_kind.is_empty() else GardenLeisure.VERBS.get(rest_target.get("kind",""),"Pet companion")
  if g.rest_kind.is_empty() and work_target.is_empty() and rest_target.is_empty() and GardenAreaCatalogue.index_at(g.player.position)>=0:buttons.greet.text="Garden activities"
  if g.rest_kind.is_empty() and not work_target.is_empty():buttons.greet.text="Use planter" if work_target.kind in GardenContainers.SPECS else "Use equipment"
+ if sign_index>=0:buttons.greet.text="Edit sign"
  var habitat=GardenAreaCatalogue.index_at(g.player.position)
  if g.rest_kind.is_empty() and habitat>=0 and not GardenAreaProgression.unlocked(g,habitat):buttons.greet.text="Garden milestone"
  if not g.rest_kind.is_empty():
   context_title.text={"bench":"Sitting in your garden","pergola":"Resting in the shade","pond":"Watching the pond"}.get(g.rest_kind,"Resting")
-  context_hint.text="Drag to look. Garden lets you invite a companion. Walk or tap Stand up to leave."
+  context_hint.text="Drag to look. Guide lets you invite a companion. Walk or tap Stand up to leave."
  for key in ["up","down","photo","done"]: buttons[key].visible=g.photo_mode
  buttons.seeds.visible=not g.photo_mode
  buttons.garden.visible=not g.photo_mode

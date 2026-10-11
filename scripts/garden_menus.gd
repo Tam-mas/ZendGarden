@@ -61,7 +61,7 @@ static func sections(g, options: Array, key: String) -> void:
  for title in options:
   var chosen=title
   var button=g.button(title,func():g.menu_sections[key]=chosen;g.refresh_sidebar();g.list_box.get_parent().set_deferred("scroll_vertical",0),Vector2(0,34))
-  button.custom_minimum_size.x=button.get_theme_font("font").get_string_size(title,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x+24
+  button.custom_minimum_size.x=ceilf(button.get_theme_font("font").get_string_size(title,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x)+16
   button.name=title.replace(" ","")+"Section"
   GardenTheme.choose(button,g.menu_sections[key]==title)
   box.add_child(button)
@@ -115,11 +115,13 @@ static func stat(g, parent: Node, kind: String, text: String, description: Strin
 
 static func shop(g) -> void:
  g.side_title.text="Shop · %d petals"%g.coins
- sections(g,["Decor","Tools","Bed care","Equipment","Owned"],"shop")
+ sections(g,["Decor","Equipment","Tools","Bed care"],"shop")
  var section=str(g.menu_sections.shop)
  if section in ["Decor","Equipment"]:
   if section=="Equipment":
    g.list_box.add_child(g.button("My equipment, supplies & nursery",func():GardenWorkshop.open(g)))
+   g.list_box.add_child(g.button("Stock a pond with fish · 20 petals",g.stock_fish))
+   note(g,g.list_box,"Fish for an unstocked pond in "+g.plots[g.current_plot].name+".")
   var grid=GridContainer.new()
   grid.name="OrnamentCards"
   grid.columns=2
@@ -145,17 +147,32 @@ static func shop(g) -> void:
     caption.mouse_filter=Control.MOUSE_FILTER_IGNORE
  elif section=="Tools":
   var names={"can":"Watering can","shears":"Pruning shears","trowel":"Planting trowel","rake":"Garden rake","gather":"Gather reach"}
-  var benefits={"can":"Wider watering; the water lasts longer.","shears":"A 10% wider pruning square per upgrade.","trowel":"Less waiting between planting clicks.","rake":"Wider paths and more found petals.","gather":"A %.1f m square → %.1f m square."}
+  var benefits={"can":"Wider watering; the water lasts longer.","shears":"A 10% wider pruning square per upgrade.","trowel":"Less waiting between planting clicks.","rake":"Wider paths and more found petals.","gather":"Gather square: %.1f to %.1f m."}
+  var grid=GridContainer.new()
+  grid.name="ToolCards";grid.columns=2
+  grid.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+  grid.add_theme_constant_override("h_separation",8)
+  grid.add_theme_constant_override("v_separation",8)
+  g.list_box.add_child(grid)
   for kind in names:
    var k=kind
    var level=int(g.upgrades[k])
-   g.add_note(names[k]+" · "+("fully upgraded" if level>=2 else "level %d → %d"%[level,level+1]),17)
-   g.add_note(benefits[k]%[1.3+level*.8,1.3+(level+1)*.8] if k=="gather" and level<2 else "Maximum gathering reach." if k=="gather" else benefits[k])
-   if level<2:
-    var day=3 if level==0 else 18
-    var action=g.button("Upgrade · %d petals"%(45+level*45) if g.day>=day else "Available day %d"%day,func():g.buy_tool(k))
-    action.disabled=g.day<day or g.coins<45+level*45
-    g.list_box.add_child(action)
+   var day=3 if level==0 else 18
+   var cost=45+level*45
+   var button=g.button("",func():g.buy_tool(k),Vector2(120,0))
+   button.name="Tool_"+k
+   button.disabled=level>=2 or g.day<day or g.coins<cost
+   button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+   var benefit=benefits[k]%[1.3+level*.8,1.3+(level+1)*.8] if k=="gather" and level<2 else "Maximum gathering reach." if k=="gather" else benefits[k]
+   button.tooltip_text=names[k]+" · "+benefit
+   grid.add_child(button)
+   var content=card_content(button)
+   portrait(content,"res://assets/ui/tools/"+("shears" if k=="gather" else k),96)
+   var status="Fully upgraded" if level>=2 else "Available day %d"%day if g.day<day else "Upgrade · %d petals"%cost
+   for text in [names[k],"Level %d / 2"%level,benefit,status]:
+    var caption=note(g,content,text,14)
+    caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+    caption.mouse_filter=Control.MOUSE_FILTER_IGNORE
   disclosure(g,g.list_box,"Using your tools","The hoe is included. Choose it from the tool tray or press 9. R switches raise/lower; [ / ] adjust the pruning square within your upgrades.")
  elif section=="Bed care":
   g.add_note("CARE FOR · "+g.plots[g.current_plot].name,16)
@@ -174,18 +191,6 @@ static func shop(g) -> void:
    g.menu_sections.guide="";g.menu_scroll.Guide=0
    visit(g,"Guide")
    g.list_box.get_node("MoregardenspaceSection").pressed.emit()))
- else:
-  g.list_box.add_child(g.button("Equipment, containers & stored plants",func():GardenWorkshop.open(g)))
-  var signs=0
-  for index in range(g.objects.size()):
-   if g.objects[index].kind!="sign":continue
-   signs+=1
-   var id=index
-   g.list_box.add_child(g.button("Edit sign: "+str(g.objects[index].get("text","My garden")),func():g.open_sign_editor(id)))
-  if signs==0:g.add_note("Your placed signs will appear here for editing.")
-  g.add_note("PONDS · "+g.plots[g.current_plot].name,16)
-  g.list_box.add_child(g.button("Stock a pond with fish · 20 petals",g.stock_fish))
-  disclosure(g,g.list_box,"Moving and arranging","Use Move in the garden to rearrange an object. Rotate while placing or moving: Q/E on keyboard, Turn left/right on touch.")
 
 static func reserved(g, id: int) -> int:
  var total=0
@@ -404,8 +409,9 @@ const GUIDE={
  "Tools & landscaping":["Hold Water and sweep across the ground. Manual watering gives +20% growth for one game day; rewatering refreshes the timer. Rain and soakers do not apply this bonus.","Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. [ / ] resize the pruning square within your upgrades.","Rake open ground to remove grass and leave a path. Move or prune plants first. Upgrades widen existing patches; new patches can reveal up to four petals per day.","The hoe reshapes unlocked dry ground. R switches raise/lower, or use the touch action control."],
  "Gathering & requests":["Hold Gather and sweep across plants. Every ready plant in the square is collected, on every layer; unready plants stay growing. Gather upgrades widen its square from 1.3 m to 2.1 m, then 2.9 m. Border plants yield once per day.","Requests show what you have and what is missing. Deliver whenever you like. The Basket section keeps harvest needed for current requests when you sell spare items."],
  "Cultivars & nursery":["Preserve a flowering selection at a potting bench, name it and keep it in My cultivars. Cross two forms of the same species, grow a tray of four seedlings and choose the next generation.","Open My cultivars from Seeds for traits, parentage and your library. Equipment and nursery management is under Shop → Equipment. Planted containers keep their plants when moved; packed-away plants are kept in the nursery."],
- "Wildlife & companions":["Native plants welcome native birds. Two flowering plants or produce welcome lady beetles; three flowering plants welcome bees and butterflies. Trees or bird baths welcome songbirds; ponds welcome frogs and dragonflies. Moss and dusk bring fireflies. A beehive brings daytime bees; rabbits occasionally visit open ground.","Stock a placed pond from Shop → Owned. Name and call companions under Guide → Companions. E rests near a bench, pergola or pond; F pets a nearby companion and C calls both. While resting, invite them to settle beside you."],
- "Structures & photos":["Rotate a structure in 15° steps while placing or moving it: Q/E on keyboard or Turn left/right on touch. Tab releases the pointer for rotation buttons. Edit placed signs in Shop → Owned.","P opens photo mode. WASD flies, Q/E moves down/up, right-drag looks around and F12 captures a photo. Use the touch photo controls on a tablet. Return with P or Done.","Enjoy the view hides the interface and held tool. Mouse look still works. Press any key or click/tap to return."],
+ "Wildlife & companions":["Native plants welcome native birds. Two flowering plants or produce welcome lady beetles; three flowering plants welcome bees and butterflies. Trees or bird baths welcome songbirds; ponds welcome frogs and dragonflies. Moss and dusk bring fireflies. A beehive brings daytime bees; rabbits occasionally visit open ground.","Stock a placed pond from Shop → Equipment. Name and call companions under Guide → Companions. E rests near a bench, pergola or pond; F pets a nearby companion and C calls both. While resting, invite them to settle beside you."],
+ "Moving & arranging":["Choose Move to rearrange a plant, object or planted container. Aim at it, pick it up and choose its new home. Rotate an object while placing or moving: Q/E on keyboard, Turn left/right on touch.","Walk up to a sign and point at its board to see Edit sign. Press E or tap the touch action, change the lettering or colour, then Save changes to return to your garden."],
+ "Structures & photos":["Rotate a structure in 15° steps while placing or moving it: Q/E on keyboard or Turn left/right on touch. Tab releases the pointer for rotation buttons. Walk up to a placed sign and aim at its board. Press E or tap Edit sign to change its text and colour.","P opens photo mode. WASD flies, Q/E moves down/up, right-drag looks around and F12 captures a photo. Use the touch photo controls on a tablet. Return with P or Done.","Enjoy the view hides the interface and held tool. Mouse look still works. Press any key or click/tap to return."],
  "Controls & saving":["Keyboard: WASD or arrows walk, Shift strolls faster, mouse looks, 1–9 selects tools, Tab opens/closes menus, and Escape opens Settings. G welcomes the next morning; H hides the interface.","Touch: left thumb walks and right thumb looks. Tap the current tool to open the tool tray. Hold Water, Gather, Rake or the hoe action and drag the same thumb to look; release to stop.","Your garden saves on this device. Settings → Save files lets you download a copy or upload it elsewhere. Upload asks before replacement, and the previous garden is kept as a backup."]
 }
 

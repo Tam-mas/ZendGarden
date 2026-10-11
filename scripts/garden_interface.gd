@@ -25,7 +25,9 @@ static func layout(g, force: bool=false) -> void:
  column.add_theme_constant_override("separation",6)
  g.menu_scrollbox.custom_minimum_size=Vector2(0,40)
  g.detail_label.hide()
- g.side_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+ g.side_title.autowrap_mode=TextServer.AUTOWRAP_OFF
+ g.side_title.clip_text=true
+ g.side_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
  g.side_title.custom_minimum_size.x=0
  for tab in g.menu_tabs.get_children():
   tab.custom_minimum_size=Vector2(0,36)

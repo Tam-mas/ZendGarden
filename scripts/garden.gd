@@ -683,7 +683,9 @@ func open_sign_editor(index: int = -1) -> void:
  active_tab="Sign"
  side_panel.show()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ if touch_active():touch.reset_gestures()
  refresh_sidebar()
+ menu_scrollbox.set_deferred("scroll_vertical",0)
 
 func sign_editor_page() -> void:
  side_title.text="Garden sign"
@@ -715,8 +717,10 @@ func sign_editor_page() -> void:
  picker.color_changed.connect(func(value):
   sign_color=value
   sample.add_theme_color_override("font_color",value))
- list_box.add_child(button("Back to shop",func(): GardenMenus.visit(self,"Shop")))
- detail_label.text="Lettering appears on both sides.\nQ/E rotates a sign while placing or moving it.\nEdit placed signs from the Shop at any time."
+ list_box.add_child(button("Back to garden" if editing_sign>=0 else "Back to shop",func():
+  if editing_sign>=0:GardenMenus.close(self)
+  else:GardenMenus.visit(self,"Shop")))
+ detail_label.text="Lettering appears on both sides.\nQ/E rotates a sign while placing or moving it.\nAim at a nearby sign and use Edit sign to change it."
 
 func finish_sign_editor() -> void:
  sign_text=Art.clean_sign_text(sign_text)
@@ -728,7 +732,7 @@ func finish_sign_editor() -> void:
   obj.text_color=sign_color.to_html(false)
   Art.set_sign_text(obj.node,sign_text,sign_color)
   save_game()
-  open_sidebar("Shop")
+  GardenMenus.close(self)
   toast("Your sign has been updated.")
  else:
   for i in range(furniture.size()):

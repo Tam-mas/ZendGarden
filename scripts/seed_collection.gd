@@ -107,11 +107,25 @@ static func build(g) -> void:
  views.clip_text=true
  views.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  views.custom_minimum_size.y=44 if g.touch_active() else 36
- var modes=["All plants","Discovered","Favourites","Recently planted","My cultivars"]
- for title in ["All plants","My seeds","Favourites","Recently planted","My cultivars"]:views.add_item(title)
- views.select(maxi(0,modes.find(g.collection_filters.view)))
- views.item_selected.connect(func(index):g.collection_filters.view=modes[index];update_cards(g))
+ for type in ["All plants"]+GardenCatalogue.CATEGORIES:
+  views.add_item(type)
+  views.set_item_metadata(views.item_count-1,{"category":"All" if type=="All plants" else type})
+ views.add_separator("My collection")
+ for entry in [["My seeds","Discovered"],["Favourites","Favourites"],["Recently planted","Recently planted"],["My cultivars","My cultivars"]]:
+  views.add_item(entry[0])
+  views.set_item_metadata(views.item_count-1,{"view":entry[1]})
+ views.item_selected.connect(func(index):
+  var choice=views.get_item_metadata(index)
+  if choice==null:return
+  g.category=choice.get("category","All")
+  g.collection_filters.view=choice.get("view","All plants")
+  if choice.has("category"):
+   g.collection_filters.group="All collections"
+   g.list_box.find_child("FilterGroup",true,false).select(0)
+  update_categories(g)
+  update_cards(g))
  browse.add_child(views)
+ update_categories(g)
  var toggle=g.button("Filters & sort",func():
   g.collection_filters_open=not g.collection_filters_open
   g.list_box.get_node("SeedFilters").visible=g.collection_filters_open
@@ -128,20 +142,6 @@ static func build(g) -> void:
  filters.visible=g.collection_filters_open
  filters.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  g.list_box.add_child(filters)
- filters.add_child(g.label("Plant type",14))
- var category=OptionButton.new()
- category.name="SeedCategories"
- category.fit_to_longest_item=false
- category.clip_text=true
- category.custom_minimum_size.y=44 if g.touch_active() else 34
- for title in ["All"]+GardenCatalogue.CATEGORIES:category.add_item(title)
- category.item_selected.connect(func(index):
-  g.category=(["All"]+GardenCatalogue.CATEGORIES)[index]
-  g.collection_filters.group="All collections"
-  g.list_box.find_child("FilterGroup",true,false).select(0)
-  update_cards(g))
- filters.add_child(category)
- update_categories(g)
  var navigation=VBoxContainer.new()
  navigation.name="CollectionNavigation"
  filters.add_child(navigation)
@@ -175,8 +175,15 @@ static func build(g) -> void:
  update_cards(g)
 
 static func update_categories(g) -> void:
- var picker=g.list_box.find_child("SeedCategories",true,false)
- if picker:picker.select(maxi(0,(["All"]+GardenCatalogue.CATEGORIES).find(g.category)))
+ var picker=g.list_box.find_child("CollectionView",true,false)
+ if not picker:return
+ for index in range(picker.item_count):
+  var choice=picker.get_item_metadata(index)
+  if choice==null:continue
+  if (choice.get("category","")==g.category and g.collection_filters.view=="All plants") or (choice.get("view","")==g.collection_filters.view):
+   picker.select(index)
+   return
+ picker.select(0)
 
 static func layout_cards(g, _available_width: float) -> void:
  var cards=g.list_box.get_node_or_null("PlantCards")
@@ -208,8 +215,9 @@ static func details(g, plant: Dictionary) -> void:
  var uid=str(plant.get("form_uid",""))
  var custom=not uid.is_empty()
  var unlocked=custom or id in g.unlocked_plants
- g.side_title.text=plant.name
+ g.side_title.text="Plant details"
  g.list_box.add_child(g.button("Back to seeds",g.touch.back_to_seeds))
+ g.add_note(plant.name,18)
  var portrait: TextureRect
  if custom:
   portrait=GardenCultivarThumbnail.new()

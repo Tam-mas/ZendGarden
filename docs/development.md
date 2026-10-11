@@ -61,6 +61,8 @@ The runner checks assets, imports the project, and runs wildlife and gameplay ch
 
 The menu regression can be run on its own with `Godot --headless --path . -- --menu-test`. Omit `--headless` and add `--rendering-method gl_compatibility --always-on-top` to capture the desktop, tablet and unfolded-screen layouts. It uses the isolated smoke-test save.
 
+Regenerate the compact tool-card portraits with `Godot --path . --rendering-method gl_compatibility --script tools/render_tool_cards.gd`, then import again. It renders the existing held-tool GLBs into `assets/ui/tools`; gathering uses the same shears held in the game.
+
 ### Smaller browser exports
 
 Build the browser version with `python3 tools/build_web.py` (set `GODOT_BIN` on macOS). After importing, it runs `tools/prepare_export.gd` to replace repeated model textures with shared native Godot resources in the generated, Git-ignored `assets/shared_textures/` directory. Existing compressed pixels, mipmaps, normal maps and transparency are copied without resizing or re-encoding. GLBs and editable Blender sources remain self-contained. The preparation pass edits only disposable imported scenes and retains their meshes, LODs, skeletons and animation resources. Use the build script rather than exporting the Web preset directly: its texture preparation is required by the export exclusions.

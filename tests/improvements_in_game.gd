@@ -21,7 +21,7 @@ static func run(g, failures: Array) -> void:
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  g.side_panel.show();g.refresh_ui()
  var query=g.list_box.get_node("SeedSearch")
- var category=g.list_box.find_child("SeedCategories",true,false) as OptionButton
+ var category=g.list_box.find_child("CollectionView",true,false) as OptionButton
  if category==null:failures.append("Plant type picker missing")
  else:
   category.item_selected.emit((["All"]+GardenCatalogue.CATEGORIES).find("Cacti & succulents"))

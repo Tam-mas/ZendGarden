@@ -4,7 +4,7 @@
 
 [**Enter the garden →**](https://zend.garden)
 
-**Current source release: 65 — A clearer garden menu.** See the [player update history](scripts/player_updates.gd).
+**Current source release: 66 — Quicker browsing and signs you can edit in place.** See the [player update history](scripts/player_updates.gd).
 
 Zend Garden is a cosy, first-person gardening game beside a mountain lake. Start with a small patch of soil, wander among the flowers, and gradually turn your corner of the valley into somewhere you want to spend time.
 

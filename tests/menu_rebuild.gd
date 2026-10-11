@@ -27,6 +27,12 @@ static func run(g, failures: Array) -> void:
  if first.size.y>245:failures.append("Compact card has too much unused height: "+str(first.size))
  if g.detail_label.visible:failures.append("Permanent footer returned")
  await capture(g,"desktop-seeds")
+ var picker=g.list_box.get_node("SeedBrowse/CollectionView")
+ picker.item_selected.emit(1)
+ if g.category!="Flowers" or g.list_box.get_node("SeedFilters").visible:failures.append("Quick plant type needs expanded filters")
+ picker.item_selected.emit(0)
+ await settle(g)
+ first=g.list_box.get_node("PlantCards").get_child(0)
  first.get_node("PlantInfo").pressed.emit()
  await settle(g)
  if g.active_tab!="Seed details":failures.append("Desktop information button did not open details")
@@ -55,11 +61,20 @@ static func run(g, failures: Array) -> void:
  await settle(g)
  await capture(g,"desktop-settings")
  GardenMenus.visit(g,"Shop")
- for section in ["Decor","Tools","Bed care","Equipment","Owned"]:
+ for section in ["Decor","Equipment","Tools","Bed care"]:
   g.menu_sections.shop=section;g.refresh_sidebar()
   await settle(g)
   if g.basket_total()>0 and g.list_box.get_children().any(func(c):return c is Label and c.text.begins_with("YOUR BASKET")):failures.append("Harvest inventory leaked into shop")
   if section=="Decor":await capture(g,"desktop-shop")
+  if section=="Tools":
+   var tools=g.list_box.get_node("ToolCards")
+   if tools.get_child_count()!=5:failures.append("Tool cards lost an upgrade")
+   var before_level=int(g.upgrades.can)
+   var before_cost=g.coins
+   tools.get_node("Tool_can").pressed.emit()
+   if int(g.upgrades.can)!=before_level+1 or g.coins!=before_cost-(45+before_level*45):failures.append("Tool card does not buy the expected upgrade")
+   await settle(g)
+   await capture(g,"desktop-tools")
  g.menu_sections.shop="Bed care";g.refresh_sidebar()
  var space_link=g.list_box.get_children().filter(func(c):return c is Button and c.text=="More garden space & milestones")
  space_link[0].pressed.emit()
@@ -105,6 +120,7 @@ static func run(g, failures: Array) -> void:
    GardenMenus.visit(g,page)
    await settle(g)
    var bounds=g.get_viewport().get_visible_rect()
+   if g.menu_utilities.size.y>52:failures.append("Menu title and icon row grew too tall: "+page+str(dimensions))
    if not bounds.encloses(g.side_panel.get_global_rect()):failures.append("Menu overflows "+page+" "+str(dimensions)+" "+str(g.side_panel.get_global_rect()))
    if g.side_panel.position.x>20:failures.append("Menu no longer stays left")
    if dimensions.x>=700 and g.side_panel.size.x>430:failures.append("Touch menu expands across screen")
@@ -119,5 +135,61 @@ static func run(g, failures: Array) -> void:
    GardenMenus.visit(g,"Seeds")
    await settle(g)
    await capture(g,"touch-seeds-%dx%d"%[dimensions.x,dimensions.y])
+ await sign_editing(g,failures)
  for voice in g.ambient.players.values():voice.stop();voice.stream=null
  print("MENU_REBUILD_RESULT: ",JSON.stringify(failures))
+
+static func sign_editing(g, failures: Array) -> void:
+ g.get_window().size=Vector2i(1280,800)
+ g.set_mode("walk")
+ g.rest_kind="";g.rest_object=null
+ var point=GardenTerrain.point(Vector3(0,0,2))
+ g.add_object("sign",point,15,false,.35,"Before editing",Color("f1e5c7"))
+ var index=g.objects.size()-1
+ var sign=g.objects[index]
+ var lettering=sign.node.get_node("FrontText").global_position
+ for control in ["keyboard","touch"]:
+  g.settings.controls=control;g.touch.configure();GardenMenus.close(g)
+  g.player.position=point+Vector3(0,.1,2)
+  g.camera.global_position=point+Vector3(0,1.62,2)
+  g.camera.look_at(lettering)
+  await g.get_tree().physics_frame
+  await g.get_tree().physics_frame
+  if GardenLeisure.sign_target(g)!=index:failures.append("Aiming at a nearby sign does not select it: "+control)
+  GardenLeisure.update(g)
+  g.touch._process(0)
+  if control=="keyboard":
+   # The headless display does not keep desktop pointer capture; the rendered
+   # run checks visibility as well as the prompt and the real E-key action.
+   if g.leisure_panel.get_child(0).get_child(1).text!="Edit sign · E" or (DisplayServer.get_name()!="headless" and not g.leisure_panel.visible):failures.append("Desktop sign prompt is missing")
+   var key=InputEventKey.new();key.physical_keycode=KEY_E;key.pressed=true
+   g._unhandled_input(key)
+  else:
+   if not g.touch.buttons.greet.visible or g.touch.buttons.greet.text!="Edit sign":failures.append("Touch sign action is missing")
+   g.touch.buttons.greet.pressed.emit()
+  if g.active_tab!="Sign" or not g.side_panel.visible or g.editing_sign!=index:failures.append("Sign interaction did not open its editor: "+control)
+  var field=g.list_box.get_node("SignText")
+  field.text="Updated with "+control;field.text_changed.emit(field.text)
+  g.sign_color=Color("b4d6ff")
+  var before=g.coins
+  g.finish_sign_editor()
+  if g.side_panel.visible or sign.text!="Updated with "+control or sign.text_color!="b4d6ff" or g.coins!=before:failures.append("Editing a sign changed cost, lost text or failed to close")
+  if sign.node.get_node("BackText").text!=sign.text or not is_equal_approx(sign.rotation,.35):failures.append("Editing changed rotation or lost the back lettering")
+ # Aiming away, standing too far off, and using a tool must not edit a sign.
+ g.camera.look_at(g.camera.global_position+Vector3.RIGHT)
+ if GardenLeisure.sign_target(g)>=0:failures.append("Looking away still selects a sign")
+ g.player.position=point+Vector3(0,.1,5)
+ g.camera.global_position=point+Vector3(0,1.62,5);g.camera.look_at(lettering)
+ if GardenLeisure.sign_target(g)>=0:failures.append("A distant sign can be edited")
+ g.player.position=point+Vector3(0,.1,2)
+ g.camera.global_position=point+Vector3(0,1.62,2);g.camera.look_at(lettering)
+ g.mode="water"
+ if GardenLeisure.sign_target(g)>=0:failures.append("Sign editing steals the watering action")
+ g.mode="walk"
+ # The nearer board blocks the first; the ray must select the visible sign.
+ g.add_object("sign",point+Vector3(0,0,.4),15,false,0,"In front",Color.WHITE)
+ var front=g.objects.back()
+ g.camera.look_at(front.node.get_node("FrontText").global_position)
+ await g.get_tree().physics_frame
+ await g.get_tree().physics_frame
+ if GardenLeisure.sign_target(g)!=g.objects.size()-1:failures.append("Editing selects a sign behind another sign")
