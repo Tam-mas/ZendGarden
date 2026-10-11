@@ -218,6 +218,16 @@ static func details(g, plant: Dictionary) -> void:
  g.side_title.text="Plant details"
  g.list_box.add_child(g.button("Back to seeds",g.touch.back_to_seeds))
  g.add_note(plant.name,18)
+ var select_plant=func():
+  if custom:GardenPlantBreeding.choose(g,uid)
+  else:g.choose_plant(id)
+ var can_plant=unlocked or g.coins>=int(plant.price)
+ var action="Plant this" if unlocked else "Discover & plant · %d petals"%plant.price
+ var image_button=g.button("",select_plant,Vector2(160,190))
+ image_button.name="PlantPortrait"
+ image_button.tooltip_text=action
+ image_button.disabled=not can_plant
+ g.list_box.add_child(image_button)
  var portrait: TextureRect
  if custom:
   portrait=GardenCultivarThumbnail.new()
@@ -227,13 +237,13 @@ static func details(g, plant: Dictionary) -> void:
   portrait.texture=GardenMenus.plant_texture(id)
  portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
  portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
- portrait.custom_minimum_size=Vector2(160,190)
- g.list_box.add_child(portrait)
- var choose=g.button("Plant this" if unlocked else "Discover & plant · %d petals"%plant.price,func():
-  if custom:GardenPlantBreeding.choose(g,uid)
-  else:g.choose_plant(id))
+ portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
+ portrait.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ portrait.offset_left=8;portrait.offset_top=8;portrait.offset_right=-8;portrait.offset_bottom=-8
+ image_button.add_child(portrait)
+ var choose=g.button(action,select_plant)
  choose.name="PlantThisSeed"
- choose.disabled=not unlocked and g.coins<int(plant.price)
+ choose.disabled=not can_plant
  g.list_box.add_child(choose)
  if not unlocked:g.add_note("Discover once to keep unlimited seeds. You have %d petals."%g.coins,16)
  if not plant.get("botanical_name","").is_empty():g.add_note(plant.botanical_name,18)

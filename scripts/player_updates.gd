@@ -4,6 +4,7 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 const RELEASES=[
+ {"version":67,"date":"11 October 2026","title":"Smoother touch browsing","note":"Swipe over plant cards, orders and menu text to scroll, with a gentle glide that stops when you tap. Open a plant, then tap its large image to start planting. Returning to Seeds remembers your place, while sliders and text fields keep their usual touch controls."},
  {"version":66,"date":"11 October 2026","title":"Quicker browsing and signs you can edit in place","note":"Choose plant types directly from the main seed dropdown. Shop puts Decor and Equipment together, with illustrated cards for tool upgrades and fish stocking under Equipment. Aim at a nearby garden sign and press E or tap Edit sign to change it. Moving and arranging tips are in Guide."},
  {"version":65,"date":"11 October 2026","title":"A clearer garden menu","note":"The wooden menu stays beside your garden, with compact plant cards showing light, growing time, height and capacity. Browse a tidier Shop, find neighbour requests before your basket, and open just the Settings category you need. The Guide brings searchable help, your atlas, companions and quiet moments together. Settings and Close have familiar icons at the top."},
  {"version":64,"date":"10 October 2026","title":"A familiar garden on a larger touch screen","note":"Tablets and unfolded phones keep the familiar Seeds, Shop, Orders and Guide menus, with roomier layouts and plant details before you choose what to grow. Seeds and a compact tool tray sit beside your movement control, with the current action near your other thumb. Hold Water, Gather, Rake or the hoe action and drag to look with the same thumb. Adjust control size, edge spacing, height and handedness in Settings."},
@@ -131,7 +132,8 @@ static func show(g, only_unseen: bool=false) -> void:
  close.tooltip_text="Close what’s new"
  heading.add_child(close)
  column.add_child(g.label("Zend Garden · Update %d" % CURRENT_VERSION,14,GardenTheme.MUTED))
- var scroll=ScrollContainer.new()
+ var scroll=GardenMenuScroll.new()
+ scroll.g=g
  scroll.name="UpdateHistory"
  scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED

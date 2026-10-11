@@ -35,6 +35,7 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await page.goto(HOME + '/fixture');
   await page.evaluate(async ({SAVE,version}) => {
    const data = {version:2,day:1,clock:.3,coins:200,plants:[],objects:[],unlocked_plants:[0,1,2],names:['Miso','Clover'],settings:{intro_seen:true,updates_seen:version,controls:'auto',graphics:'mobile',music_volume:0,request_notifications:false}};
+   data.inventory=Object.fromEntries(Array.from({length:25},(_,id)=>[String(id),4]));
    await new Promise((resolve,reject) => {
     const request = indexedDB.open('/userfs',21);
     request.onupgradeneeded = () => {const store=request.result.createObjectStore('FILE_DATA');store.createIndex('timestamp','timestamp');};
@@ -58,6 +59,17 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   assert.equal(sessions.find(packet=>packet.action==='start').version,version);
   const capture=async name=>{await page.waitForTimeout(1000);await page.screenshot({path:path.resolve('captures/tablet-browser-'+name+'.png')});};
   const tap=async (x,y)=>{await page.touchscreen.tap(x,y);await page.waitForTimeout(1000);};
+  const cdp=await context.newCDPSession(page);
+  const swipe=async (x,y,endY) => {
+   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{id:7,x,y}]});
+   for(let step=1;step<=8;step++) {
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{id:7,x,y:y+(endY-y)*step/8}]});
+    await page.waitForTimeout(25);
+   }
+   await page.waitForTimeout(180); // Settle before release so this check has no flick momentum.
+   await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+   await page.waitForTimeout(500);
+  };
   const paused=async () => {
    await page.waitForTimeout(1500);
    const before=await page.evaluate(()=>window.tabletAdvanced);
@@ -75,10 +87,25 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await tap(115,204);
   await tap(110,255); // All plants again.
   await page.waitForTimeout(500);
+  const menuClip={x:26,y:142,width:350,height:360};
+  const unscrolled=await page.screenshot({clip:menuClip});
+  await swipe(130,480,360); // Start on the card itself, away from the scrollbar.
+  await paused();
+  assert.notDeepEqual(await page.screenshot({clip:menuClip}),unscrolled,'Swiping a plant image must move the list');
+  await capture('swiped-seeds');
+  await swipe(130,350,690); // Return to the top; no accidental card selection.
+  await tap(267,102); // Orders.
+  await tap(175,151); // Basket.
+  const basketBefore=await page.screenshot({clip:menuClip});
+  await swipe(170,480,320); // Scroll the harvest pictures/text, not the scrollbar.
+  await paused();
+  assert.notDeepEqual(await page.screenshot({clip:menuClip}),basketBefore,'Swiping basket contents must move the list');
+  await capture('swiped-basket');
+  await tap(70,102); // Back to Seeds at the top.
   await tap(130,450); // First seed card opens its details.
   await capture('wide-details');
   const before=await page.evaluate(()=>window.tabletAdvanced);
-  await tap(200,435); // Explicit Plant this below the plant name and portrait.
+  await tap(200,325); // The large plant image is also a direct planting action.
   await page.waitForFunction(value=>window.tabletAdvanced>value,before,{timeout:90000});
   await capture('wide-planting');
   await tap(180,588); // Current tool opens compact tray.
@@ -87,7 +114,6 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await tap(405,315); // Water in the upper-right tray cell.
   await capture('wide-watering');
   // The browser must forward both fingers, including action-thumb camera drag.
-  const cdp=await context.newCDPSession(page);
   const points=(x,y)=>[{id:1,x:80,y:665},{id:2,x,y}];
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{id:2,x:800,y:300}]});
   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{id:2,x:800,y:440}]});
@@ -121,7 +147,7 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await page.waitForFunction(value=>window.tabletAdvanced>value,resumed,{timeout:90000});
   assert.deepEqual(errors,[]);
   assert.equal(await page.evaluate(()=>document.pointerLockElement),null,'Touch must never require pointer lock');
-  console.log('TABLET_BROWSER_RESULT: PASS — real touch entry, seed details/selection, tool tray, paused menus, two-finger dispatch, square and portrait rotation, strict CSP');
+  console.log('TABLET_BROWSER_RESULT: PASS — card swipe scrolling, portrait-tap planting, real touch entry, tool tray, paused menus, two-finger dispatch, square and portrait rotation, strict CSP');
   await context.close();
  } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

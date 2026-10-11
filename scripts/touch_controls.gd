@@ -226,11 +226,12 @@ func open_menu(page: String) -> void:
  reset_gestures()
  # Shortcuts always open the page, even if it was last selected.
  g.side_panel.hide()
- g.open_sidebar(page)
+ GardenMenus.visit(g,page)
  layout_menu()
 
 func open_seed_details(plant: Dictionary) -> void:
  seed_scroll=g.list_box.get_parent().scroll_vertical
+ g.menu_scroll.Seeds=seed_scroll
  seed_detail=plant.duplicate()
  g.active_tab="Seed details"
  g.refresh_sidebar()
@@ -264,7 +265,8 @@ func show_drawer(kind: String) -> void:
  frame.add_theme_constant_override("separation",8)
  drawer.add_child(frame)
  frame.add_child(g.label("Choose a tool",22))
- var scroll=ScrollContainer.new()
+ var scroll=GardenMenuScroll.new()
+ scroll.g=g
  scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  frame.add_child(scroll)
  var col=GridContainer.new()

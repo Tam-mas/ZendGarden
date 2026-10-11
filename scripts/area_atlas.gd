@@ -71,7 +71,7 @@ static func open(g,index: int=-1) -> void:
  var frame=VBoxContainer.new();frame.add_theme_constant_override("separation",10);g.welcome.add_child(frame)
  note(g,frame,"Garden atlas" if index<0 else GardenAreaCatalogue.entry(index).name,23)
  if not g.area_notice.is_empty():note(g,frame,g.area_notice,16)
- var scroll=ScrollContainer.new();scroll.name="AtlasScroll";scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
+ var scroll=GardenMenuScroll.new();scroll.g=g;scroll.name="AtlasScroll";scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;frame.add_child(scroll)
  var col=VBoxContainer.new();col.name="AtlasContent";col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  col.add_theme_constant_override("separation",10);scroll.add_child(col)

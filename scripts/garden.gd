@@ -122,7 +122,7 @@ var menu_sections={"shop":"Decor","orders":"Requests","settings":"","guide":""}
 var menu_scroll: Dictionary={}
 var menu_tabs: HBoxContainer
 var menu_utilities: HBoxContainer
-var menu_scrollbox: ScrollContainer
+var menu_scrollbox: GardenMenuScroll
 var mode_buttons: Dictionary = {}
 var toast_time = 0.0
 var photo_mode = false
@@ -538,7 +538,8 @@ func make_ui() -> void:
  close.tooltip_text="Close menu · return to garden"
  menu_utilities.add_child(close)
  col.move_child(menu_utilities,0)
- var scroll = ScrollContainer.new()
+ var scroll = GardenMenuScroll.new()
+ scroll.g=self
  menu_scrollbox=scroll
  scroll.custom_minimum_size = Vector2(264,80)
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -741,6 +742,7 @@ func finish_sign_editor() -> void:
   toast("Choose a spot for your sign. Q/E to rotate.")
 
 func clear_list() -> void:
+ menu_scrollbox.cancel_gesture()
  for c in list_box.get_children():
   list_box.remove_child(c)
   c.queue_free()

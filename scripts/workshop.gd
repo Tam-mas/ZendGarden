@@ -67,7 +67,7 @@ static func open(g, uid: String="") -> void:
  g.welcome.add_child(frame)
  var obj=GardenContainers.object(g,uid)
  note(g,frame,"Working garden" if obj.is_empty() else GardenEquipment.name_of(g,obj.kind),23)
- var scroll=ScrollContainer.new();scroll.name="WorkshopScroll"
+ var scroll=GardenMenuScroll.new();scroll.g=g;scroll.name="WorkshopScroll"
  scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
  frame.add_child(scroll)
