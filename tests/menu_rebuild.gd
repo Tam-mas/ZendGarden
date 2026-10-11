@@ -135,9 +135,134 @@ static func run(g, failures: Array) -> void:
    GardenMenus.visit(g,"Seeds")
    await settle(g)
    await capture(g,"touch-seeds-%dx%d"%[dimensions.x,dimensions.y])
+ await touch_browsing(g,failures)
  await sign_editing(g,failures)
  for voice in g.ambient.players.values():voice.stop();voice.stream=null
  print("MENU_REBUILD_RESULT: ",JSON.stringify(failures))
+
+static func touch_browsing(g, failures: Array) -> void:
+ var input=preload("res://tests/touch_controls.gd")
+ g.get_window().size=Vector2i(1024,768)
+ await settle(g)
+ g.settings.controls="touch";g.settings.reduced_motion=true
+ g.touch.configure()
+ g.category="All";g.collection_query="";g.collection_filters=g.default_collection_filters()
+ GardenMenus.visit(g,"Seeds")
+ g.menu_scrollbox.scroll_vertical=0
+ await settle(g)
+ var card=g.list_box.get_node("PlantCards").get_child(0)
+ var point=card.get_global_rect().get_center()
+ var start_y=g.menu_scrollbox.scroll_vertical
+ var yaw=g.yaw
+ input.press(51,point)
+ input.drag(51,point-Vector2(0,60),Vector2(0,-60))
+ input.press(51,point-Vector2(0,60),false)
+ await settle(g)
+ if g.active_tab!="Seeds" or g.menu_scrollbox.scroll_vertical<=start_y+30:failures.append("Swiping a plant card did not scroll without opening it")
+ if g.yaw!=yaw or g.touch.stick!=Vector2.ZERO:failures.append("Menu swipe leaked into garden controls")
+ card=g.list_box.get_node("PlantCards").get_child(0)
+ var star=card.get_node("Favourite")
+ point=star.get_global_rect().get_center()
+ var favourites=g.favourite_plants.duplicate()
+ input.press(52,point)
+ input.drag(52,point-Vector2(0,24),Vector2(0,-24))
+ input.press(52,point-Vector2(0,24),false)
+ await settle(g)
+ if g.favourite_plants!=favourites:failures.append("Swiping over a favourite changed it")
+ # A small natural finger wobble is still a tap, and opens details once.
+ card=g.list_box.get_node("PlantCards").get_child(0)
+ point=card.get_global_rect().get_center()
+ var browse_position=g.menu_scrollbox.scroll_vertical
+ input.press(53,point)
+ input.drag(53,point+Vector2(2,2),Vector2(2,2))
+ input.press(53,point+Vector2(2,2),false)
+ await settle(g)
+ if g.active_tab!="Seed details":
+  failures.append("Normal card tap stopped opening details")
+  return
+ var portrait=g.list_box.get_node("PlantPortrait")
+ point=portrait.get_global_rect().get_center()
+ input.press(54,point);input.press(54,point,false,true)
+ await settle(g)
+ if not g.side_panel.visible:failures.append("Canceled portrait tap entered planting")
+ input.press(55,point);input.press(55,point,false)
+ await settle(g)
+ if g.mode!="plant" or g.side_panel.visible:failures.append("Portrait tap did not jump into planting")
+ g.touch.open_menu("Seeds")
+ await settle(g)
+ if absi(g.menu_scrollbox.scroll_vertical-browse_position)>3:failures.append("Returning from planting lost the collection position")
+ # Locked plants use the same affordability gate for the image and action.
+ var locked=g.catalogue.filter(func(p):return p.id not in g.unlocked_plants)[0]
+ g.coins=0;g.touch.open_seed_details(locked)
+ await settle(g)
+ if not g.list_box.get_node("PlantPortrait").disabled or not g.list_box.get_node("PlantThisSeed").disabled:failures.append("Portrait bypasses seed affordability")
+ var old_selected=g.selected
+ point=g.list_box.get_node("PlantPortrait").get_global_rect().get_center()
+ input.press(56,point);input.press(56,point,false)
+ if g.selected!=old_selected or not g.side_panel.visible:failures.append("Unaffordable portrait bought seeds")
+ g.coins=int(locked.price)+5;g.refresh_sidebar()
+ await settle(g)
+ point=g.list_box.get_node("PlantPortrait").get_global_rect().get_center()
+ input.press(63,point);input.press(63,point,false)
+ if locked.id not in g.unlocked_plants or g.coins!=5 or g.selected!=locked.id or g.side_panel.visible:failures.append("Portrait discovery did not charge once and enter planting")
+ # Real text and request buttons scroll too, without delivering on release.
+ g.coins=1000;g.orders=[];g.inventory={"0":100}
+ for index in range(12):g.orders.append({"person":"Neighbour %d"%index,"plant":0,"count":2,"reward":24})
+ g.menu_sections.orders="Requests";GardenMenus.visit(g,"Orders")
+ await settle(g)
+ var deliver=g.list_box.get_children().filter(func(c):return c is Button and c.text=="Deliver request")[0]
+ point=deliver.get_global_rect().get_center()
+ var coins=g.coins
+ input.press(57,point)
+ input.drag(57,point-Vector2(0,30),Vector2(0,-30))
+ input.press(57,point-Vector2(0,30),false)
+ await settle(g)
+ if g.menu_scrollbox.scroll_vertical<20 or g.coins!=coins or int(g.inventory["0"])!=100:failures.append("Request-button swipe failed or delivered an order")
+ # Settings sliders and text fields retain their own direct manipulation.
+ g.menu_sections.settings="Sound";GardenMenus.visit(g,"Settings")
+ await settle(g)
+ var slider=g.list_box.get_node("SoundOptions/music_volume")
+ var old_volume=slider.value
+ point=slider.get_global_rect().position+Vector2(slider.size.x*.25,slider.size.y*.5)
+ input.press(58,point)
+ input.drag(58,point+Vector2(slider.size.x*.4,0),Vector2(slider.size.x*.4,0))
+ input.press(58,point+Vector2(slider.size.x*.4,0),false)
+ if is_equal_approx(slider.value,old_volume) or g.menu_scrollbox.scroll_vertical!=0:failures.append("Menu scrolling stole a volume-slider drag: %s to %s, scroll %s, rect %s"%[old_volume,slider.value,g.menu_scrollbox.scroll_vertical,slider.get_global_rect()])
+ GardenMenus.visit(g,"Seeds")
+ await settle(g)
+ g.menu_scrollbox.scroll_vertical=0
+ await settle(g)
+ var search=g.list_box.get_node("SeedSearch")
+ point=search.get_global_rect().get_center()
+ input.press(59,point);input.press(59,point,false)
+ if not search.has_focus():failures.append("Menu scrolling stole the search field tap")
+ # A mouse/trackpad press-and-drag also works with the Touch controls setting.
+ g.menu_scrollbox.scroll_vertical=500
+ await settle(g)
+ point=g.menu_scrollbox.get_global_rect().get_center()
+ var mouse=InputEventMouseButton.new();mouse.button_index=MOUSE_BUTTON_LEFT;mouse.position=point;mouse.pressed=true
+ g.menu_scrollbox._input(mouse)
+ var motion=InputEventMouseMotion.new();motion.position=point-Vector2(0,80)
+ g.menu_scrollbox._input(motion)
+ mouse.pressed=false;g.menu_scrollbox._input(mouse)
+ if g.menu_scrollbox.scroll_vertical<550:failures.append("Mouse drag in touch mode cannot scroll")
+ g.settings.reduced_motion=false
+ input.press(60,point)
+ input.drag(60,point-Vector2(0,60),Vector2(0,-60))
+ input.press(60,point-Vector2(0,60),false)
+ var released_at=g.menu_scrollbox.scroll_vertical
+ g.menu_scrollbox._process(.08)
+ if g.menu_scrollbox.scroll_vertical<=released_at:failures.append("A flick has no scroll momentum")
+ input.press(61,point);input.press(61,point,false)
+ if g.active_tab!="Seeds" or g.menu_scrollbox.scrolling:failures.append("Tapping a gliding list selected a card instead of stopping")
+ # Canceling a gesture or rebuilding a page stops momentum and pending taps.
+ input.press(62,point)
+ input.drag(62,point-Vector2(0,60),Vector2(0,-60))
+ input.press(62,point-Vector2(0,60),false,true)
+ released_at=g.menu_scrollbox.scroll_vertical
+ g.menu_scrollbox._process(.1)
+ if g.menu_scrollbox.scroll_vertical!=released_at or g.active_tab!="Seeds":failures.append("Canceled swipe kept moving or selected a card")
+ g.menu_scrollbox.cancel_gesture()
 
 static func sign_editing(g, failures: Array) -> void:
  g.get_window().size=Vector2i(1280,800)

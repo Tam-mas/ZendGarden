@@ -1,3 +1,13 @@
+### [2026-10-11 21:40] Fixed
+
+**Tech:** `GardenMenuScroll`, `GardenSeedCollection.details`, `GardenTouch.open_menu` — touch scrolling and image-based seed selection
+
+**Dev:** Recognise menu swipes before cards consume them, cancel pending button presses after the drag threshold, and add bounded momentum with tap-to-stop and reduced-motion support. Use the same gesture handling in the sidebar, tool tray, atlas, workshop and update history; leave sliders, text fields and dropdowns to their own controls. Make the plant detail portrait share the existing planting/discovery action and affordability gate, and preserve the seed browsing position after planting. Retain wooden styling, left-side layout, desktop controls and save compatibility; add release 67 and native/browser input regressions.
+
+**Plain:** Swipe anywhere over menu content to browse, then tap a plant's large image to start planting and return to the same place in Seeds afterward.
+
+**Why:** Make common gardening actions comfortable on tablets and unfolded phones without needing precise scrollbar dragging.
+
 ### [2026-10-11 14:02] Changed
 
 **Tech:** `GardenSeedCollection`, `GardenMenus`, `GardenLeisure.sign_target` — quick plant types, illustrated tools and aimed sign editing

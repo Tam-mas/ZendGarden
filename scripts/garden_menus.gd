@@ -18,7 +18,7 @@ static func plant_texture(id: int) -> Texture2D:
 
 # Navigation is session-only; garden saves and game rules keep their existing shape.
 static func visit(g, page: String) -> void:
- g.menu_scroll[g.active_tab]=g.list_box.get_parent().scroll_vertical
+ if g.side_panel.visible:g.menu_scroll[g.active_tab]=g.list_box.get_parent().scroll_vertical
  if page=="Shop" and g.active_tab!="Shop":g.surface_shop_plot=g.current_plot
  g.active_tab=page
  g.side_panel.show()
@@ -412,7 +412,7 @@ const GUIDE={
  "Wildlife & companions":["Native plants welcome native birds. Two flowering plants or produce welcome lady beetles; three flowering plants welcome bees and butterflies. Trees or bird baths welcome songbirds; ponds welcome frogs and dragonflies. Moss and dusk bring fireflies. A beehive brings daytime bees; rabbits occasionally visit open ground.","Stock a placed pond from Shop → Equipment. Name and call companions under Guide → Companions. E rests near a bench, pergola or pond; F pets a nearby companion and C calls both. While resting, invite them to settle beside you."],
  "Moving & arranging":["Choose Move to rearrange a plant, object or planted container. Aim at it, pick it up and choose its new home. Rotate an object while placing or moving: Q/E on keyboard, Turn left/right on touch.","Walk up to a sign and point at its board to see Edit sign. Press E or tap the touch action, change the lettering or colour, then Save changes to return to your garden."],
  "Structures & photos":["Rotate a structure in 15° steps while placing or moving it: Q/E on keyboard or Turn left/right on touch. Tab releases the pointer for rotation buttons. Walk up to a placed sign and aim at its board. Press E or tap Edit sign to change its text and colour.","P opens photo mode. WASD flies, Q/E moves down/up, right-drag looks around and F12 captures a photo. Use the touch photo controls on a tablet. Return with P or Done.","Enjoy the view hides the interface and held tool. Mouse look still works. Press any key or click/tap to return."],
- "Controls & saving":["Keyboard: WASD or arrows walk, Shift strolls faster, mouse looks, 1–9 selects tools, Tab opens/closes menus, and Escape opens Settings. G welcomes the next morning; H hides the interface.","Touch: left thumb walks and right thumb looks. Tap the current tool to open the tool tray. Hold Water, Gather, Rake or the hoe action and drag the same thumb to look; release to stop.","Your garden saves on this device. Settings → Save files lets you download a copy or upload it elsewhere. Upload asks before replacement, and the previous garden is kept as a backup."]
+ "Controls & saving":["Keyboard: WASD or arrows walk, Shift strolls faster, mouse looks, 1–9 selects tools, Tab opens/closes menus, and Escape opens Settings. G welcomes the next morning; H hides the interface.","Touch: left thumb walks and right thumb looks. Tap the current tool to open the tool tray. Hold Water, Gather, Rake or the hoe action and drag the same thumb to look; release to stop.","Swipe over menu cards or text to scroll. Tap a gliding list to stop it. Open a plant, then tap its large image to start planting. Seeds remembers your browsing position.","Your garden saves on this device. Settings → Save files lets you download a copy or upload it elsewhere. Upload asks before replacement, and the previous garden is kept as a backup."]
 }
 
 static func guide(g) -> void:

@@ -59,7 +59,7 @@ Browser download recovery is covered by `node tests/web_loader.cjs`. To check ac
 
 The runner checks assets, imports the project, and runs wildlife and gameplay checks. The gameplay test opens a visible game window and uses a separate test save. Keep the window visible while it runs.
 
-The menu regression can be run on its own with `Godot --headless --path . -- --menu-test`. Omit `--headless` and add `--rendering-method gl_compatibility --always-on-top` to capture the desktop, tablet and unfolded-screen layouts. It uses the isolated smoke-test save.
+The menu regression can be run on its own with `Godot --headless --path . -- --menu-test`. Omit `--headless` and add `--rendering-method gl_compatibility --always-on-top` to capture the desktop, tablet and unfolded-screen layouts. It uses the isolated smoke-test save. Real input regressions cover card/order swipes, canceled taps, portrait planting, affordability, scroll restoration, sliders, search focus and momentum. After exporting, `PLAYWRIGHT_MODULE=/path/to/playwright node tests/tablet_browser.cjs` checks card swipes and image-tap planting in an isolated browser with actual touch events.
 
 Regenerate the compact tool-card portraits with `Godot --path . --rendering-method gl_compatibility --script tools/render_tool_cards.gd`, then import again. It renders the existing held-tool GLBs into `assets/ui/tools`; gathering uses the same shears held in the game.
 
