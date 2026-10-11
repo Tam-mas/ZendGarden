@@ -25,10 +25,11 @@ static func run(g, failures: Array) -> void:
  escape_settings.physical_keycode=KEY_ESCAPE
  g._unhandled_input(escape_settings)
  if g.active_tab!="Settings" or Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:failures.append("Escape did not release cursor for Settings")
- var controls=g.list_box.get_children()
+ g.list_box.get_node("SettingsSound").pressed.emit()
+ var controls=g.list_box.get_node("SoundOptions").get_children()
  var music_slider: HSlider
  for i in range(controls.size()-1):
-  if controls[i] is Label and controls[i].text=="Music volume": music_slider=controls[i+1]
+  if controls[i] is Label and controls[i].text.begins_with("Music volume"): music_slider=controls[i+1]
  if not is_instance_valid(music_slider):
   failures.append("Music slider missing from settings")
  else:
@@ -70,7 +71,8 @@ static func run(g, failures: Array) -> void:
  if not saved.settings.intro_seen or not saved.settings.reduced_motion: failures.append("Experience preferences not saved")
  g.open_sidebar("Settings")
  var history_button: Button
- for control in g.list_box.get_children():
+ g.list_box.get_node("SettingsAbout").pressed.emit()
+ for control in g.list_box.get_node("AboutOptions").get_children():
   if control is Button and control.text=="What’s new": history_button=control
  if not is_instance_valid(history_button):
   failures.append("Update history missing from settings")

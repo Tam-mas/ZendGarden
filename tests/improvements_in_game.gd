@@ -21,13 +21,11 @@ static func run(g, failures: Array) -> void:
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  g.side_panel.show();g.refresh_ui()
  var query=g.list_box.get_node("SeedSearch")
- var succulent_button: Button
- for button in g.list_box.get_node("SeedCategories").get_children():
-  if button.get_meta("category","")=="Cacti & succulents":succulent_button=button
- if succulent_button==null:failures.append("New category button missing")
+ var category=g.list_box.find_child("CollectionView",true,false) as OptionButton
+ if category==null:failures.append("Plant type picker missing")
  else:
-  succulent_button.pressed.emit()
-  if GardenSeedCollection.matching(g).size()!=20 or g.list_box.get_node("PlantCards").get_child_count()!=20:failures.append("New category does not show twenty seed cards")
+  category.item_selected.emit((["All"]+GardenCatalogue.CATEGORIES).find("Cacti & succulents"))
+  if GardenSeedCollection.matching(g).size()!=20 or g.list_box.get_node("PlantCards").get_child_count()!=20:failures.append("Plant type does not show twenty succulent cards")
   await image(g,"succulent-category")
  g.category="All"
  query.text="rose";query.text_changed.emit("rose")
@@ -36,7 +34,11 @@ static func run(g, failures: Array) -> void:
  g.collection_filters_open=true;g.refresh_sidebar()
  await image(g,"catalogue-filters")
  g.active_tab="Shop";g.refresh_sidebar()
- if g.list_box.get_node("OrnamentCards").get_child_count()!=GardenCatalogue.furnishings().size():failures.append("Shop cards missing ornaments")
+ var item_count=g.list_box.get_node("OrnamentCards").get_child_count()
+ g.menu_sections.shop="Equipment";g.refresh_sidebar()
+ item_count+=g.list_box.get_node("OrnamentCards").get_child_count()
+ if item_count!=GardenCatalogue.furnishings().size():failures.append("Shop categories lose items")
+ g.menu_sections.shop="Decor";g.refresh_sidebar()
  # Scroll to ornaments using the real scroll container.
  g.list_box.get_parent().scroll_vertical=600
  await image(g,"ornament-shop")

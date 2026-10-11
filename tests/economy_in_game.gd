@@ -18,8 +18,9 @@ static func run(g, failures: Array) -> void:
  g.dismiss_request()
  for i in range(GardenEconomy.MODES.size()):
   g.side_panel.hide()
+  g.menu_sections.settings="Comfort & play"
   g.open_sidebar("Settings")
-  var choice=g.list_box.get_node_or_null("PetalRate") as OptionButton
+  var choice=g.list_box.get_node_or_null("ComfortplayOptions/petal_rate") as OptionButton
   if not choice or choice.item_count!=3:
    failures.append("Petal earnings selector missing from Settings")
    break
@@ -39,8 +40,8 @@ static func run(g, failures: Array) -> void:
    failures.append("Harvest rate or reserved order items incorrect")
   g.open_sidebar("Orders")
   var reward=GardenEconomy.preview(g,24)
-  if not g.list_box.get_children().any(func(control):return control is Button and control.text=="Deliver   +%d petals"%reward):
-   failures.append("Order button does not show the selected rate")
+  if not g.list_box.find_children("*","Label",true,false).any(func(control):return control.text=="Thank-you: %d petals"%reward):
+   failures.append("Order does not show the selected earnings rate")
   before=g.coins
   g.fulfill_order(0)
   if g.coins!=before+reward or int(g.inventory.get("0",-1))!=0:
@@ -104,11 +105,12 @@ static func run(g, failures: Array) -> void:
   g.settings.controls="touch" if size.x<700 else "keyboard"
   g.touch.configure()
   g.side_panel.hide()
+  g.menu_sections.settings="Comfort & play"
   g.open_sidebar("Settings")
   await g.get_tree().process_frame
   await g.get_tree().process_frame
-  var choice=g.list_box.get_node_or_null("PetalRate") as OptionButton
-  if not choice or not choice.is_visible_in_tree() or choice.size.x>g.list_box.size.x+1 or choice.size.y<(48 if size.x<700 else 38):
+  var choice=g.list_box.get_node_or_null("ComfortplayOptions/petal_rate") as OptionButton
+  if not choice or not choice.is_visible_in_tree() or choice.size.x>g.list_box.size.x+1 or choice.size.y<(48 if size.x<700 else 36):
    failures.append("Petal selector does not fit Settings at "+str(size))
   elif choice:
    var scroll=g.list_box.get_parent() as ScrollContainer

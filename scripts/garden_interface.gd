@@ -1,14 +1,14 @@
 class_name GardenInterface
 extends RefCounted
 
-const SIDEBAR_WIDTH=300.0
+const SIDEBAR_WIDTH=380.0
 
 # Desktop uses logical display pixels, so a small window keeps readable text.
 static func layout(g, force: bool=false) -> void:
  if g.touch_active(): return
  var size=g.get_viewport().get_visible_rect().size
  var menus=Input.mouse_mode!=Input.MOUSE_MODE_CAPTURED and g.rest_kind.is_empty() and not g.photo_mode and not g.day_transition
- var sidebar=SIDEBAR_WIDTH
+ var sidebar=minf(SIDEBAR_WIDTH,size.x-32)
  var tip_width=size.x-sidebar-48 if menus else size.x-32
  g.tip_label.size=Vector2(tip_width,0)
  var tip_height=maxf(g.tip_label.size.y,g.tip_label.get_minimum_size().y)+8
@@ -22,14 +22,18 @@ static func layout(g, force: bool=false) -> void:
  g.hud_top.position=Vector2(sidebar+margin*2,28)
  g.side_panel.position=Vector2(margin,100)
  var column=g.side_panel.get_child(0)
- column.add_theme_constant_override("separation",10)
- column.get_child(2).custom_minimum_size=Vector2(sidebar-28,80)
- g.detail_label.custom_minimum_size.x=sidebar-28
- g.detail_label.visible=g.active_tab not in ["Seeds","Shop"]
- for tab in column.get_child(0).get_children():
-  tab.custom_minimum_size=Vector2(0,40)
+ column.add_theme_constant_override("separation",6)
+ g.menu_scrollbox.custom_minimum_size=Vector2(0,40)
+ g.detail_label.hide()
+ g.side_title.autowrap_mode=TextServer.AUTOWRAP_OFF
+ g.side_title.clip_text=true
+ g.side_title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
+ g.side_title.custom_minimum_size.x=0
+ for tab in g.menu_tabs.get_children():
+  tab.custom_minimum_size=Vector2(0,36)
   tab.add_theme_font_size_override("font_size",16)
- column.get_child(4).custom_minimum_size.y=40
+ for utility in g.menu_utilities.get_children():
+  if utility is Button:utility.custom_minimum_size.y=36
  # Set the panel after its children's limits, including when leaving touch mode.
  g.side_panel.size=Vector2(sidebar,maxf(320,size.y-192))
  var right_width=368.0

@@ -59,7 +59,7 @@ var path_widths: Dictionary = {}
 var companion_names = ["Miso", "Clover"]
 var selected = 0
 var selected_furniture = 0
-var category = "Flowers"
+var category = "All"
 var collection_query=""
 var collection_filters_open=false
 var collection_filters=default_collection_filters()
@@ -118,6 +118,11 @@ var list_box: VBoxContainer
 var side_panel: PanelContainer
 var side_title: Label
 var detail_label: Label
+var menu_sections={"shop":"Decor","orders":"Requests","settings":"","guide":""}
+var menu_scroll: Dictionary={}
+var menu_tabs: HBoxContainer
+var menu_utilities: HBoxContainer
+var menu_scrollbox: ScrollContainer
 var mode_buttons: Dictionary = {}
 var toast_time = 0.0
 var photo_mode = false
@@ -203,6 +208,7 @@ func _ready() -> void:
  GardenTerrain.offsets.clear()
  rng.seed = 7183
  smoke = "--view-water-test" in OS.get_cmdline_user_args() or "--improvements-test" in OS.get_cmdline_user_args() or "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
+ if "--menu-test" in OS.get_cmdline_user_args():smoke=true
  if smoke: SAVE_PATH="user://smoke-test-save.json"
  if "--inhabit-test" in OS.get_cmdline_user_args() or "--tutorial-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
@@ -265,7 +271,8 @@ func _ready() -> void:
  refresh_ui()
  if loaded_data.is_empty() and not planted.any(func(p):return int(p.plot)<4):starter_garden()
  if not settings.intro_seen and not smoke: show_welcome()
- if "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
+ if "--menu-test" in OS.get_cmdline_user_args():call_deferred("run_menu_test")
+ elif "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
  elif "--inhabit-test" in OS.get_cmdline_user_args():call_deferred("run_inhabit_test")
  elif "--structure-test" in OS.get_cmdline_user_args():call_deferred("run_structure_test")
  elif "--view-water-test" in OS.get_cmdline_user_args(): call_deferred("run_view_water_test")
@@ -502,17 +509,37 @@ func make_ui() -> void:
  col.add_theme_constant_override("separation",12)
  side_panel.add_child(col)
  var tabs = HBoxContainer.new()
+ menu_tabs=tabs
  tabs.add_theme_constant_override("separation",4)
  col.add_child(tabs)
  for tab in ["Seeds","Shop","Orders","Guide"]:
-  var tab_button=button(tab,func(): active_tab=tab; list_box.get_parent().set_deferred("scroll_vertical",0); refresh_sidebar(),Vector2(0,40))
+  var tab_button=button(tab,func(): GardenMenus.visit(self,tab),Vector2(0,40))
   tab_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
   tab_button.clip_text=true
   tabs.add_child(tab_button)
   if tab=="Orders": orders_button=tab_button
- side_title = label("The seed collection",22)
- col.add_child(side_title)
+ menu_utilities=HBoxContainer.new()
+ menu_utilities.name="MenuUtilities"
+ col.add_child(menu_utilities)
+ side_title = label("Seeds",19)
+ side_title.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+ menu_utilities.add_child(side_title)
+ var settings_button=button("",func():GardenMenus.visit(self,"Settings"),Vector2(36,36))
+ settings_button.set_meta("page","Settings")
+ settings_button.tooltip_text="Settings"
+ settings_button.name="SettingsMenu"
+ settings_button.icon=preload("res://assets/ui/menu-settings.svg")
+ settings_button.add_theme_constant_override("icon_max_width",20)
+ menu_utilities.add_child(settings_button)
+ var close=button("",func():GardenMenus.close(self),Vector2(36,36))
+ close.name="CloseMenu"
+ close.icon=preload("res://assets/ui/menu-close.svg")
+ close.add_theme_constant_override("icon_max_width",20)
+ close.tooltip_text="Close menu · return to garden"
+ menu_utilities.add_child(close)
+ col.move_child(menu_utilities,0)
  var scroll = ScrollContainer.new()
+ menu_scrollbox=scroll
  scroll.custom_minimum_size = Vector2(264,80)
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -525,10 +552,7 @@ func make_ui() -> void:
  detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  detail_label.custom_minimum_size.x = 256
  col.add_child(detail_label)
- col.add_child(button("Garden atlas · milestones & trails",func():
-  if touch_active():touch.open_menu("Garden")
-  else:GardenAreaAtlas.open(self),Vector2(0,40)))
- col.add_child(button("Settings",func(): open_sidebar("Settings"),Vector2(0,30)))
+ detail_label.hide()
  var capacity = panel_at(Vector2(1054,112),Vector2(362,144))
  hud_capacity=capacity
  var cap_col = VBoxContainer.new()
@@ -659,10 +683,12 @@ func open_sign_editor(index: int = -1) -> void:
  active_tab="Sign"
  side_panel.show()
  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+ if touch_active():touch.reset_gestures()
  refresh_sidebar()
+ menu_scrollbox.set_deferred("scroll_vertical",0)
 
 func sign_editor_page() -> void:
- side_title.text="Your garden sign"
+ side_title.text="Garden sign"
  add_note("SIGN TEXT · up to 64 characters",14)
  var field=LineEdit.new()
  field.name="SignText"
@@ -691,8 +717,10 @@ func sign_editor_page() -> void:
  picker.color_changed.connect(func(value):
   sign_color=value
   sample.add_theme_color_override("font_color",value))
- list_box.add_child(button("Back to the shed",func(): open_sidebar("Shop")))
- detail_label.text="Lettering appears on both sides.\nQ/E rotates a sign while placing or moving it.\nEdit placed signs from the Shop at any time."
+ list_box.add_child(button("Back to garden" if editing_sign>=0 else "Back to shop",func():
+  if editing_sign>=0:GardenMenus.close(self)
+  else:GardenMenus.visit(self,"Shop")))
+ detail_label.text="Lettering appears on both sides.\nQ/E rotates a sign while placing or moving it.\nAim at a nearby sign and use Edit sign to change it."
 
 func finish_sign_editor() -> void:
  sign_text=Art.clean_sign_text(sign_text)
@@ -704,7 +732,7 @@ func finish_sign_editor() -> void:
   obj.text_color=sign_color.to_html(false)
   Art.set_sign_text(obj.node,sign_text,sign_color)
   save_game()
-  open_sidebar("Shop")
+  GardenMenus.close(self)
   toast("Your sign has been updated.")
  else:
   for i in range(furniture.size()):
@@ -724,144 +752,25 @@ func add_note(text: String, size: int = 13) -> void:
  list_box.add_child(l)
 
 func refresh_sidebar() -> void:
- for tab in side_panel.get_child(0).get_child(0).get_children():
-  GardenTheme.choose(tab,tab.text.begins_with(active_tab))
+ for tab in menu_tabs.get_children():
+  GardenTheme.choose(tab,tab.text.begins_with(active_tab) or active_tab=="Seed details" and tab.text=="Seeds")
+ for utility in menu_utilities.get_children():
+  if utility is Button:GardenTheme.choose(utility,utility.get_meta("page","")==active_tab)
  clear_list()
+ detail_label.text=""
+ detail_label.hide()
  match active_tab:
-  "Garden":
-   touch.garden_page()
-  "Seed details":
-   GardenSeedCollection.details(self,touch.seed_detail)
-  "Seeds":
-   GardenSeedCollection.build(self)
-  "Shop":
-   list_box.add_child(button("Working garden · equipment & planters",func():GardenWorkshop.open(self),Vector2(0,48)))
-   basket_summary()
-   list_box.add_child(button("View orders",func(): open_sidebar("Orders")))
-   side_title.text = "The garden shed"
-   GardenBedSurfaces.shop(self)
-   add_note("BED CARE  ·  available day 7",14)
-   for kind in ["water","prune"]:
-    var k: String = kind
-    var owned = automation.has(str(current_plot)+k)
-    list_box.add_child(button(("Owned " if owned else "Petals: 45  ")+ ("Soaker system" if k=="water" else "Gentle auto-pruner"),func(): buy_automation(k)))
-   list_box.add_child(button("Expand bed +80 · 65 petals",expand_bed))
-   add_note("TOOLS  ·  first upgrades day 3, master day 18",14)
-   add_note("Hoe included: 9 to equip, R to raise/lower. Pruner upgrades grow the square by 10% each; [ / ] adjust its size.")
-   for kind in ["can","shears","trowel","rake","gather"]:
-    var k: String = kind
-    var level: int = int(upgrades[k])
-    var names = {"can":"Watering can", "shears":"Pruning shears", "trowel":"Planting trowel", "rake":"Garden rake", "gather":"Gather reach"}
-    list_box.add_child(button(names[k]+(" · complete" if level>=2 else " +"+str(level+1)+"   Petals: "+str(45+level*45)),func(): buy_tool(k)))
-   add_note("ORNAMENTS & STRUCTURES",14)
-   var ornaments=GridContainer.new()
-   ornaments.name="OrnamentCards"
-   ornaments.columns=2
-   ornaments.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-   ornaments.add_theme_constant_override("h_separation",8)
-   ornaments.add_theme_constant_override("v_separation",8)
-   list_box.add_child(ornaments)
-   for i in range(furniture.size()):
-    var idx=i
-    var item=furniture[i]
-    var card=button("",func(): choose_furnishing(idx),Vector2(120,200 if touch_active() else 170))
-    card.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-    card.tooltip_text=item.name+" · "+item.hint
-    var content=VBoxContainer.new()
-    content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    content.offset_left=6;content.offset_right=-6;content.offset_top=6;content.offset_bottom=-6
-    content.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    var portrait=TextureRect.new()
-    portrait.texture=load(Art.card_path("res://assets/ui/shop/"+item.kind))
-    portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-    portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-    portrait.custom_minimum_size=Vector2(108,82)
-    portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    content.add_child(portrait)
-    for text in [item.name,"%d petals"%item.price]:
-     var caption=label(text,13)
-     caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-     caption.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-     caption.mouse_filter=Control.MOUSE_FILTER_IGNORE
-     content.add_child(caption)
-    card.add_child(content)
-    ornaments.add_child(card)
-   for i in range(objects.size()):
-    if objects[i].kind=="sign":
-     var sign_index=i
-     list_box.add_child(button("Edit sign: "+str(objects[i].get("text","My garden")).left(22),func(): open_sign_editor(sign_index)))
-   list_box.add_child(button("Stock pond with fish · 20 petals",stock_fish))
-   add_note("A LITTLE MORE ROOM",14)
-   if GardenAreaCatalogue.next_plot(self)<plots.size():
-    var next=GardenAreaCatalogue.next_plot(self)
-    list_box.add_child(button("Open "+plots[next].name+"   Petals: "+str(plots[next].cost),buy_plot))
-   else: add_note("Every path is open. Keep making it yours.")
-   detail_label.text = "Aim at a nearby patch of ground.\nNew beds open over time; after day 36, another opens every 12 days."
-  "Orders":
-   request_unread=false
-   request_popup_time=0
-   side_title.text = "Notes from neighbours"
-   add_note("No deadlines. A thank-you, whenever you're ready.")
-   basket_summary()
-   for i in range(orders.size()):
-    var idx = i
-    var order = orders[i]
-    if order.get("welcome",false) and order.get("pending",false):continue
-    if order.get("pending",false):
-     add_note(order.person+" sends thanks. Next note on day %d." % order.ready_day)
-     continue
-    add_note(order.person+" would love",16)
-    add_note("%d × %s  ·  in basket: %d" % [order.count,catalogue[order.plant].name,int(inventory.get(str(int(order.plant)),0))])
-    var ready=int(inventory.get(str(int(order.plant)),0))>=int(order.count)
-    var deliver=button(("Deliver   +"+str(GardenEconomy.preview(self,int(order.reward)))+" petals") if ready else "Collect more to deliver",func(): fulfill_order(idx))
-    deliver.disabled=not ready
-    list_box.add_child(deliver)
-   list_box.add_child(button("Sell spare harvest",sell_harvest))
-   detail_label.text = "Prune or gather mature plants to collect one item per plant. Both start its next bloom. Border plants provide one item per day. Selling keeps items needed by current orders."
+  "Seed details":GardenSeedCollection.details(self,touch.seed_detail)
+  "Seeds":GardenSeedCollection.build(self)
+  "Shop":GardenMenus.shop(self)
+  "Orders":GardenMenus.orders(self)
   "Sign":
    sign_editor_page()
-  "Settings":
-   GardenExperience.settings_page(self)
-  "Guide":
-   list_box.add_child(button("Enjoy the view · H",func():GardenClearView.enter(self)))
-   add_note("Hide the interface and held tool to enjoy the garden. Press any key, or click/tap, to return. Mouse look still works.")
-   GardenExperience.journey(self)
-   side_title.text = "A field companion"
-   add_note("GROWING IN LAYERS",15)
-   add_note("Groundcover, flowers and shrubs share planting rows. Trees sit between the rows, above the underplanting. Each uses 1, 2, 4 or 7 capacity. Use the Layer button (L on keyboard) to target a layer. Trees shade nearby plants; leave sunny flowers at the edges.")
-   add_note("A GENTLE RHYTHM",15)
-   add_note("A day lasts 10 minutes; Next morning in the Garden menu (G on keyboard) plays a twelve-second sunset, starry night and sunrise. Each season lasts 12 days. Plants take 2–28 ideal growing days. Seasonal plants rest outside their growing season, keeping all progress. Greenhouses let them grow year-round. Rain gently waters plants. Plants never die.")
-   add_note("PRUNING & PATHS",15)
-   add_note("Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. Border clearing and raked paths are saved. Rake open ground to remove grass and leave visible grooves; move or prune plants first. Upgrades widen existing patches. New patches can reveal up to four petals per day.")
-   add_note("Hold left click and sweep to water an area. Manual watering gives the ground +20% growth for one game day. Rewatering refreshes the timer; rain and soakers do not apply this bonus. The hoe reshapes unlocked dry ground; R switches raise/lower. [ / ] resize the pruning square within purchased limits.")
-   add_note("GATHERING",15)
-   add_note("Hold Gather (5 / left click) and sweep across plants. Every ready plant in the highlighted square is collected, on every layer; unready plants are left growing. Gather reach upgrades in the Shop widen the square from 1.3 m to 2.1 m, then 2.9 m. Border plants still yield once per day.")
-   add_note("WELCOMING WILDLIFE",15)
-   add_note("Rabbits occasionally visit open ground. A shop beehive brings its own daytime bees.")
-   add_note("Native plants -> native birds\nTwo flowering plants or produce -> lady beetles\nThree flowering plants -> bees & butterflies\nTrees or bird baths -> songbirds\nPonds -> frogs & dragonflies\nMoss and dusk -> fireflies\nFish -> stock a placed pond in the shop")
-   list_box.add_child(button("Garden atlas · milestones & trails",func():GardenAreaAtlas.open(self)))
-   add_note("STRUCTURES & PHOTOS",15)
-   add_note("Use Turn left / Turn right on touch, or Q/E on keyboard, to rotate a structure in 15° steps. Use these while placing or moving an ornament. Tab releases the pointer for the rotation buttons.\nP enters photo mode: WASD fly, Q/E move down/up, right-drag looks around, and F12 captures a photo. Press P again to return.")
-   add_note("COMPANIONS",15)
-   for i in range(2):
-    var idx = i
-    var input = LineEdit.new()
-    input.text = companion_names[i]
-    input.placeholder_text = "Name your "+("cat" if i==0 else "dog")
-    input.max_length = 24
-    input.text_changed.connect(func(value): companion_names[idx]=value)
-    list_box.add_child(input)
-   add_note("E rests at nearby benches, pergolas or ponds. F pets a nearby companion; C calls both over. While resting, invite them to settle beside you. No feeding, chores or worries.")
-   for i in range(2):
-    var pet_index=i
-    list_box.add_child(button("Call "+companion_names[i],func(): GardenLeisure.call_pet(self,pet_index)))
-   list_box.add_child(button("Save garden",func(): save_game(); toast("Your garden is saved.")))
-   list_box.add_child(button("Comfort & sound settings",func(): open_sidebar("Settings")))
-   detail_label.text = "Left thumb to walk · Right thumb to look\nTap the current tool to choose another · Seeds opens your collection\nHold a continuous action and drag to look; release to stop\nGarden opens the familiar menus, companions and photo mode" if touch_active() else "WASD move · Shift stroll faster\nMouse look · Tab menus · Wheel field of view\nL switches target layer · Esc settings"
-
- if touch_active():
-  add_note(detail_label.text,16)
-  touch.layout_menu()
+   add_note(detail_label.text)
+  "Settings":GardenExperience.settings_page(self)
+  "Guide":GardenMenus.guide(self)
+ if touch_active():touch.layout_menu()
+ else:GardenInterface.layout(self,true)
 
 func refresh_ui() -> void:
  refresh_sidebar()
@@ -2208,7 +2117,7 @@ func greet_pet() -> void:
   toast(companion_names[nearest]+(" leans in with a happy purr." if nearest==0 else " wags a very enthusiastic hello."))
   pets[nearest].pet()
   care_effect(pets[nearest].position,Color("e9b6b6"))
- else: toast("Press C to call your companions, or choose Call in the Garden menu.")
+ else: toast("Press C to call your companions, or choose Call in Guide → Companions.")
 
 func toast(message: String) -> void:
  if area_atlas_open:area_notice=message
@@ -2711,4 +2620,9 @@ func run_breeding_test() -> void:
  var failures: Array=[]
  await preload("res://tests/breeding_in_game.gd").run(self,failures)
  print("BREEDING_IN_GAME_RESULT: ",JSON.stringify(failures))
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_menu_test() -> void:
+ var failures=[]
+ await preload("res://tests/menu_rebuild.gd").run(self,failures)
  get_tree().quit(0 if failures.is_empty() else 1)

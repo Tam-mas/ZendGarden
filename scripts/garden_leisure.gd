@@ -3,6 +3,21 @@ extends RefCounted
 
 const VERBS={"bench":"Sit on bench","pergola":"Rest under pergola","pond":"Watch the pond","gazebo":"Rest in gazebo","garden_swing":"Sit on swing"}
 
+# Signs use the actual aimed surface, so nearby furniture and signs behind it
+# cannot steal the edit action. Only player-placed signs belong to g.objects.
+static func sign_target(g) -> int:
+ if g.mode!="walk" or g.photo_mode or g.day_transition or not g.rest_kind.is_empty() or g.side_panel.visible:return -1
+ if not g.objects.any(func(obj):return obj.kind=="sign" and is_instance_valid(obj.node) and obj.pos.distance_to(g.player.position)<4):return -1
+ var center=g.get_viewport().get_visible_rect().size*.5
+ var origin=g.camera.project_ray_origin(center)
+ var direction=g.camera.project_ray_normal(center)
+ var hit=GardenStructureTarget.ray(g,origin,direction,GardenTerrain.ray(origin,direction))
+ if hit.is_empty() or g.player.position.distance_to(hit.position)>3.2:return -1
+ for index in range(g.objects.size()):
+  var obj=g.objects[index]
+  if obj.kind=="sign" and obj.node==hit.node:return index
+ return -1
+
 static func target(g) -> Dictionary:
  if g.mode!="walk" or g.photo_mode or g.day_transition:return {}
  var best={}
@@ -20,6 +35,12 @@ static func target(g) -> Dictionary:
 static func interact(g) -> void:
  if g.photo_mode or g.day_transition or g.mode!="walk":return
  if is_instance_valid(g.rest_object):leave(g);return
+ var sign_index=sign_target(g)
+ if sign_index>=0:
+  var sign_pos=g.objects[sign_index].pos
+  if GardenAreaProgression.allowed(g,sign_pos):g.open_sign_editor(sign_index)
+  else:GardenAreaAtlas.open(g,GardenAreaCatalogue.index_at(sign_pos))
+  return
  if GardenWorkshop.interact(g):return
  var obj=target(g)
  if not obj.is_empty():
@@ -85,18 +106,22 @@ static func update(g) -> void:
  var obj=target(g)
  var resting=not g.rest_kind.is_empty()
  var working=GardenWorkshop.target(g)
+ var sign_index=sign_target(g)
  var area=GardenAreaCatalogue.index_at(g.player.position)>=0
  var nearby=g.pets.any(func(p):return p.position.distance_to(g.player.position)<4)
- var visible=g.mode=="walk" and (resting or not obj.is_empty() or not working.is_empty() or nearby or area) and not g.photo_mode and not g.day_transition and not g.side_panel.visible and not is_instance_valid(g.welcome) and not g.tutorial_state.get("active",false)
- # Touch has the same actions in its large Interact button and Garden drawer.
+ var visible=g.mode=="walk" and (resting or sign_index>=0 or not obj.is_empty() or not working.is_empty() or nearby or area) and not g.photo_mode and not g.day_transition and not g.side_panel.visible and not is_instance_valid(g.welcome) and not g.tutorial_state.get("active",false)
+ # Touch has the same actions in its large Interact button and Guide menu.
  g.leisure_panel.visible=visible and not g.touch_active() and (resting or g.gameplay_active())
  var col=g.leisure_panel.get_child(0)
- col.get_child(1).visible=resting or not obj.is_empty() or not working.is_empty() or area
+ col.get_child(1).visible=resting or sign_index>=0 or not obj.is_empty() or not working.is_empty() or area
  col.get_child(1).text=("Stand up" if resting else VERBS.get(obj.get("kind",""),"Rest"))+" · E"
  if not resting and not working.is_empty():
   col.get_child(1).text="Use planter · E" if working.kind in GardenContainers.SPECS else "Use equipment · E"
   col.get_child(1).tooltip_text=GardenEquipment.name_of(g,working.kind)
  if area and not resting and obj.is_empty() and working.is_empty():col.get_child(1).text="Garden activities · E"
+ if sign_index>=0:
+  col.get_child(1).text="Edit sign · E"
+  col.get_child(1).tooltip_text="Change this sign’s lettering and colour"
  if area and not resting and not GardenAreaProgression.unlocked(g,GardenAreaCatalogue.index_at(g.player.position)):
   col.get_child(1).text="Garden milestone · E"
   col.get_child(1).tooltip_text=GardenAreaProgression.requirement(GardenAreaCatalogue.index_at(g.player.position))

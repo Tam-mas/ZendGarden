@@ -68,10 +68,17 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await tap(60,588); // Seeds, above movement.
   await paused();
   await capture('wide-seeds');
+  await tap(115,204); // The main dropdown includes plant types and personal views.
+  await capture('quick-types');
+  await tap(110,282); // Flowers in the open dropdown.
+  await capture('quick-flowers');
+  await tap(115,204);
+  await tap(110,255); // All plants again.
+  await page.waitForTimeout(500);
   await tap(130,450); // First seed card opens its details.
   await capture('wide-details');
   const before=await page.evaluate(()=>window.tabletAdvanced);
-  await tap(200,390); // Explicit Plant this.
+  await tap(200,435); // Explicit Plant this below the plant name and portrait.
   await page.waitForFunction(value=>window.tabletAdvanced>value,before,{timeout:90000});
   await capture('wide-planting');
   await tap(180,588); // Current tool opens compact tray.
@@ -91,15 +98,27 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   await page.waitForTimeout(600);
   await cdp.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});
   await capture('two-thumbs');
-  await tap(952,46); // Garden opens familiar tabs and occasional actions.
+  await tap(952,46); // Guide opens help and expandable garden actions.
   await paused();
   await page.setViewportSize({width:800,height:740});
   await capture('square-garden-menu');
-  await tap(130,54); // Seeds tab in the square overlay.
+  await tap(70,102); // Seeds tab below the title and utility icons.
   await capture('square-seeds');
   await page.setViewportSize({width:768,height:1024});
   await capture('portrait-seeds');
   await paused();
+  await tap(170,101); // Shop: Decor, Equipment, Tools, Bed care.
+  await tap(252,151);
+  await capture('portrait-tool-cards');
+  await tap(155,151);
+  await capture('portrait-equipment');
+  await tap(348,52); // Settings gear, at the top right of the left sidebar.
+  await tap(120,151); // Expand Sound below its category heading.
+  await capture('portrait-settings');
+  await paused();
+  const resumed=await page.evaluate(()=>window.tabletAdvanced);
+  await tap(397,52); // Close icon returns to gardening.
+  await page.waitForFunction(value=>window.tabletAdvanced>value,resumed,{timeout:90000});
   assert.deepEqual(errors,[]);
   assert.equal(await page.evaluate(()=>document.pointerLockElement),null,'Touch must never require pointer lock');
   console.log('TABLET_BROWSER_RESULT: PASS — real touch entry, seed details/selection, tool tray, paused menus, two-finger dispatch, square and portrait rotation, strict CSP');

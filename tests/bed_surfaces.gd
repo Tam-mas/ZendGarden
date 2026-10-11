@@ -45,6 +45,7 @@ static func run(g,failures: Array) -> void:
  GardenSculpt.rebuild(g,Vector3.ZERO)
  g.surface_shop_plot=1
  g.current_plot=1
+ g.menu_sections.shop="Bed care"
  g.open_sidebar("Shop")
  if g.surface_shop_plot!=1:failures.append("Shop did not select the nearby bed")
  g.surface_shop_plot=1

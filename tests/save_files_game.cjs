@@ -9,10 +9,12 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
  try {
   const context=await browser.newContext({viewport:{width:1280,height:800},acceptDownloads:true});
   const errors=[];
+  const version=Number((await fs.readFile('scripts/player_updates.gd','utf8')).match(/"version":(\d+)/)[1]);
   await context.route('**/*',async route=>{
    const url=new URL(route.request().url());
    if(url.origin!==HOME) {await route.abort();return;}
    if(url.pathname==='/fixture') {await route.fulfill({body:'<!doctype html><body>Fixture</body>',contentType:'text/html'});return;}
+   if(url.pathname==='/api/session') return route.fulfill({json:route.request().postDataJSON().action==='start'?{token:'fixture'}:{ok:true}});
    const filename=path.join('build/web',url.pathname==='/'?'index.html':url.pathname);
    if(!path.resolve(filename).startsWith(path.resolve('build/web')+path.sep)) {await route.abort();return;}
    try {
@@ -26,7 +28,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
   page.on('console',message=>{console.log('BROWSER:',message.text());if(/SCRIPT ERROR|ERROR:/.test(message.text()))errors.push(message.text());});
   await page.goto(HOME+'/fixture');
   const original={version:2,day:17,coins:240,clock:.3,plants:[{id:147,plot:0,pos:[1,-2],age:3,water:2,stress:0,shape_seed:41}],objects:[],names:['Miso','Clover'],
-   settings:{intro_seen:true,updates_seen:33,controls:'keyboard',graphics:'mobile',music_volume:0,request_notifications:false},inventory:{'147':4},
+   settings:{intro_seen:true,updates_seen:version,controls:'keyboard',graphics:'mobile',music_volume:0,request_notifications:false},inventory:{'147':4},
    owned_surfaces:['soil','sand'],bed_surfaces:{'0':'sand'}};
   await page.evaluate(async({original,SAVE})=>{
    await new Promise((resolve,reject)=>{
@@ -44,11 +46,13 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
    await page.locator('#welcome').waitFor({state:'hidden',timeout:180000});
    await page.keyboard.press('Escape');
    await page.waitForTimeout(1000);
+   await page.mouse.click(160,405,{delay:150}); // Expand Save files below its category.
+   await page.waitForTimeout(500);
    await page.screenshot({path:path.resolve('captures/save-files-browser-settings.png')});
    console.log('Browser garden entered; pointer lock:',await page.evaluate(()=>document.pointerLockElement?.id || 'released'));
    assert.equal(await page.evaluate(()=>document.pointerLockElement),null,'Settings must release the pointer before a file action');
   };
-  const download=async(y=326)=>{
+  const download=async(y=547)=>{
    const event=page.waitForEvent('download');await page.mouse.click(160,y,{delay:150});
    await page.waitForTimeout(1500);
    await page.screenshot({path:path.resolve('captures/save-files-browser-after-download.png')});
@@ -57,7 +61,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
    return JSON.parse(await fs.readFile(await file.path(),'utf8'));
   };
   const choose=async(data,name='garden-copy.json')=>{
-   const event=page.waitForEvent('filechooser');await page.mouse.click(160,372,{delay:150});
+   const event=page.waitForEvent('filechooser');await page.mouse.click(160,593,{delay:150});
    await page.waitForTimeout(1000);
    console.log('Picker state:',await page.evaluate(()=>({lock:document.pointerLockElement?.id,input:!!document.querySelector('input[type=file]'),active:document.activeElement?.id})));
    await page.screenshot({path:path.resolve('captures/save-files-browser-picker.png')});
@@ -97,9 +101,10 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
   await waitForImported();
   await page.waitForTimeout(1000);
   await page.keyboard.press('Escape');await page.waitForTimeout(700);
+  await page.mouse.click(160,405,{delay:150});await page.waitForTimeout(500);
   const restored=await download();
   assert.equal(restored.day,29);assert.equal(restored.coins,419);assert.equal(restored.bed_surfaces['0'],'gravel');
-  const backup=await download(418);assert.equal(backup.day,17);assert.equal(backup.coins,240);assert.equal(backup.bed_surfaces['0'],'sand');
+  const backup=await download(639);assert.equal(backup.day,17);assert.equal(backup.coins,240);assert.equal(backup.bed_surfaces['0'],'sand');
   await page.reload();await enter();
   const persisted=await download();assert.equal(persisted.day,29);assert.equal(persisted.coins,419);
   assert.deepEqual(errors,[]);

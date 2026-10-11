@@ -156,6 +156,9 @@ static func run(g, failures: Array) -> void:
  for size in [Vector2i(844,390),Vector2i(390,844),Vector2i(320,568),Vector2i(640,360),Vector2i(1024,768),Vector2i(768,1024),Vector2i(1366,1024),Vector2i(800,740),Vector2i(740,800),Vector2i(700,560)]:
   g.get_window().size=size
   await g.get_tree().process_frame
+  # A native window can be clamped to the screen asynchronously. Wait for that
+  # OS resize before taking the bounds used throughout this size's assertions.
+  if DisplayServer.get_name()!="headless":await g.get_tree().create_timer(.5).timeout
   touch.configure()
   for frame in range(5):await g.get_tree().process_frame
   touch.layout()
@@ -165,7 +168,7 @@ static func run(g, failures: Array) -> void:
   if not bounds.encloses(g.side_panel.get_global_rect()): failures.append("Touch menu overflow at %s: panel %s, viewport %s, minimum %s"%[size,g.side_panel.get_global_rect(),bounds,g.side_panel.get_combined_minimum_size()])
   touch.close_menu()
   if touch.tablet_layout:
-   for page in ["Shop","Orders","Guide","Garden"]:
+   for page in ["Shop","Orders","Guide"]:
     touch.open_menu(page)
     await g.get_tree().process_frame
     if not bounds.encloses(g.side_panel.get_global_rect()):failures.append("Touch "+page+" menu overflow at "+str(size))

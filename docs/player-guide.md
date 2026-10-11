@@ -4,7 +4,7 @@
 
 ### Your first planting
 
-Choose **Start the welcome walk** for a short lesson in your garden: plant a flower, water it, welcome the morning, gather its bloom and deliver it to Jun. Only this welcome flower gets a one-time bloom after its first watered morning. The lesson saves your progress; skip at any time or replay it in **Settings**. On desktop, **Enter** selects the next lesson tool and **Escape** skips the lesson. Touch the lesson button on phones.
+Choose **Start the welcome walk** for a short lesson in your garden: plant a flower, water it, welcome the morning, gather its bloom and deliver it to Jun. Only this welcome flower gets a one-time bloom after its first watered morning. The lesson saves your progress; skip at any time or replay it in **Guide**. On desktop, **Enter** selects the next lesson tool and **Escape** skips the lesson. Touch the lesson button on phones.
 
 Press **Tab** to open the menus and choose a plant from the seed selection. Aim down at a garden plot and click to plant where the preview appears. Switch to the watering tool to tend it, then keep exploring or press **G** to move on to the next morning. The in-game guide explains the tools and garden systems in more detail.
 
@@ -52,9 +52,9 @@ A normal in-game day lasts about **10 minutes**, and each season lasts **12 days
 
 You can advance to the next morning whenever you want. The garden does not progress while the game is closed, so you can return without having missed anything.
 
-Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
+Open Settings with the gear icon beside the page title; the × closes the menu. Settings is a vertical list: Sound, Controls, Display, Comfort & play, Save files and About. Click a heading to open its controls below it; opening another closes the previous section. Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
 
-**Settings → Petal earnings** lets you choose **Easy (100%)**, **Medium (60%)**
+**Settings → Comfort & play → Petal earnings** lets you choose **Easy (100%)**, **Medium (60%)**
 or **Hard (30%)** of the original earnings from selling spare harvest, delivering
 neighbour requests and finding petals while raking. Easy is the default and keeps
 existing gardens at their familiar rate. Change whenever you like; the setting
@@ -69,11 +69,11 @@ structure turns warm red, and its name and petal refund appear. Click, or tap
 **Remove** on touch, to pack away that structure and return its full cost.
 Nearby plants stay in place. Touch controls offer **Undo** for a short time.
 
-Move **Music volume** all the way down to silence the music completely; **Nature volume** controls birds, water, rain and other surroundings separately. **Settings → What’s new** shows short notes about meaningful improvements and the current update number. Returning players see new notes once, and can close them with the ×, the bottom button or Escape. Your garden remembers the dismissal.
+Move **Music volume** all the way down to silence the music completely; **Nature volume** controls birds, water, rain and other surroundings separately. **Settings → About → What’s new** shows short notes about meaningful improvements and the current update number. Returning players see new notes once, and can close them with the ×, the bottom button or Escape. Your garden remembers the dismissal.
 
 ### Pruning, paths, and visitors
 
-Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Shop** or **Orders**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
+Pruning and gathering a mature plant both add one item to **Your basket**, then the plant must regrow before yielding again. Decorative border plants provide one item per day through either tool. See your collected items in **Orders → Basket**; ready orders have an enabled Deliver button. Delivery consumes the requested items and awards petals once, with another request arriving two days later. **Sell spare harvest** keeps the items needed for current orders.
 
 **Gather (5)** collects every ready plant in the highlighted square, including plants sharing a position on different layers. Hold the left mouse button and sweep your aim across the garden to keep collecting; unready plants stay untouched. On touch, hold **Gather** while looking around. The Shop’s **Gather reach** upgrades increase the square from **1.3 m → 2.1 m → 2.9 m**. They cost **45 petals from day 3**, then **90 petals from day 18**, independently of pruner upgrades. Border plants still provide only one item per day.
 
@@ -113,7 +113,7 @@ Some installations use different locations; see [Godot's user data paths](https:
 
 ### Personal garden signs
 
-Open **Shop → Custom garden sign** to write up to 64 characters and choose a text colour. Each sign costs 15 petals. Place it on the ground and use **Q/E** to rotate it; the lettering is readable from both sides. Use the **Edit sign** buttons in the Shop to change existing signs for free, or the usual move and remove tools to rearrange them. Your signs are saved with your garden.
+Open **Shop → Decor → Custom garden sign** to write up to 64 characters and choose a text colour. Each sign costs 15 petals. Place it on the ground and use **Q/E** to rotate it; the lettering is readable from both sides. In Wander, walk within a few steps and point at the sign’s board. Press **E** or tap **Edit sign** to change its text and colour for free; saving returns you to the garden. Use the usual move and remove tools to rearrange signs. Your signs are saved with your garden.
 
 ### Playing on a tablet or unfolded phone
 
@@ -121,17 +121,17 @@ Touch controls appear automatically. Hold the **WALK** control with one thumb an
 
 Tap **Plant here**, **Pick up**, **Place** or **Remove** for a single action. For **Water**, **Gather**, **Rake** and the hoe, hold the action and drag that same thumb to turn the view while working. Your movement thumb stays free, and releasing or cancelling the action stops it. Extra options appear only when relevant: **Smaller / Larger** for pruning, **Turn left / Turn right** for structures, plant-layer selection and **Switch to lower / raise** for the hoe. **Done** returns to wandering. Removing a plant or ornament offers **Undo lift** for 12 seconds.
 
-**Garden** opens the familiar **Seeds, Shop, Orders and Guide** tabs, alongside next morning, companions, the atlas and photo mode. **Garden & companions**, **Settings** and **Back to garden** remain within reach below the scrolling content. Wide tablets use a left panel; portrait tablets and nearly square unfolded screens use a larger central overlay. Seed cards adapt to the available width. Tap a card to read its growing conditions, mature height and other details, then choose **Plant this** or **Discover & plant**. Returning to the collection keeps your browsing position. Plant selection on PC keeps its usual direct action.
+**Guide** opens help and the garden atlas, with expandable sections for garden actions, companions and more garden space. The familiar **Seeds, Shop, Orders and Guide** tabs stay in a left-side panel on landscape, portrait and unfolded screens. The Settings gear and close × sit above the tabs. The **All plants** dropdown also offers Flowers, Grasses, Shrubs, Trees, Natives, Produce and Cacti & succulents, followed by your personal collection views. Extra conditions and sorting stay under **Filters & sort**. Seeds uses compact two-column cards with light, growing-day, height and capacity icons. Tap a card to read its growing conditions, mature height and other details, then choose **Plant this** or **Discover & plant**. Returning to the collection keeps your browsing position. Plant selection on PC keeps its usual direct action.
 
 The garden readout includes your location, day, time, petals, season and weather. Menus stop movement and respect **Pause time in menus**. Changing orientation resets held gestures while keeping your selected seed, tool and open menu. Text fields support the on-screen keyboard, and browser photos download to your device. Compact screens retain a smaller fallback layout; the larger touch layout is designed for tablets and unfolded phones.
 
-In **Settings**, choose Auto, Touch or Keyboard & mouse controls; switch handedness; adjust control size, distance from the edges and height; and change look sensitivity, inversion, graphics quality or 3D resolution. Position adjustments apply to the larger touch layout. Text size stays independent of control size. Auto graphics uses the existing lighter touch preset; choose Standard for full plant shadows. Menus stay at full resolution.
+In **Settings**, expand one category at a time. **Controls** lets you choose Auto, Touch or Keyboard & mouse controls; switch handedness; adjust control size, distance from the edges and height; and change look sensitivity, inversion, graphics quality or 3D resolution. Position adjustments apply to the larger touch layout. Text size stays independent of control size. Auto graphics uses the existing lighter touch preset; choose Standard for full plant shadows. Menus stay at full resolution.
 
 Automated checks cover simultaneous touch input, tool gestures, menu layouts, orientation changes and saved settings. Physical iOS and Android devices still need checking for comfort, performance and on-screen keyboard behaviour. Saves stay with the browser profile and site address; they do not automatically sync across devices or domains.
 
 ## Ten new garden trails
 
-Open **Garden atlas · milestones & trails** from the garden menus, or **Garden atlas** in the touch Garden menu. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas, or cross one of the three arched stone bridges over the mountain stream and follow the eastern garden trail. The bridges sit at the ends and centre of the ravine; bank paths connect their landings. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
+Open **Guide → Garden atlas · milestones & trails** on desktop or touch. All ten areas, their starter planting and furniture are visible from the beginning. Visit any trail through the atlas, or cross one of the three arched stone bridges over the mountain stream and follow the eastern garden trail. The bridges sit at the ends and centre of the ravine; bank paths connect their landings. Each milestone permanently opens that area’s planting, care, activities and furniture use; rewards cost no petals and are independent, so several can unlock together.
 
 | Garden | Milestone |
 | --- | --- |
@@ -146,7 +146,7 @@ Open **Garden atlas · milestones & trails** from the garden menus, or **Garden 
 | Alpine Lookout | Reach game day 60 |
 | Moon Garden | Reach game day 100 |
 
-Guide and Garden atlas list every requirement, live progress and unlock status. Plantings are cumulative and include containers and specialist collection planting. Automatic starter plants, moving plants and replanting stored plants do not add to this count. Day milestones use game days. Existing saves use these milestones too: saved planting, arrangements, surfaces and activities remain in place, and plants keep growing while further interactions wait for the reward.
+Garden atlas lists every requirement, live progress and unlock status. Plantings are cumulative and include containers and specialist collection planting. Automatic starter plants, moving plants and replanting stored plants do not add to this count. Day milestones use game days. Existing saves use these milestones too: saved planting, arrangements, surfaces and activities remain in place, and plants keep growing while further interactions wait for the reward.
 
 The planting rewards are later-game goals. Saves made with the earlier 10/25/50/100 targets are checked against the higher totals above; planting and arrangements stay intact. Once earned under these targets, each reward remains permanent.
 
@@ -175,7 +175,7 @@ Kitchen recipes use one spare item of each ingredient: **salad** uses lettuce, t
 
 ## Working equipment and container gardens
 
-Find equipment and planters in **Shop**. Choose **Working garden · equipment & planters** to see supplies, prepared batches and stored plants. In Wander, face a placed item within a few steps and press **E**; on touch, use **Interact**. This opens its controls and pauses garden time.
+Find equipment and planters in **Shop → Equipment**. Choose **My equipment, supplies & nursery** to see supplies, prepared batches and stored plants. In Wander, face a placed item within a few steps and press **E**; on touch, use **Interact**. This opens its controls and pauses garden time.
 
 | Equipment | Price | Benefit |
 | --- | ---: | --- |
@@ -214,6 +214,8 @@ Aim **Move** at the container's frame to carry the whole display, or at a plant 
 
 ## Shop reference
 
+Shop is ordered **Decor**, **Equipment**, **Tools**, then **Bed care**. Tools uses illustrated upgrade cards. **Equipment → Stock a pond with fish** adds fish to an unstocked pond in your current garden for 20 petals. **Guide → Moving & arranging** explains placement and sign editing.
+
 Prices are in petals. Select a structure in Shop, then aim at open ground to place it. **Q/E** rotates it; **Move** relocates it. **Remove** (formerly “Lift”) removes a plant or ornament; it does not raise the ground. Removing an ornament refunds its purchase price. Plants do not refund petals, but unlocked seeds stay available. Use the hoe to raise or lower the ground.
 
 | Item | Price | Function |
@@ -248,11 +250,11 @@ Pressing **G** advances to the next morning with a 12-second transition. The red
 
 In **Wander**, face a nearby bench, pergola or pond and press **E**. Benches offer a seated view, pergolas a shaded pause, and ponds a view over the water and stocked fish. While resting on desktop, use the mouse to choose **Invite Miso/Clover to settle**, and hold the right mouse button to look around. **F** pets the nearest companion within reach. Press **E** or start walking to stand; choosing a tool also returns you to safe ground.
 
-On touch, the large **Interact** button changes to **Sit on bench**, **Rest under pergola**, **Watch the pond**, **Pet companion** or **Stand up** when available. **Garden** offers individual Call buttons, and invitations to settle while resting. You can also call a companion from **Guide**. Companions walk over on their own, settle for a while and resume wandering. Cats sometimes stretch in daylight; dogs pause to sniff. There are no care chores.
+On touch, the large **Interact** button changes to **Sit on bench**, **Rest under pergola**, **Watch the pond**, **Pet companion** or **Stand up** when available. **Guide → Companions** offers individual Call buttons, and invitations to settle while resting. Name or call companions from **Guide → Companions** on desktop too. Companions walk over on their own, settle for a while and resume wandering. Cats sometimes stretch in daylight; dogs pause to sniff. There are no care chores.
 
 ### Enjoy the view
 
-Press **H**, use **Enjoy the view** at the top right of the walking HUD or in **Guide**, or choose **Garden → Enjoy the view** on touch. The HUD, held tool and aiming guides disappear while the weather, wildlife and garden clock continue. Mouse look still works. Press any key, or click or tap, to return to your previous tool and menu. The return input only restores the interface.
+Press **H**, use **Enjoy the view** at the top right of the walking HUD, or choose **Garden → Enjoy the view**. The HUD, held tool and aiming guides disappear while the weather, wildlife and garden clock continue. Mouse look still works. Press any key, or click or tap, to return to your previous tool and menu. The return input only restores the interface.
 
 
 ## Plant breeding and propagation
