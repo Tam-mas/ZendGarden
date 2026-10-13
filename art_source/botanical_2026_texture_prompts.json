@@ -1,0 +1,20 @@
+{
+  "generation_mode": "built-in image_gen tool (one separate generate call per asset); no CLI/API fallback",
+  "assets": [
+    {
+      "file": "assets/textures/botanical_2026/tropical_leaf_tissue.png",
+      "prompt": "Use case: photorealistic-natural\nAsset type: square seamless game material diffuse/albedo texture\nPrimary request: create a realistic macro botanical texture of green broadleaf epidermal tissue, suitable for mango, guava, and rainforest foliage materials.\nComposition: perfectly flat, tile filled edge to edge, with understated branching leaf veins and natural fine surface texture. The pattern should be seamless or nearly seamless at all four edges, with no focal point.\nLighting: neutral, uniform flat/albedo lighting with no directional highlight, no cast shadow, no lighting gradient, no perspective.\nColor palette: varied but restrained natural greens.\nConstraints: texture only; macro tissue surface fills the entire square.\nAvoid: whole leaf silhouette, leaf edge, background, drop shadow, branch, stem, central midrib, text, labels, watermark, 3D render.",
+      "inspection": "Square, edge-filled green macro tissue with branching veins and fine surface detail. No silhouette, background, drop shadow, or obvious perspective. Veins read clearly and are somewhat stronger than understated, but remain usable for broadleaf albedo."
+    },
+    {
+      "file": "assets/textures/botanical_2026/parallel_leaf_tissue.png",
+      "prompt": "Use case: photorealistic-natural\nAsset type: square seamless game material diffuse/albedo texture\nPrimary request: create realistic macro banana or palm leaf epidermal tissue for a game material.\nComposition: close view of only the flat leaf tissue, filling the square edge to edge. Fine parallel veins run horizontally across the image with gentle natural irregularity and very shallow relief; keep them fine and repeated, with no focal point. Seamless or nearly seamless at all four edges.\nLighting: neutral uniform flat/albedo lighting, no directionality, highlight, shadow, or gradient.\nColor palette: natural restrained medium and deep greens with subtle variation.\nConstraints: texture only, macro scale, no central midrib, no text.\nAvoid: whole leaf silhouette, leaf edge, background, stem, major central midrib, strong gloss, lighting gradient, text, labels, watermark, 3D render.",
+      "inspection": "Square macro leaf tissue filled edge to edge, with fine horizontal parallel veins, subdued natural green variation, and no central midrib, silhouette, or background. Slight tonal variation is visible but no strong lighting gradient."
+    },
+    {
+      "file": "assets/textures/botanical_2026/succulent_cuticle.png",
+      "prompt": "Use case: photorealistic-natural\nAsset type: square seamless game material diffuse/albedo texture\nPrimary request: create realistic macro grey-green succulent or cactus waxy epidermis for a game material.\nComposition: flat close-up of epidermal surface filling the image edge to edge, seamless or nearly seamless at all four edges, with fine pores and soft subtle mottling distributed evenly. No focal feature.\nLighting: neutral uniform flat/albedo lighting, no directional highlights, no cast shadows, no lighting gradient, no perspective.\nColor palette: muted grey-green and sage with gentle natural tonal variation.\nMaterials/textures: smooth waxy cuticle with fine pores and delicate low-contrast mottling.\nConstraints: texture only; details remain subtle enough to serve as diffuse material.\nAvoid: spines, areoles, leaf outline, whole plant silhouette, background, shadows, text, labels, watermark, 3D render.",
+      "inspection": "Square grey-green macro epidermis with fine pores and soft mottling distributed across the image; no spines, areoles, outlines, or backdrop. Pores are small but visually distinct, and overall lighting appears even."
+    }
+  ]
+}

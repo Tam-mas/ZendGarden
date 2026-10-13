@@ -2,7 +2,7 @@ class_name GardenCatalogue
 extends RefCounted
 
 const CATEGORIES = ["Flowers", "Grasses", "Shrubs", "Trees", "Natives", "Produce", "Cacti & succulents"]
-const COLLECTION_GROUPS = ["Orchids", "Wildflowers", "Cottage flowers", "Flowering bushes", "Grasses & groundcovers", "Trees", "Australian natives", "Fruit & vegetables", "Cacti & succulents"]
+const COLLECTION_GROUPS = ["Orchids", "Wildflowers", "Cottage flowers", "Flowering bushes", "Grasses & groundcovers", "Trees", "Australian natives", "Fruit & vegetables", "Fruit trees", "Cacti & succulents", "Rainforest & tree ferns"]
 const ROWS = [
  ["Cosmos", "Flowers", "efb0ba", 1, 2, "sun", "butterflies"],
  ["Lavender", "Flowers", "a894cc", 1, 3, "sun", "bees"],
@@ -221,11 +221,71 @@ const ROWS = [
  ["Correa", "Natives", "be7b70", 2, 16, "any", "native birds"],
  ["Pink boronia", "Natives", "d594b8", 2, 17, "any", "bees"],
  ["Flowering tea-tree", "Natives", "e0afb8", 2, 18, "sun", "bees"],
- ["Spotted emu bush", "Natives", "bd715d", 2, 17, "sun", "native birds"]
+ ["Spotted emu bush", "Natives", "bd715d", 2, 17, "sun", "native birds"],
+ ["Mango", "Trees", "dca149", 3, 25, "sun", "bees"],
+ ["Banana", "Trees", "d6bd58", 3, 23, "sun", "bees"],
+ ["Pawpaw", "Trees", "d9ac4a", 3, 23, "sun", "bees"],
+ ["Dragonfruit", "Trees", "c9497e", 2, 21, "sun", "bees"],
+ ["Guava", "Trees", "bdc965", 3, 23, "sun", "bees"],
+ ["Lychee", "Trees", "bd5e57", 3, 24, "sun", "bees"],
+ ["Longan", "Trees", "b29762", 3, 25, "sun", "bees"],
+ ["Jackfruit", "Trees", "92a250", 3, 25, "sun", "bees"],
+ ["Starfruit", "Trees", "d5bf4e", 3, 23, "sun", "bees"],
+ ["Pomegranate", "Trees", "ba594c", 3, 22, "sun", "bees"],
+ ["Persimmon", "Trees", "d98738", 3, 23, "sun", "bees"],
+ ["Loquat", "Trees", "dca34d", 3, 23, "sun", "bees"],
+ ["Mulberry", "Trees", "623748", 3, 24, "sun", "bees"],
+ ["Tamarillo", "Trees", "b64c39", 3, 21, "sun", "bees"],
+ ["Breadfruit", "Trees", "8fa858", 3, 26, "sun", "bees"],
+ ["Grapefruit", "Trees", "dabb55", 3, 23, "sun", "bees"],
+ ["Pomelo", "Trees", "b8ba5c", 3, 24, "sun", "bees"],
+ ["Kumquat", "Trees", "de9438", 3, 21, "sun", "bees"],
+ ["Yuzu", "Trees", "d5bc4b", 3, 22, "sun", "bees"],
+ ["Custard apple", "Trees", "9ba26a", 3, 23, "sun", "bees"],
+ ["Saguaro", "Cacti & succulents", "eee5c9", 2, 27, "sun", "bees"],
+ ["Organ pipe cactus", "Cacti & succulents", "e4d8c6", 2, 20, "sun", "bees"],
+ ["Blue torch cactus", "Cacti & succulents", "e8dcca", 2, 19, "sun", "bees"],
+ ["Totem pole cactus", "Cacti & succulents", "d9c5b0", 2, 17, "sun", "bees"],
+ ["Bishop's cap", "Cacti & succulents", "e4c45f", 1, 13, "sun", "bees"],
+ ["Fishhook barrel cactus", "Cacti & succulents", "d59646", 1, 14, "sun", "bees"],
+ ["Pincushion cactus", "Cacti & succulents", "cb5f8d", 0, 13, "sun", "bees"],
+ ["Rainbow hedgehog cactus", "Cacti & succulents", "d274a2", 0, 13, "sun", "bees"],
+ ["Fishbone cactus", "Cacti & succulents", "e8e1cd", 1, 14, "shade", "bees"],
+ ["Rat's tail cactus", "Cacti & succulents", "c56c8f", 1, 14, "shade", "bees"],
+ ["Queen of the night", "Cacti & succulents", "eee8d3", 1, 16, "shade", "bees"],
+ ["Spiral aloe", "Cacti & succulents", "d9825b", 1, 13, "sun", "bees"],
+ ["Foxtail agave", "Cacti & succulents", "c6bd72", 1, 16, "sun", "bees"],
+ ["Panda plant", "Cacti & succulents", "c8ae78", 1, 14, "sun", "bees"],
+ ["Bear's paw", "Cacti & succulents", "cf9260", 1, 13, "sun", "bees"],
+ ["String of pearls", "Cacti & succulents", "ded9c1", 0, 13, "sun", "bees"],
+ ["Burro's tail", "Cacti & succulents", "c78088", 0, 13, "sun", "bees"],
+ ["Paddle plant", "Cacti & succulents", "caba73", 1, 14, "sun", "bees"],
+ ["Split rock", "Cacti & succulents", "df9d54", 0, 12, "sun", "bees"],
+ ["Tiger jaws", "Cacti & succulents", "dfbf48", 0, 12, "sun", "bees"],
+ ["Soft tree fern", "Trees", "91a968", 3, 23, "shade", "birds"],
+ ["Lacy tree fern", "Trees", "9cb675", 3, 24, "shade", "birds"],
+ ["Rough tree fern", "Trees", "91a966", 3, 24, "shade", "birds"],
+ ["Silver tree fern", "Trees", "b7c7a7", 3, 23, "shade", "birds"],
+ ["Black tree fern", "Trees", "8aa266", 3, 25, "shade", "birds"],
+ ["Golden chicken fern", "Trees", "bba367", 3, 21, "shade", "birds"],
+ ["Alexandra palm", "Trees", "ad664f", 3, 29, "shade", "birds"],
+ ["Bangalow palm", "Trees", "a96451", 3, 27, "shade", "birds"],
+ ["Ruffled fan palm", "Trees", "b76542", 3, 22, "shade", "birds"],
+ ["Fishtail palm", "Trees", "9f674e", 3, 25, "shade", "birds"],
+ ["Walking palm", "Trees", "bba169", 3, 28, "shade", "birds"],
+ ["Moreton Bay fig", "Trees", "a28461", 3, 32, "sun", "birds"],
+ ["Kapok tree", "Trees", "a89a71", 3, 37, "sun", "birds"],
+ ["Queensland kauri", "Trees", "9a936b", 3, 35, "sun", "birds"],
+ ["Hoop pine", "Trees", "9e906b", 3, 34, "sun", "birds"],
+ ["Queensland maple", "Trees", "b29968", 3, 30, "sun", "birds"],
+ ["Black bean tree", "Trees", "c69245", 3, 28, "sun", "birds"],
+ ["Blue quandong", "Trees", "779cac", 3, 31, "sun", "birds"],
+ ["Candlenut", "Trees", "b7a26a", 3, 29, "sun", "birds"],
+ ["Red lauan", "Trees", "bc976b", 3, 40, "sun", "birds"]
 ]
 
 # Ideal watered growing days, not calendar deadlines. Twelve days form a season.
-const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16,7,7,7,7,7,7,7,7,7,7,7,7,14,14,14,14,14,14,14,14,14,14,8,8,9,9,11,10,10,12,9,9,11,8,9,10,10,7,6,6,7,8,11,8,9,8,9,9,9,8,7,8,11,11,12,11,11,12,10,11,8,10,18,18,20,20,20,18,16,18,20,18,17,18,16,19,17,18,16,17,18,17]
+const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16,7,7,7,7,7,7,7,7,7,7,7,7,14,14,14,14,14,14,14,14,14,14,8,8,9,9,11,10,10,12,9,9,11,8,9,10,10,7,6,6,7,8,11,8,9,8,9,9,9,8,7,8,11,11,12,11,11,12,10,11,8,10,18,18,20,20,20,18,16,18,20,18,17,18,16,19,17,18,16,17,18,17,25,23,23,21,23,24,25,25,23,22,23,23,24,21,26,23,24,21,22,23,27,20,19,17,13,14,13,13,14,14,16,13,16,14,13,13,13,14,12,12,23,24,24,23,25,21,29,27,22,25,28,32,37,35,34,30,28,31,29,40]
 const SEASONAL={0:["Spring","Summer"],3:["Summer"],4:["Spring","Summer"],6:["Spring"],7:["Spring","Summer"],8:["Spring"],9:["Spring"],11:["Spring","Summer"],21:["Spring"],23:["Autumn","Winter","Spring"],24:["Spring","Summer"],28:["Spring","Summer"],30:["Spring","Summer","Autumn"],33:["Spring","Summer"],35:["Spring","Summer","Autumn"],38:["Winter","Spring"],47:["Summer"],48:["Spring","Autumn","Winter"],49:["Summer","Autumn"],50:["Spring","Summer"],52:["Spring","Autumn"],53:["Summer"],54:["Spring","Summer"],55:["Summer"],56:["Summer"],57:["Summer"],58:["Spring","Autumn"],59:["Summer"],60:["Spring", "Summer"],61:["Spring"],62:["Winter", "Spring"],63:["Summer", "Autumn"],64:["Spring"],65:["Spring", "Summer"],66:["Spring", "Summer"],67:["Summer"],73:["Spring", "Summer", "Autumn"],74:["Spring", "Summer", "Autumn"],75:["Spring", "Summer", "Autumn"],76:["Spring", "Summer", "Autumn"],77:["Spring", "Summer", "Autumn"],82:["Summer", "Autumn"],83:["Summer", "Autumn"],84:["Summer"],85:["Summer"],86:["Summer"],87:["Summer"],94:["Summer"],95:["Spring"],96:["Spring", "Summer"],97:["Spring", "Summer"],98:["Spring", "Summer"],99:["Spring"],100:["Spring", "Autumn", "Winter"],101:["Spring", "Autumn", "Winter"],102:["Summer"],103:["Autumn", "Winter"],104:["Spring", "Autumn", "Winter"],105:["Spring", "Summer"],106:["Spring","Summer","Autumn"],107:["Spring","Summer","Autumn"],108:["Spring","Summer","Autumn"],110:["Spring","Summer","Autumn"],111:["Spring","Summer","Autumn"],113:["Spring","Summer","Autumn"],115:["Spring","Summer","Autumn"],116:["Spring","Summer","Autumn"],117:["Spring","Summer","Autumn"],118:["Spring","Summer","Autumn"],119:["Spring","Summer","Autumn"],120:["Spring","Summer","Autumn"],121:["Spring","Summer","Autumn"],122:["Spring","Summer","Autumn"],124:["Spring","Summer","Autumn"],125:["Spring","Summer","Autumn"],127:["Spring","Summer","Autumn"],128:["Spring","Summer","Autumn"],129:["Spring","Summer","Autumn"],130:["Spring","Summer","Autumn"],131:["Spring","Summer","Autumn"],132:["Spring","Summer","Autumn"],134:["Spring","Summer","Autumn"],135:["Spring","Summer","Autumn"],123:["Autumn","Winter","Spring"],133:["Autumn","Winter","Spring"]}
 const BOTANICAL_NAMES={106: "Miscanthus sinensis 'Zebrinus'", 107: "Calamagrostis × acutiflora 'Karl Foerster'", 108: "Panicum virgatum 'Heavy Metal'", 109: "Hakonechloa macra 'Aureola'", 110: "Imperata cylindrica 'Red Baron'", 111: "Molinia caerulea subsp. arundinacea 'Transparent'", 112: "Deschampsia cespitosa", 113: "Briza media", 114: "Sesleria autumnalis", 115: "Muhlenbergia capillaris", 116: "Echinocactus grusonii", 117: "Opuntia microdasys", 118: "Opuntia ficus-indica", 119: "Pachycereus marginatus", 120: "Cephalocereus senilis", 121: "Mammillaria elongata", 122: "Astrophytum asterias", 123: "Schlumbergera truncata", 124: "Echeveria elegans", 125: "Echeveria agavoides 'Lipstick'", 126: "Sempervivum tectorum", 127: "Aloe vera", 128: "Agave americana", 129: "Haworthiopsis attenuata", 130: "Haworthia cooperi", 131: "Crassula ovata", 132: "Crassula ovata 'Gollum'", 133: "Aeonium 'Zwartkop'", 134: "Sedum × rubrotinctum", 135: "Lithops aucampiae", 136: "Ophiopogon japonicus 'Nana'", 137: "Ophiopogon planiscapus 'Nigrescens'", 138: "Zoysia tenuifolia", 139: "Bouteloua dactyloides", 140: "Agrostis stolonifera", 141: "Festuca rubra", 142: "Festuca ovina", 143: "Festuca gautieri", 144: "Sesleria caerulea", 145: "Carex oshimensis 'Evergold'", 146: "Carex conica 'Snowline'", 147: "Acorus gramineus 'Minimus Aureus'"}
 
@@ -582,6 +642,309 @@ const FLOWER_METADATA={
  }
 }
 
+const EXPANSION_METADATA={
+ "218": {
+  "botanical_name": "Mangifera indica",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "219": {
+  "botanical_name": "Musa acuminata",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "220": {
+  "botanical_name": "Carica papaya",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "221": {
+  "botanical_name": "Selenicereus undatus",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "222": {
+  "botanical_name": "Psidium guajava",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "223": {
+  "botanical_name": "Litchi chinensis",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "224": {
+  "botanical_name": "Dimocarpus longan",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "225": {
+  "botanical_name": "Artocarpus heterophyllus",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "226": {
+  "botanical_name": "Averrhoa carambola",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "227": {
+  "botanical_name": "Punica granatum",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "228": {
+  "botanical_name": "Diospyros kaki",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "229": {
+  "botanical_name": "Eriobotrya japonica",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "230": {
+  "botanical_name": "Morus nigra",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "231": {
+  "botanical_name": "Solanum betaceum",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "232": {
+  "botanical_name": "Artocarpus altilis",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "233": {
+  "botanical_name": "Citrus × paradisi",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "234": {
+  "botanical_name": "Citrus maxima",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "235": {
+  "botanical_name": "Citrus japonica",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "236": {
+  "botanical_name": "Citrus junos",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "237": {
+  "botanical_name": "Annona reticulata",
+  "collection_group": "Fruit trees",
+  "growth_kind": "fruit"
+ },
+ "238": {
+  "botanical_name": "Carnegiea gigantea",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "239": {
+  "botanical_name": "Stenocereus thurberi",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "240": {
+  "botanical_name": "Pilosocereus pachycladus",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "241": {
+  "botanical_name": "Lophocereus schottii var. monstrosus",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "tips"
+ },
+ "242": {
+  "botanical_name": "Astrophytum myriostigma",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "243": {
+  "botanical_name": "Ferocactus wislizeni",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "244": {
+  "botanical_name": "Mammillaria spinosissima",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "245": {
+  "botanical_name": "Echinocereus rigidissimus",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "246": {
+  "botanical_name": "Disocactus anguliger",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "247": {
+  "botanical_name": "Disocactus flagelliformis",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "248": {
+  "botanical_name": "Epiphyllum oxypetalum",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "249": {
+  "botanical_name": "Aloe polyphylla",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "250": {
+  "botanical_name": "Agave attenuata",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "tips"
+ },
+ "251": {
+  "botanical_name": "Kalanchoe tomentosa",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "252": {
+  "botanical_name": "Cotyledon tomentosa",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "253": {
+  "botanical_name": "Curio rowleyanus",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "254": {
+  "botanical_name": "Sedum morganianum",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "255": {
+  "botanical_name": "Kalanchoe luciae",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "256": {
+  "botanical_name": "Pleiospilos nelii",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "257": {
+  "botanical_name": "Faucaria tigrina",
+  "collection_group": "Cacti & succulents",
+  "growth_kind": "flowers"
+ },
+ "258": {
+  "botanical_name": "Dicksonia antarctica",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "fronds"
+ },
+ "259": {
+  "botanical_name": "Sphaeropteris cooperi",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "fronds"
+ },
+ "260": {
+  "botanical_name": "Alsophila australis",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "fronds"
+ },
+ "261": {
+  "botanical_name": "Alsophila dealbata",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "fronds"
+ },
+ "262": {
+  "botanical_name": "Sphaeropteris medullaris",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "fronds"
+ },
+ "263": {
+  "botanical_name": "Cibotium barometz",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "fronds"
+ },
+ "264": {
+  "botanical_name": "Archontophoenix alexandrae",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "265": {
+  "botanical_name": "Archontophoenix cunninghamiana",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "266": {
+  "botanical_name": "Licuala grandis",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "267": {
+  "botanical_name": "Caryota mitis",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "268": {
+  "botanical_name": "Socratea exorrhiza",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "269": {
+  "botanical_name": "Ficus macrophylla",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "270": {
+  "botanical_name": "Ceiba pentandra",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "271": {
+  "botanical_name": "Agathis robusta",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "tips"
+ },
+ "272": {
+  "botanical_name": "Araucaria cunninghamii",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "tips"
+ },
+ "273": {
+  "botanical_name": "Flindersia brayleyana",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "274": {
+  "botanical_name": "Castanospermum australe",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "275": {
+  "botanical_name": "Elaeocarpus grandis",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "276": {
+  "botanical_name": "Aleurites moluccanus",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ },
+ "277": {
+  "botanical_name": "Shorea leprosula",
+  "collection_group": "Rainforest & tree ferns",
+  "growth_kind": "flowers"
+ }
+}
+
 static func saved_age(id: int, age: float, version: int) -> float:
  return age/float(ROWS[id][4])*GROWTH_DAYS[id] if version==1 else age
 
@@ -599,8 +962,11 @@ static func plants() -> Array:
   result.back()["attached_bloom"]=true
   result.back()["collection_group"]={"Flowers":"Cottage flowers","Shrubs":"Flowering bushes","Grasses":"Grasses & groundcovers","Trees":"Trees","Natives":"Australian natives","Produce":"Fruit & vegetables","Cacti & succulents":"Cacti & succulents"}.get(r[1],"Cottage flowers")
   if i in [0,2,7]:result.back()["collection_group"]="Wildflowers"
+  if i in [31,34,35,82,83,84,85,86,87,88,89,90,91]:result.back()["collection_group"]="Fruit trees"
   if FLOWER_METADATA.has(str(i)):
    for key in FLOWER_METADATA[str(i)]:result.back()[key]=FLOWER_METADATA[str(i)][key]
+  if EXPANSION_METADATA.has(str(i)):
+   for key in EXPANSION_METADATA[str(i)]:result.back()[key]=EXPANSION_METADATA[str(i)][key]
  return result
 
 static func furnishings() -> Array:

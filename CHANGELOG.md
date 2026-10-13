@@ -1,3 +1,13 @@
+### [2026-10-13 19:20] Added
+
+**Tech:** `botanical_2026_*`, `GardenCatalogue`, `GardenPlantGrowth` — 60 append-only botanical additions, pumpkin revision and 42/48 m redwoods, release 69
+
+**Dev:** Add 20 fruit varieties, 20 cacti/succulents and 20 rainforest trees/palms/ferns as IDs 218–277, with editable packed Blender sources, independently authored seedling/juvenile organs, locally attached buds/fruit and compressed model portraits. Use three image-tool tissue sources produced by the requested Luna subagent; preserve prompts and reproducible geometry/export scripts. Group existing fruit trees with the new orchard collection and label fern unfurling correctly. Rebuild Pumpkin with visible peduncles and fruit on the soil; preserve small redwood juveniles while increasing mature heights. Explicitly select the active glTF vertex colour layer on Blender 5 so attachment depth remains in COLOR_0. Keep original plant IDs, saved gardens and update-dismissal data compatible; extend catalogue, asset, stage, rigidity and source checks, with deliberate exceptions for only the three revised placement envelopes. Validate 278 plants through 1,425 Godot growth cases, 35 cultivar reload stages and 41 rigid succulent cases; verify new/legacy save round trips, seven packed Blender libraries and the Cloudflare Pages export.
+
+**Plain:** The garden gains sixty new plants with their own growing stages, pumpkins connected to their vines, and towering fully grown redwoods.
+
+**Why:** Offer more varied orchards, desert planting and rainforest gardens while keeping plants recognisable as they grow.
+
 ### [2026-10-13 17:41] Added
 
 **Tech:** `project.godot`, `garden.gd::jump/can_jump/move_player`, `GardenUpdates.RELEASES` — keyboard jump and double jump, release 68

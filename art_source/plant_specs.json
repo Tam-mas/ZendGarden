@@ -1960,5 +1960,545 @@
     17,
     "sun",
     "native birds"
+  ],
+  [
+    "Mango",
+    "Trees",
+    "dca149",
+    3,
+    25,
+    "sun",
+    "bees"
+  ],
+  [
+    "Banana",
+    "Trees",
+    "d6bd58",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Pawpaw",
+    "Trees",
+    "d9ac4a",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Dragonfruit",
+    "Trees",
+    "c9497e",
+    2,
+    21,
+    "sun",
+    "bees"
+  ],
+  [
+    "Guava",
+    "Trees",
+    "bdc965",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Lychee",
+    "Trees",
+    "bd5e57",
+    3,
+    24,
+    "sun",
+    "bees"
+  ],
+  [
+    "Longan",
+    "Trees",
+    "b29762",
+    3,
+    25,
+    "sun",
+    "bees"
+  ],
+  [
+    "Jackfruit",
+    "Trees",
+    "92a250",
+    3,
+    25,
+    "sun",
+    "bees"
+  ],
+  [
+    "Starfruit",
+    "Trees",
+    "d5bf4e",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Pomegranate",
+    "Trees",
+    "ba594c",
+    3,
+    22,
+    "sun",
+    "bees"
+  ],
+  [
+    "Persimmon",
+    "Trees",
+    "d98738",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Loquat",
+    "Trees",
+    "dca34d",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Mulberry",
+    "Trees",
+    "623748",
+    3,
+    24,
+    "sun",
+    "bees"
+  ],
+  [
+    "Tamarillo",
+    "Trees",
+    "b64c39",
+    3,
+    21,
+    "sun",
+    "bees"
+  ],
+  [
+    "Breadfruit",
+    "Trees",
+    "8fa858",
+    3,
+    26,
+    "sun",
+    "bees"
+  ],
+  [
+    "Grapefruit",
+    "Trees",
+    "dabb55",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Pomelo",
+    "Trees",
+    "b8ba5c",
+    3,
+    24,
+    "sun",
+    "bees"
+  ],
+  [
+    "Kumquat",
+    "Trees",
+    "de9438",
+    3,
+    21,
+    "sun",
+    "bees"
+  ],
+  [
+    "Yuzu",
+    "Trees",
+    "d5bc4b",
+    3,
+    22,
+    "sun",
+    "bees"
+  ],
+  [
+    "Custard apple",
+    "Trees",
+    "9ba26a",
+    3,
+    23,
+    "sun",
+    "bees"
+  ],
+  [
+    "Saguaro",
+    "Cacti & succulents",
+    "eee5c9",
+    2,
+    27,
+    "sun",
+    "bees"
+  ],
+  [
+    "Organ pipe cactus",
+    "Cacti & succulents",
+    "e4d8c6",
+    2,
+    20,
+    "sun",
+    "bees"
+  ],
+  [
+    "Blue torch cactus",
+    "Cacti & succulents",
+    "e8dcca",
+    2,
+    19,
+    "sun",
+    "bees"
+  ],
+  [
+    "Totem pole cactus",
+    "Cacti & succulents",
+    "d9c5b0",
+    2,
+    17,
+    "sun",
+    "bees"
+  ],
+  [
+    "Bishop's cap",
+    "Cacti & succulents",
+    "e4c45f",
+    1,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "Fishhook barrel cactus",
+    "Cacti & succulents",
+    "d59646",
+    1,
+    14,
+    "sun",
+    "bees"
+  ],
+  [
+    "Pincushion cactus",
+    "Cacti & succulents",
+    "cb5f8d",
+    0,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "Rainbow hedgehog cactus",
+    "Cacti & succulents",
+    "d274a2",
+    0,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "Fishbone cactus",
+    "Cacti & succulents",
+    "e8e1cd",
+    1,
+    14,
+    "shade",
+    "bees"
+  ],
+  [
+    "Rat's tail cactus",
+    "Cacti & succulents",
+    "c56c8f",
+    1,
+    14,
+    "shade",
+    "bees"
+  ],
+  [
+    "Queen of the night",
+    "Cacti & succulents",
+    "eee8d3",
+    1,
+    16,
+    "shade",
+    "bees"
+  ],
+  [
+    "Spiral aloe",
+    "Cacti & succulents",
+    "d9825b",
+    1,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "Foxtail agave",
+    "Cacti & succulents",
+    "c6bd72",
+    1,
+    16,
+    "sun",
+    "bees"
+  ],
+  [
+    "Panda plant",
+    "Cacti & succulents",
+    "c8ae78",
+    1,
+    14,
+    "sun",
+    "bees"
+  ],
+  [
+    "Bear's paw",
+    "Cacti & succulents",
+    "cf9260",
+    1,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "String of pearls",
+    "Cacti & succulents",
+    "ded9c1",
+    0,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "Burro's tail",
+    "Cacti & succulents",
+    "c78088",
+    0,
+    13,
+    "sun",
+    "bees"
+  ],
+  [
+    "Paddle plant",
+    "Cacti & succulents",
+    "caba73",
+    1,
+    14,
+    "sun",
+    "bees"
+  ],
+  [
+    "Split rock",
+    "Cacti & succulents",
+    "df9d54",
+    0,
+    12,
+    "sun",
+    "bees"
+  ],
+  [
+    "Tiger jaws",
+    "Cacti & succulents",
+    "dfbf48",
+    0,
+    12,
+    "sun",
+    "bees"
+  ],
+  [
+    "Soft tree fern",
+    "Trees",
+    "91a968",
+    3,
+    23,
+    "shade",
+    "birds"
+  ],
+  [
+    "Lacy tree fern",
+    "Trees",
+    "9cb675",
+    3,
+    24,
+    "shade",
+    "birds"
+  ],
+  [
+    "Rough tree fern",
+    "Trees",
+    "91a966",
+    3,
+    24,
+    "shade",
+    "birds"
+  ],
+  [
+    "Silver tree fern",
+    "Trees",
+    "b7c7a7",
+    3,
+    23,
+    "shade",
+    "birds"
+  ],
+  [
+    "Black tree fern",
+    "Trees",
+    "8aa266",
+    3,
+    25,
+    "shade",
+    "birds"
+  ],
+  [
+    "Golden chicken fern",
+    "Trees",
+    "bba367",
+    3,
+    21,
+    "shade",
+    "birds"
+  ],
+  [
+    "Alexandra palm",
+    "Trees",
+    "ad664f",
+    3,
+    29,
+    "shade",
+    "birds"
+  ],
+  [
+    "Bangalow palm",
+    "Trees",
+    "a96451",
+    3,
+    27,
+    "shade",
+    "birds"
+  ],
+  [
+    "Ruffled fan palm",
+    "Trees",
+    "b76542",
+    3,
+    22,
+    "shade",
+    "birds"
+  ],
+  [
+    "Fishtail palm",
+    "Trees",
+    "9f674e",
+    3,
+    25,
+    "shade",
+    "birds"
+  ],
+  [
+    "Walking palm",
+    "Trees",
+    "bba169",
+    3,
+    28,
+    "shade",
+    "birds"
+  ],
+  [
+    "Moreton Bay fig",
+    "Trees",
+    "a28461",
+    3,
+    32,
+    "sun",
+    "birds"
+  ],
+  [
+    "Kapok tree",
+    "Trees",
+    "a89a71",
+    3,
+    37,
+    "sun",
+    "birds"
+  ],
+  [
+    "Queensland kauri",
+    "Trees",
+    "9a936b",
+    3,
+    35,
+    "sun",
+    "birds"
+  ],
+  [
+    "Hoop pine",
+    "Trees",
+    "9e906b",
+    3,
+    34,
+    "sun",
+    "birds"
+  ],
+  [
+    "Queensland maple",
+    "Trees",
+    "b29968",
+    3,
+    30,
+    "sun",
+    "birds"
+  ],
+  [
+    "Black bean tree",
+    "Trees",
+    "c69245",
+    3,
+    28,
+    "sun",
+    "birds"
+  ],
+  [
+    "Blue quandong",
+    "Trees",
+    "779cac",
+    3,
+    31,
+    "sun",
+    "birds"
+  ],
+  [
+    "Candlenut",
+    "Trees",
+    "b7a26a",
+    3,
+    29,
+    "sun",
+    "birds"
+  ],
+  [
+    "Red lauan",
+    "Trees",
+    "bc976b",
+    3,
+    40,
+    "sun",
+    "birds"
   ]
 ]

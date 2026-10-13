@@ -55,7 +55,7 @@ func render_cards() -> void:
   camera.position=center+Vector3(1,.55,1.5).normalized()*maxf(5,box.size.length()*2)
   camera.look_at(center)
   camera.size=maxf(box.size.y,maxf(box.size.x,box.size.z)*1.25)*1.25
-  camera.far=100
+  camera.far=maxf(100,box.size.length()*4)
   await process_frame
   await RenderingServer.frame_post_draw
   var portrait=viewport.get_texture().get_image()

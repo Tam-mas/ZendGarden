@@ -26,7 +26,7 @@ func inspect_attachments(node: Node, expected: float) -> void:
 
 func verify() -> void:
  var catalogue=GardenCatalogue.plants()
- check(catalogue.size()==218,"Catalogue must contain 218 plants")
+ check(catalogue.size()==278,"Catalogue must contain 278 plants")
  var counts={"Orchids":0,"Wildflowers":0,"Cottage flowers":0,"Flowering bushes":0}
  for id in range(148,218):
   var data=catalogue[id]
@@ -75,19 +75,19 @@ func verify() -> void:
  garden.add_child(garden.climate)
  garden.player=CharacterBody3D.new()
  garden.add_child(garden.player)
- var selected_ids=[0,148,190,217]
+ var selected_ids=[0,148,190,217,218,238,258,277]
  for index in range(selected_ids.size()):garden.add_plant(selected_ids[index],Vector3(index*2,0,0),0,1,1.0,.35,921+index)
  garden.favourite_plants=[148,217]
  garden.recent_plants=[217,0,190]
  garden.save_game()
  var saved=JSON.parse_string(FileAccess.get_file_as_string(garden.SAVE_PATH))
  check(saved.plants.map(func(p):return int(p.id))==selected_ids,"New and legacy plant IDs changed during save")
- check(garden.valid_plant_ids([0,148,217,218])==[0,148,217],"Catalogue boundary validation rejects new plants")
+ check(garden.valid_plant_ids([0,148,217,277,278])==[0,148,217,277],"Catalogue boundary validation rejects new plants")
  garden.loaded_data={"version":2,"plants":saved.plants}
  garden.restore_garden()
- check(garden.planted.size()==8,"New and legacy plants failed to restore")
+ check(garden.planted.size()==selected_ids.size()*2,"New and legacy plants failed to restore")
  for index in range(selected_ids.size()):
-  var restored=garden.planted[4+index]
+  var restored=garden.planted[selected_ids.size()+index]
   check(restored.id==selected_ids[index] and restored.shape_seed==921+index,"Restored identity or plant appearance changed")
  garden.free()
  print("FLOWER_ADDITIONS_RESULT: ",JSON.stringify(failures))

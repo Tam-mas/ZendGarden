@@ -3,9 +3,9 @@ import json, re, struct
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 rows=json.loads((ROOT/'art_source/plant_specs.json').read_text())
-assert len(rows)==218
+assert len(rows)==278
 assert sum(row[1]=='Grasses' for row in rows)==36
-assert sum(row[1]=='Cacti & succulents' for row in rows)==20
+assert sum(row[1]=='Cacti & succulents' for row in rows)==40
 assert all(row[1]=='Grasses' for row in rows[106:116])
 for i in [68,69,70,71,72,80]:
     assert rows[i][1]=='Grasses' and rows[i][3]==(3 if i==80 else 2), 'Bamboo category or placement layer changed incorrectly'
