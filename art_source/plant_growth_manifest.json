@@ -443,11 +443,12 @@
   {
     "id": 49,
     "name": "Pumpkin",
-    "family": "broad",
-    "height": 0.2506,
-    "triangles": 3792,
-    "source": "art_source/plant_full_03.blend",
-    "full_art_revision": 1
+    "family": "vine",
+    "height": 0.4736,
+    "triangles": 5348,
+    "source": "art_source/botanical_2026_00.blend",
+    "full_art_revision": 1,
+    "botanical_2026_revision": 1
   },
   {
     "id": 50,
@@ -705,19 +706,21 @@
     "id": 78,
     "name": "Giant redwood",
     "family": "conifer",
-    "height": 10.0012,
+    "height": 42.0,
     "triangles": 9796,
-    "source": "art_source/plant_full_06.blend",
-    "full_art_revision": 1
+    "source": "art_source/botanical_2026_00.blend",
+    "full_art_revision": 1,
+    "botanical_2026_revision": 1
   },
   {
     "id": 79,
     "name": "Coast redwood",
     "family": "conifer",
-    "height": 11.5006,
+    "height": 48.0,
     "triangles": 7492,
-    "source": "art_source/plant_full_06.blend",
-    "full_art_revision": 1
+    "source": "art_source/botanical_2026_00.blend",
+    "full_art_revision": 1,
+    "botanical_2026_revision": 1
   },
   {
     "id": 80,
@@ -1960,5 +1963,545 @@
     "triangles": 4452,
     "source": "art_source/plant_full_17.blend",
     "full_art_revision": 1
+  },
+  {
+    "id": 218,
+    "name": "Mango",
+    "family": "mango",
+    "height": 6.0,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 219,
+    "name": "Banana",
+    "family": "banana",
+    "height": 4.2,
+    "triangles": 1236,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 220,
+    "name": "Pawpaw",
+    "family": "papaya",
+    "height": 4.0,
+    "triangles": 1592,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 221,
+    "name": "Dragonfruit",
+    "family": "dragonfruit",
+    "height": 2.4,
+    "triangles": 1624,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 222,
+    "name": "Guava",
+    "family": "guava",
+    "height": 3.8,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 223,
+    "name": "Lychee",
+    "family": "lychee",
+    "height": 5.2,
+    "triangles": 10212,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 224,
+    "name": "Longan",
+    "family": "longan",
+    "height": 5.5,
+    "triangles": 10240,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 225,
+    "name": "Jackfruit",
+    "family": "jackfruit",
+    "height": 6.2,
+    "triangles": 2060,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 226,
+    "name": "Starfruit",
+    "family": "starfruit",
+    "height": 4.0,
+    "triangles": 6516,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 227,
+    "name": "Pomegranate",
+    "family": "pomegranate",
+    "height": 3.0,
+    "triangles": 2942,
+    "source": "art_source/botanical_2026_01.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 228,
+    "name": "Persimmon",
+    "family": "persimmon",
+    "height": 4.2,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 229,
+    "name": "Loquat",
+    "family": "loquat",
+    "height": 4.4,
+    "triangles": 6708,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 230,
+    "name": "Mulberry",
+    "family": "mulberry",
+    "height": 4.6,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 231,
+    "name": "Tamarillo",
+    "family": "tamarillo",
+    "height": 2.8,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 232,
+    "name": "Breadfruit",
+    "family": "breadfruit",
+    "height": 6.5,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 233,
+    "name": "Grapefruit",
+    "family": "grapefruit",
+    "height": 4.5,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 234,
+    "name": "Pomelo",
+    "family": "pomelo",
+    "height": 4.8,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 235,
+    "name": "Kumquat",
+    "family": "kumquat",
+    "height": 2.5,
+    "triangles": 2942,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 236,
+    "name": "Yuzu",
+    "family": "yuzu",
+    "height": 3.2,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 237,
+    "name": "Custard apple",
+    "family": "custard",
+    "height": 4.2,
+    "triangles": 3012,
+    "source": "art_source/botanical_2026_02.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 238,
+    "name": "Saguaro",
+    "family": "saguaro",
+    "height": 5.0,
+    "triangles": 11304,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 239,
+    "name": "Organ pipe cactus",
+    "family": "organpipe",
+    "height": 2.8,
+    "triangles": 11360,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 240,
+    "name": "Blue torch cactus",
+    "family": "bluetorch",
+    "height": 2.2,
+    "triangles": 11248,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 241,
+    "name": "Totem pole cactus",
+    "family": "totem",
+    "height": 1.7,
+    "triangles": 1792,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 242,
+    "name": "Bishop's cap",
+    "family": "bishop",
+    "height": 0.45,
+    "triangles": 1068,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 243,
+    "name": "Fishhook barrel cactus",
+    "family": "barrel",
+    "height": 0.8,
+    "triangles": 11136,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 244,
+    "name": "Pincushion cactus",
+    "family": "pincushion",
+    "height": 0.38,
+    "triangles": 11248,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 245,
+    "name": "Rainbow hedgehog cactus",
+    "family": "rainbow",
+    "height": 0.35,
+    "triangles": 11136,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 246,
+    "name": "Fishbone cactus",
+    "family": "fishbone",
+    "height": 0.65,
+    "triangles": 852,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 247,
+    "name": "Rat's tail cactus",
+    "family": "rattail",
+    "height": 0.7,
+    "triangles": 11136,
+    "source": "art_source/botanical_2026_03.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 248,
+    "name": "Queen of the night",
+    "family": "epiphyllum",
+    "height": 1.25,
+    "triangles": 1032,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 249,
+    "name": "Spiral aloe",
+    "family": "spiral",
+    "height": 0.48,
+    "triangles": 3896,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 250,
+    "name": "Foxtail agave",
+    "family": "foxtail",
+    "height": 1.25,
+    "triangles": 2104,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 251,
+    "name": "Panda plant",
+    "family": "panda",
+    "height": 0.55,
+    "triangles": 4648,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 252,
+    "name": "Bear's paw",
+    "family": "bearpaw",
+    "height": 0.45,
+    "triangles": 4008,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 253,
+    "name": "String of pearls",
+    "family": "pearls",
+    "height": 0.22,
+    "triangles": 3696,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 254,
+    "name": "Burro's tail",
+    "family": "burro",
+    "height": 0.35,
+    "triangles": 12912,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 255,
+    "name": "Paddle plant",
+    "family": "paddle",
+    "height": 0.6,
+    "triangles": 2104,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 256,
+    "name": "Split rock",
+    "family": "splitrock",
+    "height": 0.13,
+    "triangles": 1320,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 257,
+    "name": "Tiger jaws",
+    "family": "tiger",
+    "height": 0.16,
+    "triangles": 3896,
+    "source": "art_source/botanical_2026_04.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 258,
+    "name": "Soft tree fern",
+    "family": "softfern",
+    "height": 4.0,
+    "triangles": 16408,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 259,
+    "name": "Lacy tree fern",
+    "family": "lacyfern",
+    "height": 5.2,
+    "triangles": 16408,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 260,
+    "name": "Rough tree fern",
+    "family": "roughfern",
+    "height": 4.8,
+    "triangles": 16408,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 261,
+    "name": "Silver tree fern",
+    "family": "silverfern",
+    "height": 4.5,
+    "triangles": 16408,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 262,
+    "name": "Black tree fern",
+    "family": "blackfern",
+    "height": 6.0,
+    "triangles": 16408,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 263,
+    "name": "Golden chicken fern",
+    "family": "goldenfern",
+    "height": 2.5,
+    "triangles": 16408,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 264,
+    "name": "Alexandra palm",
+    "family": "kingpalm",
+    "height": 9.0,
+    "triangles": 5112,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 265,
+    "name": "Bangalow palm",
+    "family": "bangalow",
+    "height": 7.5,
+    "triangles": 4944,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 266,
+    "name": "Ruffled fan palm",
+    "family": "fanpalm",
+    "height": 3.2,
+    "triangles": 964,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 267,
+    "name": "Fishtail palm",
+    "family": "fishtail",
+    "height": 5.5,
+    "triangles": 2904,
+    "source": "art_source/botanical_2026_05.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 268,
+    "name": "Walking palm",
+    "family": "walkingpalm",
+    "height": 8.0,
+    "triangles": 4944,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 269,
+    "name": "Moreton Bay fig",
+    "family": "banyan",
+    "height": 12.0,
+    "triangles": 2228,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 270,
+    "name": "Kapok tree",
+    "family": "kapok",
+    "height": 16.0,
+    "triangles": 5828,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 271,
+    "name": "Queensland kauri",
+    "family": "kauri",
+    "height": 14.0,
+    "triangles": 2228,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 272,
+    "name": "Hoop pine",
+    "family": "hooppine",
+    "height": 13.0,
+    "triangles": 7492,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 273,
+    "name": "Queensland maple",
+    "family": "qmaple",
+    "height": 10.0,
+    "triangles": 6824,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 274,
+    "name": "Black bean tree",
+    "family": "blackbean",
+    "height": 8.0,
+    "triangles": 8200,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 275,
+    "name": "Blue quandong",
+    "family": "quandong",
+    "height": 11.0,
+    "triangles": 2228,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 276,
+    "name": "Candlenut",
+    "family": "candlenut",
+    "height": 9.0,
+    "triangles": 2228,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 277,
+    "name": "Red lauan",
+    "family": "lauan",
+    "height": 18.0,
+    "triangles": 2228,
+    "source": "art_source/botanical_2026_06.blend",
+    "botanical_2026_revision": 1
   }
 ]

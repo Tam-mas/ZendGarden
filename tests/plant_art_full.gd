@@ -90,12 +90,12 @@ func verify_stage(model: Node3D, data: Dictionary, fraction: float) -> void:
  var early=lerpf(.70,1.15,fraction/.20) if fraction<.20 else lerpf(.65,1.25,clampf((fraction-.20)/.32,0,1))
  for organ in [seedling,juvenile]:
   check((organ.scale*model.scale).is_equal_approx(Vector3.ONE*early),label+": early foliage no longer keeps its authored proportions")
- if int(data.id)>=116 and int(data.id)<=135:verify_rigid(model,label)
+ if int(data.id) in range(116,136) or int(data.id) in range(238,258) or int(data.id)==221:verify_rigid(model,label)
  checked_stages+=1
 
 func verify() -> void:
  var garden=GardenFixture.new()
- check(garden.catalogue.size()==218,"Full collection no longer contains 218 species")
+ check(garden.catalogue.size()==278,"Full collection no longer contains 278 species")
  for id in range(garden.catalogue.size()):
   var data=garden.catalogue[id]
   check(bool(data.get("attached_bloom",false)),str(data.name)+": catalogue omits attached growth")
@@ -105,7 +105,7 @@ func verify() -> void:
    set_stage(model,data,fraction)
    verify_stage(model,data,fraction)
    if fraction==0.0:verify_authored_stages(model,str(data.name))
-  if id>=116 and id<=135:checked_succulents+=1
+  if id in range(116,136) or id in range(238,258) or id==221:checked_succulents+=1
   model.free()
   await process_frame
 
@@ -149,7 +149,7 @@ func verify() -> void:
    check(leaf_found,str(id)+": cultivar has no marked leaf tissue")
   model.free();loaded_model.free()
   await process_frame
- check(checked_stages==218*5+CULTIVAR_IDS.size()*5,"Some plant growth cases did not complete")
- check(checked_succulents==20,"Some succulent rigidity cases were skipped")
+ check(checked_stages==278*5+CULTIVAR_IDS.size()*5,"Some plant growth cases did not complete")
+ check(checked_succulents==41,"Some succulent rigidity cases were skipped")
  print("PLANT_ART_FULL_RESULT: ",JSON.stringify({"plants":garden.catalogue.size(),"growth_stages":checked_stages,"cultivar_reload_stages":checked_cultivar_stages,"succulents":checked_succulents,"attachment_vertices":checked_attachment_vertices,"failures":failures}))
  quit(0 if failures.is_empty() else 1)

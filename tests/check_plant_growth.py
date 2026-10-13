@@ -3,7 +3,7 @@ import json, struct, math
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 report=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())
-assert [p['id'] for p in report]==list(range(218))
+assert [p['id'] for p in report]==list(range(278))
 triangles=0
 for entry in report:
     path=ROOT/'assets/plants/growth'/f"growth_{entry['id']:02d}.glb"
@@ -27,6 +27,7 @@ for entry in report:
     assert 0<count<=18000,(path,count)
     triangles+=count
 assert sum(p['triangles'] for p in report[:148])<900000
-assert sum(p['triangles'] for p in report[148:])<800000
-assert triangles<1700000
+assert sum(p['triangles'] for p in report[148:218])<800000
+assert sum(p['triangles'] for p in report[218:])<600000
+assert triangles<2300000
 print('PLANT_GROWTH_ASSETS: PASS',len(report),'species,',triangles,'triangles')

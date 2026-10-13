@@ -16,6 +16,10 @@ static func fruit_growth(node: Node, amount: float) -> void:
 static func stage(fraction: float, data: Dictionary) -> String:
  if fraction<.20: return "Seedling"
  if fraction<.52: return "Developing leaves"
+ var kind=str(data.get("growth_kind",""))
+ if fraction<1.0 and kind=="fronds":return "Unfurling fronds" if fraction<.78 else "Filling out"
+ if fraction<1.0 and kind=="tips":return "New growing tips" if fraction<.78 else "Filling out"
+ if fraction<1.0 and kind=="fruit":return "Developing harvest" if fraction<.78 else "Ripening"
  if fraction<.78:
   if data.id in [13,14,15,16,17,18,25,29,30,32,44,45,68,69,70,71,72,78,79,80,81,110,119,120,128,133]: return "New growing tips"
   return "Developing harvest" if data.category=="Produce" or data.id in [27,31,34,35,42,82,83,84,85,86,87,88,89,90,91] else "Budding"

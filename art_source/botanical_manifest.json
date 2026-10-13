@@ -492,12 +492,13 @@
   {
     "id": 49,
     "name": "Pumpkin",
-    "vertices": 6832,
+    "vertices": 6272,
     "path": "assets/plants/plant_49.glb",
-    "morphology_version": 3,
-    "triangles": 11800,
-    "source": "art_source/plant_full_03.blend",
-    "full_art_revision": 1
+    "morphology_version": 5,
+    "triangles": 11168,
+    "source": "art_source/botanical_2026_00.blend",
+    "full_art_revision": 1,
+    "botanical_2026_revision": 1
   },
   {
     "id": 50,
@@ -785,9 +786,10 @@
     "vertices": 154177,
     "triangles": 140876,
     "path": "assets/plants/plant_78.glb",
-    "morphology_version": 3,
-    "source": "art_source/plant_full_06.blend",
-    "full_art_revision": 1
+    "morphology_version": 5,
+    "source": "art_source/botanical_2026_00.blend",
+    "full_art_revision": 1,
+    "botanical_2026_revision": 1
   },
   {
     "id": 79,
@@ -795,9 +797,10 @@
     "vertices": 105667,
     "triangles": 97756,
     "path": "assets/plants/plant_79.glb",
-    "morphology_version": 3,
-    "source": "art_source/plant_full_06.blend",
-    "full_art_revision": 1
+    "morphology_version": 5,
+    "source": "art_source/botanical_2026_00.blend",
+    "full_art_revision": 1,
+    "botanical_2026_revision": 1
   },
   {
     "id": 80,
@@ -2178,5 +2181,605 @@
     "morphology_version": 4,
     "source": "art_source/plant_full_17.blend",
     "full_art_revision": 1
+  },
+  {
+    "id": 218,
+    "name": "Mango",
+    "vertices": 41567,
+    "triangles": 58094,
+    "path": "assets/plants/plant_218.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 219,
+    "name": "Banana",
+    "vertices": 3462,
+    "triangles": 4916,
+    "path": "assets/plants/plant_219.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 220,
+    "name": "Pawpaw",
+    "vertices": 3608,
+    "triangles": 6452,
+    "path": "assets/plants/plant_220.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 221,
+    "name": "Dragonfruit",
+    "vertices": 7076,
+    "triangles": 10886,
+    "path": "assets/plants/plant_221.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 222,
+    "name": "Guava",
+    "vertices": 43767,
+    "triangles": 60734,
+    "path": "assets/plants/plant_222.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 223,
+    "name": "Lychee",
+    "vertices": 115034,
+    "triangles": 175016,
+    "path": "assets/plants/plant_223.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 224,
+    "name": "Longan",
+    "vertices": 76829,
+    "triangles": 111362,
+    "path": "assets/plants/plant_224.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 225,
+    "name": "Jackfruit",
+    "vertices": 43527,
+    "triangles": 60438,
+    "path": "assets/plants/plant_225.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 226,
+    "name": "Starfruit",
+    "vertices": 63998,
+    "triangles": 86328,
+    "path": "assets/plants/plant_226.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 227,
+    "name": "Pomegranate",
+    "vertices": 43767,
+    "triangles": 60734,
+    "path": "assets/plants/plant_227.glb",
+    "source": "art_source/botanical_2026_01.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 228,
+    "name": "Persimmon",
+    "vertices": 43327,
+    "triangles": 60206,
+    "path": "assets/plants/plant_228.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 229,
+    "name": "Loquat",
+    "vertices": 63567,
+    "triangles": 94262,
+    "path": "assets/plants/plant_229.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 230,
+    "name": "Mulberry",
+    "vertices": 57407,
+    "triangles": 84494,
+    "path": "assets/plants/plant_230.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 231,
+    "name": "Tamarillo",
+    "vertices": 41567,
+    "triangles": 58094,
+    "path": "assets/plants/plant_231.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 232,
+    "name": "Breadfruit",
+    "vertices": 57407,
+    "triangles": 84494,
+    "path": "assets/plants/plant_232.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 233,
+    "name": "Grapefruit",
+    "vertices": 41567,
+    "triangles": 58094,
+    "path": "assets/plants/plant_233.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 234,
+    "name": "Pomelo",
+    "vertices": 41567,
+    "triangles": 58094,
+    "path": "assets/plants/plant_234.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 235,
+    "name": "Kumquat",
+    "vertices": 41567,
+    "triangles": 58094,
+    "path": "assets/plants/plant_235.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 236,
+    "name": "Yuzu",
+    "vertices": 41567,
+    "triangles": 58094,
+    "path": "assets/plants/plant_236.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 237,
+    "name": "Custard apple",
+    "vertices": 57407,
+    "triangles": 84494,
+    "path": "assets/plants/plant_237.glb",
+    "source": "art_source/botanical_2026_02.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 238,
+    "name": "Saguaro",
+    "vertices": 15566,
+    "triangles": 22388,
+    "path": "assets/plants/plant_238.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 239,
+    "name": "Organ pipe cactus",
+    "vertices": 23440,
+    "triangles": 33700,
+    "path": "assets/plants/plant_239.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 240,
+    "name": "Blue torch cactus",
+    "vertices": 14064,
+    "triangles": 20220,
+    "path": "assets/plants/plant_240.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 241,
+    "name": "Totem pole cactus",
+    "vertices": 1224,
+    "triangles": 2436,
+    "path": "assets/plants/plant_241.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 242,
+    "name": "Bishop's cap",
+    "vertices": 1091,
+    "triangles": 1706,
+    "path": "assets/plants/plant_242.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 243,
+    "name": "Fishhook barrel cactus",
+    "vertices": 4688,
+    "triangles": 6740,
+    "path": "assets/plants/plant_243.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 244,
+    "name": "Pincushion cactus",
+    "vertices": 14064,
+    "triangles": 20220,
+    "path": "assets/plants/plant_244.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 245,
+    "name": "Rainbow hedgehog cactus",
+    "vertices": 4688,
+    "triangles": 6740,
+    "path": "assets/plants/plant_245.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 246,
+    "name": "Fishbone cactus",
+    "vertices": 8478,
+    "triangles": 11322,
+    "path": "assets/plants/plant_246.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 247,
+    "name": "Rat's tail cactus",
+    "vertices": 29124,
+    "triangles": 41868,
+    "path": "assets/plants/plant_247.glb",
+    "source": "art_source/botanical_2026_03.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 248,
+    "name": "Queen of the night",
+    "vertices": 11988,
+    "triangles": 16200,
+    "path": "assets/plants/plant_248.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 249,
+    "name": "Spiral aloe",
+    "vertices": 10986,
+    "triangles": 16816,
+    "path": "assets/plants/plant_249.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 250,
+    "name": "Foxtail agave",
+    "vertices": 1728,
+    "triangles": 3072,
+    "path": "assets/plants/plant_250.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 251,
+    "name": "Panda plant",
+    "vertices": 7550,
+    "triangles": 12880,
+    "path": "assets/plants/plant_251.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 252,
+    "name": "Bear's paw",
+    "vertices": 6590,
+    "triangles": 11280,
+    "path": "assets/plants/plant_252.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 253,
+    "name": "String of pearls",
+    "vertices": 14976,
+    "triangles": 24804,
+    "path": "assets/plants/plant_253.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 254,
+    "name": "Burro's tail",
+    "vertices": 38736,
+    "triangles": 66276,
+    "path": "assets/plants/plant_254.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 255,
+    "name": "Paddle plant",
+    "vertices": 1566,
+    "triangles": 2496,
+    "path": "assets/plants/plant_255.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 256,
+    "name": "Split rock",
+    "vertices": 3294,
+    "triangles": 4992,
+    "path": "assets/plants/plant_256.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 257,
+    "name": "Tiger jaws",
+    "vertices": 2678,
+    "triangles": 3968,
+    "path": "assets/plants/plant_257.glb",
+    "source": "art_source/botanical_2026_04.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 258,
+    "name": "Soft tree fern",
+    "vertices": 121962,
+    "triangles": 149048,
+    "path": "assets/plants/plant_258.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 259,
+    "name": "Lacy tree fern",
+    "vertices": 132652,
+    "triangles": 162068,
+    "path": "assets/plants/plant_259.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 260,
+    "name": "Rough tree fern",
+    "vertices": 101762,
+    "triangles": 124400,
+    "path": "assets/plants/plant_260.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 261,
+    "name": "Silver tree fern",
+    "vertices": 121962,
+    "triangles": 149048,
+    "path": "assets/plants/plant_261.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 262,
+    "name": "Black tree fern",
+    "vertices": 91662,
+    "triangles": 112076,
+    "path": "assets/plants/plant_262.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 263,
+    "name": "Golden chicken fern",
+    "vertices": 80322,
+    "triangles": 98252,
+    "path": "assets/plants/plant_263.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 264,
+    "name": "Alexandra palm",
+    "vertices": 15662,
+    "triangles": 21524,
+    "path": "assets/plants/plant_264.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 265,
+    "name": "Bangalow palm",
+    "vertices": 15662,
+    "triangles": 21524,
+    "path": "assets/plants/plant_265.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 266,
+    "name": "Ruffled fan palm",
+    "vertices": 2492,
+    "triangles": 3264,
+    "path": "assets/plants/plant_266.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 267,
+    "name": "Fishtail palm",
+    "vertices": 10382,
+    "triangles": 10964,
+    "path": "assets/plants/plant_267.glb",
+    "source": "art_source/botanical_2026_05.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 268,
+    "name": "Walking palm",
+    "vertices": 15806,
+    "triangles": 21780,
+    "path": "assets/plants/plant_268.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 269,
+    "name": "Moreton Bay fig",
+    "vertices": 38853,
+    "triangles": 52806,
+    "path": "assets/plants/plant_269.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 270,
+    "name": "Kapok tree",
+    "vertices": 103935,
+    "triangles": 138378,
+    "path": "assets/plants/plant_270.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 271,
+    "name": "Queensland kauri",
+    "vertices": 38727,
+    "triangles": 52578,
+    "path": "assets/plants/plant_271.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 272,
+    "name": "Hoop pine",
+    "vertices": 105667,
+    "triangles": 97756,
+    "path": "assets/plants/plant_272.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 273,
+    "name": "Queensland maple",
+    "vertices": 70671,
+    "triangles": 95610,
+    "path": "assets/plants/plant_273.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 274,
+    "name": "Black bean tree",
+    "vertices": 89151,
+    "triangles": 119898,
+    "path": "assets/plants/plant_274.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 275,
+    "name": "Blue quandong",
+    "vertices": 38727,
+    "triangles": 52578,
+    "path": "assets/plants/plant_275.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 276,
+    "name": "Candlenut",
+    "vertices": 38727,
+    "triangles": 52578,
+    "path": "assets/plants/plant_276.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
+  },
+  {
+    "id": 277,
+    "name": "Red lauan",
+    "vertices": 38727,
+    "triangles": 52578,
+    "path": "assets/plants/plant_277.glb",
+    "source": "art_source/botanical_2026_06.blend",
+    "morphology_version": 5,
+    "botanical_2026_revision": 1
   }
 ]
