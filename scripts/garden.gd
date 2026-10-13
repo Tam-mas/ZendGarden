@@ -10,6 +10,8 @@ const GRID = 0.4
 const CAPACITY_MULTIPLIER = 4
 const TREE_SPACING = 1.15
 const DAY_SECONDS = 600.0
+const JUMP_SPEED = 6.0
+const JUMP_GRAVITY = 18.0
 const STARTERS = [0,1,2,12,14,20,28,36,37,44,46,48,50]
 var catalogue = Catalogue.plants()
 var furniture = Catalogue.furnishings()
@@ -89,6 +91,7 @@ var action_cooldown = 0.0
 var save_timer = 0.0
 var preview: Node3D
 var preview_id = ""
+var jumps_used = 0
 var player: CharacterBody3D
 var camera: Camera3D
 var camera_target = Vector3.ZERO
@@ -208,8 +211,10 @@ func _ready() -> void:
  GardenTerrain.offsets.clear()
  rng.seed = 7183
  smoke = "--view-water-test" in OS.get_cmdline_user_args() or "--improvements-test" in OS.get_cmdline_user_args() or "--gather-test" in OS.get_cmdline_user_args() or "--tools-test" in OS.get_cmdline_user_args() or "--touch-test" in OS.get_cmdline_user_args() or "--smoke-test" in OS.get_cmdline_user_args() or "--walk-test" in OS.get_cmdline_user_args() or "--experience-test" in OS.get_cmdline_user_args() or "--ground-test" in OS.get_cmdline_user_args()
+ if "--jump-test" in OS.get_cmdline_user_args():smoke=true
  if "--menu-test" in OS.get_cmdline_user_args():smoke=true
  if smoke: SAVE_PATH="user://smoke-test-save.json"
+ if "--jump-test" in OS.get_cmdline_user_args():SAVE_PATH="user://jump-test-save.json"
  if "--inhabit-test" in OS.get_cmdline_user_args() or "--tutorial-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--structure-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://smoke-test-save.json"
  if "--economy-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://economy-test-save.json"
@@ -291,6 +296,7 @@ func _ready() -> void:
  elif "--trail-polish-test" in OS.get_cmdline_user_args():call_deferred("run_trail_polish_test")
  elif "--areas-showcase" in OS.get_cmdline_user_args():call_deferred("show_area_collection")
  elif "--cohesion-review" in OS.get_cmdline_user_args():call_deferred("run_cohesion_review")
+ elif "--jump-test" in OS.get_cmdline_user_args(): call_deferred("run_jump_test")
  elif "--walk-test" in OS.get_cmdline_user_args(): call_deferred("run_walk_test")
  elif smoke: call_deferred("run_smoke_test")
  elif tutorial_state.get("active",false):
@@ -811,7 +817,7 @@ func update_hud() -> void:
   status_label.text+="\n"+catalogue[p.id].name+" · "+("ready" if p.age>=catalogue[p.id].days else str(int(100*p.age/catalogue[p.id].days))+"% grown")
  for key in mode_buttons:
   GardenTheme.choose(mode_buttons[key],key==mode)
- var tips = {"walk":"WASD / arrows walk  ·  Mouse look  ·  Tab menus  ·  E interact / use equipment  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil or a planter pocket & click  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Hold click and sweep to water · +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or container frame, then its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+ var tips = {"walk":"WASD / arrows walk  ·  Space jump (twice for double jump)  ·  Mouse look  ·  Tab menus  ·  E interact / use equipment  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil or a planter pocket & click  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Hold click and sweep to water · +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or container frame, then its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  tip_label.text = tips.get(mode,"")
  if not rest_kind.is_empty():tip_label.text="Right-drag to look · Choose a companion to invite · F pet · WASD or E stand · Tab menus"
  if mode=="build" or (mode=="move" and moved_object>=0): tip_label.text+="  ·  Q/E rotate 15°"
@@ -904,16 +910,7 @@ func _process(delta: float) -> void:
   camera_target += move*delta*8
   camera_target.y += (float(Input.is_physical_key_pressed(KEY_E))-float(Input.is_physical_key_pressed(KEY_Q)))*delta*4
  else:
-  var speed = 5.5 if Input.is_physical_key_pressed(KEY_SHIFT) else 3.2
-  var next = player.position+move*delta*speed
-  player.velocity.x = move.x*speed if accessible(next) else 0.0
-  player.velocity.z = move.z*speed if accessible(next) else 0.0
-  if not player.is_on_floor(): player.velocity.y -= 18.0*delta
-  else: player.velocity.y = 0
-  if clear_view:player.velocity=Vector3.ZERO
-  walk_motion(Vector3(player.velocity.x,0,player.velocity.z)*delta)
-  if rest_kind.is_empty() and not clear_view:player.move_and_slide()
-  else:player.velocity=Vector3.ZERO
+  move_player(move,delta)
   var stride=sin(Time.get_ticks_msec()*0.012)*0.45*minf(1,move.length())
   player.get_node("LegLeft").rotation.x=stride
   player.get_node("LegRight").rotation.x=-stride
@@ -953,6 +950,33 @@ func _process(delta: float) -> void:
   ui_refresh=0
   update_hud()
 
+func can_jump() -> bool:
+ var focus=get_viewport().gui_get_focus_owner()
+ if not is_instance_valid(player) or photo_mode or clear_view or day_transition or not rest_kind.is_empty():return false
+ if side_panel.visible or is_instance_valid(welcome) or (is_instance_valid(request_popup) and request_popup.visible):return false
+ if focus is LineEdit or focus is TextEdit or not gameplay_active():return false
+ return jumps_used<2 and (player.is_on_floor() or jumps_used==1)
+
+func jump() -> void:
+ if not can_jump():return
+ # A fresh press gives one boost in the air; landing restores both jumps.
+ jumps_used+=1
+ player.velocity.y=JUMP_SPEED
+
+func move_player(move: Vector3, delta: float) -> void:
+ var speed = 5.5 if Input.is_physical_key_pressed(KEY_SHIFT) else 3.2
+ var next = player.position+move*delta*speed
+ player.velocity.x = move.x*speed if accessible(next) else 0.0
+ player.velocity.z = move.z*speed if accessible(next) else 0.0
+ if not player.is_on_floor(): player.velocity.y -= JUMP_GRAVITY*delta
+ elif player.velocity.y<0: player.velocity.y=0
+ if clear_view:player.velocity=Vector3.ZERO
+ walk_motion(Vector3(player.velocity.x,0,player.velocity.z)*delta)
+ if rest_kind.is_empty() and not clear_view:
+  player.move_and_slide()
+  if player.is_on_floor():jumps_used=0
+ else:player.velocity=Vector3.ZERO
+
 func update_camera(_delta: float) -> void:
  camera.fov=view_fov
  if photo_mode:
@@ -970,7 +994,7 @@ func update_camera(_delta: float) -> void:
 
 
 func walk_motion(motion: Vector3) -> void:
- if motion.length()<.0001 or player.velocity.y>0: return
+ if motion.length()<.0001 or not player.is_on_floor() or player.velocity.y>0: return
  var contact=KinematicCollision3D.new()
  if not player.test_move(player.global_transform,motion,contact): return
  # Clear headroom, move over a low obstacle, then land on a walkable top.
@@ -1121,6 +1145,10 @@ func _unhandled_input(event: InputEvent) -> void:
    else: perform_action()
  if event is InputEventKey and event.pressed and not event.echo:
   if get_viewport().gui_get_focus_owner() is LineEdit: return
+  if event.is_action_pressed("jump"):
+   jump()
+   get_viewport().set_input_as_handled()
+   return
   match event.physical_keycode:
    KEY_ENTER: if tutorial_state.get("active",false):GardenTutorial.action(self)
    KEY_C: if mode=="walk":GardenLeisure.call_pet(self,0);GardenLeisure.call_pet(self,1)
@@ -2514,6 +2542,13 @@ func animate_tool_action() -> void:
  var tilt=Vector3(0,0,-.40) if mode=="water" else Vector3(-.32,.10,-.12)
  tool_tween.tween_property(held_tool,"rotation",tilt,.14).set_trans(Tween.TRANS_SINE)
  tool_tween.tween_property(held_tool,"rotation",Vector3.ZERO,.30).set_trans(Tween.TRANS_SINE)
+
+func run_jump_test() -> void:
+ var failures: Array=[]
+ await preload("res://tests/jumping.gd").run(self,failures)
+ await get_tree().process_frame
+ print("JUMP_RESULT: ",failures)
+ get_tree().quit(0 if failures.is_empty() else 1)
 
 func run_walk_test() -> void:
  await get_tree().create_timer(2).timeout

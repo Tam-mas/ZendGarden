@@ -15,6 +15,9 @@ class PreviewGame extends Node:
  var resumed=0
  var saved_settings={}
 
+ func touch_active() -> bool:
+  return false
+
  func _ready() -> void:
   ui=Control.new()
   ui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
