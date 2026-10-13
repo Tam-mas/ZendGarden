@@ -1,3 +1,13 @@
+### [2026-10-13 17:41] Added
+
+**Tech:** `project.godot`, `garden.gd::jump/can_jump/move_player`, `GardenUpdates.RELEASES` — keyboard jump and double jump, release 68
+
+**Dev:** Bind the jump action to physical Space. Preserve the takeoff impulse, allow one fresh airborne boost, reject key-repeat and further jumps, and reset on real floor contact. Retain horizontal control, capsule collisions and map access checks; restrict automatic step-up to grounded walking. Block jump initiation in menus, text fields, rest, photo mode, clear view and day transitions. Add keyboard guidance and player release 68 titled “A special update”; keep jump state transient and garden save/dismissal formats unchanged. Add real-key, height, landing, ceiling, tool and input-guard regressions to local and browser CI checks. Correct the update-history preview mock's missing desktop control query. Godot import, headless and rendered Compatibility jump regressions, rendered bridge/step/gateway walking, update history/dismissal and save-file checks pass.
+
+**Plain:** A special update adds Space to jump and a second press in the air to double jump, with keyboard controls only.
+
+**Why:** Give garden walks a playful lift while keeping the familiar gardening controls and saved progress.
+
 ### [2026-10-11 21:40] Fixed
 
 **Tech:** `GardenMenuScroll`, `GardenSeedCollection.details`, `GardenTouch.open_menu` — touch scrolling and image-based seed selection

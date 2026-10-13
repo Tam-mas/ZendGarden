@@ -27,6 +27,7 @@ use **L**, or the touch **Layer** button, to inspect plants sharing a spot.
 | **W A S D** or **arrow keys** | Walk |
 | **Mouse** | Look around |
 | **Shift** | Walk faster |
+| **Space** | Jump; press again while airborne to double jump. Land to jump again. Holding Space does not repeat the jump. |
 | **Tab** | Open menus / return to looking around |
 | **Left click** | Use the selected tool at the centre crosshair; hold and sweep to water or gather |
 | **1–9** | Select wander, plant, water, prune, harvest, move, remove, rake, or hoe |

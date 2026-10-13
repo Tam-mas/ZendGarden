@@ -26,6 +26,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+jump_log="$(mktemp -t zend-garden-jump)"
+"$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --jump-test > "$jump_log" 2>&1 || { cat "$jump_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$jump_log" || ! rg -Fq 'JUMP_RESULT: []' "$jump_log"; then
+  cat "$jump_log"
+  exit 1
+fi
 menu_log="$(mktemp -t zend-garden-menus)"
 "$GODOT_BIN" --headless --path "$PWD" -- --menu-test > "$menu_log" 2>&1 || { cat "$menu_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$menu_log" || ! rg -Fq 'MENU_REBUILD_RESULT: []' "$menu_log"; then
