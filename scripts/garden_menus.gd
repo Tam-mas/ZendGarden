@@ -414,6 +414,7 @@ static func garden_actions(g) -> void:
  note(g,space,"New beds open freely as the days pass. After day 36, another opens every 12 days. The atlas shows the ten garden milestones and your progress.")
 
 const GUIDE={
+ "Moon & night sky":["The moon waxes and wanes over 28 garden days, from crescent through quarter and full to new. It rises and sets at different times as the cycle moves on: look for an evening waxing moon, a full moon through the night, or a waning moon before dawn. A pale moon can also be visible in daylight.","Clear skies reveal its surface and soft moonlight. Clouds can hide it, and new moon nights are darker. The next-morning transition looks toward the moon when it is up at night; Reduced motion keeps the instant morning change.","Each garden’s saved day and clock determine its moon. Pausing time pauses the moon, welcoming morning advances it, and it waits while you are away. The cycle adds atmosphere without changing plant growth or requests."],
  "Getting started":["Choose a seed, find a spot in an open bed and plant it. Water and gather as it grows. Your garden has no deadlines and plants never die.","Use the tool bar or touch tool tray to choose an action. Seeds keeps your collection, Shop holds upgrades and objects, and Orders shows neighbours’ requests."],
  "Plants, seasons & layers":["Groundcover, flowers and shrubs share planting rows. Trees sit between rows, above the underplanting. Each uses 1, 2, 4 or 7 capacity. Switch target layers with L or the Layer control. Trees shade nearby plants; leave sunny flowers at the edges.","A day lasts 10 minutes and a season lasts 12 days. Plants take 2–28 ideal growing days. Plants resting outside their season keep all progress; greenhouses allow year-round growth. Rain gently waters plants.","On seed cards: the sun, shade or water symbol shows preferred light or habitat; the clock shows ideal growing days, the ruler shows mature height, and the stacked squares show capacity. Open a plant’s information button for seasons and wildlife."],
  "Tools & landscaping":["Hold Water and sweep across the ground. Manual watering gives +20% growth for one game day; rewatering refreshes the timer. Rain and soakers do not apply this bonus.","Bed plants are safe to prune repeatedly. Outside beds, three cuts clear a plant; planted varieties recover one cut per morning. [ / ] resize the pruning square within your upgrades.","Rake open ground to remove grass and leave a path. Move or prune plants first. Upgrades widen existing patches; new patches can reveal up to four petals per day.","The hoe reshapes unlocked dry ground. R switches raise/lower, or use the touch action control."],
@@ -433,6 +434,16 @@ static func guide(g) -> void:
  if GUIDE.has(topic):
   g.list_box.add_child(g.button("Back to guide",func():g.menu_sections.guide="";g.refresh_sidebar();g.list_box.get_parent().set_deferred("scroll_vertical",0)))
   g.add_note(topic,18)
+  if topic=="Moon & night sky":
+   g.add_note(GardenMoon.description(g.day,g.clock_time),15)
+   var moon=GardenMoon.at(g.day,g.clock_time)
+   if moon.direction.y>0 and moon.illumination>.01:
+    g.list_box.add_child(g.button("Look toward the moon",func():
+     var now=GardenMoon.at(g.day,g.clock_time)
+     g.yaw=atan2(-now.direction.x,-now.direction.z)
+     g.pitch=-clampf(asin(now.direction.y),0.,1.45)
+     close(g)
+     g.update_camera(0.)))
   for paragraph in GUIDE[topic]:g.add_note(paragraph,15)
   return
  garden_actions(g)

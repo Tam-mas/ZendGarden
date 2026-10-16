@@ -333,16 +333,16 @@ func layout() -> void:
  place("seeds",Vector2(size.x-204,12),Vector2(86,48))
  place("done",buttons.garden.position,buttons.garden.size)
  status_panel.position=Vector2(12,12)
- status_panel.size=Vector2(minf(320,size.x-224),48)
+ status_panel.size=Vector2(minf(320,size.x-224),70 if size.x>=380 else 48)
  status_text.position=Vector2(10,4)
- status_text.size=Vector2(status_panel.size.x-20,40)
+ status_text.size=Vector2(status_panel.size.x-20,status_panel.size.y-8)
  status_text.add_theme_font_size_override("font_size",14 if size.x<380 else 16)
- status_text.max_lines_visible=2
+ status_text.max_lines_visible=3 if size.x>=380 else 2
  place("undo",Vector2(size.x-132,68),Vector2(120,48))
  var portrait=size.x<600
  var context_width=minf(500,size.x-2*(maxf(radius*2,action_width)+32)) if not portrait else size.x-24
  context_panel.size=Vector2(context_width,70)
- context_panel.position=Vector2((size.x-context_width)/2,size.y-150 if not portrait else (72.0 if size.y<650 else tool_y-146))
+ context_panel.position=Vector2((size.x-context_width)/2,size.y-150 if not portrait else (92.0 if size.y<650 and size.x>=380 else (72.0 if size.y<650 else tool_y-146)))
  context_title.position=Vector2(12,7)
  context_title.size=Vector2(context_width-24,24)
  context_title.max_lines_visible=1
@@ -351,7 +351,7 @@ func layout() -> void:
  context_hint.size=Vector2(context_width-24,34)
  g.reticle.position=size/2-Vector2(8,18)
  g.toast_label.size.x=minf(480,size.x-32)
- g.toast_label.position=Vector2((size.x-g.toast_label.size.x)/2,72)
+ g.toast_label.position=Vector2((size.x-g.toast_label.size.x)/2,92 if size.x>=380 else 72)
  g.toast_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  g.transition_label.position=Vector2(16,size.y/2-40)
  g.transition_label.size.x=size.x-32
@@ -484,9 +484,9 @@ func _process(delta: float) -> void:
  look_label.visible=tablet_layout and not blocked()
  look_base.visible=look_label.visible
  look_knob.visible=look_label.visible
- status_text.text="Day %d · %d petals\n%s" % [g.day,g.coins,GardenClimate.season(g.day)]
+ status_text.text="Day %d · %d petals\n%s\n%s" % [g.day,g.coins,GardenClimate.season(g.day),GardenMoon.phase_name(g.day,g.clock_time)]
  if tablet_layout:
-  status_text.text=g.plots[g.current_plot].name+"\nDay %d · %02d:%02d · %d petals\n%s · %s"%[g.day,int(g.clock_time*24),int(fmod(g.clock_time*1440,60)),g.coins,GardenClimate.season(g.day),g.climate.description()]
+  status_text.text=g.plots[g.current_plot].name+"\nDay %d · %02d:%02d · %d petals\n%s · %s · %s"%[g.day,int(g.clock_time*24),int(fmod(g.clock_time*1440,60)),g.coins,GardenClimate.season(g.day),g.climate.description(),GardenMoon.phase_name(g.day,g.clock_time)]
  if last_size.x<380: status_text.text="Day %d\n%d petals"%[g.day,g.coins]
  for b in buttons.values(): b.visible=not blocked()
  stick_base.visible=not blocked()

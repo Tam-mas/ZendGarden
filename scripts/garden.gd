@@ -105,6 +105,7 @@ var yaw = 0.0
 var pitch = 0.12
 var distance = 7.5
 var sun: DirectionalLight3D
+var moon_light: DirectionalLight3D
 var environment: WorldEnvironment
 var world_root: Node3D
 var plant_root: Node3D
@@ -171,6 +172,9 @@ var day_transition=false
 var transition_elapsed=0.0
 var transition_start=0.0
 var transition_crossed_midnight=false
+var transition_sky_yaw=0.0
+var transition_sky_pitch=0.0
+var transition_moon_blend=0.0
 var transition_label: Label
 const TRANSITION_SECONDS=12.0
 var tool_tween: Tween
@@ -233,6 +237,7 @@ func _ready() -> void:
  if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
  if "--cohesion-review" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://cohesion-review-save.json"
  if "--challenge-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://challenge-test.json";garden_mode="challenge"
+ if "--moon-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://moon-test-"+str(OS.get_process_id())+".json"
  if not browser_save_check():
   save_load_blocked=true
   set_process(false)
@@ -295,7 +300,8 @@ func _ready() -> void:
  GardenChallenge.setup(self)
  if GardenChallenge.active(self) and loaded_data.is_empty() and not smoke:GardenMenus.visit(self,"Care")
  if not settings.intro_seen and not smoke: show_welcome()
- if "--challenge-test" in OS.get_cmdline_user_args():call_deferred("run_challenge_test")
+ if "--moon-test" in OS.get_cmdline_user_args():call_deferred("run_moon_test")
+ elif "--challenge-test" in OS.get_cmdline_user_args():call_deferred("run_challenge_test")
  elif "--menu-test" in OS.get_cmdline_user_args():call_deferred("run_menu_test")
  elif "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
  elif "--inhabit-test" in OS.get_cmdline_user_args():call_deferred("run_inhabit_test")
@@ -384,6 +390,12 @@ func make_world() -> void:
  sun.light_angular_distance = 0.7
  sun.directional_shadow_max_distance = 90
  add_child(sun)
+ moon_light=DirectionalLight3D.new()
+ moon_light.name="Moonlight"
+ moon_light.light_color=Color("b9cbea")
+ moon_light.light_energy=0.0
+ moon_light.shadow_enabled=false
+ add_child(moon_light)
  GardenWorldLighting.configure(self)
  GardenLandscape.build(self)
  GardenAreas.build(self)
@@ -831,7 +843,7 @@ func update_hud() -> void:
  hud_capacity.visible=not photo_mode and not day_transition and ((hover_valid and mode!="walk") or (menus and active_tab=="Shop"))
  tip_label.visible=not photo_mode and not day_transition
  compact_hud.text="ZEND GARDEN   /   "+plots[current_plot].name+"\nDay %02d   ·   %02d:%02d   ·   %d petals   ·   %s" % [day,int(clock_time*24),int(fmod(clock_time*1440,60)),coins,mode.capitalize()]
- compact_hud.text+="\n"+GardenClimate.season(day)+" · "+climate.description()
+ compact_hud.text+="\n"+GardenClimate.season(day)+" · "+climate.description()+" · "+GardenMoon.phase_name(day,clock_time)
  if GardenChallenge.active(self):compact_hud.text+="\n"+str(challenge.report)+" · K care"
  var hour = int(clock_time*24)
  top_label.text = "Day %02d · %02d:%02d · %d petals" % [day,hour,int(fmod(clock_time*1440,60)),coins]
@@ -1016,7 +1028,7 @@ func move_player(move: Vector3, delta: float) -> void:
   if player.is_on_floor():jumps_used=0
  else:player.velocity=Vector3.ZERO
 
-func update_camera(_delta: float) -> void:
+func update_camera(delta: float) -> void:
  camera.fov=view_fov
  if photo_mode:
   camera.position=camera_target
@@ -1024,7 +1036,18 @@ func update_camera(_delta: float) -> void:
   camera.position=player.position+Vector3(0,.72 if rest_kind=="bench" else (1.0 if rest_kind=="pond" else 1.62),0)
  camera.rotation=Vector3(-pitch,yaw,0)
  if day_transition and not settings.reduced_motion:
-  camera.rotation.x=lerpf(-pitch,.40,sin(transition_elapsed/TRANSITION_SECONDS*PI)*.85)
+  var moon=GardenMoon.at(day,clock_time)
+  var night=1.-smoothstep(-.12,.30,float(moon.sun.y))
+  var visible=night*smoothstep(.02,.20,float(moon.direction.y))*smoothstep(.02,.10,float(moon.illumination))
+  transition_moon_blend=move_toward(transition_moon_blend,visible,delta*2.)
+  if visible>.01:
+   if Vector2(moon.direction.x,moon.direction.z).length()>.03:
+    var moon_yaw=atan2(-moon.direction.x,-moon.direction.z)
+    transition_sky_yaw+=wrapf(moon_yaw-transition_sky_yaw,-PI,PI)*minf(1.,delta*3.)
+   transition_sky_pitch=lerpf(transition_sky_pitch,clampf(asin(moon.direction.y),.25,1.1),minf(1.,delta*3.))
+  var arc=sin(transition_elapsed/TRANSITION_SECONDS*PI)
+  camera.rotation.x=lerpf(lerpf(-pitch,.40,arc*.85),transition_sky_pitch,arc*transition_moon_blend)
+  camera.rotation.y=lerpf(yaw,transition_sky_yaw,arc*transition_moon_blend)
  if is_instance_valid(reticle): reticle.visible=not clear_view and not photo_mode and not day_transition and gameplay_active()
  if is_instance_valid(held_tool):
   var tools_by_mode={"water":"can","prune":"shears","harvest":"shears","plant":"trowel","remove":"trowel","rake":"rake","hoe":"hoe","weed":"weed_tool","mulch":"mulch_tool"}
@@ -1811,6 +1834,9 @@ func next_day() -> void:
  transition_elapsed=0.0
  transition_start=clock_time
  transition_crossed_midnight=false
+ transition_sky_yaw=yaw
+ transition_sky_pitch=-pitch
+ transition_moon_blend=0.0
  side_panel.hide()
  transition_label.show()
  update_hud()
@@ -1823,7 +1849,7 @@ func update_day_transition(delta: float) -> void:
  if elapsed_clock>=1.0 and not transition_crossed_midnight:
   transition_crossed_midnight=true
   advance_growth()
- transition_label.text="A new morning" if elapsed_clock>=1.22 else ("Under the stars" if clock_time>.78 or clock_time<.22 else ("The sun slips away" if clock_time>.65 else "The garden takes a breath"))
+ transition_label.text="A new morning" if elapsed_clock>=1.22 else ("Under the stars · "+GardenMoon.phase_name(day,clock_time) if clock_time>.78 or clock_time<.22 else ("The sun slips away" if clock_time>.65 else "The garden takes a breath"))
  transition_label.modulate.a=sin(progress*PI)
  if progress>=1:
   day_transition=false
@@ -2759,6 +2785,17 @@ func run_challenge_test() -> void:
  set_process(false)
  await get_tree().create_timer(1.5).timeout
  # Fixed-FPS checks can finish before the audio thread consumes stop commands.
+ for voice in find_children("*","AudioStreamPlayer",true,false)+find_children("*","AudioStreamPlayer3D",true,false):voice.stop()
+ OS.delay_msec(60)
+ for frame in range(3):await get_tree().process_frame
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_moon_test() -> void:
+ get_tree().create_timer(90).timeout.connect(func():push_error("Moon test timed out");get_tree().quit(1))
+ var failures=[]
+ await preload("res://tests/moon_in_game.gd").run(self,failures)
+ print("MOON_IN_GAME_RESULT: ",JSON.stringify(failures))
+ DirAccess.remove_absolute(SAVE_PATH)
  for voice in find_children("*","AudioStreamPlayer",true,false)+find_children("*","AudioStreamPlayer3D",true,false):voice.stop()
  OS.delay_msec(60)
  for frame in range(3):await get_tree().process_frame

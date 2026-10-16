@@ -35,6 +35,10 @@ static func update(g) -> void:
  var direction=Vector3(cos(angle)*.45,sin(angle),cos(angle)*.89).normalized()
  var daylight=clampf(smoothstep(-.12,.30,direction.y),.025,1)
  var twilight=exp(-pow(direction.y/.19,2))
+ var moon=GardenMoon.at(g.day,g.clock_time)
+ var moonlight=GardenMoon.light_strength(moon,daylight)
+ g.moon_light.light_energy=moonlight*.16
+ g.moon_light.quaternion=Quaternion(Vector3.FORWARD,-moon.direction)
  var position=g.camera.global_position if g.photo_mode else g.player.global_position
  var regional=atmosphere(position)
  g.environment.set_meta("habitat_mist",regional.x)
@@ -45,18 +49,24 @@ static func update(g) -> void:
  var env=g.environment.environment
  env.background_color=horizon;env.fog_light_color=horizon.lerp(Color("becbca"),regional.y*daylight*.24)
  env.ambient_light_color=Color("98acd0").lerp(Color("e1e9f0"),daylight).lerp(Color("ccdfdd"),regional.y*.16)
- env.ambient_light_energy=.22+daylight*.41
+ env.ambient_light_energy=.22+daylight*.41+moonlight*.035
  env.fog_sky_affect=.06
  var sky=env.sky.sky_material
  sky.set_shader_parameter("daylight",daylight);sky.set_shader_parameter("sun_direction",direction)
  sky.set_shader_parameter("day_phase",g.clock_time);sky.set_shader_parameter("sky_motion",float(g.day)+g.clock_time)
  sky.set_shader_parameter("twilight",twilight)
+ sky.set_shader_parameter("moon_direction",moon.direction)
+ sky.set_shader_parameter("moon_right",GardenMoon.RIGHT)
+ sky.set_shader_parameter("moon_radius",GardenMoon.ANGULAR_RADIUS)
+ sky.set_shader_parameter("moon_illumination",moon.illumination)
+ sky.set_shader_parameter("moonlight",moonlight)
  if is_instance_valid(g.ambient):
   g.ambient.daylight=daylight;g.ambient.update_location(g.player.position,g.plots)
 
 static func weather(g) -> void:
  var cloud=clampf(g.climate.current.x,0,1)
  g.sun.light_energy*=1.-cloud*.48
+ g.moon_light.light_energy*=1.-cloud*.80
  var env=g.environment.environment
  env.fog_density=.00010+float(g.environment.get_meta("habitat_mist",0.))+g.climate.current.z*.0019
  env.ambient_light_color=env.ambient_light_color.lerp(Color("c7d1da"),cloud*.30)

@@ -53,6 +53,18 @@ A normal in-game day lasts about **10 minutes**, and each season lasts **12 days
 
 You can advance to the next morning whenever you want. The garden does not progress while the game is closed, so you can return without having missed anything.
 
+The moon follows a **28 garden-day cycle** in both Free Garden and Challenge Garden.
+Watch its crescents grow through quarter to full, then wane back to new. Its rising
+and setting times shift with its phase: waxing moons favour the evening, full moons
+the night, and waning moons the morning. A pale moon can be visible during the day.
+Clouds can hide it, while clear nights reveal surface detail and soft moonlight.
+The next-morning transition looks toward the moon when it is up at night; Reduced
+motion keeps the instant change to morning. The garden readout and **Guide → Moon &
+night sky** show its phase, with current illumination and visibility in the guide.
+Choose **Look toward the moon** there to find its place in the sky when it is up.
+Each garden keeps its own cycle through its saved day and clock, including older
+save files. Pausing time or closing the game pauses the cycle too.
+
 Open Settings with the gear icon beside the page title; the × closes the menu. Settings is a vertical list: Sound, Controls, Display, Comfort & play, Save files and About. Click a heading to open its controls below it; opening another closes the previous section. Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
 
 **Settings → Comfort & play → Petal earnings** lets you choose **Easy (100%)**, **Medium (60%)**
