@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
   for p in garden.planted:
    p.node.set_meta("batch_shape",true)
    GardenArt.add_leaf_wind(p.node)
-   GardenPlantGrowth.variation(p.node,int(p.shape_seed),float(garden.catalogue[p.id].height),.15 if garden.catalogue[p.id].category=="Cacti & succulents" else 1.0)
+   GardenPlantGrowth.variation(p.node,int(p.shape_seed),float(garden.catalogue[p.id].height),.15 if garden.catalogue[p.id].category in ["Cacti & succulents","Mushrooms"] else 1.0)
    GardenCultivarAppearance.apply(garden,p.node,GardenPlantBreeding.of_plant(garden,p))
   dirty=true
   if is_instance_valid(garden.touch):garden.touch.apply_graphics()

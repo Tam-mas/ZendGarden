@@ -58,6 +58,9 @@ static func matching(g) -> Array:
   return name_before(a,b) if left==right else left<right)
  return found
 
+static func wildlife_note(plant: Dictionary) -> String:
+ return "Woodland collection" if plant.animal=="none" else "Welcomes "+str(plant.animal)
+
 static func name_before(a, b) -> bool:
  var comparison=a.name.naturalnocasecmp_to(b.name)
  return int(a.id)<int(b.id) if comparison==0 else comparison<0
@@ -247,9 +250,9 @@ static func details(g, plant: Dictionary) -> void:
  g.list_box.add_child(choose)
  if not unlocked:g.add_note("Discover once to keep unlimited seeds. You have %d petals."%g.coins,16)
  if not plant.get("botanical_name","").is_empty():g.add_note(plant.botanical_name,18)
- g.add_note("%s layer · %.1f m at maturity · %d capacity"%[["Groundcover","Flowers","Shrubs","Canopy"][plant.layer],float(plant.height),plant.capacity],17)
+ g.add_note("%s layer · %.1f m at maturity · %d capacity"%["Mushrooms" if plant.category=="Mushrooms" else ["Groundcover","Flowers","Shrubs","Canopy"][plant.layer],float(plant.height),plant.capacity],17)
  if GardenChallenge.active(g):g.add_note(GardenChallenge.water_label(plant)+" · mulch and irrigation help with care",15)
- g.add_note("%d growing days · Likes %s\nGrows: %s\nWelcomes %s"%[plant.days,plant.condition,GardenCatalogue.growing_seasons(id),plant.animal],17)
+ g.add_note("%d growing days · Likes %s\nGrows: %s\n%s"%[plant.days,plant.condition,GardenCatalogue.growing_seasons(id),wildlife_note(plant)],17)
  if plant.climber:g.add_note("Climbs nearby arbors and pergolas.",17)
  if custom:g.add_note(GardenPlantBreeding.traits(GardenPlantBreeding.form(g,uid)),17)
  var favourite=GardenPlantBreeding.form(g,uid).get("favourite",false) if custom else id in g.favourite_plants
@@ -286,7 +289,7 @@ static func update_cards(g) -> void:
    else:g.choose_plant(id),Vector2(120,0))
   b.name="CultivarCard"+uid if custom else "PlantCard%02d" % id
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-  b.tooltip_text="%s · %.1f m at maturity · %d growing days\nGrows: %s · welcomes %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),p.animal,"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
+  b.tooltip_text="%s · %.1f m at maturity · %d growing days\nGrows: %s · %s\n%s" % [p.name,float(p.get("height",1)),p.days,GardenCatalogue.growing_seasons(id),wildlife_note(p),"Discovered · unlimited seeds" if unlocked else "Discover for %d petals" % p.price]
   if not p.get("botanical_name","").is_empty():b.tooltip_text=p.botanical_name+"\n"+b.tooltip_text
   if p.climber: b.tooltip_text+="\nClimbs nearby arbors and pergolas."
   GardenTheme.choose(b,uid==g.selected_cultivar if custom else id==g.selected and g.selected_cultivar.is_empty())

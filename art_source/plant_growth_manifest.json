@@ -2503,5 +2503,85 @@
     "triangles": 2228,
     "source": "art_source/botanical_2026_06.blend",
     "botanical_2026_revision": 1
+  },
+  {
+    "id": 278,
+    "name": "Fly agaric",
+    "family": "mushroom_agaric",
+    "height": 0.34,
+    "triangles": 5748,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 279,
+    "name": "Porcini",
+    "family": "mushroom_bolete",
+    "height": 0.28,
+    "triangles": 4756,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 280,
+    "name": "Golden chanterelle",
+    "family": "mushroom_funnel",
+    "height": 0.24,
+    "triangles": 6028,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 281,
+    "name": "Pearl oyster",
+    "family": "mushroom_oyster",
+    "height": 0.3,
+    "triangles": 15192,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 282,
+    "name": "Pink oyster",
+    "family": "mushroom_pink_oyster",
+    "height": 0.28,
+    "triangles": 15192,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 283,
+    "name": "Shiitake",
+    "family": "mushroom_shiitake",
+    "height": 0.27,
+    "triangles": 5108,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 284,
+    "name": "Common morel",
+    "family": "mushroom_morel",
+    "height": 0.32,
+    "triangles": 14080,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 285,
+    "name": "Lion's mane",
+    "family": "mushroom_mane",
+    "height": 0.3,
+    "triangles": 8256,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 286,
+    "name": "Amethyst deceiver",
+    "family": "mushroom_amethyst",
+    "height": 0.22,
+    "triangles": 6028,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 287,
+    "name": "Shaggy inkcap",
+    "family": "mushroom_inkcap",
+    "height": 0.36,
+    "triangles": 6028,
+    "source": "art_source/mushrooms.blend"
   }
 ]

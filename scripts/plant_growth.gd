@@ -14,6 +14,12 @@ static func fruit_growth(node: Node, amount: float) -> void:
  for child in node.get_children():fruit_growth(child,amount)
 
 static func stage(fraction: float, data: Dictionary) -> String:
+ if str(data.get("growth_kind",""))=="mushroom":
+  if fraction<.20:return "Pins emerging"
+  if fraction<.52:return "Young mushrooms"
+  if fraction<.78:return "Caps forming"
+  if fraction<1.0:return "Caps opening"
+  return "Ready to gather"
  if fraction<.20: return "Seedling"
  if fraction<.52: return "Developing leaves"
  var kind=str(data.get("growth_kind",""))
@@ -68,7 +74,7 @@ static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: i
   if attached_bloom:fruit_growth(buds,budding)
  node.set_meta("growth_fraction",fraction)
  node.set_meta("shape_seed",shape_seed)
- variation(node,shape_seed,float(data.get("height",1.0)),.15 if data.category=="Cacti & succulents" else 1.0)
+ variation(node,shape_seed,float(data.get("height",1.0)),.15 if data.category in ["Cacti & succulents","Mushrooms"] else 1.0)
 
 static func variation(node: Node, seed_value: int, height: float, amount: float=1.0) -> void:
  var rng=RandomNumberGenerator.new()

@@ -1,3 +1,13 @@
+### [2026-10-16 19:32] Added
+
+**Tech:** `mushroom_data.py`, `mushroom_geometry.py`, `build_mushrooms.py`, `GardenCatalogue` — ten Blender-authored mushrooms, append-only IDs 278–287, release 72
+
+**Dev:** Add fly agaric, porcini, golden chanterelle, pearl and pink oysters, shiitake, common morel, lion’s mane, amethyst deceiver and shaggy inkcap as a dedicated shade-loving collection. Build a packed editable 50-mesh Blender library and twenty GLBs with shared botanical PBR maps, rigid tissue, locally attached caps and independent young stages; render ten catalogue portraits and mature/five-stage reviews. Add fungi growth labels and collection wording, preserve all earlier plant identities and model hashes, and extend rebuild, local and GitHub CI regression coverage to 288 entries without changing saved garden or update-dismissal formats. Validate 1,475 Godot growth cases, 35 cultivar reload cases, mushroom search/batching/save restores and packed Blender source dependencies.
+
+**Plain:** Plant ten distinctive mushrooms in shady corners and watch tiny pins grow into colourful caps, fans and shaggy clusters.
+
+**Why:** Give woodland planting its own varied collection using the same detailed art and growth workflow as the rest of the garden.
+
 ### [2026-10-16 18:12] Added
 
 **Tech:** `GardenMoon`, `country_sky.gdshader`, `GardenWorldLighting` — saved-time lunar orbit, eight phases and moonlit transitions, release 71

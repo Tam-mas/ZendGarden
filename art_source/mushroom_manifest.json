@@ -1,0 +1,102 @@
+[
+  {
+    "id": 278,
+    "name": "Fly agaric",
+    "botanical_name": "Amanita muscaria",
+    "form": "agaric",
+    "height": 0.34,
+    "mature_triangles": 15744,
+    "growth_triangles": 5748,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 279,
+    "name": "Porcini",
+    "botanical_name": "Boletus edulis",
+    "form": "bolete",
+    "height": 0.28,
+    "mature_triangles": 17652,
+    "growth_triangles": 4756,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 280,
+    "name": "Golden chanterelle",
+    "botanical_name": "Cantharellus cibarius",
+    "form": "funnel",
+    "height": 0.24,
+    "mature_triangles": 10760,
+    "growth_triangles": 6028,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 281,
+    "name": "Pearl oyster",
+    "botanical_name": "Pleurotus ostreatus",
+    "form": "oyster",
+    "height": 0.3,
+    "mature_triangles": 24464,
+    "growth_triangles": 15192,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 282,
+    "name": "Pink oyster",
+    "botanical_name": "Pleurotus djamor",
+    "form": "pink_oyster",
+    "height": 0.28,
+    "mature_triangles": 24464,
+    "growth_triangles": 15192,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 283,
+    "name": "Shiitake",
+    "botanical_name": "Lentinula edodes",
+    "form": "shiitake",
+    "height": 0.27,
+    "mature_triangles": 18956,
+    "growth_triangles": 5108,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 284,
+    "name": "Common morel",
+    "botanical_name": "Morchella esculenta",
+    "form": "morel",
+    "height": 0.32,
+    "mature_triangles": 27108,
+    "growth_triangles": 14080,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 285,
+    "name": "Lion's mane",
+    "botanical_name": "Hericium erinaceus",
+    "form": "mane",
+    "height": 0.3,
+    "mature_triangles": 14056,
+    "growth_triangles": 8256,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 286,
+    "name": "Amethyst deceiver",
+    "botanical_name": "Laccaria amethystina",
+    "form": "amethyst",
+    "height": 0.22,
+    "mature_triangles": 10280,
+    "growth_triangles": 6028,
+    "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 287,
+    "name": "Shaggy inkcap",
+    "botanical_name": "Coprinus comatus",
+    "form": "inkcap",
+    "height": 0.36,
+    "mature_triangles": 19900,
+    "growth_triangles": 6028,
+    "source": "art_source/mushrooms.blend"
+  }
+]
