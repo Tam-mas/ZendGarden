@@ -98,5 +98,105 @@
     "mature_triangles": 19900,
     "growth_triangles": 6028,
     "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 288,
+    "name": "Turkey tail",
+    "botanical_name": "Trametes versicolor",
+    "form": "turkey_tail",
+    "height": 0.22,
+    "mature_triangles": 29228,
+    "growth_triangles": 10960,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 289,
+    "name": "Scarlet elf cup",
+    "botanical_name": "Sarcoscypha coccinea",
+    "form": "elf_cup",
+    "height": 0.16,
+    "mature_triangles": 4436,
+    "growth_triangles": 4060,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 290,
+    "name": "Common puffball",
+    "botanical_name": "Lycoperdon perlatum",
+    "form": "puffball",
+    "height": 0.24,
+    "mature_triangles": 15084,
+    "growth_triangles": 3236,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 291,
+    "name": "Collared earthstar",
+    "botanical_name": "Geastrum triplex",
+    "form": "earthstar",
+    "height": 0.19,
+    "mature_triangles": 4624,
+    "growth_triangles": 3536,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 292,
+    "name": "Shaggy parasol",
+    "botanical_name": "Chlorophyllum rhacodes",
+    "form": "parasol",
+    "height": 0.42,
+    "mature_triangles": 19212,
+    "growth_triangles": 5460,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 293,
+    "name": "Saffron milkcap",
+    "botanical_name": "Lactarius deliciosus",
+    "form": "milkcap",
+    "height": 0.24,
+    "mature_triangles": 12648,
+    "growth_triangles": 4884,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 294,
+    "name": "Verdigris agaric",
+    "botanical_name": "Stropharia aeruginosa",
+    "form": "verdigris",
+    "height": 0.28,
+    "mature_triangles": 15432,
+    "growth_triangles": 5460,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 295,
+    "name": "Wood blewit",
+    "botanical_name": "Lepista nuda",
+    "form": "blewit",
+    "height": 0.26,
+    "mature_triangles": 8520,
+    "growth_triangles": 4884,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 296,
+    "name": "Black trumpet",
+    "botanical_name": "Craterellus cornucopioides",
+    "form": "trumpet",
+    "height": 0.25,
+    "mature_triangles": 4308,
+    "growth_triangles": 3796,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 297,
+    "name": "Golden coral",
+    "botanical_name": "Ramaria aurea",
+    "form": "coral",
+    "height": 0.3,
+    "mature_triangles": 12288,
+    "growth_triangles": 4890,
+    "source": "art_source/mushrooms_02.blend"
   }
 ]

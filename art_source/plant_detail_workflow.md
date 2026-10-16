@@ -1,8 +1,69 @@
 # Detailed botanical library
 
+## Second mushroom collection (IDs 288–297, release 73)
+
+The catalogue now has **298 entries**, including twenty mushrooms. The second
+collection lives in `mushrooms_02.blend`, with its own fifty meshes and packed
+textures. `mushroom_expansion_geometry.py` adds ten distinct forms without
+changing the first collection's geometry or exports. `mushroom_data.py` keeps
+all twenty identities stable. Run `build_mushrooms.py -- --new-only` to write
+only the additions; the normal full rebuild writes the two libraries sequentially.
+The audit manifest merges entries from each collection rather than dropping the
+other library's records.
+
+| ID | Name | Species | Authored detail |
+| --- | --- | --- | --- |
+| 288 | Turkey tail | Trametes versicolor | Thin overlapping shelves with concentric ochre, grey and cream bands |
+| 289 | Scarlet elf cup | Sarcoscypha coccinea | Open red interiors, pale outer walls and a hardwood twig base |
+| 290 | Common puffball | Lycoperdon perlatum | Pear-shaped bodies, modelled surface spines and dark apical pores |
+| 291 | Collared earthstar | Geastrum triplex | Curled, thick star rays beneath round spore bodies |
+| 292 | Shaggy parasol | Chlorophyllum rhacodes | Broad pale caps, brown scales, slender stems and rings |
+| 293 | Saffron milkcap | Lactarius deliciosus | Depressed orange caps, concentric surface rings and orange gills |
+| 294 | Verdigris agaric | Stropharia aeruginosa | Blue-green domes, pale flecks, stem rings and dusky gills |
+| 295 | Wood blewit | Lepista nuda | Lilac caps, thick stems and pale violet gills |
+| 296 | Black trumpet | Craterellus cornucopioides | Hollow dark funnels with thin wavy rims |
+| 297 | Golden coral | Ramaria aurea | Dense, repeated forks with fine golden tips |
+
+Use the same packed botanical smooth-tissue PBR maps, rigid materials, local
+attachment channels and young-stage contracts as the first collection. The new
+shapes have appropriate player labels for shelves, cups, spore bodies, unfolding
+rays, trumpets and coral branches. Young bodies are authored at 16% / 30% of
+mature size, and one continuous organ-size curve crosses the forming-to-mature
+handoff; batching uses that same size curve. Display heights of 0.16–0.42 m and 7–10 growing
+days are game design choices. Earlier catalogue records, model files, the first
+Blender source library and save formats remain unchanged.
+
+Morphology references include the [Woodland Trust mushroom guide](https://www.woodlandtrust.org.uk/blog/2025/11/types-of-mushroom/),
+[earthstar](https://www.woodlandtrust.org.uk/trees-woods-and-wildlife/fungi-and-lichens/collared-earthstar/),
+[bracket fungi](https://www.woodlandtrust.org.uk/blog/bracket-fungi-identification/),
+[scarlet elf cup](https://www.first-nature.com/fungi/sarcoscypha-coccinea.php),
+[shaggy parasol](https://www.first-nature.com/fungi/chlorophyllum-rhacodes.php),
+[saffron milkcap](https://www.first-nature.com/fungi/lactarius-deliciosus.php),
+[verdigris agaric](https://www.first-nature.com/fungi/stropharia-aeruginosa.php),
+[wood blewit](https://www.first-nature.com/fungi/lepista-nuda.php) and
+[black trumpet](https://www.first-nature.com/fungi/craterellus-cornucopioides.php).
+No reference photographs are distributed with the models.
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender --background --python-exit-code 1 --python art_source/build_mushrooms.py -- --new-only
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import
+/Applications/Godot.app/Contents/MacOS/Godot --rendering-method gl_compatibility --always-on-top --path . --script art_source/render_plant_cards.gd -- --ids=288,289,290,291,292,293,294,295,296,297 --review --portraits --stages
+python3 tools/compose_mushroom_reviews.py --new-only
+python3 tests/check_mushrooms.py
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/mushrooms.gd
+```
+
+Use approved normal OS access for Blender and Godot as in the root execution
+notes. Reviews are under ignored `captures/mushrooms-02/`. Each ten-species
+library retains its own 350,000 mature / 180,000 growth triangle budget, plus the
+existing 60,000 mature / 18,000 growth limits per mushroom. The source checker’s
+`--mushrooms-only` option checks both libraries. Asset and runtime tests cover all
+twenty species, scientific-name search, every growth stage, rigid surface maps,
+local attachments, batching and mixed legacy/new save restoration.
+
 ## Mushroom collection (IDs 278–287, release 72)
 
-The catalogue has **288 entries**. `mushroom_data.py` records the ten identities;
+The first mushroom release brought the catalogue to **288 entries**. `mushroom_data.py` records the ten identities;
 `mushroom_geometry.py` builds their species silhouettes with the existing shared
 Blender primitives. `build_mushrooms.py` writes only `mushrooms.blend`, the ten
 mature GLBs and ten supplementary growth GLBs, appends their manifest entries

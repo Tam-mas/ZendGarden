@@ -22,8 +22,8 @@ def inspect(path):
 
 parser=argparse.ArgumentParser();parser.add_argument('--baseline',type=Path);args=parser.parse_args()
 manifest=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())
-assert len(manifest)==288 and all(x['morphology_version']==(6 if x['id']>=278 else 5 if x['id'] in [49,78,79] or x['id']>=218 else 4 if x['id']>=198 else 3) for x in manifest),'Incomplete catalogue update'
-assert [p['id'] for p in manifest]==list(range(288)), 'Plant IDs must remain contiguous'
+assert len(manifest)==298 and all(x['morphology_version']==(6 if x['id']>=278 else 5 if x['id'] in [49,78,79] or x['id']>=218 else 4 if x['id']>=198 else 3) for x in manifest),'Incomplete catalogue update'
+assert [p['id'] for p in manifest]==list(range(298)), 'Plant IDs must remain contiguous'
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
 assert [p['name'] for p in manifest]==[p[0] for p in specs], 'Source/catalogue ID mismatch'
 report=[]
@@ -46,6 +46,7 @@ assert sum(x[1] for x in report[106:136])<900000, 'New library geometry budget e
 assert sum(x[1] for x in report[136:148])<250000, 'Low-grass geometry budget exceeded'
 assert sum(x[1] for x in report[148:218])<3000000, 'Flower collection geometry budget exceeded'
 assert sum(x[1] for x in report[218:278])<5000000,'New orchard/forest geometry budget exceeded'
-assert sum(x[1] for x in report[278:])<350000,'Mushroom geometry budget exceeded'
-assert sum(x[1] for x in report)<15700000,'Whole-library geometry budget exceeded'
+assert sum(x[1] for x in report[278:288])<350000,'Mushroom geometry budget exceeded'
+assert sum(x[1] for x in report[288:])<350000,'Second mushroom collection geometry budget exceeded'
+assert sum(x[1] for x in report)<16050000,'Whole-library geometry budget exceeded'
 print('DETAILED_PLANT_ASSETS: PASS',json.dumps({'species':len(report),'triangles':sum(x[1] for x in report),'largest':max(report,key=lambda x:x[1]),'baseline_dimensions':bool(args.baseline)}))

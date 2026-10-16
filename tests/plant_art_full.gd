@@ -78,7 +78,8 @@ func verify_stage(model: Node3D, data: Dictionary, fraction: float) -> void:
  check(not meshes(buds).is_empty(),label+": bud stage has no organs")
  check(buds.scale.is_equal_approx(Vector3.ONE),label+": buds shrink around the ground origin")
  verify_attachments(buds,label+" buds",fraction>=.52 and fraction<.78)
- verify_growth_amount(buds,lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1)),label+" buds")
+ var continuous=.65+.35*clampf((fraction-.52)/.48,0,1)
+ verify_growth_amount(buds,continuous if data.has("mushroom_form") else lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1)),label+" buds")
  var mature=model.get_node("MatureFoliage")
  var bloom=model.get_node("Bloom")
  check(mature.visible==(fraction>=.52),label+": incorrect mature foliage visibility")
@@ -86,7 +87,7 @@ func verify_stage(model: Node3D, data: Dictionary, fraction: float) -> void:
  check(bloom.scale.is_equal_approx(Vector3.ONE),label+": flowers shrink around the ground origin")
  # Foliage-only species intentionally have an empty Bloom container.
  verify_attachments(bloom,label+" flowers/fruit",fraction>=.78 and fraction<1.0)
- verify_growth_amount(bloom,lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1)),label+" flowers/fruit")
+ verify_growth_amount(bloom,continuous if data.has("mushroom_form") else lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1)),label+" flowers/fruit")
  var early=lerpf(.70,1.15,fraction/.20) if fraction<.20 else lerpf(.65,1.25,clampf((fraction-.20)/.32,0,1))
  for organ in [seedling,juvenile]:
   check((organ.scale*model.scale).is_equal_approx(Vector3.ONE*early),label+": early foliage no longer keeps its authored proportions")
@@ -95,7 +96,7 @@ func verify_stage(model: Node3D, data: Dictionary, fraction: float) -> void:
 
 func verify() -> void:
  var garden=GardenFixture.new()
- check(garden.catalogue.size()==288,"Full collection no longer contains 288 species")
+ check(garden.catalogue.size()==298,"Full collection no longer contains 298 species")
  for id in range(garden.catalogue.size()):
   var data=garden.catalogue[id]
   check(bool(data.get("attached_bloom",false)),str(data.name)+": catalogue omits attached growth")
@@ -149,7 +150,7 @@ func verify() -> void:
    check(leaf_found,str(id)+": cultivar has no marked leaf tissue")
   model.free();loaded_model.free()
   await process_frame
- check(checked_stages==288*5+CULTIVAR_IDS.size()*5,"Some plant growth cases did not complete")
+ check(checked_stages==298*5+CULTIVAR_IDS.size()*5,"Some plant growth cases did not complete")
  check(checked_succulents==41,"Some succulent rigidity cases were skipped")
  print("PLANT_ART_FULL_RESULT: ",JSON.stringify({"plants":garden.catalogue.size(),"growth_stages":checked_stages,"cultivar_reload_stages":checked_cultivar_stages,"succulents":checked_succulents,"attachment_vertices":checked_attachment_vertices,"failures":failures}))
  quit(0 if failures.is_empty() else 1)
