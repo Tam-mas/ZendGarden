@@ -48,7 +48,7 @@ func update(g, delta: float) -> void:
  if slot!=next_slot:
   slot=next_slot
   var sequence=["Clear","Cloudy","Rain","Cloudy","Clear","Mist","Clear","Rain","Cloudy"]
-  target=sequence[posmod(slot,sequence.size())]
+  target=GardenChallenge.weather_for(g,g.day) if GardenChallenge.active(g) else sequence[posmod(slot,sequence.size())]
   if season(g.day)=="Winter" and target=="Rain": target="Snow"
  current=current.move_toward(TYPES[target],delta/18.0)
  snow=move_toward(snow,1.0 if target=="Snow" else 0.0,delta/18.0)
@@ -57,7 +57,7 @@ func update(g, delta: float) -> void:
  rain_particles.material_override.albedo_color.a=.45*current.y
  snow_particles.emitting=snow>.03
  snow_particles.material_override.albedo_color.a=.8*snow
- if not g.photo_mode:
+ if not g.photo_mode and not GardenChallenge.active(g):
   GardenEquipment.weather(g,current.y,delta)
   for plant in g.planted:
    if GardenAreas.rain_reaches(g,plant):plant.water=minf(4.0,plant.water+current.y*delta/24.0)

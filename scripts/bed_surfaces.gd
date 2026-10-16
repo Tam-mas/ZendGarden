@@ -127,6 +127,7 @@ static func apply(g,index: int,id: String) -> bool:
 
 static func shop(g) -> void:
  g.add_note("BED SURFACES",14)
+ if GardenChallenge.active(g):g.add_note("These finishes are decorative. Use Care → Mulch for moisture retention and weed protection.")
  g.add_note("Buy a finish once, then use it on any open bed. Changes cover the whole bed and leave your plants in place.")
  var chooser=OptionButton.new()
  chooser.name="SurfaceBedChoice"

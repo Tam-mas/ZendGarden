@@ -94,7 +94,7 @@ static func record(p: Dictionary) -> Dictionary:
  var result={"orientation":p.node.rotation.y,"shape_seed":p.get("shape_seed",0),"prune_cuts":p.get("prune_cuts",0),"height_factor":p.height_factor,"id":p.id,"pos":[p.pos.x,p.pos.z],"plot":p.plot,"age":p.age,"water":p.water,"stress":p.stress,"pruned":p.get("pruned",0.0),"treatments":p.get("treatments",{}).duplicate(true)}
  if is_contained(p):result.merge({"container_uid":p.container_uid,"container_slot":p.container_slot})
  if p.has("watered_until"):result["watered_until"]=p.watered_until
- for field in ["area_training","area_graft","area_offset_day","form_uid","breeding_checked"]:
+ for field in ["area_training","area_graft","area_offset_day","form_uid","breeding_checked","dry_days"]:
   if p.has(field):result[field]=p[field]
  return result
 
@@ -114,7 +114,7 @@ static func pack(g, obj: Dictionary) -> void:
 
 static func restore_record(g, saved: Dictionary) -> Dictionary:
  var p=g.add_plant(int(saved.id),Vector3(saved.pos[0],0,saved.pos[1]),int(saved.plot),float(saved.age),float(saved.get("height_factor",1)),float(saved.get("orientation",0)),int(saved.get("shape_seed",0)),str(saved.get("form_uid","")))
- for key in ["water","stress","pruned","prune_cuts","treatments","watered_until","breeding_checked","area_training","area_graft","area_offset_day"]:
+ for key in ["water","stress","pruned","prune_cuts","treatments","watered_until","breeding_checked","area_training","area_graft","area_offset_day","dry_days"]:
   if saved.has(key):p[key]=saved[key]
  if saved.has("container_uid"):
   var obj=object(g,str(saved.container_uid))

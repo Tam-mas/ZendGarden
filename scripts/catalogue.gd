@@ -1007,3 +1007,10 @@ static func furnishings() -> Array:
   {"name":"Alpine wind chime", "price":45, "kind":"wind_chime", "hint":"A timber stand with gently swaying metal chimes."},
   {"name":"Tiered planting steps", "price":85, "kind":"tiered_planter", "hint":"Six planting pockets on three levels for a layered garden display."}
  ]
+
+static func challenge_furnishings() -> Array:
+ return [
+  {"name":"Reserve water tank","price":90,"kind":"reserve_tank","hint":"Challenge: stores 48 irrigation charges. Rain fills it; manual refills are free."},
+  {"name":"Planter drip kit","price":30,"kind":"planter_drip","hint":"Challenge: irrigates containers within four metres using a connected barrel or tank."},
+  {"name":"Bed soaker controller","price":45,"kind":"soaker_controller","hint":"Challenge: waters this bed using a connected barrel or tank within twelve metres."},
+ ]

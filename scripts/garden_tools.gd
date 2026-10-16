@@ -43,7 +43,7 @@ static func repeat_mouse(g) -> void:
  if g.clear_view_hold_guard:
   if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):g.clear_view_hold_guard=false
   return
- if g.clear_view or g.mode not in ["water","hoe","harvest"] or g.touch_active() or not g.gameplay_active():return
+ if g.clear_view or g.mode not in ["water","hoe","harvest","weed","mulch"] or g.touch_active() or not g.gameplay_active():return
  if g.photo_mode or g.day_transition or not g.hover_valid or g.action_cooldown>0:return
  if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):g.perform_action(true)
 

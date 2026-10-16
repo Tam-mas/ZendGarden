@@ -54,6 +54,8 @@ Use the **arrow keys** to walk and the **mouse** to look around. Press **Tab** t
 
 Tablets and unfolded phones use the familiar garden menus with larger tap targets, adaptive plant-card grids and a compact tool tray. Hold a continuous action and drag the same thumb to look while your other thumb moves. Settings include control size, edge spacing, height and handedness, alongside sound, camera sensitivity, reduced motion and graphics quality. See the [player guide](docs/player-guide.md) for the full controls, tool tips, shop details and saving help.
 
+Choose **Guide → Your gardens** to keep a separate **Challenge Garden** alongside your relaxed Free Garden. Tend thirsty plants, clear weeds, spread mulch, connect stored-water irrigation and deliver seasonal baskets. Each garden has its own save, and both wait while you are away.
+
 ## Come back when you feel like it
 
 Your garden saves as you play. In the browser, it stays with the same browser, device and site address; it does not sync between devices. Use **Save garden** before closing the tab, and remember that clearing site data removes the garden saved there. In **Settings**, choose **Download save file** to keep a JSON copy or move your garden to another browser or device. Choose **Upload save file…** on the destination, check the day and plant count, then confirm. The garden it replaces is kept as a backup; **Download previous garden** lets you retrieve that copy.

@@ -1,3 +1,13 @@
+### [2026-10-14 11:33] Added
+
+**Tech:** `scripts/garden_challenge.gd` / `GardenModes` — separate Challenge Garden mode and format-4 saves
+
+**Dev:** Add isolated Free/Challenge slots and mode-aware import backups; deterministic morning water, recoverable neglect, capped weeds, patch mulch, stored-water irrigation, seasonal baskets and reserved harvest. Add care/forecast/equipment UI, touch-safe tools, code-authored models, equipment portraits, onboarding, regression coverage (including the expanded tree catalogue) and documentation while retaining Free growth/equipment rules and format-3 exports.
+
+**Plain:** Keep your relaxed garden and start a separate Challenge Garden with watering, weeds, useful equipment and seasonal goals.
+
+**Why:** Give players an optional structured gardening progression without changing their existing relaxed garden.
+
 ### [2026-10-13 19:20] Added
 
 **Tech:** `botanical_2026_*`, `GardenCatalogue`, `GardenPlantGrowth` — 60 append-only botanical additions, pumpkin revision and 42/48 m redwoods, release 69

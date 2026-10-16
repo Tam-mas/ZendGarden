@@ -46,7 +46,7 @@ var wide_menu=false
 var seed_detail: Dictionary={}
 var seed_scroll=0
 
-const CONTINUOUS_TOOLS=["water","rake","hoe","harvest"]
+const CONTINUOUS_TOOLS=["water","rake","hoe","harvest","weed","mulch"]
 const TOOL_CHOICES=[["walk","Wander"],["plant","Plant"],["water","Water"],["prune","Prune"],["harvest","Gather"],["move","Move"],["remove","Remove"],["rake","Rake"],["hoe","Hoe"]]
 
 func setup(game) -> void:
@@ -275,7 +275,9 @@ func show_drawer(kind: String) -> void:
  col.add_theme_constant_override("v_separation",8)
  col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
  scroll.add_child(col)
- for entry in TOOL_CHOICES:
+ var choices=TOOL_CHOICES.duplicate()
+ if GardenChallenge.active(g):choices.append_array([["weed","Weed"],["mulch","Mulch"],["meadow","To meadow"]])
+ for entry in choices:
   var key=entry[0]
   var choice=g.button(entry[1],func():
    close_menu()
@@ -505,10 +507,11 @@ func _process(delta: float) -> void:
  var rotating=g.mode=="build" or (g.mode=="move" and g.moved_object>=0)
  buttons.action.visible=g.mode!="walk" and not g.photo_mode
  buttons.action.disabled=not g.hover_valid
- buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","rake":"Rake","hoe":"Raise ground" if g.hoe_raise else "Lower ground"}.get(g.mode,"Use")
+ buttons.action.text={"plant":"Plant here","build":"Place here","move":"Place" if moving else "Pick up","remove":"Remove","water":"Water","prune":"Prune","harvest":"Gather","weed":"Weed","mulch":"Apply mulch","meadow":"To meadow","rake":"Rake","hoe":"Raise ground" if g.hoe_raise else "Lower ground"}.get(g.mode,"Use")
  buttons.tools.text="Tools"
  for entry in TOOL_CHOICES:
   if entry[0]==g.mode:buttons.tools.text=entry[1]
+ if g.mode in ["weed","mulch","meadow"]:buttons.tools.text={"weed":"Weed","mulch":"Mulch","meadow":"To meadow"}[g.mode]
  if buttons.tools.size.x<104:buttons.tools.text="Tools"
  context_title.text={"walk":"Explore your garden","water":"Water · +20% growth","prune":"Prune · %.2f m square"%GardenTools.prune_width(g),"harvest":"Gather · %.1f m square"%GardenTools.gather_width(g),"hoe":"Hoe · "+("raise ground" if g.hoe_raise else "lower ground")}.get(g.mode,g.mode.capitalize())
  if g.mode=="plant": context_title.text="Plant · "+g.catalogue[g.selected].name

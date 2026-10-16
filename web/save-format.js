@@ -14,7 +14,10 @@ export function validateSave(bytes) {
   try { data = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)); }
   catch { throw new Error('We could not read this saved garden. Please keep a backup before trying again.'); }
   const fail = () => { throw new Error('This saved garden could not be opened safely. Please keep a backup before trying again.'); };
-  if (!object(data) || ![1, 2, 3].includes(data.version) || !Array.isArray(data.plants)) fail();
+  if (!object(data) || ![1, 2, 3, 4].includes(data.version) || !Array.isArray(data.plants)) fail();
+  if (data.version === 4 && (data.garden_mode !== 'challenge' || !object(data.challenge)
+    || data.challenge.rules !== 1 || !object(data.challenge.patches))) fail();
+  if (data.version < 4 && ('challenge' in data || (data.garden_mode || 'free') !== 'free')) fail();
   for (const plant of data.plants) {
     if (!object(plant) || !Number.isInteger(plant.id) || plant.id < 0 || !pair(plant.pos)
       || !Number.isInteger(plant.plot) || plant.plot < 0

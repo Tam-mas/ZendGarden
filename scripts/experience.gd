@@ -34,6 +34,7 @@ static func welcome(g, _page: int = 0) -> void:
  col.add_child(note)
  col.add_child(g.button("Start the welcome walk",func(): GardenTutorial.start(g),Vector2(0,48)))
  col.add_child(g.button("Explore on my own",func(): finish(g),Vector2(0,44)))
+ col.add_child(g.button("Choose Free or Challenge Garden",func():finish(g);GardenMenus.visit(g,"Gardens"),Vector2(0,44)))
  if g.touch_active():g.touch.fit_popup(g.welcome)
  else:GardenInterface.fit_popup(g,g.welcome)
 
