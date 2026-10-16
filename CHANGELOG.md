@@ -1,3 +1,13 @@
+### [2026-10-16 22:08] Fixed
+
+**Tech:** `GardenUpdates.RELEASES`, `tests/player_updates.gd` — consolidate mushroom announcements into update 72
+
+**Dev:** Remove the separate update-73 announcement and revise the existing mushroom notice to state that 20 mushrooms were added, as requested. Preserve update 72 and earlier identifiers and keep saved dismissal watermarks at 73 intact; reserve that withdrawn identifier so the next new announcement uses 74. Add focused checks for a single mushroom notice, revised wording and dismissed/reopened history compatibility. Retain all twenty mushroom types and their game assets.
+
+**Plain:** The existing mushroom update now announces all 20 types in one notice.
+
+**Why:** Keep the in-game history concise without making players dismiss another announcement for the same collection.
+
 ### [2026-10-16 21:51] Added
 
 **Tech:** `mushroom_expansion_geometry.py`, `build_mushrooms.py`, `GardenCatalogue` — second ten-species mushroom library, append-only IDs 288–297, release 73

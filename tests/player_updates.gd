@@ -66,9 +66,14 @@ func run() -> void:
  var failures=[]
  var game=PreviewGame.new()
  root.add_child(game)
+ var mushroom_notices=GardenUpdates.RELEASES.filter(func(entry):return entry.version in [72,73])
+ if mushroom_notices.size()!=1 or mushroom_notices[0].version!=72 or not str(mushroom_notices[0].note).contains("20 mushrooms"):
+  failures.append("Mushrooms must have one revised 20-mushroom announcement")
+ for seen in [72,73]:
+  if GardenUpdates.unseen({"updates_seen":seen}).any(func(entry):return entry.version in [72,73]):failures.append("Consolidated mushroom announcement repeated after dismissal")
  var previous=GardenUpdates.CURRENT_VERSION+1
  for entry in GardenUpdates.RELEASES:
-  if entry.version!=previous-1: failures.append("Update counter is not sequential")
+  if entry.version!=previous-1 and not (previous==74 and entry.version==72): failures.append("Update counter skipped an unreserved version")
   previous=entry.version
  if GardenUpdates.unseen({}).size()!=GardenUpdates.RELEASES.size(): failures.append("Old save did not receive updates")
  game.smoke=true
@@ -110,6 +115,12 @@ func run() -> void:
    root.get_texture().get_image().save_png(output)
  GardenUpdates.dismiss(game)
  if game.resumed!=1: failures.append("History dismissal closed the settings menu")
+ # A save that dismissed the withdrawn notice keeps its higher watermark.
+ game.settings.updates_seen=73
+ GardenUpdates.show(game)
+ GardenUpdates.dismiss(game)
+ if int(game.saved_settings.updates_seen)!=maxi(73,GardenUpdates.CURRENT_VERSION):failures.append("Consolidation lowered an existing dismissal watermark")
+ if GardenUpdates.maybe_show(game):failures.append("Withdrawn mushroom announcement reappeared")
  game.queue_free()
  await process_frame
  print("PLAYER_UPDATES_RESULT: ",failures)
