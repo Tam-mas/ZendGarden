@@ -39,7 +39,7 @@ func changing(p: Dictionary) -> void:
  if previous<0 or stage_key(previous)!=stage_key(next):
   restore(p.node)
   dirty=true
- elif (int(p.id) in GardenPlantGrowth.FRUIT_TREES or bool(garden.catalogue[p.id].get("attached_bloom",false))) and fruit_size_key(previous)!=fruit_size_key(next):
+ elif (int(p.id) in GardenPlantGrowth.FRUIT_TREES or bool(garden.catalogue[p.id].get("attached_bloom",false))) and fruit_size_key(previous,garden.catalogue[p.id])!=fruit_size_key(next,garden.catalogue[p.id]):
   # Attached fruit and flower growth selects a size material; refresh its batch group.
   restore(p.node)
   dirty=true
@@ -48,9 +48,9 @@ func changing(p: Dictionary) -> void:
 func stage_key(fraction: float) -> int:
  return 0 if fraction<.20 else 1 if fraction<.52 else 2 if fraction<.78 else 3
 
-func fruit_size_key(fraction: float) -> int:
+func fruit_size_key(fraction: float, data: Dictionary={}) -> int:
  if fraction<.52:return 0
- var size=lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1)) if fraction<.78 else lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1))
+ var size=GardenPlantGrowth.organ_amount(fraction,data)
  return roundi(size*32.0)
 
 func _process(delta: float) -> void:

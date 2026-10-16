@@ -12,13 +12,13 @@ import check_plant_art_full as glb
 
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
 catalogue=(ROOT/'scripts/catalogue.gd').read_text()
-assert len(specs)==288
+assert len(specs)==298
 assert json.loads(re.search(r'const ROWS\s*=\s*(\[.*?\n\])',catalogue,re.S)[1])==specs
 heights=json.loads((ROOT/'scripts/plant_profiles.gd').read_text().split('const HEIGHTS=')[1])
-assert len(heights)==288
+assert len(heights)==298
 manifest=json.loads((ROOT/'art_source/mushroom_manifest.json').read_text())
-assert [r['id'] for r in manifest]==list(range(278,288))
-assert len({r['form'] for r in manifest})==10
+assert [r['id'] for r in manifest]==list(range(278,298))
+assert len({r['form'] for r in manifest})==20
 mt=gt=0
 for data,record in zip(MUSHROOMS,manifest):
     idx,name,botanical,color,height,days,form=data
@@ -51,9 +51,12 @@ for data,record in zip(MUSHROOMS,manifest):
             assert 0<sizes['Seedling']<sizes['Juvenile']<height*.75,(name,'independent young stages',sizes)
     assert any((ROOT/f'assets/ui/plants/{idx}{ext}').is_file() for ext in ['.webp','.png']),(name,'missing portrait')
 # A local pre-build snapshot also verifies old exports remained byte-identical.
-baseline=ROOT/'captures/mushrooms/existing_asset_hashes.json'
+baseline=ROOT/'captures/mushrooms-02/existing_asset_hashes.json'
 if baseline.exists():
     for path,digest in json.loads(baseline.read_text()).items():
         assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==digest,(path,'legacy model changed')
-assert mt<350000 and gt<180000
-print('MUSHROOM_ASSETS: PASS — 10 species;',mt,'mature triangles;',gt,'growth triangles; packed maps and local caps')
+for start in [278,288]:
+    batch=[r for r in manifest if start<=r['id']<start+10]
+    assert sum(r['mature_triangles'] for r in batch)<350000
+    assert sum(r['growth_triangles'] for r in batch)<180000
+print('MUSHROOM_ASSETS: PASS — 20 species;',mt,'mature triangles;',gt,'growth triangles; packed maps and local caps')

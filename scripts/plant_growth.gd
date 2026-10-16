@@ -2,6 +2,14 @@ class_name GardenPlantGrowth
 extends RefCounted
 
 static var scenes: Dictionary={}
+const MUSHROOM_STAGES={
+ "turkey_tail":["Shelves forming","Shelves widening"],
+ "elf_cup":["Cups forming","Cups opening"],
+ "puffball":["Spore bodies forming","Filling out"],
+ "earthstar":["Rays unfolding","Spore bodies forming"],
+ "trumpet":["Trumpets forming","Trumpets opening"],
+ "coral":["Branches forming","Branches filling out"]
+}
 const FRUIT_TREES=[31,34,35,82,83,84,85,86,87,88,89,90,91]
 
 static func fruit_growth(node: Node, amount: float) -> void:
@@ -17,8 +25,9 @@ static func stage(fraction: float, data: Dictionary) -> String:
  if str(data.get("growth_kind",""))=="mushroom":
   if fraction<.20:return "Pins emerging"
   if fraction<.52:return "Young mushrooms"
-  if fraction<.78:return "Caps forming"
-  if fraction<1.0:return "Caps opening"
+  var labels=MUSHROOM_STAGES.get(str(data.get("mushroom_form","")),["Caps forming","Caps opening"])
+  if fraction<.78:return labels[0]
+  if fraction<1.0:return labels[1]
   return "Ready to gather"
  if fraction<.20: return "Seedling"
  if fraction<.52: return "Developing leaves"
@@ -46,6 +55,12 @@ static func ensure_stages(node: Node3D, id: int) -> Node3D:
  GardenArt.add_leaf_wind(stages)
  return stages
 
+static func organ_amount(fraction: float, data: Dictionary) -> float:
+ # Whole fungal bodies keep one size curve across the forming/opening handoff.
+ if data.has("mushroom_form"):return lerpf(.65,1.0,clampf((fraction-.52)/.48,0,1))
+ if fraction<.78:return lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1))
+ return lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1))
+
 static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: int, root_scale: Vector3) -> void:
  var mature=node.get_node_or_null("MatureFoliage")
  if mature==null: return
@@ -54,7 +69,7 @@ static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: i
  bloom.visible=fraction>=.78
  var fruit_tree=int(data.id) in FRUIT_TREES
  var attached_bloom=fruit_tree or bool(data.get("attached_bloom",false))
- var ripening=lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1))
+ var ripening=organ_amount(fraction,data) if data.has("mushroom_form") else lerpf(.48,1.0,clampf((fraction-.78)/.22,0,1))
  bloom.scale=Vector3.ONE if attached_bloom else Vector3.ONE*ripening
  if attached_bloom:fruit_growth(bloom,ripening)
  var stages=node.get_node_or_null("GrowthStages")
@@ -69,7 +84,7 @@ static func apply(node: Node3D, data: Dictionary, fraction: float, shape_seed: i
   # Early organs are authored at their own size, independent of mature-model scaling.
   var early=lerpf(.70,1.15,fraction/.20) if fraction<.20 else lerpf(.65,1.25,clampf((fraction-.20)/.32,0,1))
   for organ in [seedling,juvenile]: organ.scale=Vector3.ONE*early/root_scale
-  var budding=lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1))
+  var budding=organ_amount(fraction,data) if data.has("mushroom_form") else lerpf(.65,1.0,clampf((fraction-.52)/.26,0,1))
   buds.scale=Vector3.ONE if attached_bloom else Vector3.ONE*budding
   if attached_bloom:fruit_growth(buds,budding)
  node.set_meta("growth_fraction",fraction)

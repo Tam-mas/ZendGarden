@@ -11,7 +11,7 @@ from botanical_2026_data import PLANTS
 import check_plant_art_full as glb
 
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
-assert len(specs)==288 and len({p[0] for p in specs})==288
+assert len(specs)==298 and len({p[0] for p in specs})==298
 baseline=json.loads((ROOT/'art_source/plant_full_baseline.json').read_text())
 assert [p[0] for p in specs[:218]]==[p['name'] for p in baseline], 'Existing save identities moved'
 assert collections.Counter(p['group'] for p in PLANTS)=={'Fruit trees':20,'Cacti & succulents':20,'Rainforest & tree ferns':20}

@@ -2871,5 +2871,95 @@
     "path": "assets/plants/plant_287.glb",
     "source": "art_source/mushrooms.blend",
     "morphology_version": 6
+  },
+  {
+    "id": 288,
+    "name": "Turkey tail",
+    "vertices": 15076,
+    "triangles": 29228,
+    "path": "assets/plants/plant_288.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 289,
+    "name": "Scarlet elf cup",
+    "vertices": 2242,
+    "triangles": 4436,
+    "path": "assets/plants/plant_289.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 290,
+    "name": "Common puffball",
+    "vertices": 9000,
+    "triangles": 15084,
+    "path": "assets/plants/plant_290.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 291,
+    "name": "Collared earthstar",
+    "vertices": 2580,
+    "triangles": 4624,
+    "path": "assets/plants/plant_291.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 292,
+    "name": "Shaggy parasol",
+    "vertices": 11694,
+    "triangles": 19212,
+    "path": "assets/plants/plant_292.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 293,
+    "name": "Saffron milkcap",
+    "vertices": 6552,
+    "triangles": 12648,
+    "path": "assets/plants/plant_293.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 294,
+    "name": "Verdigris agaric",
+    "vertices": 9174,
+    "triangles": 15432,
+    "path": "assets/plants/plant_294.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 295,
+    "name": "Wood blewit",
+    "vertices": 4584,
+    "triangles": 8520,
+    "path": "assets/plants/plant_295.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 296,
+    "name": "Black trumpet",
+    "vertices": 2166,
+    "triangles": 4308,
+    "path": "assets/plants/plant_296.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 297,
+    "name": "Golden coral",
+    "vertices": 6984,
+    "triangles": 12288,
+    "path": "assets/plants/plant_297.glb",
+    "source": "art_source/mushrooms_02.blend",
+    "morphology_version": 6
   }
 ]

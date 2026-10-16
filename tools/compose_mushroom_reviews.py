@@ -7,7 +7,8 @@ sys.path.insert(0,str(ROOT/'art_source'))
 from mushroom_data import MUSHROOMS
 font_path=Path('/System/Library/Fonts/Supplemental/Arial.ttf')
 font=ImageFont.truetype(str(font_path),20) if font_path.exists() else ImageFont.load_default()
-folder=ROOT/'captures/mushrooms';folder.mkdir(parents=True,exist_ok=True)
+MUSHROOMS=[p for p in MUSHROOMS if (p[0]>=288)==('--new-only' in sys.argv)]
+folder=ROOT/('captures/mushrooms-02' if '--new-only' in sys.argv else 'captures/mushrooms');folder.mkdir(parents=True,exist_ok=True)
 canvas=Image.new('RGB',(1500,660),'#e9e4d7');draw=ImageDraw.Draw(canvas)
 for n,(idx,name,*_) in enumerate(MUSHROOMS):
     portrait=Image.open(ROOT/f'captures/botanical-review/{idx}.png').convert('RGBA');portrait.thumbnail((285,285))
@@ -15,7 +16,7 @@ for n,(idx,name,*_) in enumerate(MUSHROOMS):
     canvas.paste(portrait,(x,y),portrait)
     draw.text(((n%5)*300+150,y+300),name,fill='#342c24',font=font,anchor='mm')
 canvas.save(folder/'mushroom-collection.jpg',quality=95)
-labels=['Pins emerging','Young mushrooms','Caps forming','Caps opening','Ready to gather']
+labels=['Pins emerging','Young mushrooms','Forming','Filling out','Ready to gather']
 canvas=Image.new('RGB',(1150,2030),'#e9e4d7');draw=ImageDraw.Draw(canvas)
 for col,label in enumerate(labels):draw.text((col*230+115,20),label,fill='#342c24',font=font,anchor='mm')
 for row,(idx,name,*_) in enumerate(MUSHROOMS):

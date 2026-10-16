@@ -1,3 +1,13 @@
+### [2026-10-16 21:51] Added
+
+**Tech:** `mushroom_expansion_geometry.py`, `build_mushrooms.py`, `GardenCatalogue` — second ten-species mushroom library, append-only IDs 288–297, release 73
+
+**Dev:** Add turkey tail, scarlet elf cup, common puffball, collared earthstar, shaggy parasol, saffron milkcap, verdigris agaric, wood blewit, black trumpet and golden coral. Build a separate packed 50-mesh Blender library, twenty mature/growth GLBs and ten game-rendered portraits; author banded shelves, open cups and trumpets, spore bodies, curled rays, cap details and branching coral with rigid PBR tissue and local attachments. Extend the builder with a new-only option and merged audit records, add shape-specific growth descriptions and a continuous forming-to-mature size curve shared with batching, and expand catalogue/source/save/batching regressions to 298 entries and twenty fungi while preserving earlier identities, exports, source art and save compatibility.
+
+**Plain:** Ten more mushrooms bring striped fans, bright cups, spiny puffballs, earthstars and branching golden coral to shady garden corners.
+
+**Why:** Give the woodland collection more varied silhouettes and colour as it grows.
+
 ### [2026-10-16 19:32] Added
 
 **Tech:** `mushroom_data.py`, `mushroom_geometry.py`, `build_mushrooms.py`, `GardenCatalogue` — ten Blender-authored mushrooms, append-only IDs 278–287, release 72

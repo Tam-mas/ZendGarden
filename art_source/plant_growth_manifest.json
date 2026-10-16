@@ -2583,5 +2583,85 @@
     "height": 0.36,
     "triangles": 6028,
     "source": "art_source/mushrooms.blend"
+  },
+  {
+    "id": 288,
+    "name": "Turkey tail",
+    "family": "mushroom_turkey_tail",
+    "height": 0.22,
+    "triangles": 10960,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 289,
+    "name": "Scarlet elf cup",
+    "family": "mushroom_elf_cup",
+    "height": 0.16,
+    "triangles": 4060,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 290,
+    "name": "Common puffball",
+    "family": "mushroom_puffball",
+    "height": 0.24,
+    "triangles": 3236,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 291,
+    "name": "Collared earthstar",
+    "family": "mushroom_earthstar",
+    "height": 0.19,
+    "triangles": 3536,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 292,
+    "name": "Shaggy parasol",
+    "family": "mushroom_parasol",
+    "height": 0.42,
+    "triangles": 5460,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 293,
+    "name": "Saffron milkcap",
+    "family": "mushroom_milkcap",
+    "height": 0.24,
+    "triangles": 4884,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 294,
+    "name": "Verdigris agaric",
+    "family": "mushroom_verdigris",
+    "height": 0.28,
+    "triangles": 5460,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 295,
+    "name": "Wood blewit",
+    "family": "mushroom_blewit",
+    "height": 0.26,
+    "triangles": 4884,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 296,
+    "name": "Black trumpet",
+    "family": "mushroom_trumpet",
+    "height": 0.25,
+    "triangles": 3796,
+    "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 297,
+    "name": "Golden coral",
+    "family": "mushroom_coral",
+    "height": 0.3,
+    "triangles": 4890,
+    "source": "art_source/mushrooms_02.blend"
   }
 ]
