@@ -26,6 +26,14 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+challenge_log="$(mktemp -t zend-garden-challenge)"
+for args in "--script tests/challenge.gd" "--fixed-fps 60 -- --challenge-test"; do
+  "$GODOT_BIN" --headless --path "$PWD" ${=args} > "$challenge_log" 2>&1 || { cat "$challenge_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$challenge_log" || ! rg -q 'CHALLENGE(_IN_GAME)?_RESULT: \[\]' "$challenge_log"; then
+    cat "$challenge_log"
+    exit 1
+  fi
+done
 jump_log="$(mktemp -t zend-garden-jump)"
 "$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --jump-test > "$jump_log" 2>&1 || { cat "$jump_log"; exit 1; }
 if rg -q 'SCRIPT ERROR|ERROR:' "$jump_log" || ! rg -Fq 'JUMP_RESULT: []' "$jump_log"; then

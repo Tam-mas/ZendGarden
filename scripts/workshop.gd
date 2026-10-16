@@ -79,7 +79,10 @@ static func open(g, uid: String="") -> void:
  elif obj.is_empty():overview(g,column)
  elif not GardenAreaProgression.allowed(g,obj.pos):note(g,column,GardenAreaProgression.message(g,GardenAreaCatalogue.index_at(obj.pos)),16)
  elif obj.kind in GardenContainers.SPECS:planter(g,column,obj)
- else:equipment(g,column,obj)
+ else:
+  if not GardenChallenge.active(g) or not GardenChallengeUI.equipment(g,column,obj):equipment(g,column,obj)
+  if GardenChallenge.active(g) and obj.kind=="mulch_bin":
+   action(g,column,"Six trimmings → four mulch portions",func():GardenChallenge.trimming_batch(g,obj))
  if not obj.is_empty():frame.add_child(g.button("Equipment & stored plants",func():open(g),Vector2(0,48)))
  frame.add_child(g.button("Back to garden" if g.workshop_return_to_game else "Done",func():close(g),Vector2(0,48)))
  fit(g)
@@ -239,7 +242,7 @@ static func valid_save(data: Dictionary, plant_count: int) -> bool:
   if obj.has("work"):
    if not obj.work is Dictionary:return false
    if not GardenSaveFormat.fields(obj.work,["water","feed_until"],["upgraded","irrigating","shade_on","closed"]):return false
-   if obj.work.has("water") and (float(obj.work.water)<0 or float(obj.work.water)>24):return false
+   if obj.work.has("water") and (float(obj.work.water)<0 or float(obj.work.water)>(48 if int(data.get("version",0))==4 and obj.kind=="reserve_tank" else 24)):return false
    if obj.work.has("feed_until") and not GardenSaveFormat.integer(obj.work.feed_until,0):return false
  var plot_count=maxi(4,int(data.get("unlocked_plots",1))+2)
  if plot_count%2:plot_count+=1
@@ -250,6 +253,7 @@ static func valid_save(data: Dictionary, plant_count: int) -> bool:
   for key in ["age","water","stress"]:
    if not GardenSaveFormat.number(p.get(key)):return false
   if not GardenSaveFormat.fields(p,["height_factor","orientation","shape_seed","pruned","prune_cuts","watered_until"],[],["storage_source"]):return false
+  if p.has("dry_days") and not GardenSaveFormat.integer(p.dry_days,0,3):return false
   if p.has("area_training") and p.area_training not in ["open","fan","espalier"]:return false
   if p.has("area_graft") and (not GardenSaveFormat.integer(p.area_graft,0,plant_count-1) or int(p.area_graft) not in GardenAreas.compatible_grafts(int(p.id))):return false
   if p.has("area_offset_day") and not GardenSaveFormat.integer(p.area_offset_day,0):return false

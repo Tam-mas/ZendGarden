@@ -52,7 +52,8 @@ static func run(g, failures: Array) -> void:
  g.toast_time=0
  g.refresh_ui()
  var cards=g.list_box.get_node("PlantCards")
- if cards.columns!=2 or cards.get_child_count()!=21: failures.append("Tree catalogue is not a two-column grid")
+ var tree_count=g.catalogue.filter(func(plant):return plant.category=="Trees").size()
+ if cards.columns!=2 or cards.get_child_count()!=tree_count: failures.append("Tree catalogue is not a two-column grid")
  for id in range(GardenCatalogue.ROWS.size()):
   if not ResourceLoader.exists(GardenArt.card_path("res://assets/ui/plants/%02d" % id)): failures.append("Missing plant thumbnail "+str(id))
  for button in all_buttons(g.hud_top):

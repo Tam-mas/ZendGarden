@@ -120,6 +120,9 @@ static func shop(g) -> void:
  if section in ["Decor","Equipment"]:
   if section=="Equipment":
    g.list_box.add_child(g.button("My equipment, supplies & nursery",func():GardenWorkshop.open(g)))
+   if GardenChallenge.active(g):
+    g.list_box.add_child(g.button("Challenge care & supplies",func():visit(g,"Care")))
+    g.list_box.add_child(g.button("Four mulch portions · 8 petals",func():GardenChallenge.buy_mulch(g)))
    g.list_box.add_child(g.button("Stock a pond with fish · 20 petals",g.stock_fish))
    note(g,g.list_box,"Fish for an unstocked pond in "+g.plots[g.current_plot].name+".")
   var grid=GridContainer.new()
@@ -131,13 +134,16 @@ static func shop(g) -> void:
   g.list_box.add_child(grid)
   for index in range(g.furniture.size()):
    var item=g.furniture[index]
+   if item.kind in GardenChallenge.EQUIPMENT and not GardenChallenge.active(g):continue
    var equipment=item.kind in GardenEquipment.KINDS or item.kind in GardenContainers.SPECS
    if equipment!=(section=="Equipment"):continue
    var id=index
    var button=g.button("",func():g.choose_furnishing(id),Vector2(120,0))
    button.name="Shop_"+item.kind
+   if item.kind in GardenChallenge.EQUIPMENT:button.disabled=g.day<5
    button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
    button.tooltip_text=item.name+" · "+item.hint+"\nChoose a place in the garden."
+   if item.kind in GardenChallenge.EQUIPMENT and g.day<5:button.tooltip_text+="\nAvailable day 5"
    grid.add_child(button)
    var content=card_content(button)
    portrait(content,"res://assets/ui/shop/"+item.kind)
@@ -148,6 +154,7 @@ static func shop(g) -> void:
  elif section=="Tools":
   var names={"can":"Watering can","shears":"Pruning shears","trowel":"Planting trowel","rake":"Garden rake","gather":"Gather reach"}
   var benefits={"can":"Wider watering; the water lasts longer.","shears":"A 10% wider pruning square per upgrade.","trowel":"Less waiting between planting clicks.","rake":"Wider paths and more found petals.","gather":"Gather square: %.1f to %.1f m."}
+  if GardenChallenge.active(g):benefits.can="Wider coverage; every drink fills moisture to four."
   var grid=GridContainer.new()
   grid.name="ToolCards";grid.columns=2
   grid.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -180,11 +187,12 @@ static func shop(g) -> void:
   for kind in ["water","prune"]:
    var k=kind
    var owned=g.automation.has(str(g.current_plot)+k)
+   if GardenChallenge.active(g) and k=="water":owned=g.objects.any(func(obj):return obj.kind=="soaker_controller" and int(obj.work.get("plot",-1))==g.current_plot)
    var name="Soaker system" if k=="water" else "Gentle auto-pruner"
    var action=g.button(name+(" · owned" if owned else " · 45 petals"),func():g.buy_automation(k))
-   action.disabled=owned or g.day<7 or g.coins<45
+   action.disabled=owned or g.day<(5 if GardenChallenge.active(g) and k=="water" else 7) or g.coins<45
    g.list_box.add_child(action)
-  if g.day<7:g.add_note("Care systems arrive on day 7.")
+  if g.day<7:g.add_note("Challenge soakers arrive on day 5; auto-pruners on day 7." if GardenChallenge.active(g) else "Care systems arrive on day 7.")
   g.list_box.add_child(g.button("Add 80 capacity · 65 petals",g.expand_bed))
   GardenBedSurfaces.shop(g)
   g.list_box.add_child(g.button("More garden space & milestones",func():
@@ -196,7 +204,7 @@ static func reserved(g, id: int) -> int:
  var total=0
  for order in g.orders:
   if not order.get("pending",false) and int(order.plant)==id:total+=int(order.count)
- return total
+ return total+GardenChallenge.reserved(g,id)
 
 static func orders(g) -> void:
  g.side_title.text="Orders"
@@ -227,7 +235,8 @@ static func orders(g) -> void:
   g.list_box.add_child(sell)
   g.add_note("Items needed for current requests stay in your basket.")
  else:
-  g.add_note("No deadlines. A thank-you whenever you're ready.")
+  if GardenChallenge.active(g):GardenChallengeUI.requests(g)
+  else:g.add_note("No deadlines. A thank-you whenever you're ready.")
   var indices=range(g.orders.size())
   indices.sort_custom(func(a,b):return ready(g,g.orders[a]) and not ready(g,g.orders[b]))
   var notes=[]
@@ -300,6 +309,7 @@ static func choice(g, parent: Node, key: String, title: String, values: Array, l
 
 static func settings(g) -> void:
  g.side_title.text="Settings"
+ g.list_box.add_child(g.button("Your gardens · "+("Challenge" if GardenChallenge.active(g) else "Free"),func():visit(g,"Gardens")))
  var bodies={}
  var headers={}
  for title in ["Sound","Controls","Display","Comfort & play","Save files","About"]:
@@ -417,6 +427,8 @@ const GUIDE={
 
 static func guide(g) -> void:
  g.side_title.text="Guide"
+ g.list_box.add_child(g.button("Your gardens",func():visit(g,"Gardens")))
+ if GardenChallenge.active(g):g.list_box.add_child(g.button("Challenge care & forecast",func():visit(g,"Care")))
  var topic=str(g.menu_sections.guide)
  if GUIDE.has(topic):
   g.list_box.add_child(g.button("Back to guide",func():g.menu_sections.guide="";g.refresh_sidebar();g.list_box.get_parent().set_deferred("scroll_vertical",0)))

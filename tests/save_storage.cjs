@@ -13,7 +13,9 @@ global.crypto = webcrypto;
     const bytes = encode(data); assert.deepEqual(validateSave(bytes), data);
     assert.match(await sha256(bytes), /^[0-9a-f]{64}$/);
   }
-  for (const data of [{ version: 4, plants: [] }, { version: 2, plants: null }, { version: 2, plants: [], player: [0] },
+  const challenge = { version: 4, garden_mode: 'challenge', plants: [], challenge: { rules: 1, patches: {} } };
+  assert.deepEqual(validateSave(encode(challenge)), challenge);
+  for (const data of [{ version: 3, garden_mode: 'challenge', plants: [] }, { version: 4, plants: [] }, { version: 2, plants: null }, { version: 2, plants: [], player: [0] },
     ...[2, null, [], { x: 1, z: 2, radius: .65 }, { x: 1, z: 2, radius: 'wide', until: 18 }]
       .map(patch => ({ version: 2, plants: [], watered_ground: { '2:4': patch } }))]) assert.throws(() => validateSave(encode(data)));
   assert.throws(() => validateSave(new Uint8Array([0xff]))); assert.throws(() => validateSave(new Uint8Array(4 * 1024 * 1024 + 1)));

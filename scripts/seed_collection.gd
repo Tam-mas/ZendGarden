@@ -248,6 +248,7 @@ static func details(g, plant: Dictionary) -> void:
  if not unlocked:g.add_note("Discover once to keep unlimited seeds. You have %d petals."%g.coins,16)
  if not plant.get("botanical_name","").is_empty():g.add_note(plant.botanical_name,18)
  g.add_note("%s layer · %.1f m at maturity · %d capacity"%[["Groundcover","Flowers","Shrubs","Canopy"][plant.layer],float(plant.height),plant.capacity],17)
+ if GardenChallenge.active(g):g.add_note(GardenChallenge.water_label(plant)+" · mulch and irrigation help with care",15)
  g.add_note("%d growing days · Likes %s\nGrows: %s\nWelcomes %s"%[plant.days,plant.condition,GardenCatalogue.growing_seasons(id),plant.animal],17)
  if plant.climber:g.add_note("Climbs nearby arbors and pergolas.",17)
  if custom:g.add_note(GardenPlantBreeding.traits(GardenPlantBreeding.form(g,uid)),17)
@@ -313,6 +314,11 @@ static func update_cards(g) -> void:
   growing.mouse_filter=Control.MOUSE_FILTER_IGNORE
   GardenMenus.stat(g,growing,p.condition,p.condition.capitalize(),"Preferred light or habitat")
   GardenMenus.stat(g,growing,"clock","%dd"%p.days,"Ideal growing days")
+  if GardenChallenge.active(g):
+   b.tooltip_text+="\n"+GardenChallenge.water_label(p)
+   var water=g.label(["Low water","Moderate water","High water"][GardenChallenge.water_class(p)],12)
+   water.mouse_filter=Control.MOUSE_FILTER_IGNORE
+   content.add_child(water)
   var size_row=GardenMenus.row(content)
   size_row.alignment=BoxContainer.ALIGNMENT_CENTER
   size_row.mouse_filter=Control.MOUSE_FILTER_IGNORE

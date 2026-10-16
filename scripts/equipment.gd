@@ -1,7 +1,7 @@
 class_name GardenEquipment
 extends RefCounted
 
-const KINDS=["compost_bays","worm_farm","mulch_bin","potting_bench","rain_barrel","shade_canopy","cold_frame","bird_feeder","hive","insect_hotel"]
+const KINDS=["compost_bays","worm_farm","mulch_bin","potting_bench","rain_barrel","shade_canopy","cold_frame","bird_feeder","hive","insect_hotel","reserve_tank","planter_drip","soaker_controller"]
 const RECIPES={
  "compost":{"station":"compost_bays","name":"Garden compost","input":8,"days":2,"output":4,"cost":0,"hint":"+10% growth for four mornings"},
  "castings":{"station":"worm_farm","name":"Worm castings","input":6,"days":3,"output":4,"cost":0,"hint":"Eases stress now and slows its return for four mornings"},
@@ -21,6 +21,9 @@ static func setup(g, obj: Dictionary) -> void:
   while g.objects.any(func(other):return other!=obj and other.get("uid","")==obj.uid) or g.loaded_data.get("objects",[]).any(func(other):return other.get("uid","")==obj.uid):
    g.workshop_state.sequence+=1;obj.uid="garden-%d"%int(g.workshop_state.sequence)
  if not obj.has("work"):obj["work"]={}
+ if GardenChallenge.active(g):
+  if obj.kind in GardenChallenge.SUPPLIES:obj.work.merge({"water":0.0,"upgraded":false},false)
+  if obj.kind in GardenChallenge.EQUIPMENT:obj.work.merge({"automatic":true,"priority":0,"supply":"","plot":g.nearest_plot(obj.pos)},false)
  if obj.kind=="rain_barrel":
   obj.work.merge({"water":0.0,"irrigating":false,"upgraded":false},false)
  if obj.kind=="shade_canopy":obj.work.merge({"shade_on":true},false)
@@ -29,6 +32,7 @@ static func setup(g, obj: Dictionary) -> void:
  visual(g,obj)
 
 static func visual(g, obj: Dictionary) -> void:
+ if GardenChallenge.active(g):GardenChallengeArt.equipment_visual(g,obj)
  var changed=false
  if obj.kind=="cold_frame":
   var lid=obj.node.find_child("ColdFrameLid*",true,false)
@@ -57,6 +61,7 @@ static func spare(g, produce_only: bool=false) -> Dictionary:
   var reserved=0
   for order in g.orders:
    if not order.get("pending",false) and int(order.plant)==id:reserved+=int(order.count)
+  reserved+=GardenChallenge.reserved(g,id)
   var amount=maxi(0,int(g.inventory[key])-reserved)
   if amount>0:result[str(id)]=amount
  return result
@@ -127,6 +132,7 @@ static func morning(g) -> void:
   var key=str(job.recipe)
   g.workshop_state.resources[key]=int(g.workshop_state.resources.get(key,0))+int(job.amount)
   g.workshop_state.jobs.erase(job)
+ if GardenChallenge.active(g):return
  for obj in g.objects:
   if obj.kind!="rain_barrel" or not obj.work.get("irrigating",false):continue
   for p in g.planted:
@@ -145,6 +151,10 @@ static func active(p: Dictionary, treatment: String, day: int) -> bool:
 
 static func treat(g, p: Dictionary, key: String) -> bool:
  if not GardenAreaProgression.allowed(g,p.pos):return false
+ if GardenChallenge.active(g) and key=="mulch":
+  g.hover_cell=p.pos;g.hover_plot=int(p.plot);g.hover_container_uid=str(p.get("container_uid",""))
+  var previous=g.mode;g.mode="mulch";GardenChallenge.care_action(g,false);g.mode=previous
+  return true
  if key not in ["compost","castings","mulch"] or active(p,key,g.day):return false
  if int(g.workshop_state.resources.get(key,0))<=0:return false
  if not p.has("treatments"):p["treatments"]={}

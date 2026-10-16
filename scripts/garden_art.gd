@@ -305,6 +305,7 @@ static func detailed_model(folder: String, kind: String) -> Node3D:
  return scene
 
 static func furnishing(kind: String) -> Node3D:
+ if kind in ["reserve_tank","planter_drip","soaker_controller"]:return GardenChallengeArt.model(kind)
  if kind=="sign": return sign_board()
  var n=detailed_model("areas/furniture" if kind in ["harvest_table","nursery_shelf","wind_chime"] else "shop",kind)
  if kind=="lantern":

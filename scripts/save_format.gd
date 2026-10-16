@@ -38,7 +38,9 @@ static func read(bytes: PackedByteArray, plant_count: int, kinds: Array) -> Dict
  return {"data":data}
 
 static func valid(data: Dictionary, plant_count: int, kinds: Array) -> bool:
- if not integer(data.get("version"),1,3) or not data.get("plants") is Array:return false
+ if not integer(data.get("version"),1,4) or not data.get("plants") is Array:return false
+ if not GardenChallenge.valid_save(data,plant_count):return false
+ if int(data.version)==4:kinds=kinds+GardenChallenge.EQUIPMENT
  for key in ["objects","orders","clean_paths","unlocked_plants","names","favourite_plants","recent_plants","owned_surfaces"]:
   if data.has(key) and not data[key] is Array:return false
  for key in ["settings","terrain","watered_ground","wild_collection","wild_pruning","inventory","upgrades","automation","expansions","path_widths","climate","tutorial","bed_surfaces"]:

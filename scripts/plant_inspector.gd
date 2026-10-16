@@ -43,7 +43,13 @@ static func lines(g, p: Dictionary) -> Array:
   text.insert(2,GardenPlantBreeding.traits(cultivar,fraction>=.78))
   if not cultivar.registered:text.insert(3,"Preserve this selection at the potting bench" if cultivar.observed else "Grow to flowering, then preserve this selection")
  if GardenContainers.is_contained(p):text.append("Container pocket %d"%(int(p.container_slot)+1))
- text.append("Thirsty · watering helps" if p.water<=0 else "Watered")
+ if GardenChallenge.active(g):
+  text.append(GardenChallenge.water_label(data)+" · "+GardenChallenge.condition(p))
+  text.append("Moisture %.1f / 4 · %s"%[float(p.water),"water to restore growth" if p.water<2 else "comfortable"])
+  var patch=g.challenge.patches.get(GardenChallenge.key_for(p),{})
+  if int(patch.get("weed",0))>=2:text.append("Nearby weeds · %d%% slower growth"%(25 if int(patch.weed)==3 else 15))
+  if GardenChallenge.mulched(g,p):text.append("Mulch protects this patch")
+ else:text.append("Thirsty · watering helps" if p.water<=0 else "Watered")
  var care=growth_context(g,p)
  if fraction<1: text.append(care.reason)
  if (float(p.get("watered_until",0))>GardenTools.now(g) if GardenContainers.is_contained(p) else GardenTools.growth_multiplier(g,p.pos,GardenTools.now(g))>1): text.append("Watering boost · +20% growth")
@@ -107,5 +113,8 @@ static func update(g) -> void:
  if allowed:
   g.inspector_lines=lines(g,g.planted[g.hover_target])
  elif not structure_lines.is_empty():g.inspector_lines=structure_lines
+ if GardenChallenge.active(g) and g.hover_valid and g.mode in ["weed","mulch","meadow"]:
+  g.inspector_lines=GardenChallengeUI.care_lines(g)
+  g.inspector_panel.visible=not g.touch_active()
  if not g.inspector_lines.is_empty():
   g.inspector_label.text="\n".join(g.inspector_lines)

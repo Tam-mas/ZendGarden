@@ -12,6 +12,9 @@ var picker: FileDialog
 var callback: JavaScriptObject
 var pending_bytes=PackedByteArray()
 var confirmation: PanelContainer
+var upload_path=""
+var upload_mode=""
+var upload_existed=false
 
 func setup(game) -> void:
  g=game
@@ -20,7 +23,7 @@ func backup_path() -> String:
  return g.SAVE_PATH+".before-upload.json"
 
 func filename() -> String:
- return "zend-garden-day-%d-%s.json" % [g.day,Time.get_datetime_string_from_system().replace(":","-")]
+ return ("zend-challenge-day-%d-%s.json" if GardenChallenge.active(g) else "zend-garden-day-%d-%s.json") % [g.day,Time.get_datetime_string_from_system().replace(":","-")]
 
 static func write_atomic(path: String, bytes: PackedByteArray) -> bool:
  var temporary=path+".tmp"
@@ -136,6 +139,9 @@ func preview(bytes: PackedByteArray, name: String) -> bool:
   g.toast(result.error)
   return false
  pending_bytes=bytes
+ upload_mode=str(result.data.get("garden_mode","free"))
+ upload_path=GardenModes.PATHS[upload_mode]
+ if g.smoke:upload_path=g.SAVE_PATH if upload_mode==g.garden_mode else g.SAVE_PATH+"."+upload_mode
  if is_instance_valid(picker):picker.queue_free()
  picker=null
  g.welcome_backdrop=ColorRect.new()
@@ -155,7 +161,7 @@ func preview(bytes: PackedByteArray, name: String) -> bool:
  title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  title.custom_minimum_size.x=width-28
  col.add_child(title)
- var note=g.label("%s\nDay %d · %d plants\n\nThis replaces the garden on this device. A copy of your current garden will be kept; download it from Settings if you want to return to it." % [name.left(100),int(result.data.get("day",1)),result.data.plants.size()],17)
+ var note=g.label("%s\nDay %d · %d plants\n\nThis replaces only the %s slot. Its previous save will be kept as a backup. Your other garden is preserved." % [name.left(100),int(result.data.get("day",1)),result.data.plants.size(),"Challenge Garden" if upload_mode=="challenge" else "Free Garden"],17)
  note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
  note.custom_minimum_size.x=width-28
  col.add_child(note)
@@ -188,12 +194,15 @@ func install_upload() -> bool:
  if not g.save_game():
   g.toast("Could not save your current garden. Upload cancelled.")
   return false
- var original=FileAccess.get_file_as_bytes(g.SAVE_PATH)
- if original.is_empty() or not write_atomic(backup_path(),original):
-  g.toast("Could not back up your current garden. Upload cancelled.")
-  return false
- if not write_atomic(g.SAVE_PATH,pending_bytes):
-  g.toast("Could not open that copy. Your current garden is unchanged.")
+ if upload_path.is_empty():upload_path=g.SAVE_PATH;upload_mode="challenge" if GardenChallenge.active(g) else "free"
+ upload_existed=FileAccess.file_exists(upload_path)
+ if upload_existed:
+  var original=FileAccess.get_file_as_bytes(upload_path)
+  if original.is_empty() or not write_atomic(upload_path+".before-upload.json",original):
+   g.toast("Could not back up the destination garden. Upload cancelled.")
+   return false
+ if not write_atomic(upload_path,pending_bytes):
+  g.toast("Could not open that copy. Your saved gardens are unchanged.")
   return false
  return true
 
@@ -202,10 +211,17 @@ func apply_upload() -> void:
   finish()
   return
  arrival_notice="Garden copy opened. Your previous garden is available in Settings."
+ var previous=g.garden_mode
+ if not g.smoke:
+  if not write_atomic(GardenModes.REGISTRY,JSON.stringify({"last":upload_mode}).to_utf8_buffer()):
+   rollback_upload();finish();g.toast("Could not select the imported garden.");return
+  GardenModes.requested=upload_mode
  var tree=g.get_tree()
  var error=tree.reload_current_scene()
  if error!=OK:
-  write_atomic(g.SAVE_PATH,FileAccess.get_file_as_bytes(backup_path()))
+  rollback_upload()
+  GardenModes.requested=previous
+  if not g.smoke:write_atomic(GardenModes.REGISTRY,JSON.stringify({"last":previous}).to_utf8_buffer())
   arrival_notice=""
   finish()
   g.toast("Could not reopen the garden. Your previous save has been restored.")
@@ -214,3 +230,7 @@ func _exit_tree() -> void:
  if OS.has_feature("web") and callback!=null:
   var bridge=JavaScriptBridge.get_interface("window").ZendSaveFiles
   if bridge!=null:bridge.cancel()
+
+func rollback_upload() -> void:
+ if upload_existed:write_atomic(upload_path,FileAccess.get_file_as_bytes(upload_path+".before-upload.json"))
+ elif FileAccess.file_exists(upload_path):DirAccess.remove_absolute(upload_path)
