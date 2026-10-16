@@ -1,6 +1,6 @@
 # Detailed botanical library
 
-## Second mushroom collection (IDs 288–297, release 73)
+## Second mushroom collection (IDs 288–297, included in release 72)
 
 The catalogue now has **298 entries**, including twenty mushrooms. The second
 collection lives in `mushrooms_02.blend`, with its own fifty meshes and packed
