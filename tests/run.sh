@@ -26,6 +26,19 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   cat "$import_log"
   exit 1
 fi
+moon_log="$(mktemp -t zend-garden-moon)"
+for args in "--script tests/moon.gd" "--fixed-fps 60 -- --moon-test"; do
+  "$GODOT_BIN" --headless --path "$PWD" ${=args} > "$moon_log" 2>&1 || { cat "$moon_log"; exit 1; }
+  if rg -q 'SCRIPT ERROR|ERROR:' "$moon_log" || ! rg -q 'MOON(_IN_GAME)?_RESULT: \[\]' "$moon_log"; then
+    cat "$moon_log"
+    exit 1
+  fi
+done
+"$GODOT_BIN" --rendering-method gl_compatibility --always-on-top --path "$PWD" -- --moon-test > "$moon_log" 2>&1 || { cat "$moon_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$moon_log" || ! rg -Fq 'MOON_IN_GAME_RESULT: []' "$moon_log"; then
+  cat "$moon_log"
+  exit 1
+fi
 challenge_log="$(mktemp -t zend-garden-challenge)"
 for args in "--script tests/challenge.gd" "--fixed-fps 60 -- --challenge-test"; do
   "$GODOT_BIN" --headless --path "$PWD" ${=args} > "$challenge_log" 2>&1 || { cat "$challenge_log"; exit 1; }

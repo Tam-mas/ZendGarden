@@ -109,6 +109,21 @@ Bird-bath behaviour lives in `scripts/bath_life.gd`. Bath visitors leave at nigh
 
 ### Music and ambience
 
+The lunar sky is derived from the existing saved `day` and `clock` by
+`GardenMoon.at`, with a 28-day cycle beginning near first quarter. It needs no new
+save fields or schema migration. `GardenWorldLighting` supplies a shared sun/moon
+orbital frame to `country_sky.gdshader`, which shades a spherical disc toward the
+sun, adds procedural surface markings, and renders the existing cloud layers in
+front. A shadow-free directional light and a small ambient lift vary with the
+illuminated fraction, altitude, daylight and weather. The morning transition
+temporarily follows a visible night moon and restores the player's view; Reduced
+motion bypasses it. `tests/moon.gd` covers phase order, geometry and midnight/wrap
+continuity. `--moon-test` covers both save formats, pauses, day skips and, with a
+renderer, eight phase images plus daytime/nighttime and phone captures in `/tmp`.
+After a browser build, `node tests/moon_browser.cjs` runs the same rendered checks
+in an isolated Chrome profile against loopback files, with external traffic blocked.
+Set `PLAYWRIGHT_MODULE` to an installed Playwright module if it is not on Node's path.
+
 The four areas have original synthesized themes with different melodies, spacing and instrument envelopes:
 
 | Area | Tune | Sound and mood |

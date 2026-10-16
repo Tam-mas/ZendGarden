@@ -1,3 +1,13 @@
+### [2026-10-16 18:12] Added
+
+**Tech:** `GardenMoon`, `country_sky.gdshader`, `GardenWorldLighting` — saved-time lunar orbit, eight phases and moonlit transitions, release 71
+
+**Dev:** Derive a continuous 28-day cycle from existing day/clock fields in both garden modes. Replace the fixed anti-solar glow with a spherical, sun-facing procedural moon behind cloud layers, allow daytime visibility, and vary soft directional/ambient moonlight with phase, altitude and weather. Follow visible night moons during morning transitions while restoring the player's view and preserving instant Reduced motion. Add responsive phase readouts, a guide button that finds the moon, phase/continuity/save/pause/transition tests and native/WebGL phase/viewport checks without changing save formats or growth rules.
+
+**Plain:** Watch the moon wax, wane and travel through the sky, with pale daytime appearances and gently lit nights.
+
+**Why:** Give each garden evening its own character and make the passage of garden time visible in the sky.
+
 ### [2026-10-14 11:33] Added
 
 **Tech:** `scripts/garden_challenge.gd` / `GardenModes` — separate Challenge Garden mode and format-4 saves

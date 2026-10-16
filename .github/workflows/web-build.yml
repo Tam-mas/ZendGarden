@@ -65,6 +65,10 @@ jobs:
         run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --fixed-fps 60 --path . -- --milestones-test
       - name: Test continuous garden land and walking seams
         run: .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --fixed-fps 60 --path . -- --land-test
+      - name: Test lunar phases, sky motion and saved time
+        run: |
+          .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/moon.gd
+          .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --fixed-fps 60 --path . -- --moon-test
       - name: Test separate Challenge Garden and care mechanics
         run: |
           .web-tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script tests/challenge.gd
