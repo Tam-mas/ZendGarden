@@ -1,8 +1,8 @@
 class_name GardenCatalogue
 extends RefCounted
 
-const CATEGORIES = ["Flowers", "Grasses", "Shrubs", "Trees", "Natives", "Produce", "Cacti & succulents"]
-const COLLECTION_GROUPS = ["Orchids", "Wildflowers", "Cottage flowers", "Flowering bushes", "Grasses & groundcovers", "Trees", "Australian natives", "Fruit & vegetables", "Fruit trees", "Cacti & succulents", "Rainforest & tree ferns"]
+const CATEGORIES = ["Flowers", "Grasses", "Shrubs", "Trees", "Natives", "Produce", "Cacti & succulents", "Mushrooms"]
+const COLLECTION_GROUPS = ["Orchids", "Wildflowers", "Cottage flowers", "Flowering bushes", "Grasses & groundcovers", "Trees", "Australian natives", "Fruit & vegetables", "Fruit trees", "Cacti & succulents", "Rainforest & tree ferns", "Mushrooms"]
 const ROWS = [
  ["Cosmos", "Flowers", "efb0ba", 1, 2, "sun", "butterflies"],
  ["Lavender", "Flowers", "a894cc", 1, 3, "sun", "bees"],
@@ -281,11 +281,21 @@ const ROWS = [
  ["Black bean tree", "Trees", "c69245", 3, 28, "sun", "birds"],
  ["Blue quandong", "Trees", "779cac", 3, 31, "sun", "birds"],
  ["Candlenut", "Trees", "b7a26a", 3, 29, "sun", "birds"],
- ["Red lauan", "Trees", "bc976b", 3, 40, "sun", "birds"]
+ ["Red lauan", "Trees", "bc976b", 3, 40, "sun", "birds"],
+ ["Fly agaric", "Mushrooms", "c94632", 0, 8, "shade", "none"],
+ ["Porcini", "Mushrooms", "94613b", 0, 9, "shade", "none"],
+ ["Golden chanterelle", "Mushrooms", "eab044", 0, 7, "shade", "none"],
+ ["Pearl oyster", "Mushrooms", "a5a49d", 0, 7, "shade", "none"],
+ ["Pink oyster", "Mushrooms", "df8d9c", 0, 7, "shade", "none"],
+ ["Shiitake", "Mushrooms", "8d5e40", 0, 9, "shade", "none"],
+ ["Common morel", "Mushrooms", "b49a61", 0, 10, "shade", "none"],
+ ["Lion's mane", "Mushrooms", "ece5cf", 0, 10, "shade", "none"],
+ ["Amethyst deceiver", "Mushrooms", "936fa9", 0, 7, "shade", "none"],
+ ["Shaggy inkcap", "Mushrooms", "e9e3d5", 0, 8, "shade", "none"]
 ]
 
 # Ideal watered growing days, not calendar deadlines. Twelve days form a season.
-const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16,7,7,7,7,7,7,7,7,7,7,7,7,14,14,14,14,14,14,14,14,14,14,8,8,9,9,11,10,10,12,9,9,11,8,9,10,10,7,6,6,7,8,11,8,9,8,9,9,9,8,7,8,11,11,12,11,11,12,10,11,8,10,18,18,20,20,20,18,16,18,20,18,17,18,16,19,17,18,16,17,18,17,25,23,23,21,23,24,25,25,23,22,23,23,24,21,26,23,24,21,22,23,27,20,19,17,13,14,13,13,14,14,16,13,16,14,13,13,13,14,12,12,23,24,24,23,25,21,29,27,22,25,28,32,37,35,34,30,28,31,29,40]
+const GROWTH_DAYS=[4,7,3,6,8,10,12,4,7,5,10,4,5,6,5,8,6,9,5,4,14,12,10,16,15,10,14,12,24,20,24,28,18,26,20,22,8,5,18,16,12,20,16,9,7,28,5,9,3,12,6,2,5,10,3,9,7,10,5,12,10,10,10,12,7,10,10,12,18,18,20,20,18,14,14,16,14,14,36,32,28,28,24,24,22,24,22,22,24,22,22,28,28,26,28,18,20,14,12,14,9,10,10,12,8,12,14,12,14,9,10,14,11,9,9,12,18,14,18,22,20,12,16,12,10,10,9,14,22,10,10,18,16,16,9,16,7,7,7,7,7,7,7,7,7,7,7,7,14,14,14,14,14,14,14,14,14,14,8,8,9,9,11,10,10,12,9,9,11,8,9,10,10,7,6,6,7,8,11,8,9,8,9,9,9,8,7,8,11,11,12,11,11,12,10,11,8,10,18,18,20,20,20,18,16,18,20,18,17,18,16,19,17,18,16,17,18,17,25,23,23,21,23,24,25,25,23,22,23,23,24,21,26,23,24,21,22,23,27,20,19,17,13,14,13,13,14,14,16,13,16,14,13,13,13,14,12,12,23,24,24,23,25,21,29,27,22,25,28,32,37,35,34,30,28,31,29,40,8,9,7,7,7,9,10,10,7,8]
 const SEASONAL={0:["Spring","Summer"],3:["Summer"],4:["Spring","Summer"],6:["Spring"],7:["Spring","Summer"],8:["Spring"],9:["Spring"],11:["Spring","Summer"],21:["Spring"],23:["Autumn","Winter","Spring"],24:["Spring","Summer"],28:["Spring","Summer"],30:["Spring","Summer","Autumn"],33:["Spring","Summer"],35:["Spring","Summer","Autumn"],38:["Winter","Spring"],47:["Summer"],48:["Spring","Autumn","Winter"],49:["Summer","Autumn"],50:["Spring","Summer"],52:["Spring","Autumn"],53:["Summer"],54:["Spring","Summer"],55:["Summer"],56:["Summer"],57:["Summer"],58:["Spring","Autumn"],59:["Summer"],60:["Spring", "Summer"],61:["Spring"],62:["Winter", "Spring"],63:["Summer", "Autumn"],64:["Spring"],65:["Spring", "Summer"],66:["Spring", "Summer"],67:["Summer"],73:["Spring", "Summer", "Autumn"],74:["Spring", "Summer", "Autumn"],75:["Spring", "Summer", "Autumn"],76:["Spring", "Summer", "Autumn"],77:["Spring", "Summer", "Autumn"],82:["Summer", "Autumn"],83:["Summer", "Autumn"],84:["Summer"],85:["Summer"],86:["Summer"],87:["Summer"],94:["Summer"],95:["Spring"],96:["Spring", "Summer"],97:["Spring", "Summer"],98:["Spring", "Summer"],99:["Spring"],100:["Spring", "Autumn", "Winter"],101:["Spring", "Autumn", "Winter"],102:["Summer"],103:["Autumn", "Winter"],104:["Spring", "Autumn", "Winter"],105:["Spring", "Summer"],106:["Spring","Summer","Autumn"],107:["Spring","Summer","Autumn"],108:["Spring","Summer","Autumn"],110:["Spring","Summer","Autumn"],111:["Spring","Summer","Autumn"],113:["Spring","Summer","Autumn"],115:["Spring","Summer","Autumn"],116:["Spring","Summer","Autumn"],117:["Spring","Summer","Autumn"],118:["Spring","Summer","Autumn"],119:["Spring","Summer","Autumn"],120:["Spring","Summer","Autumn"],121:["Spring","Summer","Autumn"],122:["Spring","Summer","Autumn"],124:["Spring","Summer","Autumn"],125:["Spring","Summer","Autumn"],127:["Spring","Summer","Autumn"],128:["Spring","Summer","Autumn"],129:["Spring","Summer","Autumn"],130:["Spring","Summer","Autumn"],131:["Spring","Summer","Autumn"],132:["Spring","Summer","Autumn"],134:["Spring","Summer","Autumn"],135:["Spring","Summer","Autumn"],123:["Autumn","Winter","Spring"],133:["Autumn","Winter","Spring"]}
 const BOTANICAL_NAMES={106: "Miscanthus sinensis 'Zebrinus'", 107: "Calamagrostis × acutiflora 'Karl Foerster'", 108: "Panicum virgatum 'Heavy Metal'", 109: "Hakonechloa macra 'Aureola'", 110: "Imperata cylindrica 'Red Baron'", 111: "Molinia caerulea subsp. arundinacea 'Transparent'", 112: "Deschampsia cespitosa", 113: "Briza media", 114: "Sesleria autumnalis", 115: "Muhlenbergia capillaris", 116: "Echinocactus grusonii", 117: "Opuntia microdasys", 118: "Opuntia ficus-indica", 119: "Pachycereus marginatus", 120: "Cephalocereus senilis", 121: "Mammillaria elongata", 122: "Astrophytum asterias", 123: "Schlumbergera truncata", 124: "Echeveria elegans", 125: "Echeveria agavoides 'Lipstick'", 126: "Sempervivum tectorum", 127: "Aloe vera", 128: "Agave americana", 129: "Haworthiopsis attenuata", 130: "Haworthia cooperi", 131: "Crassula ovata", 132: "Crassula ovata 'Gollum'", 133: "Aeonium 'Zwartkop'", 134: "Sedum × rubrotinctum", 135: "Lithops aucampiae", 136: "Ophiopogon japonicus 'Nana'", 137: "Ophiopogon planiscapus 'Nigrescens'", 138: "Zoysia tenuifolia", 139: "Bouteloua dactyloides", 140: "Agrostis stolonifera", 141: "Festuca rubra", 142: "Festuca ovina", 143: "Festuca gautieri", 144: "Sesleria caerulea", 145: "Carex oshimensis 'Evergold'", 146: "Carex conica 'Snowline'", 147: "Acorus gramineus 'Minimus Aureus'"}
 
@@ -945,6 +955,59 @@ const EXPANSION_METADATA={
  }
 }
 
+const MUSHROOM_METADATA={
+ "278": {
+  "botanical_name": "Amanita muscaria",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "279": {
+  "botanical_name": "Boletus edulis",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "280": {
+  "botanical_name": "Cantharellus cibarius",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "281": {
+  "botanical_name": "Pleurotus ostreatus",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "282": {
+  "botanical_name": "Pleurotus djamor",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "283": {
+  "botanical_name": "Lentinula edodes",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "284": {
+  "botanical_name": "Morchella esculenta",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "285": {
+  "botanical_name": "Hericium erinaceus",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "286": {
+  "botanical_name": "Laccaria amethystina",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ },
+ "287": {
+  "botanical_name": "Coprinus comatus",
+  "collection_group": "Mushrooms",
+  "growth_kind": "mushroom"
+ }
+}
+
 static func saved_age(id: int, age: float, version: int) -> float:
  return age/float(ROWS[id][4])*GROWTH_DAYS[id] if version==1 else age
 
@@ -967,6 +1030,8 @@ static func plants() -> Array:
    for key in FLOWER_METADATA[str(i)]:result.back()[key]=FLOWER_METADATA[str(i)][key]
   if EXPANSION_METADATA.has(str(i)):
    for key in EXPANSION_METADATA[str(i)]:result.back()[key]=EXPANSION_METADATA[str(i)][key]
+  if MUSHROOM_METADATA.has(str(i)):
+   for key in MUSHROOM_METADATA[str(i)]:result.back()[key]=MUSHROOM_METADATA[str(i)][key]
  return result
 
 static func furnishings() -> Array:

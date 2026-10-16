@@ -1,5 +1,68 @@
 # Detailed botanical library
 
+## Mushroom collection (IDs 278–287, release 72)
+
+The catalogue has **288 entries**. `mushroom_data.py` records the ten identities;
+`mushroom_geometry.py` builds their species silhouettes with the existing shared
+Blender primitives. `build_mushrooms.py` writes only `mushrooms.blend`, the ten
+mature GLBs and ten supplementary growth GLBs, appends their manifest entries
+and regenerates the measured height table. The packed editable library contains
+50 meshes. Rebuild it last, after the older botanical builders, as in `rebuild.sh`.
+The separate Blender process preserves the interactive scene and preferences.
+
+| ID | Name | Species | Authored detail |
+| --- | --- | --- | --- |
+| 278 | Fly agaric | Amanita muscaria | Red caps, raised pale scales, white gills, stem rings and bulbs |
+| 279 | Porcini | Boletus edulis | Chestnut domes, stout stems and pores beneath caps |
+| 280 | Golden chanterelle | Cantharellus cibarius | Wavy golden funnels and forked underside ridges |
+| 281 | Pearl oyster | Pleurotus ostreatus | Layered grey fans, side stems, gills and hardwood base |
+| 282 | Pink oyster | Pleurotus djamor | Pink fans, pale pink undersides and hardwood base |
+| 283 | Shiitake | Lentinula edodes | Brown scaled caps, pale gills and hardwood base |
+| 284 | Common morel | Morchella esculenta | Recessed honeycomb cells and raised tan rims |
+| 285 | Lion’s mane | Hericium erinaceus | Cream lobes with hanging tapered spines on hardwood |
+| 286 | Amethyst deceiver | Laccaria amethystina | Slender violet stems and small wavy purple caps |
+| 287 | Shaggy inkcap | Coprinus comatus | Tall white caps, downward flakes and dark lower margins |
+
+The collection reuses packed botanical smooth-tissue colour, normal and
+roughness maps through `Surfaces`, with species pigments and modelled relief.
+All tissue is rigid and uses the existing local organ-attachment channels;
+internal Seedling/Juvenile/Buds names retain runtime compatibility while player
+labels describe pins, young mushrooms and developing caps. Heights of 0.22–0.36 m
+are garden display choices, and shade preferences and 7–10 growing days follow
+the existing game's care rules. These are ornamental collection entries, separate
+from Produce, with no pollinator claim. Existing IDs 0–277, their mature/growth
+exports, saves and update dismissals are preserved.
+
+Reference morphology: [fly agaric](https://www.woodlandtrust.org.uk/trees-woods-and-wildlife/fungi-and-lichens/fly-agaric/),
+[porcini](https://www.woodlandtrust.org.uk/trees-woods-and-wildlife/fungi-and-lichens/penny-bun/),
+[chanterelle](https://www.woodlandtrust.org.uk/trees-woods-and-wildlife/fungi-and-lichens/chanterelle/),
+[morel](https://www.first-nature.com/fungi/morchella-esculenta.php),
+[lion’s mane](https://www.first-nature.com/fungi/hericium-erinaceus.php) and the
+[Woodland Trust mushroom guide](https://www.woodlandtrust.org.uk/blog/2025/11/types-of-mushroom/).
+References inform the model shapes; no photographs are included in the assets.
+
+Run these commands sequentially, with approved normal OS access for Blender
+and Godot as described in the root execution notes:
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender --background --python-exit-code 1 --python art_source/build_mushrooms.py
+/Applications/Blender.app/Contents/MacOS/Blender --background --python-exit-code 1 --python tests/check_blender_sources.py -- --mushrooms-only
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --editor --import
+/Applications/Godot.app/Contents/MacOS/Godot --rendering-method gl_compatibility --always-on-top --path . --script art_source/render_plant_cards.gd -- --ids=278,279,280,281,282,283,284,285,286,287 --review --portraits --stages
+python3 tools/compose_mushroom_reviews.py
+python3 tests/check_mushrooms.py
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/mushrooms.gd
+```
+
+The review composer requires Pillow. Portraits are game renders; labelled mature
+and five-stage contact sheets are under ignored `captures/mushrooms/`. The ten
+mature models total 183,384 triangles and growth models total 86,416, within the
+separate 350,000/180,000 collection budgets and existing per-model limits.
+General plant, growth, attachment, family and catalogue checks cover all 288
+entries. The mushroom runtime regression covers search, stage visibility, rigid
+materials, cap attachments, batch refresh and mixed old/new garden save restores.
+Physical mobile performance has not been measured.
+
 ## Current full botanical art pass
 
 The current catalogue has **218 plants**. `plant_art_sample.blend` preserves the

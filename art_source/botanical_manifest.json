@@ -2781,5 +2781,95 @@
     "source": "art_source/botanical_2026_06.blend",
     "morphology_version": 5,
     "botanical_2026_revision": 1
+  },
+  {
+    "id": 278,
+    "name": "Fly agaric",
+    "vertices": 9360,
+    "triangles": 15744,
+    "path": "assets/plants/plant_278.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 279,
+    "name": "Porcini",
+    "vertices": 11088,
+    "triangles": 17652,
+    "path": "assets/plants/plant_279.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 280,
+    "name": "Golden chanterelle",
+    "vertices": 5720,
+    "triangles": 10760,
+    "path": "assets/plants/plant_280.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 281,
+    "name": "Pearl oyster",
+    "vertices": 13208,
+    "triangles": 24464,
+    "path": "assets/plants/plant_281.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 282,
+    "name": "Pink oyster",
+    "vertices": 13208,
+    "triangles": 24464,
+    "path": "assets/plants/plant_282.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 283,
+    "name": "Shiitake",
+    "vertices": 11528,
+    "triangles": 18956,
+    "path": "assets/plants/plant_283.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 284,
+    "name": "Common morel",
+    "vertices": 16224,
+    "triangles": 27108,
+    "path": "assets/plants/plant_284.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 285,
+    "name": "Lion's mane",
+    "vertices": 8384,
+    "triangles": 14056,
+    "path": "assets/plants/plant_285.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 286,
+    "name": "Amethyst deceiver",
+    "vertices": 5400,
+    "triangles": 10280,
+    "path": "assets/plants/plant_286.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
+  },
+  {
+    "id": 287,
+    "name": "Shaggy inkcap",
+    "vertices": 13340,
+    "triangles": 19900,
+    "path": "assets/plants/plant_287.glb",
+    "source": "art_source/mushrooms.blend",
+    "morphology_version": 6
   }
 ]

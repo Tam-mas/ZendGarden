@@ -567,7 +567,7 @@
     "bees"
   ],
   [
-    "Dahlia 'Café au Lait'",
+    "Dahlia 'Caf\u00e9 au Lait'",
     "Flowers",
     "eed8c0",
     1,
@@ -2500,5 +2500,95 @@
     40,
     "sun",
     "birds"
+  ],
+  [
+    "Fly agaric",
+    "Mushrooms",
+    "c94632",
+    0,
+    8,
+    "shade",
+    "none"
+  ],
+  [
+    "Porcini",
+    "Mushrooms",
+    "94613b",
+    0,
+    9,
+    "shade",
+    "none"
+  ],
+  [
+    "Golden chanterelle",
+    "Mushrooms",
+    "eab044",
+    0,
+    7,
+    "shade",
+    "none"
+  ],
+  [
+    "Pearl oyster",
+    "Mushrooms",
+    "a5a49d",
+    0,
+    7,
+    "shade",
+    "none"
+  ],
+  [
+    "Pink oyster",
+    "Mushrooms",
+    "df8d9c",
+    0,
+    7,
+    "shade",
+    "none"
+  ],
+  [
+    "Shiitake",
+    "Mushrooms",
+    "8d5e40",
+    0,
+    9,
+    "shade",
+    "none"
+  ],
+  [
+    "Common morel",
+    "Mushrooms",
+    "b49a61",
+    0,
+    10,
+    "shade",
+    "none"
+  ],
+  [
+    "Lion's mane",
+    "Mushrooms",
+    "ece5cf",
+    0,
+    10,
+    "shade",
+    "none"
+  ],
+  [
+    "Amethyst deceiver",
+    "Mushrooms",
+    "936fa9",
+    0,
+    7,
+    "shade",
+    "none"
+  ],
+  [
+    "Shaggy inkcap",
+    "Mushrooms",
+    "e9e3d5",
+    0,
+    8,
+    "shade",
+    "none"
   ]
 ]

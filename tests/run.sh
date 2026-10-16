@@ -6,6 +6,7 @@ python3 tests/check_greenhouse.py
 python3 tests/check_mountains.py
 python3 tests/check_plants.py
 python3 tests/check_plant_growth.py
+python3 tests/check_mushrooms.py
 python3 tests/check_plant_art_full.py --enforce-baseline-budget
 python3 tests/check_fruit_trees.py
 python3 tests/check_botanical_additions.py
@@ -59,14 +60,14 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$menu_log" || ! rg -Fq 'MENU_REBUILD_RESULT: []'
   cat "$menu_log"
   exit 1
 fi
-for check in flower_collection flower_additions plant_art_sample plant_art_full area_atlas garden_performance; do
+for check in mushrooms flower_collection flower_additions plant_art_sample plant_art_full area_atlas garden_performance; do
   flower_log="$(mktemp -t zend-garden-flower)"
   "$GODOT_BIN" --headless --path "$PWD" --script "tests/${check}.gd" > "$flower_log" 2>&1 || { cat "$flower_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:|RESULT: \[[^]]' "$flower_log"; then
     cat "$flower_log"
     exit 1
   fi
-  rg -q 'FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]|PLANT_ART_SAMPLE_RESULT:.*"failures":\[\]|PLANT_ART_FULL_RESULT:.*"failures":\[\]|AREA_ATLAS_RESULT: \[\]|GARDEN_PERFORMANCE_RESULT:.*"failures":\[\]' "$flower_log"
+  rg -q 'MUSHROOMS_RESULT: \[\]|FLOWER_COLLECTION_RESULT: \[\]|FLOWER_ADDITIONS_RESULT: \[\]|PLANT_ART_SAMPLE_RESULT:.*"failures":\[\]|PLANT_ART_FULL_RESULT:.*"failures":\[\]|AREA_ATLAS_RESULT: \[\]|GARDEN_PERFORMANCE_RESULT:.*"failures":\[\]' "$flower_log"
 done
 breeding_log="$(mktemp -t zend-garden-breeding)"
 "$GODOT_BIN" --headless --path "$PWD" --script tests/plant_breeding.gd > "$breeding_log" 2>&1 || { cat "$breeding_log"; exit 1; }

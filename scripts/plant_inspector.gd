@@ -37,6 +37,7 @@ static func lines(g, p: Dictionary) -> Array:
  var data: Dictionary=g.catalogue[p.id]
  var fraction=clampf(p.age/float(data.days),0,1)
  var text=[data.name+" · "+["Groundcover","Flowers","Shrubs","Canopy"][data.layer],"%s · %d%% grown"%[GardenPlantGrowth.stage(fraction,data),roundi(fraction*100)]]
+ if data.category=="Mushrooms":text[0]=data.name+" · Mushrooms"
  var cultivar=GardenPlantBreeding.of_plant(g,p)
  if not cultivar.is_empty():
   text[0]=GardenPlantBreeding.title(g,cultivar)
