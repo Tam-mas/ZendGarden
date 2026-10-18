@@ -162,6 +162,8 @@ var hud_foot: PanelContainer
 var hud_capacity: PanelContainer
 var compact_hud: Label
 var preview_error = ""
+var night_lights: GardenNightLights
+var torch_button: Button
 var held_tool: Node3D
 var tool_models: Dictionary = {}
 var menu_theme: Theme
@@ -237,6 +239,7 @@ func _ready() -> void:
  if "--areas-showcase" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://areas-showcase-save.json"
  if "--cohesion-review" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://cohesion-review-save.json"
  if "--challenge-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://challenge-test.json";garden_mode="challenge"
+ if "--night-lights-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://night-lights-"+str(OS.get_process_id())+".json"
  if "--moon-test" in OS.get_cmdline_user_args():smoke=true;SAVE_PATH="user://moon-test-"+str(OS.get_process_id())+".json"
  if not browser_save_check():
   save_load_blocked=true
@@ -300,7 +303,8 @@ func _ready() -> void:
  GardenChallenge.setup(self)
  if GardenChallenge.active(self) and loaded_data.is_empty() and not smoke:GardenMenus.visit(self,"Care")
  if not settings.intro_seen and not smoke: show_welcome()
- if "--moon-test" in OS.get_cmdline_user_args():call_deferred("run_moon_test")
+ if "--night-lights-test" in OS.get_cmdline_user_args():call_deferred("run_night_lights_test")
+ elif "--moon-test" in OS.get_cmdline_user_args():call_deferred("run_moon_test")
  elif "--challenge-test" in OS.get_cmdline_user_args():call_deferred("run_challenge_test")
  elif "--menu-test" in OS.get_cmdline_user_args():call_deferred("run_menu_test")
  elif "--tutorial-test" in OS.get_cmdline_user_args():call_deferred("run_tutorial_test")
@@ -494,6 +498,9 @@ func make_camera() -> void:
   for kind in ["weed_tool","mulch_tool"]:
    var model=GardenChallengeArt.model(kind)
    held_tool.add_child(model);tool_models[kind]=model;model.hide()
+ night_lights=GardenNightLights.new()
+ add_child(night_lights)
+ night_lights.setup(self)
  update_camera(1.0)
 
 func panel_style(color: Color, _radius: int = 18) -> StyleBoxTexture:
@@ -696,6 +703,11 @@ func make_ui() -> void:
  view_button.add_theme_font_size_override("font_size",14)
  view_button.tooltip_text="Hide the HUD and held tool. Press any key, or click/tap, to return."
  ui.add_child(view_button)
+ torch_button=button("Torch · T",func():night_lights.toggle(),Vector2(158,36))
+ torch_button.name="TorchToggle"
+ torch_button.add_theme_font_size_override("font_size",14)
+ torch_button.tooltip_text="Carry a torch while walking or gardening. T switches it on or puts it away."
+ ui.add_child(torch_button)
  inspector_panel=panel_at(Vector2(1054,278),Vector2(362,0))
  inspector_label=label("",15)
  inspector_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -839,6 +851,8 @@ func update_hud() -> void:
  hud_tools.visible=menus
  hud_foot.hide()
  view_button.visible=not touch_active() and not menus and not photo_mode and not day_transition
+ torch_button.visible=view_button.visible
+ torch_button.text="Torch on · T" if night_lights.torch_on else "Torch off · T"
  compact_hud.visible=not menus and not photo_mode and not day_transition
  hud_capacity.visible=not photo_mode and not day_transition and ((hover_valid and mode!="walk") or (menus and active_tab=="Shop"))
  tip_label.visible=not photo_mode and not day_transition
@@ -864,7 +878,7 @@ func update_hud() -> void:
   status_label.text+="\n"+catalogue[p.id].name+" · "+("ready" if p.age>=catalogue[p.id].days else str(int(100*p.age/catalogue[p.id].days))+"% grown")
  for key in mode_buttons:
   GardenTheme.choose(mode_buttons[key],key==mode)
- var tips = {"walk":"WASD / arrows walk  ·  Space jump (twice for double jump)  ·  Mouse look  ·  Tab menus  ·  E interact / use equipment  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil or a planter pocket & click  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Hold click and sweep to water · +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or container frame, then its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
+ var tips = {"walk":"WASD / arrows walk  ·  Space jump (twice for double jump)  ·  Mouse look  ·  T torch  ·  Tab menus  ·  E interact / use equipment  ·  F pet  ·  C call companions  ·  G next morning", "plant":"Aim at soil or a planter pocket & click  ·  Tab seeds  ·  L layer  ·  G next morning", "water":"Hold click and sweep to water · +20% growth for one game day · Rewatering refreshes the timer", "prune":"[ / ] resize square · %.2f m / %.2f m unlocked · Three cuts clear plants outside beds"%[GardenTools.prune_width(self),GardenTools.prune_max(self)], "harvest":"Hold click and sweep to gather all ready plants · %.1f m square · Upgrade Gather reach in Shop"%GardenTools.gather_width(self), "move":"Click a plant or container frame, then its new home  ·  L target layer", "remove":"Remove a plant or ornament (does not raise terrain)  ·  L target layer  ·  Seeds stay yours", "rake":"Rake open lawn into a grooved path. Aim beside it to extend; upgrades widen it.", "hoe":"Hold click to %s ground · R switches raise/lower · Terrain edits are saved"%("raise" if hoe_raise else "lower"), "build":"Click to place "+furniture[selected_furniture].name+"  ·  Esc cancel"}
  if GardenChallenge.active(self):
   tips.merge({"weed":"Hold and sweep to clear weeds safely. Established patches take two seconds.","mulch":"One portion per patch or container · six mornings of protection · K care", "meadow":"Return an empty cultivated patch to meadow · plants must be moved first"})
  tip_label.text = tips.get(mode,"")
@@ -1215,6 +1229,7 @@ func _unhandled_input(event: InputEvent) -> void:
    KEY_ENTER: if tutorial_state.get("active",false):GardenTutorial.action(self)
    KEY_C: if mode=="walk":GardenLeisure.call_pet(self,0);GardenLeisure.call_pet(self,1)
    KEY_F: if mode=="walk":greet_pet()
+   KEY_T: night_lights.toggle()
    KEY_F8: open_test_entry()
    KEY_1: set_mode("walk")
    KEY_2: set_mode("plant")
@@ -2795,6 +2810,17 @@ func run_moon_test() -> void:
  var failures=[]
  await preload("res://tests/moon_in_game.gd").run(self,failures)
  print("MOON_IN_GAME_RESULT: ",JSON.stringify(failures))
+ DirAccess.remove_absolute(SAVE_PATH)
+ for voice in find_children("*","AudioStreamPlayer",true,false)+find_children("*","AudioStreamPlayer3D",true,false):voice.stop()
+ OS.delay_msec(60)
+ for frame in range(3):await get_tree().process_frame
+ get_tree().quit(0 if failures.is_empty() else 1)
+
+func run_night_lights_test() -> void:
+ get_tree().create_timer(150).timeout.connect(func():push_error("Night lighting test timed out");get_tree().quit(1))
+ var failures=[]
+ await preload("res://tests/night_lighting.gd").run(self,failures)
+ print("NIGHT_LIGHTING_RESULT: ",JSON.stringify(failures))
  DirAccess.remove_absolute(SAVE_PATH)
  for voice in find_children("*","AudioStreamPlayer",true,false)+find_children("*","AudioStreamPlayer3D",true,false):voice.stop()
  OS.delay_msec(60)

@@ -115,9 +115,14 @@ static func stat(g, parent: Node, kind: String, text: String, description: Strin
 
 static func shop(g) -> void:
  g.side_title.text="Shop · %d petals"%g.coins
- sections(g,["Decor","Equipment","Tools","Bed care"],"shop")
+ sections(g,["Decor","Lighting","Equipment","Tools","Bed care"],"shop")
  var section=str(g.menu_sections.shop)
- if section in ["Decor","Equipment"]:
+ if section in ["Decor","Lighting","Equipment"]:
+  if section=="Lighting":
+   var carry=g.button("Put torch away" if g.night_lights.torch_on else "Carry torch · included",func():g.night_lights.toggle();g.refresh_sidebar())
+   carry.name="ShopTorch"
+   g.list_box.add_child(carry)
+   note(g,g.list_box,"T switches your carried torch on or off. On touch, choose Carry torch in the tool tray. Garden lights switch on at dusk and off after dawn.")
   if section=="Equipment":
    g.list_box.add_child(g.button("My equipment, supplies & nursery",func():GardenWorkshop.open(g)))
    if GardenChallenge.active(g):
@@ -135,6 +140,7 @@ static func shop(g) -> void:
   for index in range(g.furniture.size()):
    var item=g.furniture[index]
    if item.kind in GardenChallenge.EQUIPMENT and not GardenChallenge.active(g):continue
+   if (item.kind in GardenNightLights.SPECS)!=(section=="Lighting"):continue
    var equipment=item.kind in GardenEquipment.KINDS or item.kind in GardenContainers.SPECS
    if equipment!=(section=="Equipment"):continue
    var id=index
@@ -422,8 +428,9 @@ const GUIDE={
  "Cultivars & nursery":["Preserve a flowering selection at a potting bench, name it and keep it in My cultivars. Cross two forms of the same species, grow a tray of four seedlings and choose the next generation.","Open My cultivars from Seeds for traits, parentage and your library. Equipment and nursery management is under Shop → Equipment. Planted containers keep their plants when moved; packed-away plants are kept in the nursery."],
  "Wildlife & companions":["Native plants welcome native birds. Two flowering plants or produce welcome lady beetles; three flowering plants welcome bees and butterflies. Trees or bird baths welcome songbirds; ponds welcome frogs and dragonflies. Moss and dusk bring fireflies. A beehive brings daytime bees; rabbits occasionally visit open ground.","Stock a placed pond from Shop → Equipment. Name and call companions under Guide → Companions. E rests near a bench, pergola or pond; F pets a nearby companion and C calls both. While resting, invite them to settle beside you."],
  "Moving & arranging":["Choose Move to rearrange a plant, object or planted container. Aim at it, pick it up and choose its new home. Rotate an object while placing or moving: Q/E on keyboard, Turn left/right on touch.","Walk up to a sign and point at its board to see Edit sign. Press E or tap the touch action, change the lettering or colour, then Save changes to return to your garden."],
+ "Night walks & lighting":["Carry a torch with T, the Torch button, or Carry torch in the touch tool tray. Its beam follows your view and stays available while you use other tools. Switch it off the same way. The torch is included and has no batteries to buy.","Shop → Lighting has stone lanterns, low path lanterns, tall garden lampposts and tripod floodlights. Placed lights switch on at dusk and off after dawn. Rotate floodlights with Q/E or the touch arrows to aim their beam. Move or remove lights with the usual tools; placed lights are saved with your garden."],
  "Structures & photos":["Rotate a structure in 15° steps while placing or moving it: Q/E on keyboard or Turn left/right on touch. Tab releases the pointer for rotation buttons. Walk up to a placed sign and aim at its board. Press E or tap Edit sign to change its text and colour.","P opens photo mode. WASD flies, Q/E moves down/up, right-drag looks around and F12 captures a photo. Use the touch photo controls on a tablet. Return with P or Done.","Enjoy the view hides the interface and held tool. Mouse look still works. Press any key or click/tap to return."],
- "Controls & saving":["Keyboard: WASD or arrows walk, Shift strolls faster, Space jumps (press again in the air to double jump), mouse looks, 1–9 selects tools, Tab opens/closes menus, and Escape opens Settings. G welcomes the next morning; H hides the interface.","Touch: left thumb walks and right thumb looks. Tap the current tool to open the tool tray. Hold Water, Gather, Rake or the hoe action and drag the same thumb to look; release to stop.","Swipe over menu cards or text to scroll. Tap a gliding list to stop it. Open a plant, then tap its large image to start planting. Seeds remembers your browsing position.","Your garden saves on this device. Settings → Save files lets you download a copy or upload it elsewhere. Upload asks before replacement, and the previous garden is kept as a backup."]
+ "Controls & saving":["Keyboard: WASD or arrows walk, Shift strolls faster, Space jumps (press again in the air to double jump), mouse looks, 1–9 selects tools, T toggles your carried torch, Tab opens/closes menus, and Escape opens Settings. G welcomes the next morning; H hides the interface.","Touch: left thumb walks and right thumb looks. Tap the current tool to open the tool tray. Hold Water, Gather, Rake or the hoe action and drag the same thumb to look; release to stop.","Swipe over menu cards or text to scroll. Tap a gliding list to stop it. Open a plant, then tap its large image to start planting. Seeds remembers your browsing position.","Your garden saves on this device. Settings → Save files lets you download a copy or upload it elsewhere. Upload asks before replacement, and the previous garden is kept as a backup."]
 }
 
 static func guide(g) -> void:

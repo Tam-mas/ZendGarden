@@ -277,6 +277,13 @@ func show_drawer(kind: String) -> void:
  scroll.add_child(col)
  var choices=TOOL_CHOICES.duplicate()
  if GardenChallenge.active(g):choices.append_array([["weed","Weed"],["mulch","Mulch"],["meadow","To meadow"]])
+ var torch=g.button("Put torch away" if g.night_lights.torch_on else "Carry torch",func():
+  close_menu()
+  g.night_lights.toggle(),Vector2(0,54))
+ torch.name="ToolTorch"
+ GardenTheme.choose(torch,g.night_lights.torch_on)
+ torch.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+ col.add_child(torch)
  for entry in choices:
   var key=entry[0]
   var choice=g.button(entry[1],func():
@@ -475,7 +482,7 @@ func _process(delta: float) -> void:
  if get_viewport().get_visible_rect().size!=last_size: layout()
  if Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE: Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
  if blocked(): reset_gestures()
- for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel,g.view_button]: panel.hide()
+ for panel in [g.hud_top,g.hud_title,g.hud_tools,g.hud_foot,g.hud_capacity,g.tip_label,g.rotation_panel,g.photo_panel,g.view_button,g.torch_button]: panel.hide()
  g.compact_hud.hide()
  g.reticle.visible=not blocked() and not g.photo_mode
  status_panel.visible=not blocked()

@@ -26,4 +26,5 @@ python3 tests/check_plant_art_full.py --enforce-baseline-budget
 "$BLENDER_BIN" --background art_source/workshop.blend --python-exit-code 1 --python art_source/build_tools.py
 # The MCP-authored overhaul is the authoritative structure/animal library.
 "$BLENDER_BIN" --background --python-exit-code 1 --python art_source/overhaul/build.py
+"$BLENDER_BIN" --background --python-exit-code 1 --python art_source/build_night_lighting.py
 python3 tests/check_assets.py

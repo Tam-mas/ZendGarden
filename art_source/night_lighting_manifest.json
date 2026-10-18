@@ -1,0 +1,26 @@
+[
+  {
+    "kind": "torch",
+    "path": "assets/tools/torch.glb",
+    "triangles": 10328,
+    "source": "art_source/night_lighting.blend"
+  },
+  {
+    "kind": "path_lantern",
+    "path": "assets/shop/path_lantern.glb",
+    "triangles": 4572,
+    "source": "art_source/night_lighting.blend"
+  },
+  {
+    "kind": "garden_lamppost",
+    "path": "assets/shop/garden_lamppost.glb",
+    "triangles": 5396,
+    "source": "art_source/night_lighting.blend"
+  },
+  {
+    "kind": "garden_floodlight",
+    "path": "assets/shop/garden_floodlight.glb",
+    "triangles": 7208,
+    "source": "art_source/night_lighting.blend"
+  }
+]

@@ -61,7 +61,7 @@ static func run(g, failures: Array) -> void:
  await settle(g)
  await capture(g,"desktop-settings")
  GardenMenus.visit(g,"Shop")
- for section in ["Decor","Equipment","Tools","Bed care"]:
+ for section in ["Decor","Lighting","Equipment","Tools","Bed care"]:
   g.menu_sections.shop=section;g.refresh_sidebar()
   await settle(g)
   if g.basket_total()>0 and g.list_box.get_children().any(func(c):return c is Label and c.text.begins_with("YOUR BASKET")):failures.append("Harvest inventory leaked into shop")

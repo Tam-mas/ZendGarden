@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/garden_lamppost.glb" id="1_rjti3"]
+
+[node name="Garden Lamppost" type="Node3D" unique_id=1957794101]
+
+[node name="Model" type="Node3D" parent="." unique_id=874687213 instance=ExtResource("1_rjti3")]
+
+[node name="NightLight" type="OmniLight3D" parent="." unique_id=865758838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+visible = false
+light_color = Color(1, 0.8901961, 0.7294118, 1)
+light_energy = 0.0
+light_indirect_energy = 0.0
+omni_range = 10.0
+omni_attenuation = 1.35

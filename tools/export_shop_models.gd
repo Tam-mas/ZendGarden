@@ -5,6 +5,7 @@ func _initialize() -> void:
  DirAccess.make_dir_recursive_absolute(directory)
  var exported=0
  for item in GardenCatalogue.furnishings():
+  if "--lighting-only" in OS.get_cmdline_user_args() and item.kind not in ["path_lantern","garden_lamppost","garden_floodlight"]:continue
   if "--area-furniture" in OS.get_cmdline_user_args() and item.kind not in ["harvest_table","nursery_shelf","wind_chime"]:continue
   if "--working-garden" in OS.get_cmdline_user_args() and item.kind not in ["worm_farm","mulch_bin","shade_canopy","cold_frame","bird_feeder","wide_bowl","large_planter","herb_trough","hanging_basket","vertical_planter","tiered_planter"]:continue
   var model=Node3D.new()
@@ -18,7 +19,7 @@ func _initialize() -> void:
   imported.owner=model
   var runtime=GardenArt.furnishing(item.kind)
   for child in runtime.get_children():
-   if child is Label3D or child is OmniLight3D:
+   if child is Label3D or child is Light3D:
     var extra=child.duplicate()
     model.add_child(extra)
     extra.owner=model
