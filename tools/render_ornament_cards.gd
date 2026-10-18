@@ -26,6 +26,7 @@ func render_cards() -> void:
  DirAccess.make_dir_recursive_absolute("res://assets/ui/shop")
  var items=GardenCatalogue.challenge_furnishings() if "--challenge" in OS.get_cmdline_user_args() else GardenCatalogue.furnishings()
  for item in items:
+  if "--lighting-only" in OS.get_cmdline_user_args() and item.kind not in ["path_lantern","garden_lamppost","garden_floodlight"]:continue
   if "--area-furniture" in OS.get_cmdline_user_args() and item.kind not in ["harvest_table","nursery_shelf","wind_chime"]:continue
   if "--working-garden" in OS.get_cmdline_user_args() and item.kind not in ["worm_farm","mulch_bin","shade_canopy","cold_frame","bird_feeder","wide_bowl","large_planter","herb_trough","hanging_basket","vertical_planter","tiered_planter"]:continue
   var model=GardenArt.furnishing(item.kind)
@@ -33,7 +34,7 @@ func render_cards() -> void:
   var box=bounds(model,model)
   var center=box.get_center()
   camera.size=maxf(box.size.length()*.90,.4)
-  camera.position=center+Vector3(1.4,.95,-1.8 if item.kind=="vertical_planter" else 1.8)*maxf(1.0,box.size.length())
+  camera.position=center+Vector3(1.4,.95,-1.8 if item.kind in ["vertical_planter","garden_floodlight"] else 1.8)*maxf(1.0,box.size.length())
   camera.look_at(center)
   for i in range(4):await process_frame
   await RenderingServer.frame_post_draw

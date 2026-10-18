@@ -4,8 +4,8 @@ extends RefCounted
 # Add one entry per meaningful player-visible change; its number is the version.
 # Keep technical work in CHANGELOG.md. Never renumber previously shipped entries.
 # Notice 73 was folded into 72 by request; reserve 73 for saved dismissal state.
-# The next new announcement must use 74.
 const RELEASES=[
+ {"version":74,"date":"18 October 2026","title":"A little light for night walks","note":"Carry a torch with T or the touch tool tray and follow its beam while you explore or garden. Shop → Lighting now has path lanterns, tall lampposts and tripod floodlights alongside stone lanterns. Place them around your garden, aim floodlights where you need them, and watch them switch on at dusk."},
  {"version":72,"date":"16 October 2026","title":"A little woodland of mushrooms","note":"20 mushrooms have been added to the garden, from red-spotted fly agarics, pink oyster fans and honeycomb morels to striped turkey tails, scarlet elf cups, spiny puffballs, earthstars and branching golden coral. Plant them in shady corners and watch their young shapes develop."},
  {"version":71,"date":"16 October 2026","title":"A moon that waxes and wanes","note":"Watch a textured moon rise, cross the sky and set through a 28-day cycle of crescents, quarters and full moons. Look for pale daytime moons, brighter moonlit nights and clouds drifting across its face. Welcoming the next morning briefly follows the moon when it is up at night. Find its phase in the garden readout and Guide → Moon & night sky."},
  {"version":70,"date":"14 October 2026","title":"A second garden, a new challenge","note":"Keep your relaxed Free Garden and start a separate Challenge Garden. Tend thirsty plants, clear slow-growing weeds, spread mulch and connect soakers or planter drips to rain barrels and water tanks. Plan with a three-day forecast and deliver seasonal baskets. Neglected plants recover, and both gardens wait while you are away."},

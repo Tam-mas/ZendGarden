@@ -1140,7 +1140,10 @@ static func furnishings() -> Array:
   {"name":"Orchard harvest table", "price":65, "kind":"harvest_table", "hint":"A slatted table with fruit crates. Move, rotate or pack it away."},
   {"name":"Glasshouse nursery shelf", "price":60, "kind":"nursery_shelf", "hint":"A level timber display bench with slender steel legs."},
   {"name":"Alpine wind chime", "price":45, "kind":"wind_chime", "hint":"A timber stand with gently swaying metal chimes."},
-  {"name":"Tiered planting steps", "price":85, "kind":"tiered_planter", "hint":"Six planting pockets on three levels for a layered garden display."}
+  {"name":"Tiered planting steps", "price":85, "kind":"tiered_planter", "hint":"Six planting pockets on three levels for a layered garden display."},
+  {"name":"Path lantern", "price":30, "kind":"path_lantern", "hint":"A low warm lantern for paths and beds. Lights automatically at dusk."},
+  {"name":"Garden lamppost", "price":85, "kind":"garden_lamppost", "hint":"A tall warm lamp for a wider pool of evening light. Lights automatically at dusk."},
+  {"name":"Garden floodlight", "price":70, "kind":"garden_floodlight", "hint":"A broad directional light on a tripod. Rotate it toward the area you want to illuminate. Lights automatically at dusk."}
  ]
 
 static func challenge_furnishings() -> Array:

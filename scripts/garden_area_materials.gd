@@ -41,10 +41,11 @@ static func family(name: String) -> int:
 
 static func prepare(node: Node) -> void:
  if node is MeshInstance3D:
+  if node.get_meta("night_lighting_surface",false):return
   if node.get_meta("ground_detail",false):node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
   for surface in range(node.mesh.get_surface_count()):
    var original=node.get_active_material(surface)
-   if not original is StandardMaterial3D:continue
+   if not original is StandardMaterial3D or original.emission_enabled:continue
    var kind=family(original.resource_name)
    if kind in [6,7]:
     var key=str(original.get_instance_id())+":standard"

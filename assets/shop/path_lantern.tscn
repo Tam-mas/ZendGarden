@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/shop/path_lantern.glb" id="1_t46j6"]
+
+[node name="Path Lantern" type="Node3D" unique_id=2143940776]
+
+[node name="Model" type="Node3D" parent="." unique_id=1939832513 instance=ExtResource("1_t46j6")]
+
+[node name="NightLight" type="OmniLight3D" parent="." unique_id=1455515878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
+visible = false
+light_color = Color(1, 0.85882354, 0.67058825, 1)
+light_energy = 0.0
+light_indirect_energy = 0.0
+omni_range = 5.5
+omni_attenuation = 1.35

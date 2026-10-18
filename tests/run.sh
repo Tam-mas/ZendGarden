@@ -7,6 +7,7 @@ python3 tests/check_mountains.py
 python3 tests/check_plants.py
 python3 tests/check_plant_growth.py
 python3 tests/check_mushrooms.py
+python3 tests/check_night_lighting.py
 python3 tests/check_plant_art_full.py --enforce-baseline-budget
 python3 tests/check_fruit_trees.py
 python3 tests/check_botanical_additions.py
@@ -28,6 +29,12 @@ if rg -q 'SCRIPT ERROR|ERROR:' "$import_log"; then
   exit 1
 fi
 moon_log="$(mktemp -t zend-garden-moon)"
+lighting_log="$(mktemp -t zend-garden-lighting)"
+"$GODOT_BIN" --headless --fixed-fps 60 --path "$PWD" -- --night-lights-test > "$lighting_log" 2>&1 || { cat "$lighting_log"; exit 1; }
+if rg -q 'SCRIPT ERROR|ERROR:' "$lighting_log" || ! rg -Fq 'NIGHT_LIGHTING_RESULT: []' "$lighting_log"; then
+  cat "$lighting_log"
+  exit 1
+fi
 for args in "--script tests/moon.gd" "--fixed-fps 60 -- --moon-test"; do
   "$GODOT_BIN" --headless --path "$PWD" ${=args} > "$moon_log" 2>&1 || { cat "$moon_log"; exit 1; }
   if rg -q 'SCRIPT ERROR|ERROR:' "$moon_log" || ! rg -q 'MOON(_IN_GAME)?_RESULT: \[\]' "$moon_log"; then

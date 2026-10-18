@@ -1,3 +1,13 @@
+### [2026-10-18 15:34] Added
+
+**Tech:** `GardenNightLights`, `GardenCatalogue`, `night_lighting.blend` — carried torch and dusk-controlled shop lighting, release 74
+
+**Dev:** Add an independent T/button/touch torch with a camera-following spotlight and three appended shop decorations: path lantern (30 petals), lamppost (85) and directional floodlight (70). Group these with the existing stone lantern under Lighting and apply dusk/dawn brightness to their lights and emissive diffusers. Preserve existing decoration identities, save records, rotation, surface targeting, movement and refunds; the included torch starts stowed each session. Limit nearby local lights to eight including the torch and Moon Garden fixtures, with at most two shadowed spotlights. Supply four packed PBR Blender exports, editable source, portraits, inspectable shop scenes, rebuild instructions and asset/game checks for keyboard/touch controls, light budgets, purchases and save restoration. Add player guidance and update 74 while keeping withdrawn notice 73 reserved.
+
+**Plain:** Carry a torch for night walks and place lanterns, lampposts or floodlights around the garden to light up paths and work areas after dusk.
+
+**Why:** Make the garden easier to explore and tend at night while giving players more ways to arrange inviting outdoor spaces.
+
 ### [2026-10-16 22:08] Fixed
 
 **Tech:** `GardenUpdates.RELEASES`, `tests/player_updates.gd` — consolidate mushroom announcements into update 72

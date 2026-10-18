@@ -31,13 +31,14 @@ func render_cards() -> void:
  var fill=DirectionalLight3D.new();fill.rotation_degrees=Vector3(-20,145,0);fill.light_energy=.8;stage.add_child(fill)
  var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.current=true;stage.add_child(camera)
  DirAccess.make_dir_recursive_absolute("res://assets/ui/tools")
- for kind in ["can","shears","trowel","rake"]:
+ var kinds=["torch"] if "--torch-only" in OS.get_cmdline_user_args() else ["can","shears","trowel","rake"]
+ for kind in kinds:
   var model=load("res://assets/tools/"+kind+".glb").instantiate()
   stage.add_child(model)
   var box=bounds(model,model)
   var center=box.get_center()
   camera.size=maxf(box.size.length()*.82,.4)
-  camera.position=center+Vector3(1.4,1.1,1.8)*maxf(1.0,box.size.length())
+  camera.position=center+Vector3(1.4,1.1,-1.8 if kind=="torch" else 1.8)*maxf(1.0,box.size.length())
   camera.look_at(center)
   for frame in range(4):await process_frame
   await RenderingServer.frame_post_draw

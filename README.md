@@ -4,7 +4,7 @@
 
 [**Enter the garden →**](https://zend.garden)
 
-**Current source release: 68 — A special update.** See the [player update history](scripts/player_updates.gd).
+**Current source release: 74 — A little light for night walks.** See the [player update history](scripts/player_updates.gd).
 
 Zend Garden is a cosy, first-person gardening game beside a mountain lake. Start with a small patch of soil, wander among the flowers, and gradually turn your corner of the valley into somewhere you want to spend time.
 
@@ -30,6 +30,7 @@ There is no need to keep up. Plants do not die from neglect, requests have no de
 - **Add places to linger.** Choose benches, lanterns, pots, ponds, bird baths, beehives, arbors, pergolas and a greenhouse. Write your own garden signs and make the place feel personal.
 - **Welcome a little wildlife.** Watch birds, bees, butterflies, lady beetles and other visitors, and spend time with your animal companions. Different planting and garden features bring different visitors.
 - **Grow at your own pace.** Earn petals through gathering and garden requests, discover more seeds and unlock more space. Move on to the next morning whenever you are ready.
+- **Light the garden after dark.** Carry the included torch while exploring or gardening. Find path lanterns, tall lampposts, directional floodlights and stone lanterns in Shop → Lighting; placed lights switch on at dusk and save with your garden.
 - **Enjoy the view.** Press H or choose Enjoy the view to hide the HUD and held tool; press any key or click/tap to return. Look out over the lake and wooded mountain slopes, listen to the garden's changing soundscape, or use photo mode to explore and capture a favourite scene.
 
 ## Your first visit
@@ -46,6 +47,7 @@ Use the **arrow keys** to walk and the **mouse** to look around. Press **Tab** t
 | **Tab** | Open menus or return to the garden |
 | **Left click** | Use your selected tool; hold and sweep to water or gather |
 | **1–9** | Choose a tool |
+| **T** | Switch the carried torch on or put it away; also available in the touch tool tray |
 | **[ / ]** with pruners | Make the pruning square smaller or larger within your upgrades |
 | **R** with the hoe | Switch between raising and lowering ground |
 | **G** | Go to the next morning |

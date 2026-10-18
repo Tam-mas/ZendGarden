@@ -308,13 +308,7 @@ static func furnishing(kind: String) -> Node3D:
  if kind in ["reserve_tank","planter_drip","soaker_controller"]:return GardenChallengeArt.model(kind)
  if kind=="sign": return sign_board()
  var n=detailed_model("areas/furniture" if kind in ["harvest_table","nursery_shelf","wind_chime"] else "shop",kind)
- if kind=="lantern":
-  var light=OmniLight3D.new()
-  light.position.y=1
-  light.light_color=Color("ffdc9e")
-  light.light_energy=.8
-  light.omni_range=4
-  n.add_child(light)
+ GardenNightLights.attach(n,kind)
  return n
 
 static func companion(cat: bool) -> Node3D:

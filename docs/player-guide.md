@@ -31,6 +31,7 @@ use **L**, or the touch **Layer** button, to inspect plants sharing a spot.
 | **Tab** | Open menus / return to looking around |
 | **Left click** | Use the selected tool at the centre crosshair; hold and sweep to water or gather |
 | **1–9** | Select wander, plant, water, prune, harvest, move, remove, rake, or hoe |
+| **T** | Carry the included torch or put it away; independent of the selected gardening tool |
 | **[ / ]** with pruners | Shrink / expand the square within purchased limits |
 | **R** with the hoe | Switch between raising and lowering ground |
 | **L** | Change the target plant layer where plants overlap |
@@ -64,6 +65,18 @@ night sky** show its phase, with current illumination and visibility in the guid
 Choose **Look toward the moon** there to find its place in the sky when it is up.
 Each garden keeps its own cycle through its saved day and clock, including older
 save files. Pausing time or closing the game pauses the cycle too.
+
+For night walks, press **T** or use the **Torch** button. On touch, open the tool
+tray and choose **Carry torch**. The beam follows your view while you walk or
+use other tools. Switch it off with the same control; there are no batteries
+to buy. Enjoy the view hides the carried model while keeping its light; photo
+mode switches the beam off until you return.
+
+Choose **Shop → Lighting** for path lanterns, tall garden lampposts, directional
+tripod floodlights and stone lanterns. Place them around paths or work areas;
+they switch on at dusk and off after dawn. Rotate a floodlight with **Q/E** or
+the touch arrows to point its beam. Placed lights save with your garden and
+use the usual move, remove and refund rules.
 
 Open Settings with the gear icon beside the page title; the × closes the menu. Settings is a vertical list: Sound, Controls, Display, Comfort & play, Save files and About. Click a heading to open its controls below it; opening another closes the previous section. Settings include reduced motion, mouse sensitivity, independent left/right and up/down mouse inversion, field of view, separate audio volume controls, and an option to pause while menus are open.
 
@@ -229,7 +242,7 @@ Aim **Move** at the container's frame to carry the whole display, or at a plant 
 
 ## Shop reference
 
-Shop is ordered **Decor**, **Equipment**, **Tools**, then **Bed care**. Tools uses illustrated upgrade cards. **Equipment → Stock a pond with fish** adds fish to an unstocked pond in your current garden for 20 petals. **Guide → Moving & arranging** explains placement and sign editing.
+Shop is ordered **Decor**, **Lighting**, **Equipment**, **Tools**, then **Bed care**. Tools uses illustrated upgrade cards. **Equipment → Stock a pond with fish** adds fish to an unstocked pond in your current garden for 20 petals. **Guide → Moving & arranging** explains placement and sign editing.
 
 Prices are in petals. Select a structure in Shop, then aim at open ground to place it. **Q/E** rotates it; **Move** relocates it. **Remove** (formerly “Lift”) removes a plant or ornament; it does not raise the ground. Removing an ornament refunds its purchase price. Plants do not refund petals, but unlocked seeds stay available. Use the hoe to raise or lower the ground.
 
@@ -239,6 +252,10 @@ Prices are in petals. Select a structure in Shop, then aim at open ground to pla
 | Terracotta pot | 25 | One planting pocket for a compact flower, herb or succulent. |
 | Garden bench | 45 | Decorative seating for a quiet garden corner. |
 | Stone lantern | 55 | Glows after dusk. |
+| Carried torch | Included | A beam that follows your view; toggle with T or the touch tool tray. |
+| Path lantern | 30 | Low warm light for paths and borders, automatic at dusk. |
+| Garden lamppost | 85 | Tall warm light for a wider area, automatic at dusk. |
+| Garden floodlight | 70 | Directional tripod light for work areas; rotate to aim, automatic at dusk. |
 | Climbing arbor | 65 | Supports nearby climbing plants. |
 | Timber pergola | 100 | Larger frame supporting nearby climbing plants. |
 | Glass greenhouse | 120 | Lets plants within 4 metres grow year-round and protects their growing conditions. |
