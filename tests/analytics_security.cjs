@@ -51,10 +51,12 @@ const assert = require('node:assert/strict');
         return Response.json(packet.action === 'start' ? { token: 'fixture', elapsed: 0 } : { ok: true });
       } });
     client.setVersion(74); client.start(); await new Promise(setImmediate);
-    clock += 89 * 86400000; offline = false; await client.report();
+    clock += 89 * 86400000; client.progress(128160); offline = false; await client.report();
     assert.equal(packets.at(-2).running, 0); assert.equal(packets.at(-1).running, 0);
-    clock += 120000; client.advance(20); await client.report();
+    assert.equal(packets.at(-1).game_minutes, 0, 'An offline handshake cannot backdate game-clock progress');
+    clock += 120000; client.advance(20); client.progress(48); await client.report();
     assert.equal(packets.at(-1).running, 120); assert.equal(packets.at(-1).advancing, 20);
+    assert.equal(packets.at(-1).game_minutes, 48);
     console.log('ANALYTICS_SECURITY_RESULT: PASS — canonical edge cache, midnight rollover, read-only publication, admission budget and offline start rebasing');
   } finally { Date.now = originalNow; delete globalThis.caches; }
 })().catch(error => { console.error(error); process.exitCode = 1; });

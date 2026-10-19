@@ -18,10 +18,16 @@ storage.
 - **Game-open time:** elapsed wall time after the game loads. Includes background
   tabs, paused menus and device sleep. Browser throttling catches up on the next
   successful report. It measures elapsed open time, not CPU execution or attention.
-- **Garden advancing:** accumulated Godot frame time while the garden clock
-  advances. Excludes the welcome panel, photo mode, day transition and menus that
-  pause the clock. An unattended garden can still advance. No browser focus or
-  visibility signals are observed.
+- **In-game minutes:** cumulative progress on the garden clock, including the
+  minutes crossed by animated and reduced-motion Next morning jumps. A full
+  normal garden day takes 600 real seconds and contains 1,440 garden minutes.
+  Paused menus, photo mode and browser suspension add no game-clock progress.
+  This is separate from `advancing`, the real simulation seconds retained for
+  compatible reporting and validation. Older rows have NULL `game_minutes`; their
+  recorded advancing seconds are converted at 2.4 garden minutes per second.
+  Their unrecorded morning jumps cannot be reconstructed. Both dashboards mark
+  such mixed historical totals with ≥ rather than presenting them as complete.
+  No saved day/clock or garden state is sent; only cumulative session increments.
 - **Average, median, longest and 5/15/30-minute sessions:** based on game-open time.
   Includes unfinished sessions with their latest reported totals.
   The public snapshot includes only visits started in the 90 UTC days before
@@ -39,8 +45,9 @@ storage.
 Reports are sent on load, every two minutes, and best-effort on closing. A hidden
 browser may suspend JavaScript or networking. No server extrapolation is made:
 elapsed time appears when another report arrives. If a browser is killed or never
-resumes, time after its last report is unknown. Advancing-time reports are batched
-every five seconds inside Godot, so closing can lose up to five seconds.
+resumes, time after its last report is unknown. Clock reports are batched every
+five simulation seconds; finishing a morning jump flushes its remaining minutes.
+Closing between batches can lose a small unreported tail.
 Failed analytics requests never block loading, play or saves. There is no tracking
 on the welcome/download screen. Previews, native builds and other hostnames do not
 collect production statistics.
@@ -49,7 +56,8 @@ collect production statistics.
 
 Cloudflare D1 `zend-garden-stats` contains one row per session with a random ID,
 server-derived start and last-report times, coarse device category, update number,
-two cumulative durations and a closing flag. Repeat starts return the same session;
+two cumulative real-time durations, cumulative garden-clock minutes and a closing
+flag. Repeat starts return the same session;
 repeated or out-of-order totals cannot inflate time. Signed session tokens stop
 arbitrary updates to other session IDs. Public metrics remain best-effort client
 telemetry, not tamper-proof accounting.
@@ -94,6 +102,10 @@ the next purge. D1's own backups follow Cloudflare's Time Travel retention.
    The schema is idempotent and changes no player saves. Apply this before
    deploying the snapshot/admission changes; it adds `public_activity` and
    `analytics_limits` without modifying existing session records.
+   Existing installations created before the clock-minute counter must also run
+   `wrangler d1 execute zend-garden-stats --remote --file analytics/add_game_minutes.sql`
+   once. Check `pragma_table_info('sessions')` first; a new installation's schema
+   already contains this column. Its NULL default preserves historical records.
 3. In Pages → `zendgarden` → Settings → Variables and Secrets, set production
    encrypted secrets `SESSION_SECRET` and `STATS_PASSWORD` to separate random
    values of at least 32 characters. Do not commit these values. They must exist

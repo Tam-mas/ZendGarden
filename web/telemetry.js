@@ -5,6 +5,7 @@ export function createTelemetry({ fetch: send = window.fetch.bind(window), now =
   let version = 0, started = null, token = null, advancing = 0, timer, busy = false, stopped = false;
   let elapsed = 0;
   let reportOffset = 0, advancingOffset = 0;
+  let gameMinutes = 0, gameMinutesOffset = 0;
   let id;
   const running = () => {
     // Wall time includes background throttling and sleep; never observe tab state.
@@ -26,16 +27,19 @@ export function createTelemetry({ fetch: send = window.fetch.bind(window), now =
         // A lost response may be retried with the same ID and original server time.
         reportOffset = running() - (session.elapsed || 0);
         advancingOffset = advancing;
+        gameMinutesOffset = gameMinutes;
       }
       await send('/api/session', { method: 'POST', credentials: 'omit', keepalive: ended,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'report', token, running: Math.max(0, running() - reportOffset), advancing: Math.floor(advancing - advancingOffset), ended }) });
+        body: JSON.stringify({ action: 'report', token, running: Math.max(0, running() - reportOffset), advancing: Math.floor(advancing - advancingOffset),
+          game_minutes: Math.floor(gameMinutes - gameMinutesOffset + 1e-7), ended }) });
     } catch { /* Analytics must never interrupt loading, play or saving. */ }
     finally { busy = false; }
   }
   return {
     setVersion(value) { if (Number.isInteger(value) && value > 0) version = value; },
     advance(seconds) { if (started !== null && !stopped && Number.isFinite(seconds) && seconds > 0) advancing += seconds; },
+    progress(minutes) { if (started !== null && !stopped && Number.isFinite(minutes) && minutes > 0) gameMinutes += minutes; },
     start() {
       if (started !== null || !version) return;
       started = now();

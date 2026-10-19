@@ -30,14 +30,18 @@ export async function onRequest({ request, env, waitUntil }) {
       ]).catch(() => {}));
       return reply({ token, elapsed: Math.max(0, now - session.started) }, 201);
     }
-    if (body.action !== 'report' || Object.keys(body).some(key => !['action', 'token', 'running', 'advancing', 'ended'].includes(key))
+    if (body.action !== 'report' || Object.keys(body).some(key => !['action', 'token', 'running', 'advancing', 'game_minutes', 'ended'].includes(key))
       || !seconds(body.running) || !seconds(body.advancing) || body.advancing > body.running + 5 || typeof body.ended !== 'boolean') return reply({ error: 'invalid' }, 400);
+    // Virtual time includes accelerated days and instant reduced-motion skips,
+    // so it must not be constrained to wall seconds. Still bound its size/type.
+    if (body.game_minutes !== undefined && (!Number.isInteger(body.game_minutes)
+      || body.game_minutes < 0 || body.game_minutes > MAX_SECONDS * 1440)) return reply({ error: 'invalid' }, 400);
     let session;
     try { session = await verifySession(body.token, env.SESSION_SECRET, now); }
     catch { return reply({ error: 'token' }, 403); }
     if (body.running > now - session.started + 60) return reply({ error: 'invalid-time' }, 400);
     if (!await admitted(env, 'reports', now)) return reply({ error: 'busy' }, 429);
-    await env.GARDEN_STATS.prepare(UPDATE_SQL).bind(body.running, body.advancing, body.ended ? 1 : 0, now, session.id).run();
+    await env.GARDEN_STATS.prepare(UPDATE_SQL).bind(body.running, body.advancing, body.ended ? 1 : 0, now, session.id, body.game_minutes ?? null).run();
     waitUntil(publishActivity(env, now).catch(() => {}));
     return reply({ ok: true });
   } catch { return reply({ error: 'unavailable' }, 503); }

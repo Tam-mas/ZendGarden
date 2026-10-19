@@ -4,10 +4,12 @@ export const SNAPSHOT_SQL = `INSERT OR IGNORE INTO public_activity(day, payload)
  SELECT ?1, (
  WITH visits AS MATERIALIZED (
    SELECT device, MIN(running, ?1 - started) AS running,
-     MIN(advancing, running, ?1 - started) AS advancing
+     MIN(advancing, running, ?1 - started) AS advancing, game_minutes
    FROM sessions WHERE started >= ?1 - 90 * 86400 AND started < ?1
  ), ordered AS (SELECT running FROM visits ORDER BY running),
  totals AS (SELECT COUNT(*) AS sessions, COALESCE(SUM(running),0) AS running,
+   COALESCE(SUM(COALESCE(game_minutes, advancing * 1440.0 / 600.0)),0) AS game_minutes,
+   COALESCE(SUM(game_minutes IS NULL),0) AS game_minutes_legacy_sessions,
    COALESCE(SUM(advancing),0) AS advancing, COALESCE(AVG(running),0) AS average,
    COALESCE(MAX(running),0) AS longest, COALESCE(SUM(running >= 300),0) AS over5,
    COALESCE(SUM(running >= 900),0) AS over15, COALESCE(SUM(running >= 1800),0) AS over30 FROM visits),
@@ -17,7 +19,8 @@ export const SNAPSHOT_SQL = `INSERT OR IGNORE INTO public_activity(day, payload)
  devices AS (SELECT device AS name, COUNT(*) AS sessions FROM visits GROUP BY device ORDER BY device)
  SELECT json_object('days',90,'totals',json_object(
    'sessions',t.sessions,'running',t.running,'advancing',t.advancing,'average',t.average,
-   'median',m.value,'longest',t.longest,'over5',t.over5,'over15',t.over15,'over30',t.over30),
+   'median',m.value,'longest',t.longest,'over5',t.over5,'over15',t.over15,'over30',t.over30,
+   'game_minutes',t.game_minutes,'game_minutes_legacy_sessions',t.game_minutes_legacy_sessions),
    'devices',json((SELECT json_group_array(json_object('name',name,'sessions',sessions)) FROM devices)))
  FROM totals t, median m)
  WHERE NOT EXISTS (SELECT 1 FROM public_activity WHERE day = ?1)`;

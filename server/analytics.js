@@ -63,6 +63,7 @@ export async function authorized(request, secret) {
 export const PURGE_SQL = 'DELETE FROM sessions WHERE started < ?1';
 export const UPDATE_SQL = `UPDATE sessions SET
   running = MAX(running, ?1), advancing = MAX(advancing, MIN(?2, ?1)),
+  game_minutes = CASE WHEN ?6 IS NULL THEN game_minutes ELSE MAX(COALESCE(game_minutes,0), ?6) END,
   ended = CASE WHEN ?1 >= running THEN ?3 ELSE ended END,
   last_seen = MAX(last_seen, ?4)
-  WHERE id = ?5 AND (?1 > running OR ?2 > advancing OR ?3 != ended)`;
+  WHERE id = ?5 AND (?1 > running OR ?2 > advancing OR ?3 != ended OR (?6 IS NOT NULL AND (game_minutes IS NULL OR ?6 > game_minutes)))`;

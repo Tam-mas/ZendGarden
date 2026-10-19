@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   device TEXT NOT NULL CHECK(device IN ('desktop', 'touch')),
   running INTEGER NOT NULL DEFAULT 0,
   advancing INTEGER NOT NULL DEFAULT 0,
+  game_minutes INTEGER CHECK(game_minutes >= 0),
   ended INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS sessions_started ON sessions(started);

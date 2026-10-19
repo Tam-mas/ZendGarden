@@ -1,3 +1,13 @@
+### [2026-10-19 19:47] Fixed
+
+**Tech:** `Garden.report_clock_time`, `sessions.game_minutes`, statistics dashboards — actual garden-clock minutes including morning jumps
+
+**Dev:** Track a distinct cumulative virtual-minute counter at the engine's 1,440-minutes-per-600-real-seconds rate, including incremental animated morning transitions across midnight and instant reduced-motion skips. Preserve real wall/simulation counters and their validation. Add a nullable D1 column, monotonic optional reporting compatible with existing clients, daily snapshot aggregation and explicit minute units in both dashboards. Convert older recorded simulation seconds as a lower bound, mark incomplete historical totals with ≥ and never invent missing morning jumps. Verify both transition paths, browser formatting, paused reporting, SQLite deduplication, and the actual exported Godot-to-browser bridge; retain the in-game update log as requested.
+
+**Plain:** Statistics now show minutes progressed on the garden clock, including time skipped to the next morning.
+
+**Why:** Make the figure match the passage of time players see in their gardens instead of showing real simulation minutes.
+
 ### [2026-10-19 19:33] Added
 
 **Tech:** `GardenCatalogue.GARLIC_ID`, `art_source/build_garlic.py` — append-only garlic plant and authored growth assets

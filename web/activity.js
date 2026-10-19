@@ -1,6 +1,7 @@
 const $ = id => document.getElementById(id);
 const number = value => Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 1 });
 const duration = seconds => seconds >= 3600 ? `${number(seconds / 3600)} h` : `${number(seconds / 60)} min`;
+const gameMinutes = t => `${t.game_minutes === undefined || t.game_minutes_legacy_sessions ? '≥ ' : ''}${number(t.game_minutes ?? t.advancing * 1440 / 600)} min`;
 function node(tag, text, className) {
   const element = document.createElement(tag);
   if (text !== undefined) element.textContent = text;
@@ -20,7 +21,7 @@ function render(data) {
   for (const [label, value, note] of [
     ['Garden visits', number(t.sessions), 'Separate times the garden was opened'],
     ['Game-open time', duration(t.running), 'Includes background and paused time'],
-    ['Garden advancing', duration(t.advancing), 'Time the garden clock advances'],
+    ['In-game minutes', gameMinutes(t), 'Garden-clock time, including Next morning'],
     ['Average visit', duration(t.average), 'Game-open time per visit'],
     ['Median visit', duration(t.median), 'The middle visit length'],
     ['Longest visit', duration(t.longest), 'The longest recorded garden visit'],

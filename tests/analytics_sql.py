@@ -26,10 +26,10 @@ assert row('TOTALS_SQL', (since, since))['running'] == 3060
 assert row('TOTALS_SQL', (since, since))['over15'] == 2
 public_totals = row('PUBLIC_TOTALS_SQL', (since,))
 assert public_totals['running'] == 3060 and 'recent' not in public_totals
-db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0'))
+db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0', None))
 for _ in range(3):
-    db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0'))
-db.execute(queries['UPDATE_SQL'], (60, 30, 1, since + 1990, '0'))
+    db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0', None))
+db.execute(queries['UPDATE_SQL'], (60, 30, 1, since + 1990, '0', None))
 current = dict(db.execute('SELECT * FROM sessions WHERE id=?', ('0',)).fetchone())
 assert current['running'] == 120 and current['advancing'] == 80 and current['ended'] == 0
 assert current['last_seen'] == since + 2000
@@ -68,4 +68,13 @@ assert db.execute(queries['ADMISSION_SQL'], ('starts', 500, 120)).fetchone() is 
 assert db.execute(queries['ADMISSION_SQL'], ('starts', 499, 120)).fetchone() is None
 assert db.execute(queries['ADMISSION_SQL'], ('starts', 501, 120)).fetchone()['hits'] == 1
 assert db.execute('SELECT COUNT(*) FROM analytics_limits').fetchone()[0] == 1
+
+# New clock counters can include skips larger than elapsed wall time; retries
+# cannot inflate them and old clients cannot erase measured clock progress.
+db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0', 1632))
+db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0', 1632))
+db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0', 1200))
+db.execute(queries['UPDATE_SQL'], (120, 80, 0, since + 2000, '0', None))
+assert db.execute('SELECT game_minutes FROM sessions WHERE id=?', ('0',)).fetchone()[0] == 1632
+assert row('TOTALS_SQL', (since, since))['game_minutes_legacy_sessions'] == 5
 print('ANALYTICS_SQL_RESULT: PASS — empty/odd/even medians, thresholds, monotonic cumulative totals, duplicates, stale reports, daily/device groups and expiry')
