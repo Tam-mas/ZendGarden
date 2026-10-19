@@ -154,8 +154,8 @@ def main():
     args = parser.parse_args()
     baseline = records('art_source/plant_full_baseline.json', ALL_IDS)
     updated = records('art_source/plant_full_art_manifest.json', UPDATED_IDS)
-    mature_records = records('art_source/botanical_manifest.json', set(range(298)))
-    growth_records = records('art_source/plant_growth_manifest.json', set(range(298)))
+    mature_records = records('art_source/botanical_manifest.json', set(range(299)))
+    growth_records = records('art_source/plant_growth_manifest.json', set(range(299)))
     sources = set()
     for plant_id, row in updated.items():
         source = row['source']

@@ -1,10 +1,14 @@
 # Anonymous garden statistics
 
 Production at `https://zend.garden` reports anonymous session totals to the Pages
-Function `/api/session`. The private dashboard is at `/stats`. Its password is
-stored as a Cloudflare encrypted secret; the ignored local `.stats-access.txt`
-contains the owner's copy. The password stays in dashboard memory until it is
-locked or closed. It is never placed in a URL, cookie or browser storage.
+Function `/api/session`. Shared, anonymous 90-day activity is at `/activity` and
+is served by `/api/activity`; it has no login, contains only aggregate totals and
+is served from a stored daily snapshot through an explicit edge cache. It omits individual-day results, game-version
+breakdowns, recent activity and generation timestamps. The private dashboard is
+at `/stats`. Its password is stored as a Cloudflare encrypted secret; the ignored
+local `.stats-access.txt` contains the owner's copy. The password stays in dashboard
+memory until it is locked or closed. It is never placed in a URL, cookie or browser
+storage.
 
 ## Measurements
 
@@ -14,25 +18,36 @@ locked or closed. It is never placed in a URL, cookie or browser storage.
 - **Game-open time:** elapsed wall time after the game loads. Includes background
   tabs, paused menus and device sleep. Browser throttling catches up on the next
   successful report. It measures elapsed open time, not CPU execution or attention.
-- **Garden advancing:** accumulated Godot frame time while the garden clock
-  advances. Excludes the welcome panel, photo mode, day transition and menus that
-  pause the clock. An unattended garden can still advance. No browser focus or
-  visibility signals are observed.
+- **In-game minutes:** cumulative progress on the garden clock, including the
+  minutes crossed by animated and reduced-motion Next morning jumps. A full
+  normal garden day takes 600 real seconds and contains 1,440 garden minutes.
+  Paused menus, photo mode and browser suspension add no game-clock progress.
+  This is separate from `advancing`, the real simulation seconds retained for
+  compatible reporting and validation. Older rows have NULL `game_minutes`; their
+  recorded advancing seconds are converted at 2.4 garden minutes per second.
+  Their unrecorded morning jumps cannot be reconstructed. Both dashboards mark
+  such mixed historical totals with ≥ rather than presenting them as complete.
+  No saved day/clock or garden state is sent; only cumulative session increments.
 - **Average, median, longest and 5/15/30-minute sessions:** based on game-open time.
   Includes unfinished sessions with their latest reported totals.
-- **Daily comparisons:** UTC session-start cohorts. A session's entire duration
+  The public snapshot includes only visits started in the 90 UTC days before
+  today. Duration is capped at the UTC publication boundary. Its payload is
+  immutable for that day, including when a cache is bypassed or evicted.
+- **Daily comparisons (private dashboard only):** UTC session-start cohorts. A session's entire duration
   belongs to its start day, including any time after midnight. Date ranges use the
   same rule. These are not calendar-day usage totals.
 - **Devices and versions:** desktop/touch capability and the existing game update
-  number. No user-agent string, precise screen size or device fingerprint.
-- **Reporting recently:** unfinished sessions with a report in the last five
-  minutes. This is not a live player or attention count.
+  number. The public page shows only the broad device total; no user-agent string,
+  precise screen size or device fingerprint is collected.
+- **Reporting recently (private dashboard only):** unfinished sessions with a
+  report in the last five minutes. This is not a live player or attention count.
 
 Reports are sent on load, every two minutes, and best-effort on closing. A hidden
 browser may suspend JavaScript or networking. No server extrapolation is made:
 elapsed time appears when another report arrives. If a browser is killed or never
-resumes, time after its last report is unknown. Advancing-time reports are batched
-every five seconds inside Godot, so closing can lose up to five seconds.
+resumes, time after its last report is unknown. Clock reports are batched every
+five simulation seconds; finishing a morning jump flushes its remaining minutes.
+Closing between batches can lose a small unreported tail.
 Failed analytics requests never block loading, play or saves. There is no tracking
 on the welcome/download screen. Previews, native builds and other hostnames do not
 collect production statistics.
@@ -41,10 +56,33 @@ collect production statistics.
 
 Cloudflare D1 `zend-garden-stats` contains one row per session with a random ID,
 server-derived start and last-report times, coarse device category, update number,
-two cumulative durations and a closing flag. Repeat starts return the same session;
+two cumulative real-time durations, cumulative garden-clock minutes and a closing
+flag. Repeat starts return the same session;
 repeated or out-of-order totals cannot inflate time. Signed session tokens stop
 arbitrary updates to other session IDs. Public metrics remain best-effort client
 telemetry, not tamper-proof accounting.
+
+New sessions start at the server's current time with zero claimed prior duration.
+The browser rebases reporting after the first successful handshake, so an offline
+start cannot invent earlier game-open time. Lost-response retries keep the same
+server start and ID. Existing open sessions retain valid signed reporting tokens.
+Atomic site-wide budgets admit at most 120 starts and 6,000 reports per minute;
+the two counter rows contain no visitor, IP or device identity. An exhausted
+budget returns an uncached 429 and analytics failure never interrupts the game.
+
+`analytics/snapshot-worker.js` publishes once daily at 00:05 UTC. It has no HTTP
+handler or public URL and binds only the statistics database. Successful telemetry
+can also create that day's snapshot; a unique key makes the first publication
+atomic and prevents replacement. Public GETs perform one indexed snapshot lookup
+on an edge-cache miss, never aggregate or delete session rows, and never publish
+a new snapshot. All incoming query strings share the same canonical day cache
+key. Cache entries expire at the next UTC midnight, errors are never cached, and
+disabled/preview checks happen before cache lookup. If a snapshot is missing,
+the endpoint returns unavailable instead of querying live sessions.
+
+These budgets limit accepted writes; they are not a substitute for Cloudflare's
+network-level traffic protections or account usage alerts. There are no new
+management API tokens, cross-service bindings, or browser credentials.
 
 The collector stores no IP addresses, names, email, save contents, referrer, visited
 areas, keystrokes, mouse movements, focus events or persistent visitor identifier.
@@ -61,7 +99,13 @@ the next purge. D1's own backups follow Cloudflare's Time Travel retention.
 1. Create a D1 database with `wrangler d1 create zend-garden-stats`; set its ID in
    `wrangler.jsonc` under `GARDEN_STATS`. The production database is already listed.
 2. Run `wrangler d1 execute zend-garden-stats --remote --file analytics/schema.sql`.
-   The schema is idempotent and changes no player saves.
+   The schema is idempotent and changes no player saves. Apply this before
+   deploying the snapshot/admission changes; it adds `public_activity` and
+   `analytics_limits` without modifying existing session records.
+   Existing installations created before the clock-minute counter must also run
+   `wrangler d1 execute zend-garden-stats --remote --file analytics/add_game_minutes.sql`
+   once. Check `pragma_table_info('sessions')` first; a new installation's schema
+   already contains this column. Its NULL default preserves historical records.
 3. In Pages → `zendgarden` → Settings → Variables and Secrets, set production
    encrypted secrets `SESSION_SECRET` and `STATS_PASSWORD` to separate random
    values of at least 32 characters. Do not commit these values. They must exist
@@ -71,14 +115,19 @@ the next purge. D1's own backups follow Cloudflare's Time Travel retention.
 4. Deploy `main` through the existing Pages Git integration. Wrangler supplies the
    D1 binding and enable flag. Production hostname is explicitly checked; previews
    have no database binding and collection is disabled.
-5. Open `/stats` and unlock it with the owner password. No Cloudflare API token is
-   sent to the browser or needed by the dashboard.
+   Deploy the separate daily publisher with
+   `wrangler deploy --config wrangler.activity.jsonc`. It uses the existing D1
+   database, exposes no public URL, and requires no application secrets. The first
+   valid telemetry packet after the Pages update also seeds the current snapshot.
+5. Open `/activity` for the shared aggregate view, or `/stats` and unlock it with
+   the owner password for the detailed private dashboard. No Cloudflare API token
+   is sent to either browser page.
 
 Set `ZEND_ANALYTICS_ENABLED` to `false` in the repository and redeploy to pause
 collection. The garden continues to load. The old transfer R2 bucket and local
 recovery archives are not deleted by this change; they are no longer bound or read.
 
-Run `node tests/analytics.cjs`, `python3 tests/analytics_sql.py` and
+Run `node tests/analytics.cjs`, `node tests/analytics_security.cjs`, `python3 tests/analytics_sql.py` and
 `node tests/save_storage.cjs` for the collector, authentication, timing, real SQL
 and save-validator checks. `tests/analytics_browser.cjs` uses isolated Chrome
 profiles to check real IndexedDB saves, session locks, strict CSP and the dashboard.

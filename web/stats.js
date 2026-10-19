@@ -2,6 +2,7 @@ const $ = id => document.getElementById(id);
 let password = '', loading = false;
 const number = value => Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 1 });
 const duration = seconds => seconds >= 3600 ? `${number(seconds / 3600)} h` : `${number(seconds / 60)} min`;
+const gameMinutes = t => `${t.game_minutes === undefined || t.game_minutes_legacy_sessions ? '≥ ' : ''}${number(t.game_minutes ?? t.advancing * 1440 / 600)} min`;
 function node(tag, text, className) {
   const element = document.createElement(tag);
   if (text !== undefined) element.textContent = text;
@@ -29,17 +30,17 @@ function render(data) {
   for (const [label, value, note] of [
     ['Sessions', number(t.sessions), 'Separate garden visits'],
     ['Game-open time', duration(t.running), 'Includes background and paused time'],
-    ['Garden advancing', duration(t.advancing), 'Time the garden clock advances'],
+    ['In-game minutes', gameMinutes(t), 'Garden-clock time, including Next morning'],
     ['Average session', duration(t.average), 'Game-open time per visit'],
     ['Median session', duration(t.median), 'The middle visit length'],
     ['Longest session', duration(t.longest), `${number(t.recent)} reporting in the last 5 minutes`],
   ]) {
     const card = node('div', undefined, 'card'); card.append(node('div', label), node('strong', value), node('span', note)); $('cards').append(card);
   }
-  table('daily', ['Start day (UTC)', 'Sessions', 'Game open', 'Garden advancing'], data.daily.map(row => [row.day, number(row.sessions), duration(row.running), duration(row.advancing)]));
+  table('daily', ['Start day (UTC)', 'Sessions', 'Game open', 'In-game minutes'], data.daily.map(row => [row.day, number(row.sessions), duration(row.running), gameMinutes(row)]));
   bars('lengths', [['5+ minutes', t.over5], ['15+ minutes', t.over15], ['30+ minutes', t.over30]], t.sessions);
   bars('devices', data.devices.map(row => [row.name === 'touch' ? 'Touch device' : 'Desktop', row.sessions]), t.sessions);
-  table('versions', ['Game update', 'Sessions', 'Game open', 'Garden advancing'], data.versions.map(row => [row.name, number(row.sessions), duration(row.running), duration(row.advancing)]));
+  table('versions', ['Game update', 'Sessions', 'Game open', 'In-game minutes'], data.versions.map(row => [row.name, number(row.sessions), duration(row.running), gameMinutes(row)]));
 }
 function lock() {
   password = ''; $('password').value = ''; $('dashboard').hidden = true; $('login').hidden = false;

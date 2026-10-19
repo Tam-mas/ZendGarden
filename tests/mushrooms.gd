@@ -25,7 +25,7 @@ func inspect(node: Node, name: String) -> void:
 func verify() -> void:
  var g=TestGarden.new()
  root.add_child(g)
- check(g.catalogue.size()==298,"Expected 298 catalogue entries")
+ check(g.catalogue.size()==299,"Expected 299 catalogue entries")
  g.category="Mushrooms"
  check(GardenSeedCollection.matching(g).size()==20,"Mushroom category missing plants")
  g.category="All";g.collection_filters.group="Mushrooms"
@@ -81,7 +81,7 @@ func verify() -> void:
  check(g.save_game(),"Could not save mushrooms fixture")
  var saved=JSON.parse_string(FileAccess.get_file_as_string(g.SAVE_PATH))
  check(saved.plants.map(func(p):return int(p.id))==ids,"Saved mushroom IDs changed")
- check(g.valid_plant_ids([0,277,278,287,288,297,298])==[0,277,278,287,288,297],"Catalogue boundary rejected mushrooms")
+ check(g.valid_plant_ids([0,277,278,287,288,297,298,299])==[0,277,278,287,288,297,298],"Catalogue boundary rejected mushrooms")
  g.loaded_data={"version":2,"plants":saved.plants};g.restore_garden()
  check(g.planted.size()==ids.size()*2,"Could not restore mixed garden")
  if g.planted.size()==ids.size()*2:

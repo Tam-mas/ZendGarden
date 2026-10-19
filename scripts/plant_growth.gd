@@ -32,6 +32,7 @@ static func stage(fraction: float, data: Dictionary) -> String:
  if fraction<.20: return "Seedling"
  if fraction<.52: return "Developing leaves"
  var kind=str(data.get("growth_kind",""))
+ if fraction<1.0 and kind=="bulb":return "Bulb forming" if fraction<.78 else "Bulb swelling"
  if fraction<1.0 and kind=="fronds":return "Unfurling fronds" if fraction<.78 else "Filling out"
  if fraction<1.0 and kind=="tips":return "New growing tips" if fraction<.78 else "Filling out"
  if fraction<1.0 and kind=="fruit":return "Developing harvest" if fraction<.78 else "Ripening"

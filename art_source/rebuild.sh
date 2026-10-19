@@ -20,6 +20,7 @@ for batch in {0..6}; do
   "$BLENDER_BIN" --background --python-exit-code 1 --python art_source/build_botanical_2026.py -- --batch "$batch"
 done
 "$BLENDER_BIN" --background --python-exit-code 1 --python art_source/build_mushrooms.py
+"$BLENDER_BIN" --background --python-exit-code 1 --python art_source/build_garlic.py
 python3 tests/check_mushrooms.py
 python3 tests/check_botanical_2026.py
 python3 tests/check_plant_art_full.py --enforce-baseline-budget

@@ -23,7 +23,7 @@ button.subtle { background: transparent; color: #355f47; }
 .toolbar #logout { margin-left: auto; }
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .card { margin-bottom: 0; }
-.card strong { display: block; font-size: 2rem; font-weight: 550; margin: 10px 0; }
+.card strong { display: block; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 550; margin: 10px 0; overflow-wrap: anywhere; }
 .card span, .muted, .notes { color: #607164; font-size: .87rem; }
 .cards { margin-bottom: 20px; }
 .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }

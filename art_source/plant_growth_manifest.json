@@ -2663,5 +2663,13 @@
     "height": 0.3,
     "triangles": 4890,
     "source": "art_source/mushrooms_02.blend"
+  },
+  {
+    "id": 298,
+    "name": "Garlic",
+    "family": "allium_bulb",
+    "height": 0.62,
+    "triangles": 3954,
+    "source": "art_source/garlic.blend"
   }
 ]

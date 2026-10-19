@@ -51,6 +51,8 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
    await page.evaluate(()=>window.ZendTelemetry.report());
    assert.equal(metrics.find(packet=>packet.action==='start').version,latestVersion,'Godot must configure the session version under strict CSP');
    assert(metrics.filter(packet=>packet.action==='report').at(-1).advancing>0,'Real Godot clock time must reach the browser');
+   const current=metrics.filter(packet=>packet.action==='report').at(-1);
+   assert(current.game_minutes>=Math.floor(current.advancing*1440/600),'The real Godot bridge must report garden minutes at the accelerated clock rate');
    await page.keyboard.press('Escape');
    await page.waitForTimeout(1000);
    await page.screenshot({path:path.resolve('captures/analytics-game-paused.png')});
@@ -66,6 +68,7 @@ const HOME='https://zend.garden',SAVE='/userfs/godot/app_userdata/Zend Garden/ga
   await page.evaluate(()=>window.ZendTelemetry.report());
   const paused=metrics.filter(packet=>packet.action==='report').at(-1);
   assert.equal(paused.advancing,advancing,'The garden clock must stay paused in menus');
+  assert.equal(paused.game_minutes,metrics.filter(packet=>packet.action==='report').at(-2).game_minutes,'Paused menus cannot create game-clock minutes');
   assert(paused.running>advancing,'Elapsed open time must include menu time');
   const stored=await page.evaluate(async()=>JSON.parse(new TextDecoder().decode(await (await import('/save-storage.js')).readCurrent())));
   assert.equal(stored.day,17);assert.equal(stored.coins,240);assert.equal(stored.plants[0].id,147);

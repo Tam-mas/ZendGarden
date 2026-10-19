@@ -1,3 +1,43 @@
+### [2026-10-19 19:47] Fixed
+
+**Tech:** `Garden.report_clock_time`, `sessions.game_minutes`, statistics dashboards — actual garden-clock minutes including morning jumps
+
+**Dev:** Track a distinct cumulative virtual-minute counter at the engine's 1,440-minutes-per-600-real-seconds rate, including incremental animated morning transitions across midnight and instant reduced-motion skips. Preserve real wall/simulation counters and their validation. Add a nullable D1 column, monotonic optional reporting compatible with existing clients, daily snapshot aggregation and explicit minute units in both dashboards. Convert older recorded simulation seconds as a lower bound, mark incomplete historical totals with ≥ and never invent missing morning jumps. Verify both transition paths, browser formatting, paused reporting, SQLite deduplication, and the actual exported Godot-to-browser bridge; retain the in-game update log as requested.
+
+**Plain:** Statistics now show minutes progressed on the garden clock, including time skipped to the next morning.
+
+**Why:** Make the figure match the passage of time players see in their gardens instead of showing real simulation minutes.
+
+### [2026-10-19 19:33] Added
+
+**Tech:** `GardenCatalogue.GARLIC_ID`, `art_source/build_garlic.py` — append-only garlic plant and authored growth assets
+
+**Dev:** Append Allium sativum at ID 298 in Produce with a sun-loving cool-season profile, 12 watered growing days, 0.62 m display height, scientific-name search and bulb-forming/swelling labels. Export separate mature and young-stage GLBs, a packed editable Blender source and game-rendered portrait using the established PBR, wind and local growth anchors. Preserve earlier identities, saves and the in-game update log as requested.
+
+**Plain:** Plant garlic with slender green leaves and a pale papery bulb, then gather it into your basket when it is ready.
+
+**Why:** Add a familiar kitchen-garden crop that fits existing planting, growing and harvesting tools.
+
+### [2026-10-19 19:32] Security
+
+**Tech:** `server/public_activity.js`, `functions/api/activity.js`, `functions/api/session.js` — immutable daily publication and bounded server-timed telemetry
+
+**Dev:** Store one atomic aggregate snapshot per UTC day, exclude today's starts and cap recorded time at the day boundary. Serve public reads through a canonical Cache API key with midnight expiry, no live-session fallback, no cleanup writes and uncached errors. Supply a scheduled publisher with only the D1 binding and no HTTP route. Reject nonzero initial duration, rebase delayed browser handshakes and enforce atomic shared budgets of 120 starts/6,000 reports per minute without visitor identifiers. Add two idempotent D1 tables, deployment instructions and cache, SQLite immutability/admission, forged-duration and offline-retry checks.
+
+**Plain:** Shared statistics stay fixed for the day, and new visits cannot claim days of time before they were opened.
+
+**Why:** Reduce activity inference, repeated database work and easy inflation of the public statistics.
+
+### [2026-10-19 17:01] Added
+
+**Tech:** `functions/api/activity.js`, `web/activity.html` — public, cached aggregate garden activity
+
+**Dev:** Add a production-only GET endpoint and linked public page that expose fixed 90-day aggregate visit, duration, session-length and broad device totals without authentication. Exclude response-generation time, current/recent activity, daily cohorts, update-version results and all raw session data; retain the private no-store owner dashboard. Cache the aggregate response at the edge for one day and keep the D1 database server-only.
+
+**Plain:** Anyone can now see a daily refreshed, anonymous summary of time spent in Zend Garden without seeing individual activity.
+
+**Why:** Share the garden’s overall growth while keeping player visits private and the owner’s detailed dashboard protected.
+
 ### [2026-10-18 15:34] Added
 
 **Tech:** `GardenNightLights`, `GardenCatalogue`, `night_lighting.blend` — carried torch and dusk-controlled shop lighting, release 74

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A shared, anonymous overview of time spent in Zend Garden.">
+  <title>Garden activity · Zend Garden</title>
+  <link rel="stylesheet" href="stats.css">
+  <script src="activity.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><div><p class="eyebrow">Zend Garden · Shared activity</p><h1>Time in the garden</h1></div><a href="/">Visit the garden ↗</a></header>
+    <section class="panel intro-panel">
+      <h2>A quiet look at the garden’s growth</h2>
+      <p>These anonymous, shared totals cover visits that began in the 90 days before today. They update daily. They are not a live player count and do not identify anyone.</p>
+    </section>
+    <p id="status" role="status" aria-live="polite">Loading garden activity…</p>
+    <section id="activity" hidden>
+      <div id="cards" class="cards"></div>
+      <div class="columns"><div class="panel"><h2>Session length</h2><div id="lengths"></div></div><div class="panel"><h2>Ways of visiting</h2><p class="muted">A broad desktop or touch-device category.</p><div id="devices"></div></div></div>
+      <aside class="panel notes"><h2>What the times mean</h2>
+        <p><strong>Game-open time</strong> is elapsed time after the garden loads, including background and paused time.</p>
+        <p><strong>In-game minutes</strong> counts progress on the garden clock, including Next morning jumps. Ten real minutes of normal clock advancement equals one full garden day (1,440 in-game minutes). Pauses and browser suspension add no clock progress.</p>
+        <p><strong>Older visits:</strong> only normal clock-running time was recorded, so their contribution is converted to garden minutes and excludes unrecorded morning jumps. A ≥ sign marks these incomplete historical totals.</p>
+        <p>Visits are separate garden loads, not unique people. Zend Garden does not collect names, save contents, IP addresses or persistent visitor identifiers for these figures.</p>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

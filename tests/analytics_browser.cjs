@@ -13,7 +13,7 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
   const hash = createHash('sha256').update(bytes).digest('hex');
   const errors = [], metrics = [];
   const headers = { 'Content-Security-Policy': "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; form-action 'none'" };
-  const data = { generated: 1791590400, totals: { sessions: 12, running: 72000, advancing: 21000, average: 6000, median: 3000, longest: 18000, over5: 10, over15: 8, over30: 6, recent: 2 },
+  const data = { generated: 1791590400, totals: { sessions: 12, running: 72000, advancing: 21000, game_minutes: 52320, game_minutes_legacy_sessions: 0, average: 6000, median: 3000, longest: 18000, over5: 10, over15: 8, over30: 6, recent: 2 },
     daily: [{ day: '2026-10-10', sessions: 12, running: 72000, advancing: 21000 }],
     devices: [{ name: 'desktop', sessions: 8 }, { name: 'touch', sessions: 4 }],
     versions: [{ name: '63', sessions: 12, running: 72000, advancing: 21000 }] };
@@ -24,6 +24,9 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
       if (url.pathname === '/fixture') return route.fulfill({ body: '<!doctype html><body>Storage fixture</body>', contentType: 'text/html', headers });
       if (url.pathname === '/api/session') { metrics.push(request.postDataJSON()); return route.fulfill({ status: 503, body: '{}' }); }
       if (url.pathname === '/api/stats') return route.fulfill({ status: request.headers().authorization === 'Bearer owner-fixture-password' ? 200 : 401, json: data });
+      if (url.pathname === '/api/activity') return route.fulfill({ json: { days: 90, totals: {
+        sessions: 12, running: 72000, advancing: 21000, average: 6000, median: 3000, longest: 18000, over5: 10, over15: 8, over30: 6,
+      }, devices: data.devices } });
       if (url.pathname === '/index.js') return route.fulfill({ contentType: 'text/javascript', body: `class Engine {
         static getMissingFeatures(){return [];} async init(){} async preloadFile(){}
         async start(config){window.startArgs=config.args;window.ZendTelemetry?.setVersion(63);window.ZendSaveGuard.ready();}
@@ -31,7 +34,7 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
       if (url.pathname === '/godot-config.js') return route.fulfill({ contentType: 'text/javascript', body: 'window.ZEND_GODOT_CONFIG={};' });
       if (url.pathname === '/pack.json') return route.fulfill({ json: { size: bytes.length, chunks: [{ url: 'pack/fixture.bin', size: bytes.length, sha256: hash }] } });
       if (url.pathname === '/pack/fixture.bin') return route.fulfill({ body: bytes });
-      let file = url.pathname === '/' ? 'shell.html' : url.pathname === '/stats' ? 'stats.html' : url.pathname.slice(1);
+      let file = url.pathname === '/' ? 'shell.html' : url.pathname === '/stats' ? 'stats.html' : url.pathname === '/activity' ? 'activity.html' : url.pathname.slice(1);
       try {
         let source = await fs.readFile(path.join('web', file));
         if (file === 'shell.html') source = source.toString().replace('$GODOT_HEAD_INCLUDE', '').replace('$GODOT_URL', 'index.js')
@@ -78,6 +81,7 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
     await page.locator('#password').fill('owner-fixture-password'); await page.getByRole('button', { name: 'Open statistics' }).click();
     await page.locator('#dashboard').waitFor({ state: 'visible' });
     assert.match(await page.locator('#cards').textContent(), /20 h/);
+    assert.match(await page.locator('#cards').textContent(), /52,320 min/);
     assert.equal(await page.locator('#password').inputValue(), '');
     assert.equal(await page.evaluate(() => localStorage.length + sessionStorage.length), 0);
     await page.screenshot({ path: '/private/tmp/zend-stats-desktop.png', fullPage: true });
@@ -86,6 +90,17 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
     await page.screenshot({ path: '/private/tmp/zend-stats-phone.png', fullPage: true });
     await page.getByRole('button', { name: 'Lock dashboard' }).click();
     assert.equal(await page.locator('#dashboard').isVisible(), false); assert.equal(await page.locator('#cards').textContent(), '');
+    await page.goto(HOME + '/activity');
+    await page.locator('#activity').waitFor({ state: 'visible' });
+    assert.match(await page.locator('#cards').textContent(), /Longest visit/);
+    assert.match(await page.locator('#cards').textContent(), /≥ 50,400 min/, 'Historical simulation seconds must be converted into garden-clock minutes');
+    assert.match(await page.locator('#status').textContent(), /updated daily/i);
+    assert.doesNotMatch(await page.content(), /recently|reporting|Game update|Start day/i);
+    assert.equal(await page.evaluate(() => localStorage.length + sessionStorage.length), 0);
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Public page must fit a phone');
+    await page.screenshot({ path: '/private/tmp/zend-activity-phone.png', fullPage: true });
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.screenshot({ path: '/private/tmp/zend-activity-desktop.png', fullPage: true });
     assert.deepEqual(errors, []);
     console.log('ANALYTICS_BROWSER_RESULT: PASS — real IndexedDB, exact saves, whole-session locks, corruption guard, loader with unavailable analytics, private dashboard, strict CSP and desktop/phone layouts');
   } finally { await context.close(); await browser.close(); }

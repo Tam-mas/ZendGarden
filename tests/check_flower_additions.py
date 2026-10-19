@@ -22,9 +22,9 @@ def values(doc,blob,index):
 
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
 growth=json.loads((ROOT/'art_source/plant_growth_manifest.json').read_text())
-assert len(specs)==len(growth)==298
+assert len(specs)==len(growth)==299
 assert [r['id'] for r in FLOWER_ADDITIONS]==list(range(148,218))
-assert len(set(row[0] for row in specs))==298
+assert len(set(row[0] for row in specs))==299
 assert all(r['references'] and r['scientific'] and r['notes'] for r in FLOWER_ADDITIONS)
 assert sum((ROOT/'assets/textures/flower_additions'/n).stat().st_size for n in ['leaf.webp','orchid_petal.webp','orchid_sepal.webp'])<300000
 for row in FLOWER_ADDITIONS:

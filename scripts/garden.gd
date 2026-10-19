@@ -218,6 +218,8 @@ var area_atlas_index=-1
 var area_atlas_return=false
 var area_notice=""
 var analytics_seconds=0.0
+var analytics_game_minutes=0.0
+var analytics_batch_seconds=0.0
 
 func _ready() -> void:
  GardenTerrain.offsets.clear()
@@ -940,13 +942,19 @@ func replenish_orders() -> void:
   arrived=true
  if arrived: notify_requests()
 
-func report_advancing_time(delta: float) -> void:
+func report_clock_time(delta: float, advancing: float, game_minutes: float, flush: bool=false) -> void:
  if not OS.has_feature("web") or smoke:return
- analytics_seconds+=delta
- if analytics_seconds<5.0:return
+ analytics_seconds+=advancing
+ analytics_game_minutes+=game_minutes
+ analytics_batch_seconds+=delta
+ if not flush and analytics_batch_seconds<5.0:return
  var telemetry=JavaScriptBridge.get_interface("window").ZendTelemetry
- if telemetry!=null:telemetry.advance(analytics_seconds)
+ if telemetry!=null:
+  telemetry.advance(analytics_seconds)
+  telemetry.progress(analytics_game_minutes)
  analytics_seconds=0.0
+ analytics_game_minutes=0.0
+ analytics_batch_seconds=0.0
 
 func _process(delta: float) -> void:
  GardenWorkshop.fit(self)
@@ -985,7 +993,7 @@ func _process(delta: float) -> void:
   if mode=="walk": current_plot=nearest_plot(player.position)
   if day_transition: update_day_transition(delta)
   elif not (settings.pause_menus and not gameplay_active() and not smoke):
-   report_advancing_time(delta)
+   report_clock_time(delta,delta,delta/DAY_SECONDS*1440.0)
    clock_time += delta/DAY_SECONDS
    if clock_time>=1:
     clock_time-=1
@@ -1842,8 +1850,10 @@ func next_day() -> void:
  challenge_skip_confirmed=false
  GardenLeisure.leave(self)
  if settings.reduced_motion:
+  var minutes=(1.30-clock_time)*1440.0
   advance_growth()
   clock_time=.30
+  report_clock_time(0,0,minutes,true)
   return
  day_transition=true
  transition_elapsed=0.0
@@ -1857,9 +1867,11 @@ func next_day() -> void:
  update_hud()
 
 func update_day_transition(delta: float) -> void:
+ var previous_clock=lerpf(transition_start,1.30,smoothstep(0,1,transition_elapsed/TRANSITION_SECONDS))
  transition_elapsed=minf(TRANSITION_SECONDS,transition_elapsed+delta)
  var progress=transition_elapsed/TRANSITION_SECONDS
  var elapsed_clock=lerpf(transition_start,1.30,smoothstep(0,1,progress))
+ report_clock_time(delta,0,maxf(0,elapsed_clock-previous_clock)*1440.0,progress>=1.0)
  clock_time=fposmod(elapsed_clock,1.0)
  if elapsed_clock>=1.0 and not transition_crossed_midnight:
   transition_crossed_midnight=true

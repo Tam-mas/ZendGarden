@@ -2961,5 +2961,14 @@
     "path": "assets/plants/plant_297.glb",
     "source": "art_source/mushrooms_02.blend",
     "morphology_version": 6
+  },
+  {
+    "id": 298,
+    "name": "Garlic",
+    "vertices": 2291,
+    "triangles": 4090,
+    "path": "assets/plants/plant_298.glb",
+    "source": "art_source/garlic.blend",
+    "morphology_version": 7
   }
 ]

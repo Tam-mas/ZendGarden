@@ -96,7 +96,7 @@ func verify_stage(model: Node3D, data: Dictionary, fraction: float) -> void:
 
 func verify() -> void:
  var garden=GardenFixture.new()
- check(garden.catalogue.size()==298,"Full collection no longer contains 298 species")
+ check(garden.catalogue.size()==299,"Full collection no longer contains 299 species")
  for id in range(garden.catalogue.size()):
   var data=garden.catalogue[id]
   check(bool(data.get("attached_bloom",false)),str(data.name)+": catalogue omits attached growth")
@@ -150,7 +150,7 @@ func verify() -> void:
    check(leaf_found,str(id)+": cultivar has no marked leaf tissue")
   model.free();loaded_model.free()
   await process_frame
- check(checked_stages==298*5+CULTIVAR_IDS.size()*5,"Some plant growth cases did not complete")
+ check(checked_stages==299*5+CULTIVAR_IDS.size()*5,"Some plant growth cases did not complete")
  check(checked_succulents==41,"Some succulent rigidity cases were skipped")
  print("PLANT_ART_FULL_RESULT: ",JSON.stringify({"plants":garden.catalogue.size(),"growth_stages":checked_stages,"cultivar_reload_stages":checked_cultivar_stages,"succulents":checked_succulents,"attachment_vertices":checked_attachment_vertices,"failures":failures}))
  quit(0 if failures.is_empty() else 1)
