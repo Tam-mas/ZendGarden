@@ -1,25 +1,29 @@
-import { MAX_SECONDS, enabled, publicReply, PURGE_SQL } from '../../server/analytics.js';
-import { PUBLIC_TOTALS_SQL, MEDIAN_SQL, GROUP_SQL } from './stats.js';
-
-const DAYS = 90;
+import { enabled, publicReply, reply } from '../../server/analytics.js';
+import { SNAPSHOT_READ_SQL } from '../../server/public_activity.js';
 
 // This endpoint is intentionally public. It returns only 90-day aggregate
 // activity and broad device totals: no identifiers, rows, daily cohorts,
 // game-version data, current activity, or response-generation timestamp.
-export async function onRequest({ request, env }) {
-  if (request.method !== 'GET') return publicReply({ error: 'method' }, 405);
-  if (!enabled(request, env)) return publicReply({ error: 'disabled' }, 503);
+export async function onRequest({ request, env, waitUntil }) {
+  if (request.method !== 'GET') return reply({ error: 'method' }, 405);
+  if (!enabled(request, env)) return reply({ error: 'disabled' }, 503);
   const now = Math.floor(Date.now() / 1000);
-  const since = Math.floor(now / 86400) * 86400 - (DAYS - 1) * 86400;
+  const day = Math.floor(now / 86400) * 86400;
+  // Query strings, cookies and incoming cache directives cannot create variants
+  // or force a live query. Old cached snapshots expire at the UTC day boundary.
+  const key = new Request(`https://zend.garden/api/activity?day=${day}`);
+  const cache = globalThis.caches?.default;
   try {
-    await env.GARDEN_STATS.prepare(PURGE_SQL).bind(now - MAX_SECONDS).run();
-    const result = await env.GARDEN_STATS.batch([
-      env.GARDEN_STATS.prepare(PUBLIC_TOTALS_SQL).bind(since),
-      env.GARDEN_STATS.prepare(MEDIAN_SQL).bind(since),
-      env.GARDEN_STATS.prepare(GROUP_SQL('device')).bind(since),
-    ]);
-    return publicReply({ days: DAYS,
-      totals: { ...result[0].results[0], ...result[1].results[0] },
-      devices: result[2].results });
-  } catch { return publicReply({ error: 'unavailable' }, 503); }
+    const cached = await cache?.match(key);
+    if (cached) return cached;
+    // Exactly one indexed, read-only lookup. Never fall back to raw sessions.
+    const snapshot = await env.GARDEN_STATS.prepare(SNAPSHOT_READ_SQL).bind(day).first();
+    if (!snapshot) return reply({ error: 'unavailable' }, 503);
+    const response = publicReply(JSON.parse(snapshot.payload), 200, day + 86400 - now);
+    if (cache) {
+      const write = cache.put(key, response.clone()).catch(() => {});
+      if (waitUntil) waitUntil(write); else await write;
+    }
+    return response;
+  } catch { return reply({ error: 'unavailable' }, 503); }
 }

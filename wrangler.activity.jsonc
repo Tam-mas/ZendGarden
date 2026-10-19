@@ -1,0 +1,12 @@
+{
+  "name": "zend-garden-activity-snapshot",
+  "main": "analytics/snapshot-worker.js",
+  "compatibility_date": "2026-09-18",
+  "workers_dev": false,
+  "preview_urls": false,
+  "triggers": { "crons": ["5 0 * * *"] },
+  "d1_databases": [
+    { "binding": "GARDEN_STATS", "database_name": "zend-garden-stats",
+      "database_id": "b835ab95-073f-4619-b53e-6bb43d07e568" }
+  ]
+}

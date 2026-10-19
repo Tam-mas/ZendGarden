@@ -8,7 +8,8 @@ root = Path(__file__).resolve().parents[1]
 queries = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', """
 import {UPDATE_SQL, PURGE_SQL} from './server/analytics.js';
 import {TOTALS_SQL, PUBLIC_TOTALS_SQL, MEDIAN_SQL, DAILY_SQL, GROUP_SQL} from './functions/api/stats.js';
-console.log(JSON.stringify({UPDATE_SQL,PURGE_SQL,TOTALS_SQL,PUBLIC_TOTALS_SQL,MEDIAN_SQL,DAILY_SQL,DEVICE_SQL:GROUP_SQL('device')}));
+import {SNAPSHOT_SQL,SNAPSHOT_READ_SQL,ADMISSION_SQL} from './server/public_activity.js';
+console.log(JSON.stringify({UPDATE_SQL,PURGE_SQL,TOTALS_SQL,PUBLIC_TOTALS_SQL,MEDIAN_SQL,DAILY_SQL,DEVICE_SQL:GROUP_SQL('device'),SNAPSHOT_SQL,SNAPSHOT_READ_SQL,ADMISSION_SQL}));
 """], cwd=root, text=True))
 db = sqlite3.connect(':memory:')
 db.row_factory = sqlite3.Row
@@ -41,4 +42,30 @@ assert len(db.execute(queries['DEVICE_SQL'], (since,)).fetchall()) == 2
 db.execute(insert, ('old', since - 91 * 86400, since, 63, 'touch', 999, 999))
 db.execute(queries['PURGE_SQL'], (since - 90 * 86400,))
 assert db.execute('SELECT COUNT(*) FROM sessions').fetchone()[0] == 5
+
+# Today's visits are absent; yesterday's published payload cannot change even
+# when sessions change or several collectors attempt publication on the same day.
+day = since + 86400
+db.execute(insert, ('today', day + 1, day + 20, 74, 'touch', 9999, 1000))
+db.execute(queries['SNAPSHOT_SQL'], (day,))
+published = row('SNAPSHOT_READ_SQL', (day,))['payload']
+public = json.loads(published)
+assert public['totals']['sessions'] == 5 and public['totals']['longest'] == 1800
+assert public['totals']['median'] == 600
+assert set(public) == {'days', 'totals', 'devices'}
+assert set(public['devices'][0]) == {'name', 'sessions'}
+db.execute('UPDATE sessions SET running=999999')
+db.execute(queries['SNAPSHOT_SQL'], (day,))
+assert row('SNAPSHOT_READ_SQL', (day,))['payload'] == published
+db.execute(queries['SNAPSHOT_SQL'], (day + 86400,))
+assert row('SNAPSHOT_READ_SQL', (day + 86400,))['payload'] != published
+assert json.loads(row('SNAPSHOT_READ_SQL', (day + 86400,))['payload'])['totals']['longest'] <= 2 * 86400
+
+# Atomic shared budgets cannot be reset by an out-of-order older request.
+for _ in range(120):
+    assert db.execute(queries['ADMISSION_SQL'], ('starts', 500, 120)).fetchone()
+assert db.execute(queries['ADMISSION_SQL'], ('starts', 500, 120)).fetchone() is None
+assert db.execute(queries['ADMISSION_SQL'], ('starts', 499, 120)).fetchone() is None
+assert db.execute(queries['ADMISSION_SQL'], ('starts', 501, 120)).fetchone()['hits'] == 1
+assert db.execute('SELECT COUNT(*) FROM analytics_limits').fetchone()[0] == 1
 print('ANALYTICS_SQL_RESULT: PASS — empty/odd/even medians, thresholds, monotonic cumulative totals, duplicates, stale reports, daily/device groups and expiry')

@@ -7,8 +7,8 @@ export const HEADERS = {
 export const reply = (body, status = 200) => Response.json(body, { status, headers: HEADERS });
 // Public activity is deliberately aggregate-only and may be served from the edge
 // for a day. The private dashboard must continue to use no-store above.
-export const publicReply = (body, status = 200) => Response.json(body, { status, headers: {
-  ...HEADERS, 'Cache-Control': 'public, max-age=0, s-maxage=86400, stale-while-revalidate=86400',
+export const publicReply = (body, status = 200, ttl = 86400) => Response.json(body, { status, headers: {
+  ...HEADERS, 'Cache-Control': `public, max-age=0, s-maxage=${ttl}`,
 } });
 export const sameOrigin = request => request.headers.get('Origin') === new URL(request.url).origin;
 export const enabled = (request, env) => new URL(request.url).hostname === 'zend.garden'

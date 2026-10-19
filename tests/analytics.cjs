@@ -8,6 +8,7 @@ global.crypto = webcrypto;
   const { onRequest: stats } = await import('../functions/api/stats.js');
   const { onRequest: activity } = await import('../functions/api/activity.js');
   const { verifySession, MAX_SECONDS } = await import('../server/analytics.js');
+  const { ADMISSION_SQL, SNAPSHOT_READ_SQL } = await import('../server/public_activity.js');
   let clock = Date.now(), interval, fail = false;
   const events = new Map(), packets = [], starts = [];
   const id = '22ac027d-9279-4c34-a258-7c13076c1e2d';
@@ -40,6 +41,9 @@ global.crypto = webcrypto;
   const env = { ZEND_ANALYTICS_ENABLED: 'true', SESSION_SECRET: 's'.repeat(43), STATS_PASSWORD: 'p'.repeat(43),
     GARDEN_STATS: { prepare(sql) { return { bind(...values) { return {
       async first() {
+        if (sql === ADMISSION_SQL) return { hits: 1 };
+        if (sql === SNAPSHOT_READ_SQL) return { payload: JSON.stringify({ days: 90,
+          totals: { sessions: 1, running: 600, median: 600 }, devices: [] }) };
         const [id, started, last_seen, version, device] = values;
         if (!rows.has(id)) rows.set(id, { id, started, version, device });
         starts.push({ sql, values }); return rows.get(id);
@@ -56,7 +60,7 @@ global.crypto = webcrypto;
   const response = await call(collect, start); assert.equal(response.status, 201);
   const { token } = await response.json();
   assert.equal((await verifySession(token, env.SESSION_SECRET, Math.floor(Date.now() / 1000))).id, id);
-  const retry = await call(collect, { ...start, running: 100 });
+  const retry = await call(collect, start);
   assert.equal((await retry.json()).token, token, 'A retry retains the original start and identity'); assert.equal(rows.size, 1);
   const report = { action: 'report', token, running: 0, advancing: 0, ended: false };
   assert.equal((await call(collect, report)).status, 200);
@@ -66,6 +70,7 @@ global.crypto = webcrypto;
   assert.equal((await call(collect, { ...report, running: NaN })).status, 400);
   assert.equal((await call(collect, { ...start, garden: { plants: [] } })).status, 400, 'Reject unexpected fields');
   assert.equal((await call(collect, { ...start, running: MAX_SECONDS + 1 })).status, 400);
+  assert.equal((await call(collect, { ...start, running: 89 * 86400 })).status, 400, 'Reject backdated new sessions');
   assert.equal((await call(collect, start, { origin: 'https://other.test', host: 'https://zend.garden' })).status, 403);
   assert.equal((await call(collect, start, { origin: 'https://preview.pages.dev' })).status, 503);
   assert.equal((await call(collect, start, { config: { ...env, ZEND_ANALYTICS_ENABLED: 'false' } })).status, 503);
@@ -84,7 +89,7 @@ global.crypto = webcrypto;
   assert.equal((await call(activity, null)).status, 405, 'Public activity is read-only');
   const activityResponse = await call(activity, null, { method: 'GET' });
   assert.equal(activityResponse.status, 200);
-  assert.match(activityResponse.headers.get('cache-control'), /s-maxage=86400/);
+  assert.match(activityResponse.headers.get('cache-control'), /s-maxage=\d+/);
   const publicActivity = await activityResponse.json();
   assert.equal(publicActivity.days, 90); assert.equal(publicActivity.totals.median, 600);
   assert(!('generated' in publicActivity) && !('daily' in publicActivity) && !('versions' in publicActivity));

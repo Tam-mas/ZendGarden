@@ -6,10 +6,11 @@ results=[]
 legacy_sources=['botanical_library.blend','botanical_expansion.blend','botanical_additions.blend','plant_growth.blend','low_grasses.blend','flower_additions.blend','plant_art_sample.blend','lake_garden.blend','companions.blend','shop_library.blend','wildlife_library.blend','hand_tools.blend','overhaul/animals.blend','overhaul/structures.blend','overhaul/Area_Furnishings.blend','overhaul/WorkingGarden.blend','overhaul/AlpineRavine.blend','overhaul/scenery.blend','overhaul/environment.blend','overhaul/tools.blend','cat_study/cat_game.blend',*[f'overhaul/Area_{k}.blend' for k in ['reedwater','fern_gully','limestone','pollinator','orchard','kitchen','glasshouse','stream','alpine','moon','Collections']],*[f'animal_studies/{k}/{k}_game.blend' for k in ['dog','fox','echidna','rabbit']]]
 full_sources=sorted({row['source'].removeprefix('art_source/') for row in json.loads((root/'art_source/plant_full_art_manifest.json').read_text())})
 expansion_sources=sorted({row['source'].removeprefix('art_source/') for row in json.loads((root/'art_source/botanical_2026_manifest.json').read_text())})
-full_sources+=expansion_sources+['mushrooms.blend','mushrooms_02.blend','night_lighting.blend']
+full_sources+=expansion_sources+['mushrooms.blend','mushrooms_02.blend','night_lighting.blend','garlic.blend']
 sources=expansion_sources if '--botanical-2026-only' in sys.argv else full_sources if '--full-plants-only' in sys.argv else legacy_sources+full_sources
 if '--mushrooms-only' in sys.argv:sources=['mushrooms.blend','mushrooms_02.blend']
 if '--night-lights-only' in sys.argv:sources=['night_lighting.blend']
+if '--garlic-only' in sys.argv:sources=['garlic.blend']
 if '--areas-only' in sys.argv:sources=[name for name in legacy_sources if name.startswith('overhaul/Area_') or name=='overhaul/AlpineRavine.blend']
 for name in sources:
     path=root/'art_source'/name

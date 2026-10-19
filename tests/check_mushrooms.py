@@ -12,10 +12,10 @@ import check_plant_art_full as glb
 
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
 catalogue=(ROOT/'scripts/catalogue.gd').read_text()
-assert len(specs)==298
+assert len(specs)==299
 assert json.loads(re.search(r'const ROWS\s*=\s*(\[.*?\n\])',catalogue,re.S)[1])==specs
 heights=json.loads((ROOT/'scripts/plant_profiles.gd').read_text().split('const HEIGHTS=')[1])
-assert len(heights)==298
+assert len(heights)==299
 manifest=json.loads((ROOT/'art_source/mushroom_manifest.json').read_text())
 assert [r['id'] for r in manifest]==list(range(278,298))
 assert len({r['form'] for r in manifest})==20

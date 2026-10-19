@@ -1,3 +1,23 @@
+### [2026-10-19 19:33] Added
+
+**Tech:** `GardenCatalogue.GARLIC_ID`, `art_source/build_garlic.py` — append-only garlic plant and authored growth assets
+
+**Dev:** Append Allium sativum at ID 298 in Produce with a sun-loving cool-season profile, 12 watered growing days, 0.62 m display height, scientific-name search and bulb-forming/swelling labels. Export separate mature and young-stage GLBs, a packed editable Blender source and game-rendered portrait using the established PBR, wind and local growth anchors. Preserve earlier identities, saves and the in-game update log as requested.
+
+**Plain:** Plant garlic with slender green leaves and a pale papery bulb, then gather it into your basket when it is ready.
+
+**Why:** Add a familiar kitchen-garden crop that fits existing planting, growing and harvesting tools.
+
+### [2026-10-19 19:32] Security
+
+**Tech:** `server/public_activity.js`, `functions/api/activity.js`, `functions/api/session.js` — immutable daily publication and bounded server-timed telemetry
+
+**Dev:** Store one atomic aggregate snapshot per UTC day, exclude today's starts and cap recorded time at the day boundary. Serve public reads through a canonical Cache API key with midnight expiry, no live-session fallback, no cleanup writes and uncached errors. Supply a scheduled publisher with only the D1 binding and no HTTP route. Reject nonzero initial duration, rebase delayed browser handshakes and enforce atomic shared budgets of 120 starts/6,000 reports per minute without visitor identifiers. Add two idempotent D1 tables, deployment instructions and cache, SQLite immutability/admission, forged-duration and offline-retry checks.
+
+**Plain:** Shared statistics stay fixed for the day, and new visits cannot claim days of time before they were opened.
+
+**Why:** Reduce activity inference, repeated database work and easy inflation of the public statistics.
+
 ### [2026-10-19 17:01] Added
 
 **Tech:** `functions/api/activity.js`, `web/activity.html` — public, cached aggregate garden activity

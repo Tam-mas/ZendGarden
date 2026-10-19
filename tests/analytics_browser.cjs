@@ -95,6 +95,10 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
     assert.match(await page.locator('#status').textContent(), /updated daily/i);
     assert.doesNotMatch(await page.content(), /recently|reporting|Game update|Start day/i);
     assert.equal(await page.evaluate(() => localStorage.length + sessionStorage.length), 0);
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Public page must fit a phone');
+    await page.screenshot({ path: '/private/tmp/zend-activity-phone.png', fullPage: true });
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.screenshot({ path: '/private/tmp/zend-activity-desktop.png', fullPage: true });
     assert.deepEqual(errors, []);
     console.log('ANALYTICS_BROWSER_RESULT: PASS — real IndexedDB, exact saves, whole-session locks, corruption guard, loader with unavailable analytics, private dashboard, strict CSP and desktop/phone layouts');
   } finally { await context.close(); await browser.close(); }

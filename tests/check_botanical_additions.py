@@ -3,7 +3,7 @@ import json, re, struct
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 rows=json.loads((ROOT/'art_source/plant_specs.json').read_text())
-assert len(rows)==298
+assert len(rows)==299
 assert sum(row[1]=='Grasses' for row in rows)==36
 assert sum(row[1]=='Cacti & succulents' for row in rows)==40
 assert all(row[1]=='Grasses' for row in rows[106:116])
