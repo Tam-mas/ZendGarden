@@ -1,10 +1,14 @@
 # Anonymous garden statistics
 
 Production at `https://zend.garden` reports anonymous session totals to the Pages
-Function `/api/session`. The private dashboard is at `/stats`. Its password is
-stored as a Cloudflare encrypted secret; the ignored local `.stats-access.txt`
-contains the owner's copy. The password stays in dashboard memory until it is
-locked or closed. It is never placed in a URL, cookie or browser storage.
+Function `/api/session`. Shared, anonymous 90-day activity is at `/activity` and
+is served by `/api/activity`; it has no login, contains only aggregate totals and
+is cached at the edge for a day. It omits individual-day results, game-version
+breakdowns, recent activity and generation timestamps. The private dashboard is
+at `/stats`. Its password is stored as a Cloudflare encrypted secret; the ignored
+local `.stats-access.txt` contains the owner's copy. The password stays in dashboard
+memory until it is locked or closed. It is never placed in a URL, cookie or browser
+storage.
 
 ## Measurements
 
@@ -20,13 +24,14 @@ locked or closed. It is never placed in a URL, cookie or browser storage.
   visibility signals are observed.
 - **Average, median, longest and 5/15/30-minute sessions:** based on game-open time.
   Includes unfinished sessions with their latest reported totals.
-- **Daily comparisons:** UTC session-start cohorts. A session's entire duration
+- **Daily comparisons (private dashboard only):** UTC session-start cohorts. A session's entire duration
   belongs to its start day, including any time after midnight. Date ranges use the
   same rule. These are not calendar-day usage totals.
 - **Devices and versions:** desktop/touch capability and the existing game update
-  number. No user-agent string, precise screen size or device fingerprint.
-- **Reporting recently:** unfinished sessions with a report in the last five
-  minutes. This is not a live player or attention count.
+  number. The public page shows only the broad device total; no user-agent string,
+  precise screen size or device fingerprint is collected.
+- **Reporting recently (private dashboard only):** unfinished sessions with a
+  report in the last five minutes. This is not a live player or attention count.
 
 Reports are sent on load, every two minutes, and best-effort on closing. A hidden
 browser may suspend JavaScript or networking. No server extrapolation is made:
@@ -71,8 +76,9 @@ the next purge. D1's own backups follow Cloudflare's Time Travel retention.
 4. Deploy `main` through the existing Pages Git integration. Wrangler supplies the
    D1 binding and enable flag. Production hostname is explicitly checked; previews
    have no database binding and collection is disabled.
-5. Open `/stats` and unlock it with the owner password. No Cloudflare API token is
-   sent to the browser or needed by the dashboard.
+5. Open `/activity` for the shared aggregate view, or `/stats` and unlock it with
+   the owner password for the detailed private dashboard. No Cloudflare API token
+   is sent to either browser page.
 
 Set `ZEND_ANALYTICS_ENABLED` to `false` in the repository and redeploy to pause
 collection. The garden continues to load. The old transfer R2 bucket and local

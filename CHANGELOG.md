@@ -1,3 +1,13 @@
+### [2026-10-19 17:01] Added
+
+**Tech:** `functions/api/activity.js`, `web/activity.html` — public, cached aggregate garden activity
+
+**Dev:** Add a production-only GET endpoint and linked public page that expose fixed 90-day aggregate visit, duration, session-length and broad device totals without authentication. Exclude response-generation time, current/recent activity, daily cohorts, update-version results and all raw session data; retain the private no-store owner dashboard. Cache the aggregate response at the edge for one day and keep the D1 database server-only.
+
+**Plain:** Anyone can now see a daily refreshed, anonymous summary of time spent in Zend Garden without seeing individual activity.
+
+**Why:** Share the garden’s overall growth while keeping player visits private and the owner’s detailed dashboard protected.
+
 ### [2026-10-18 15:34] Added
 
 **Tech:** `GardenNightLights`, `GardenCatalogue`, `night_lighting.blend` — carried torch and dusk-controlled shop lighting, release 74

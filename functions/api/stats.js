@@ -7,6 +7,14 @@ export const TOTALS_SQL = `SELECT COUNT(*) AS sessions, COALESCE(SUM(running),0)
  COALESCE(SUM(running >= 1800),0) AS over30,
  COALESCE(SUM(last_seen >= ?2 AND ended = 0),0) AS recent
  FROM sessions WHERE started >= ?1`;
+// The public page intentionally has no live/recent field. It must never reuse
+// TOTALS_SQL, even if the browser chooses not to display that field.
+export const PUBLIC_TOTALS_SQL = `SELECT COUNT(*) AS sessions, COALESCE(SUM(running),0) AS running,
+ COALESCE(SUM(advancing),0) AS advancing, COALESCE(AVG(running),0) AS average,
+ COALESCE(MAX(running),0) AS longest,
+ COALESCE(SUM(running >= 300),0) AS over5, COALESCE(SUM(running >= 900),0) AS over15,
+ COALESCE(SUM(running >= 1800),0) AS over30
+ FROM sessions WHERE started >= ?1`;
 export const MEDIAN_SQL = `SELECT COALESCE(AVG(running),0) AS median FROM
  (SELECT running FROM sessions WHERE started >= ?1 ORDER BY running
  LIMIT 2 - (SELECT COUNT(*) FROM sessions WHERE started >= ?1) % 2

@@ -9,7 +9,7 @@ from pathlib import Path
 root = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else Path(__file__).resolve().parents[1] / 'build/web'
 for name in ('index.html', 'index.js', 'index.wasm', 'loader.js', 'pack.json', '_headers', '404.html',
              '_routes.json', 'save-storage.js', 'save-format.js', 'save-files.js', 'telemetry.js',
-             'stats.html', 'stats.css', 'stats.js'):
+             'stats.html', 'stats.css', 'stats.js', 'activity.html', 'activity.js'):
     assert (root / name).is_file(), f'Missing {name}'
 assert not (root / 'index.pck').exists(), 'Oversized unsplit pack remains'
 assert gzip.decompress((root / 'index.wasm').read_bytes()).startswith(b'\x00asm'), 'Invalid WASM'
@@ -36,7 +36,7 @@ assert '<script src="save-files.js"></script>' in html
 assert 'garden-woodland.webp' in html and (root/'art/garden-woodland.webp').is_file(), 'New start background missing'
 assert 'garden-woodland.jpg' not in html
 routes = json.loads((root / '_routes.json').read_text())
-assert routes['include'] == ['/api/session', '/api/stats']
+assert routes['include'] == ['/api/session', '/api/stats', '/api/activity']
 assert '/pack/*' not in routes['include'], 'Game downloads must bypass functions'
 for removed in ('moving.html', 'migration.js', 'migration.css', 'migration-storage.js'):
     assert not (root / removed).exists(), f'Obsolete domain-transfer asset: {removed}'

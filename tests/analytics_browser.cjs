@@ -24,6 +24,9 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
       if (url.pathname === '/fixture') return route.fulfill({ body: '<!doctype html><body>Storage fixture</body>', contentType: 'text/html', headers });
       if (url.pathname === '/api/session') { metrics.push(request.postDataJSON()); return route.fulfill({ status: 503, body: '{}' }); }
       if (url.pathname === '/api/stats') return route.fulfill({ status: request.headers().authorization === 'Bearer owner-fixture-password' ? 200 : 401, json: data });
+      if (url.pathname === '/api/activity') return route.fulfill({ json: { days: 90, totals: {
+        sessions: 12, running: 72000, advancing: 21000, average: 6000, median: 3000, longest: 18000, over5: 10, over15: 8, over30: 6,
+      }, devices: data.devices } });
       if (url.pathname === '/index.js') return route.fulfill({ contentType: 'text/javascript', body: `class Engine {
         static getMissingFeatures(){return [];} async init(){} async preloadFile(){}
         async start(config){window.startArgs=config.args;window.ZendTelemetry?.setVersion(63);window.ZendSaveGuard.ready();}
@@ -31,7 +34,7 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
       if (url.pathname === '/godot-config.js') return route.fulfill({ contentType: 'text/javascript', body: 'window.ZEND_GODOT_CONFIG={};' });
       if (url.pathname === '/pack.json') return route.fulfill({ json: { size: bytes.length, chunks: [{ url: 'pack/fixture.bin', size: bytes.length, sha256: hash }] } });
       if (url.pathname === '/pack/fixture.bin') return route.fulfill({ body: bytes });
-      let file = url.pathname === '/' ? 'shell.html' : url.pathname === '/stats' ? 'stats.html' : url.pathname.slice(1);
+      let file = url.pathname === '/' ? 'shell.html' : url.pathname === '/stats' ? 'stats.html' : url.pathname === '/activity' ? 'activity.html' : url.pathname.slice(1);
       try {
         let source = await fs.readFile(path.join('web', file));
         if (file === 'shell.html') source = source.toString().replace('$GODOT_HEAD_INCLUDE', '').replace('$GODOT_URL', 'index.js')
@@ -86,6 +89,12 @@ const SAVE = '/userfs/godot/app_userdata/Zend Garden/garden_v1.json';
     await page.screenshot({ path: '/private/tmp/zend-stats-phone.png', fullPage: true });
     await page.getByRole('button', { name: 'Lock dashboard' }).click();
     assert.equal(await page.locator('#dashboard').isVisible(), false); assert.equal(await page.locator('#cards').textContent(), '');
+    await page.goto(HOME + '/activity');
+    await page.locator('#activity').waitFor({ state: 'visible' });
+    assert.match(await page.locator('#cards').textContent(), /Longest visit/);
+    assert.match(await page.locator('#status').textContent(), /updated daily/i);
+    assert.doesNotMatch(await page.content(), /recently|reporting|Game update|Start day/i);
+    assert.equal(await page.evaluate(() => localStorage.length + sessionStorage.length), 0);
     assert.deepEqual(errors, []);
     console.log('ANALYTICS_BROWSER_RESULT: PASS — real IndexedDB, exact saves, whole-session locks, corruption guard, loader with unavailable analytics, private dashboard, strict CSP and desktop/phone layouts');
   } finally { await context.close(); await browser.close(); }

@@ -5,6 +5,11 @@ export const HEADERS = {
   'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
 };
 export const reply = (body, status = 200) => Response.json(body, { status, headers: HEADERS });
+// Public activity is deliberately aggregate-only and may be served from the edge
+// for a day. The private dashboard must continue to use no-store above.
+export const publicReply = (body, status = 200) => Response.json(body, { status, headers: {
+  ...HEADERS, 'Cache-Control': 'public, max-age=0, s-maxage=86400, stale-while-revalidate=86400',
+} });
 export const sameOrigin = request => request.headers.get('Origin') === new URL(request.url).origin;
 export const enabled = (request, env) => new URL(request.url).hostname === 'zend.garden'
   && env.ZEND_ANALYTICS_ENABLED === 'true' && env.GARDEN_STATS && env.SESSION_SECRET;

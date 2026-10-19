@@ -6,6 +6,7 @@ global.crypto = webcrypto;
   const { createTelemetry } = await import('../web/telemetry.js');
   const { onRequest: collect } = await import('../functions/api/session.js');
   const { onRequest: stats } = await import('../functions/api/stats.js');
+  const { onRequest: activity } = await import('../functions/api/activity.js');
   const { verifySession, MAX_SECONDS } = await import('../server/analytics.js');
   let clock = Date.now(), interval, fail = false;
   const events = new Map(), packets = [], starts = [];
@@ -80,6 +81,15 @@ global.crypto = webcrypto;
   assert.equal(privateResponse.headers.get('access-control-allow-origin'), null);
   const dashboard = await privateResponse.json(); assert.equal(dashboard.totals.median, 600);
   assert(!JSON.stringify(dashboard).includes(id), 'Dashboard returns aggregates, never session records');
+  assert.equal((await call(activity, null)).status, 405, 'Public activity is read-only');
+  const activityResponse = await call(activity, null, { method: 'GET' });
+  assert.equal(activityResponse.status, 200);
+  assert.match(activityResponse.headers.get('cache-control'), /s-maxage=86400/);
+  const publicActivity = await activityResponse.json();
+  assert.equal(publicActivity.days, 90); assert.equal(publicActivity.totals.median, 600);
+  assert(!('generated' in publicActivity) && !('daily' in publicActivity) && !('versions' in publicActivity));
+  assert(!JSON.stringify(publicActivity).includes('recent'), 'Public activity has no live/recent metric');
+  assert(!JSON.stringify(publicActivity).includes(id), 'Public activity returns aggregates, never session records');
   for (const file of ['web/telemetry.js', 'server/analytics.js', 'functions/api/session.js']) {
     assert(!/visibilityState|visibilitychange|hasFocus|document\.hidden|['"]blur['"]|['"]focus['"]|localStorage|sessionStorage|userAgent|CF-Connecting-IP/i.test(fs.readFileSync(file, 'utf8')), file);
   }

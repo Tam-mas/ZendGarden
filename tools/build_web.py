@@ -125,7 +125,7 @@ def package_site():
     html_path.write_text(re.sub(pattern, '<script src="godot-config.js"></script>', html))
     for name in ('_headers', '_routes.json', 'loader.js', 'viewport.js', '404.html',
                  'save-storage.js', 'save-format.js', 'save-files.js', 'telemetry.js',
-                 'stats.html', 'stats.css', 'stats.js'):
+                 'stats.html', 'stats.css', 'stats.js', 'activity.html', 'activity.js'):
         shutil.copyfile(ROOT / 'web' / name, OUT / name)
     shutil.copytree(ROOT / 'web/art', OUT / 'art')
     for name in ('wood', 'parchment', 'button'):
