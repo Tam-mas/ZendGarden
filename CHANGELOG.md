@@ -1,3 +1,13 @@
+### [2026-10-20 18:38] Fixed
+
+**Tech:** `GardenPlantBatches.rebuild` — preserve vertex-encoded mushroom and fruit attachments
+
+**Dev:** Enable instance colours and initialise every MultiMesh slot to neutral white before drawing so Compatibility rendering cannot zero the vertex-colour bytes carrying attachment depth. Keep existing per-specimen custom shape data, growth materials, transforms and batching. Add real-renderer silhouette comparisons for all 20 mushrooms and 13 fruit trees during forming, ripening, the actual Prune action and hover/deselection, plus neutral-colour assertions and a Mesa/xvfb CI run. Preserve saves, authored assets and the in-game update log as requested.
+
+**Plain:** Mushroom caps and fruit stay attached in busy gardens, including after pruning and when pointing at a plant.
+
+**Why:** Prevent floating caps and sideways fruit without sacrificing dense-garden performance.
+
 ### [2026-10-19 19:47] Fixed
 
 **Tech:** `Garden.report_clock_time`, `sessions.game_minutes`, statistics dashboards — actual garden-clock minutes including morning jumps

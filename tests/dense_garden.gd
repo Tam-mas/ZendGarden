@@ -40,6 +40,10 @@ func verify() -> void:
  var original_meshes=0
  for entries in g.plant_batches.hidden.values():original_meshes+=entries.size()
  check(g.plant_batches.get_child_count()*3<original_meshes,"Repeated plants were not grouped efficiently")
+ for renderer in g.plant_batches.get_children():
+  check(renderer.multimesh.use_colors,"Instance colours must preserve encoded attachment data")
+  for slot in range(renderer.multimesh.instance_count):
+   check(renderer.multimesh.get_instance_color(slot).is_equal_approx(Color.WHITE),"Batch colour corrupts cap/fruit attachment bytes")
  var p: Dictionary=g.planted[0]
  var membership: Dictionary=g.plant_batches.members[p.node.get_instance_id()][0]
  var data: Color=membership.renderer.multimesh.get_instance_custom_data(membership.slot)

@@ -140,6 +140,9 @@ func rebuild() -> void:
  for group in groups.values():
   var multi=MultiMesh.new()
   multi.transform_format=MultiMesh.TRANSFORM_3D
+  # Compatibility multiplies vertex COLOR by the instance colour, including
+  # the bytes encoding cap/fruit attachment depth. Keep that data unchanged.
+  multi.use_colors=true
   multi.use_custom_data=true
   multi.mesh=group.mesh
   multi.instance_count=group.entries.size()
@@ -157,6 +160,7 @@ func rebuild() -> void:
   for i in range(group.entries.size()):
    var entry: Dictionary=group.entries[i]
    var shape: Vector4=entry.node.get_meta("plant_shape",Vector4.ZERO)
+   multi.set_instance_color(i,Color.WHITE)
    multi.set_instance_custom_data(i,Color(shape.x,shape.y,shape.z,shape.w))
    var key=entry.owner.get_instance_id()
    if not members.has(key): members[key]=[]
