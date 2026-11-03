@@ -49,7 +49,7 @@ func verify() -> void:
  check(saved.plants.map(func(p):return int(p.id))==[0,297,298],"Existing or new plant IDs changed")
  g.loaded_data={"version":3,"plants":saved.plants};g.restore_garden()
  check(g.planted.size()==6 and g.planted.back().id==298 and g.planted.back().shape_seed==1202,"Garlic did not restore")
- check(g.valid_plant_ids([0,297,298,299])==[0,297,298],"Catalogue boundary rejected garlic")
+ check(g.valid_plant_ids([0,297,298,302])==[0,297,298],"Catalogue boundary rejected garlic")
  g.free()
  print("GARLIC_RESULT: ",JSON.stringify(failures))
  quit(0 if failures.is_empty() else 1)

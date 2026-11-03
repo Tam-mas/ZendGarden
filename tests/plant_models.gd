@@ -17,7 +17,7 @@ func inspect(node: Node) -> void:
  for child in node.get_children(): inspect(child)
 
 func verify() -> void:
- if GardenCatalogue.ROWS.size()!=299 or GardenCatalogue.GROWTH_DAYS.size()!=299: failures.append("Incomplete expanded catalogue")
+ if GardenCatalogue.ROWS.size()!=302 or GardenCatalogue.GROWTH_DAYS.size()!=302: failures.append("Incomplete expanded catalogue")
  for data in GardenCatalogue.plants():
   var before=leaf_surfaces
   var model=GardenArt.plant(data)

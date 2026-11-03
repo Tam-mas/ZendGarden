@@ -1,3 +1,13 @@
+### [2026-11-04 07:40] Added
+
+**Tech:** `GardenCatalogue.POTATO_IDS`, `art_source/build_potatoes.py`, `PLANTS.md` — three append-only potato varieties and a catalogue listing
+
+**Dev:** Append Kennebec, Red Pontiac and Purple Majesty with tuber growth labels, distinct coloured tubers, authored mature and young models, seed portraits, and produce search and harvest support. Generate a grouped plant list from the live catalogue and link it from the README. Preserve earlier plant IDs and dismissal history; add player release 75 and catalogue, growth, harvest and save checks.
+
+**Plain:** Grow three kinds of potatoes and browse a complete plant list by type.
+
+**Why:** Give kitchen gardeners more choices and make the collection easy to explore on GitHub.
+
 ### [2026-10-20 18:38] Fixed
 
 **Tech:** `GardenPlantBatches.rebuild` — preserve vertex-encoded mushroom and fruit attachments

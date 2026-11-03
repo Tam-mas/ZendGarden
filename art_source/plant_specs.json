@@ -2681,5 +2681,8 @@
     "shade",
     "none"
   ],
-  ["Garlic", "Produce", "e9dfcb", 0, 12, "sun", "none"]
+  ["Garlic", "Produce", "e9dfcb", 0, 12, "sun", "none"],
+  ["Potato 'Kennebec'", "Produce", "d5bc8b", 0, 12, "sun", "bees"],
+  ["Potato 'Red Pontiac'", "Produce", "b85e58", 0, 13, "sun", "bees"],
+  ["Potato 'Purple Majesty'", "Produce", "765887", 0, 14, "sun", "bees"]
 ]

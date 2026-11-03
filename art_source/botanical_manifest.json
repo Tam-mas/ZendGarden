@@ -2970,5 +2970,32 @@
     "path": "assets/plants/plant_298.glb",
     "source": "art_source/garlic.blend",
     "morphology_version": 7
+  },
+  {
+    "id": 299,
+    "name": "Potato 'Kennebec'",
+    "vertices": 1824,
+    "triangles": 2730,
+    "path": "assets/plants/plant_299.glb",
+    "source": "art_source/potatoes.blend",
+    "morphology_version": 7
+  },
+  {
+    "id": 300,
+    "name": "Potato 'Red Pontiac'",
+    "vertices": 1824,
+    "triangles": 2730,
+    "path": "assets/plants/plant_300.glb",
+    "source": "art_source/potatoes.blend",
+    "morphology_version": 7
+  },
+  {
+    "id": 301,
+    "name": "Potato 'Purple Majesty'",
+    "vertices": 1824,
+    "triangles": 2730,
+    "path": "assets/plants/plant_301.glb",
+    "source": "art_source/potatoes.blend",
+    "morphology_version": 7
   }
 ]
