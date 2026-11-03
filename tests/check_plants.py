@@ -22,8 +22,8 @@ def inspect(path):
 
 parser=argparse.ArgumentParser();parser.add_argument('--baseline',type=Path);args=parser.parse_args()
 manifest=json.loads((ROOT/'art_source/botanical_manifest.json').read_text())
-assert len(manifest)==299 and all(x['morphology_version']==(7 if x['id']==298 else 6 if x['id']>=278 else 5 if x['id'] in [49,78,79] or x['id']>=218 else 4 if x['id']>=198 else 3) for x in manifest),'Incomplete catalogue update'
-assert [p['id'] for p in manifest]==list(range(299)), 'Plant IDs must remain contiguous'
+assert len(manifest)==302 and all(x['morphology_version']==(7 if x['id']>=298 else 6 if x['id']>=278 else 5 if x['id'] in [49,78,79] or x['id']>=218 else 4 if x['id']>=198 else 3) for x in manifest),'Incomplete catalogue update'
+assert [p['id'] for p in manifest]==list(range(302)), 'Plant IDs must remain contiguous'
 specs=json.loads((ROOT/'art_source/plant_specs.json').read_text())
 assert [p['name'] for p in manifest]==[p[0] for p in specs], 'Source/catalogue ID mismatch'
 report=[]

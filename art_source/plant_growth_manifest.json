@@ -2671,5 +2671,29 @@
     "height": 0.62,
     "triangles": 3954,
     "source": "art_source/garlic.blend"
+  },
+  {
+    "id": 299,
+    "name": "Potato 'Kennebec'",
+    "family": "potato_tuber",
+    "height": 0.55,
+    "triangles": 2730,
+    "source": "art_source/potatoes.blend"
+  },
+  {
+    "id": 300,
+    "name": "Potato 'Red Pontiac'",
+    "family": "potato_tuber",
+    "height": 0.55,
+    "triangles": 2730,
+    "source": "art_source/potatoes.blend"
+  },
+  {
+    "id": 301,
+    "name": "Potato 'Purple Majesty'",
+    "family": "potato_tuber",
+    "height": 0.55,
+    "triangles": 2730,
+    "source": "art_source/potatoes.blend"
   }
 ]
